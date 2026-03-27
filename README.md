@@ -11,7 +11,7 @@ ODG implements a trust-but-verify solution for public and **sovereign clouds**.
 The project is under neutral governance by the [NeoNephos Foundation](https://neonephos.org), as part of the [Apeiro Reference Architecture](https://apeirora.eu).
 
 [![REUSE status](https://api.reuse.software/badge/github.com/open-component-model/open-delivery-gear)](https://api.reuse.software/info/github.com/open-component-model/open-delivery-gear)
-[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/10065/badge)](https://www.bestpractices.dev/projects/10065)
+[![OpenSSF Baseline](https://www.bestpractices.dev/projects/12270/baseline)](https://www.bestpractices.dev/projects/12270)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/open-component-model/open-delivery-gear/badge)](https://scorecard.dev/viewer/?uri=github.com/open-component-model/open-delivery-gear)
 
 ## Index
