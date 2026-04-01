@@ -1,0 +1,22 @@
+apiVersion: open-delivery-gear.ocm.software/v1
+kind: ODG
+metadata:
+  finalizers:
+    - open-delivery-gear.ocm.software/odg-clean-up
+  name: odg-demo
+  namespace: delivery-modg
+spec:
+  context:
+    base_url: demo.ci.gardener.cloud
+    target_namespace: odg-demo
+  extensions:
+    - bdba
+    - blackduck
+    - crypto
+    - delivery-dashboard
+    - ghas
+    - malware-scanner
+    - osid
+    - prometheus-operator
+    - responsibles
+    - sast
