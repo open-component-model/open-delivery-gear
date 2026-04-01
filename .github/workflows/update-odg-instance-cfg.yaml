@@ -1,0 +1,79 @@
+name: Update Demo ODG Instance Configuration
+
+on:
+  workflow_dispatch:
+    inputs:
+      bootstrapping-version:
+        type: string
+        required: true
+
+jobs:
+  update-odg-instance-cfg:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+      - uses: gardener/cc-utils/.github/actions/kubernetes-auth@master
+        with:
+          server: https://api.odg-pre-prod.garden-ci.shoot.live.k8s-hana.ondemand.com
+          audience: open-delivery-gear
+          kubeconfig-path: /tmp/kubeconfig.yaml
+      - uses: gardener/cc-utils/.github/actions/oci-auth@master
+        with:
+          oci-image-reference: europe-docker.pkg.dev/gardener-project
+      - name: Update ODG Instance Configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          pip3 install \
+            mako
+
+          component_name=ocm.software/ocm-gear/delivery-service
+          component_version=${{ inputs.bootstrapping-version }}
+
+          echo ">>> Retrieving OCM component descriptor"
+
+          python3 -m ocm download component-descriptor \
+            --component "${component_name}:${component_version}" \
+            --ocm-repository "europe-docker.pkg.dev/gardener-project/releases" \
+            -o /tmp/component-descriptor.yaml
+
+          bootstrapping_helm_oci_ref=$(yq eval '.component.resources[] | select(.name=="bootstrapping" and .type | test("helmChart")) | .access.imageReference' /tmp/component-descriptor.yaml)
+
+          echo ">>> Templating value files for Helm charts"
+
+          mako-render demo-cluster/bootstrapping/values.yaml.tpl \
+            --var 'blackduck_ctp_url=${{ vars.BLACKDUCK_CTP_URL }}' \
+            --var 'blackduck_foss_url=${{ vars.BLACKDUCK_FOSS_URL }}' \
+            --output-file demo-cluster/bootstrapping/values.yaml
+
+          mako-render demo-cluster/bootstrapping/secrets.yaml.tpl \
+            --var 'bdba_token=${{ secrets.BDBA_TOKEN }}' \
+            --var 'bdba_url=${{ vars.BDBA_URL }}' \
+            --var 'blackduck_ctp_token=${{ secrets.BLACKDUCK_CTP_TOKEN }}' \
+            --var 'blackduck_ctp_url=${{ vars.BLACKDUCK_CTP_URL }}' \
+            --var 'blackduck_foss_token=${{ secrets.BLACKDUCK_FOSS_TOKEN }}' \
+            --var 'blackduck_foss_url=${{ vars.BLACKDUCK_FOSS_URL }}' \
+            --var 'delivery_db_password=${{ secrets.DELIVERY_DB_PASSWORD }}' \
+            --var 'github_app_private_key=${{ secrets.APP_PRIVATE_KEY }}' \
+            --var 'oauth_cfg_client_secret=${{ secrets.OAUTH_CFG_CLIENT_SECRET }}' \
+            --var 'signing_cfg_private_key=${{ secrets.SIGNING_CFG_PRIVATE_KEY }}' \
+            --var 'signing_cfg_public_key=${{ secrets.SIGNING_CFG_PUBLIC_KEY }}' \
+            --output-file demo-cluster/bootstrapping/secrets.yaml
+
+          export KUBECONFIG=/tmp/kubeconfig.yaml
+
+          echo ">>> Installing bootstrapping Helm chart ${bootstrapping_helm_oci_ref}"
+
+          helm upgrade bootstrapping "oci://${bootstrapping_helm_oci_ref}" \
+            --namespace odg-demo \
+            --values demo-cluster/bootstrapping/values.yaml \
+            --values demo-cluster/bootstrapping/secrets.yaml \
+            --install \
+            --wait
+
+          echo ">>> Installation finished successfully"
+          echo "Installation finished successfully" >> ${GITHUB_STEP_SUMMARY}
