@@ -317,12 +317,6 @@ features_cfg:
       version: greatest
       icon: home
       releasePipelineUrl: https://github.com/open-component-model/ocm/actions/workflows/release.yaml
-      currentVersion:
-        source:
-          type: github
-          repo: github.com/open-component-model/ocm
-          relpath:
-            - VERSION
   sprints:
     sprint_name_pattern: '%Y-week-%W'
     start_date: '2026-01-01'
