@@ -46,11 +46,6 @@ extensions_cfg:
         libraries:
           - ref:
               path: odg/crypto_defaults.yaml
-  ghas:
-    github_instances:
-      - hostname: github.com
-        orgs:
-          - open-component-model
   osid:
     enabled: True
   responsibles:
@@ -107,59 +102,6 @@ findings:
     filter:
       - semantics: include
         artefact_kind: resource
-  - type: finding/ghas
-    categorisations:
-      - id: pattern-edited
-        display_name: Pattern Edited
-        value: 0
-        allowed_processing_time: ~
-        rescoring: manual
-        selector:
-          resolutions:
-            - pattern_edited
-      - id: false-positive
-        display_name: False Positive
-        value: 0
-        allowed_processing_time: ~
-        rescoring: manual
-        selector:
-          resolutions:
-            - false_positive
-      - id: revoked
-        display_name: Revoked
-        value: 0
-        allowed_processing_time: ~
-        rescoring: manual
-        selector:
-          resolutions:
-            - revoked
-      - id: wont-fix
-        display_name: Won't Fix
-        value: 0
-        allowed_processing_time: ~
-        rescoring: manual
-        selector:
-          resolutions:
-            - wont_fix
-      - id: used-in-tests
-        display_name: Used In Tests
-        value: 0
-        allowed_processing_time: ~
-        rescoring: manual
-        selector:
-          resolutions:
-            - used_in_tests
-      - id: secret-found
-        display_name: Secret Found
-        value: 2
-        allowed_processing_time: 0
-        rescoring: manual
-        selector:
-          resolutions:
-            - null
-    filter:
-      - semantics: include
-        artefact_kind: source
   - type: finding/license
     categorisations:
       - id: false-positive
@@ -407,7 +349,6 @@ profiles:
   - name: OCM
     finding_types:
       - finding/crypto
-      - finding/ghas
       - finding/license
       - finding/malware
       - finding/osid

@@ -14,7 +14,6 @@ spec:
     - blackduck
     - crypto
     - delivery-dashboard
-    - ghas
     - malware-scanner
     - osid
     - prometheus-operator
