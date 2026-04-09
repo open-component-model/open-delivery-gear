@@ -102,6 +102,11 @@ findings:
     filter:
       - semantics: include
         artefact_kind: resource
+        artefact_type:
+          - ociImage
+          - application/tar\+vm-image-rootfs
+          - executable
+          - application/data
   - type: finding/license
     categorisations:
       - id: false-positive
@@ -217,6 +222,7 @@ findings:
     filter:
       - semantics: include
         artefact_kind: resource
+        artefact_type: ociImage
   - type: finding/sast
     default_scope: single
     categorisations:
