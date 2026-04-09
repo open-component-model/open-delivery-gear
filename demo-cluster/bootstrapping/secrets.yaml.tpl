@@ -49,6 +49,13 @@ secrets:
               type: github-app
             - name: open-component-model
               type: github-org
+        - roles:
+            - reader
+          subjects:
+            - name: '.*'
+              type: github-app
+            - name: '.*'
+              type: github-user
   signing-cfg:
     primary:
       id: 517c9ea5-b84c-4b33-9c89-3f4e6d13720b
