@@ -317,6 +317,13 @@ features_cfg:
       version: greatest
       icon: home
       releasePipelineUrl: https://github.com/open-component-model/ocm/actions/workflows/release.yaml
+    - id: a50275cc-ea57-4e94-856b-5128d67ea598
+      name: opendesk.poc.sap.com/base
+      displayName: OpenDesk
+      type: OpenDesk
+      version: greatest
+      icon: home
+      releasePipelineUrl: https://github.com/platform-mesh/samples-opendesk-ocm-landscaper/actions/workflows/package_transfer.yaml
   sprints:
     sprint_name_pattern: '%Y-week-%W'
     start_date: '2026-01-01'
@@ -344,6 +351,9 @@ ocm_repo_mappings:
   - repository: ghcr.io/open-component-model/ocm
     prefixes:
       - ocm.software/ocmcli
+  - repository: ghcr.io/platform-mesh/samples-opendesk-ocm-landscaper
+    prefixes:
+      - opendesk.poc.sap.com
 
 profiles:
   - name: OCM
@@ -356,3 +366,14 @@ profiles:
       - finding/vulnerability
     special_component_ids:
       - bd545620-3e40-4c7e-aa39-8ef565047c9f
+
+  - name: OpenDesk
+    finding_types:
+      - finding/crypto
+      - finding/license
+      - finding/malware
+      - finding/osid
+      - finding/sast
+      - finding/vulnerability
+    special_component_ids:
+      - a50275cc-ea57-4e94-856b-5128d67ea598
