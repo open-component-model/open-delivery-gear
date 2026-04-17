@@ -364,7 +364,7 @@ ocm_repo_mappings:
       - opendesk.poc.sap.com
   - repository: ghcr.io/vasu1124
     prefixes:
-      - acme.org/sovereign/product
+      - acme.org/sovereign
 
 profiles:
   - name: OCM
