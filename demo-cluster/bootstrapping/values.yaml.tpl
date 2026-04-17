@@ -324,6 +324,12 @@ features_cfg:
       version: greatest
       icon: home
       releasePipelineUrl: https://github.com/platform-mesh/samples-opendesk-ocm-landscaper/actions/workflows/package_transfer.yaml
+    - id: c6b1f9cf-63e0-4462-b55d-00b415a35be9
+      name: acme.org/sovereign/product
+      displayName: Soverein Product
+      type: Soverein
+      version: greatest
+      icon: home
   sprints:
     sprint_name_pattern: '%Y-week-%W'
     start_date: '2026-01-01'
@@ -354,6 +360,9 @@ ocm_repo_mappings:
   - repository: ghcr.io/platform-mesh/samples-opendesk-ocm-landscaper
     prefixes:
       - opendesk.poc.sap.com
+  - repository: ghcr.io/vasu1124
+    prefixes:
+      - acme.org/sovereign/product
 
 profiles:
   - name: OCM
@@ -377,3 +386,14 @@ profiles:
       - finding/vulnerability
     special_component_ids:
       - a50275cc-ea57-4e94-856b-5128d67ea598
+
+  - name: Soverein Demo
+    finding_types:
+      - finding/crypto
+      - finding/license
+      - finding/malware
+      - finding/osid
+      - finding/sast
+      - finding/vulnerability
+    special_component_ids:
+      - c6b1f9cf-63e0-4462-b55d-00b415a35be9
