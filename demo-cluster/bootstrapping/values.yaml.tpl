@@ -7,6 +7,8 @@ extensions_cfg:
   artefact_enumerator:
     components:
       - component_name: ocm.software/ocmcli
+      - component_name: acme.org/sovereign/product
+      - component_name: opendesk.poc.sap.com/base
   bdba:
     mappings:
       - prefix: ''
