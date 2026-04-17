@@ -328,8 +328,8 @@ features_cfg:
       releasePipelineUrl: https://github.com/platform-mesh/samples-opendesk-ocm-landscaper/actions/workflows/package_transfer.yaml
     - id: c6b1f9cf-63e0-4462-b55d-00b415a35be9
       name: acme.org/sovereign/product
-      displayName: Soverein Product
-      type: Soverein
+      displayName: Sovereign Product
+      type: Sovereign
       version: greatest
       icon: home
   sprints:
@@ -389,7 +389,7 @@ profiles:
     special_component_ids:
       - a50275cc-ea57-4e94-856b-5128d67ea598
 
-  - name: Soverein Demo
+  - name: Sovereign Demo
     finding_types:
       - finding/crypto
       - finding/license
