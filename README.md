@@ -68,7 +68,7 @@ End users can work with findings and delivery insights either through the Delive
 To get a feel for ODG before setting it up yourself, visit the [Demo Playground](https://delivery-dashboard.demo.ci.gardener.cloud).
 It provides a live instance of ODG connected to real data, so you can explore OCM components, findings, and the overall user experience without any installation required.
 
-- [🚧 Demo Playground](https://delivery-dashboard.demo.ci.gardener.cloud)
+- [Demo Playground](https://delivery-dashboard.demo.ci.gardener.cloud)
 - [Local Setup using Kind](https://github.com/open-component-model/delivery-service/blob/master/local-setup/local-setup.md)
 - [Standalone installation using Helm](https://github.com/open-component-model/delivery-service/tree/master/charts)
 - [K8s ODG Operator](https://github.com/open-component-model/delivery-service/tree/master/odg_operator)
