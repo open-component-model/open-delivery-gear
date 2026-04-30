@@ -111,13 +111,13 @@ flowchart TD
 
 | Property | Values |
 | -------- | ------ |
-| BlackDuck Project Name | `Component Name`, `Artefact Name`, `Artefact Type`, `ODG Unique ID` (see below), (optional: `Artefact Extra ID`) |
-| BlackDuck Project Version | `Component Version`, `Artefact Version` |
-| ODG Unique ID | `Component Name`, `Artefact Name`, `Artefact Type`, (optional: `Artefact Extra ID`) |
+| BlackDuck Project Name | `Component Name`, `Artefact Name`, `Artefact Type`, `ODG Unique ID` (see below) |
+| BlackDuck Project Version | `Component Version`, `Artefact Version`, `Artefact Extra ID` (with quirk) |
+| ODG Unique ID | `Component Name`, `Artefact Name`, `Artefact Type` |
 
 **Hint**:
-While from a pure OCM perspective the Artefact Extra ID appears to be mandatory, there are known cases where version information is redundantly included in the Artefact Extra ID.
-To address these cases, the Artefact Extra ID must either be optional, or operators must have control over which fields are considered.
+There are known cases where artefact version information is redundantly included in the artefact extra-id.
+To address these cases, the operator must either have full control over which fields are considered, or the version must be excluded implicitly.
 
 ## Discovery and Distribution
 
@@ -130,8 +130,7 @@ Additionally, the logic of creating BD Projects and Project Versions (as describ
 This decision will fulfill the goal of reusing BD's built-in assessment mechanism across versions of the same artefact by properly leveraging the Project Version concept.
 Additionally, the extension will remove the implicit dependency on BDBA and instead rely on open-source SBoM tooling.
 
-From a **configuration perspective**, this is a **non-breaking** change. Operators may need to configure the handling of the aforementioned OCM Artefact Extra ID scenario.
+From a **configuration perspective**, this is a **non-breaking** change. Operators may need to configure the handling of the aforementioned OCM artefact extra-id scenario.
 
 From a **BlackDuck perspective** this is a **breaking change**.
 Users will have to adjust to the new Project Version structure.
-
