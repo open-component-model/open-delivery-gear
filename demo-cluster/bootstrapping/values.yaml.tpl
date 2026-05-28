@@ -328,9 +328,15 @@ features_cfg:
       releasePipelineUrl: https://github.com/platform-mesh/samples-opendesk-ocm-landscaper/actions/workflows/package_transfer.yaml
     - id: c6b1f9cf-63e0-4462-b55d-00b415a35be9
       name: acme.org/sovereign/product
-      displayName: Sovereign Product
+      displayName: Product
       type: Sovereign
-      version: greatest
+      version: 1.0.0
+      icon: home
+    - id: 141d4f75-87aa-4228-8bb4-b087d825fb7f
+      name: acme.org/sovereign/product
+      displayName: Product (refined)
+      type: Sovereign
+      version: 1.0.1
       icon: home
   sprints:
     sprint_name_pattern: '%Y-week-%W'
@@ -362,9 +368,6 @@ ocm_repo_mappings:
   - repository: ghcr.io/platform-mesh/samples-opendesk-ocm-landscaper
     prefixes:
       - opendesk.poc.sap.com
-  - repository: ghcr.io/vasu1124
-    prefixes:
-      - acme.org/sovereign
 
 profiles:
   - name: OCM
@@ -399,3 +402,4 @@ profiles:
       - finding/vulnerability
     special_component_ids:
       - c6b1f9cf-63e0-4462-b55d-00b415a35be9
+      - 141d4f75-87aa-4228-8bb4-b087d825fb7f
