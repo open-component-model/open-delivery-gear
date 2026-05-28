@@ -10,6 +10,7 @@ on:
 jobs:
   update-odg-instance-cfg:
     runs-on: ubuntu-latest
+    environment: public-demo-instance
     permissions:
       contents: read
       id-token: write
