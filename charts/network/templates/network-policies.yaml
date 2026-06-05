@@ -1,0 +1,79 @@
+{{- $namespace := .Values.namespaceOverride | default .Release.Namespace }}
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-egress-from-certgen
+  namespace: {{ $namespace }}
+spec:
+  podSelector:
+    matchLabels:
+      app: certgen
+  policyTypes:
+    - Egress
+  egress:
+    - {}  # Allows all egress traffic to any destination and port
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-egress-from-envoy-gateway
+  namespace: {{ $namespace }}
+spec:
+  podSelector:
+    matchLabels:
+      control-plane: envoy-gateway
+  policyTypes:
+    - Egress
+  egress:
+    - {}  # Allows all egress traffic to any destination and port
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress-to-envoy-gateway
+  namespace: {{ $namespace }}
+spec:
+  podSelector:
+    matchLabels:
+      control-plane: envoy-gateway
+  policyTypes:
+    - Ingress
+  ingress:
+    - ports:
+      - protocol: TCP
+        port: 18000
+      - protocol: TCP
+        port: 18001
+      - protocol: TCP
+        port: 18002
+      - protocol: TCP
+        port: 19001
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-egress-from-envoy-proxy
+  namespace: {{ $namespace }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: envoy
+  policyTypes:
+    - Egress
+  egress:
+    - {}  # Allows all egress traffic to any destination and port
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress-to-envoy-proxy
+  namespace: {{ $namespace }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: envoy
+  policyTypes:
+    - Ingress
+  ingress:
+    - {}  # Allows all ingress traffic to any destination and port

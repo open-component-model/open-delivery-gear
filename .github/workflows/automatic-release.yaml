@@ -1,0 +1,38 @@
+name: Automatic-Release
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .ocm/base-component.yaml
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yaml
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    with:
+      mode: release
+
+  component-diff:
+    uses: gardener/cc-utils/.github/workflows/component-diff.yaml@v1
+    needs:
+      - build
+    permissions:
+      contents: read
+      id-token: write
+
+  release-to-github-and-bump:
+    uses: gardener/cc-utils/.github/workflows/release.yaml@v1
+    if: ${{ needs.component-diff.outputs.has-diff == 'true' }}
+    needs:
+      - component-diff
+    permissions:
+      contents: write
+      packages: write
+      id-token: write
+    with:
+      github-release-notes-recursion-depth: -1

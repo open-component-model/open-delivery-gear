@@ -1,0 +1,37 @@
+{{- $name := .Values.fullnameOverride | default "open-delivery-gear" }}
+{{- $namespace := .Values.namespaceOverride | default .Release.Namespace }}
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: {{ $name }}-{{ $namespace }}
+  namespace: {{ $namespace }}
+spec:
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller-{{ $namespace }}
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: {{ $name }}
+  namespace: {{ $namespace }}
+  {{- if default dict (.Values.gateway).annotations }}
+  annotations:
+    {{- range $annotation, $value := default dict .Values.gateway.annotations }}
+    {{ $annotation }}: {{ $value }}
+    {{- end }}
+  {{- end }}
+spec:
+  gatewayClassName: {{ $name }}-{{ $namespace }}
+  listeners:
+  {{- if not (.Values.gateway).disableTls }}
+    - name: https
+      port: 443
+      protocol: HTTPS
+      tls:
+        certificateRefs:
+          - name: "{{ $name }}-tls"
+  {{- else }}
+    - name: http
+      port: 80
+      protocol: HTTP
+  {{- end }}

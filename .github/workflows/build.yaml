@@ -1,0 +1,92 @@
+name: Build
+
+on:
+  workflow_call:
+    inputs:
+      mode:
+        required: true
+        type: string
+        default: snapshot
+        description: |
+          mode as expected by `cc-utils/.github/workflows/prepare`
+          either of
+          - snapshot
+          - release
+
+jobs:
+  prepare:
+    uses: gardener/cc-utils/.github/workflows/prepare.yaml@v1
+    permissions:
+      id-token: write
+    with:
+      mode: ${{ inputs.mode }}
+
+  odg-extension-definitions:
+    runs-on: ubuntu-latest
+    needs:
+      - prepare
+    permissions:
+      contents: read
+    steps:
+      - uses: gardener/cc-utils/.github/actions/trusted-checkout@v1
+      - name: Export odg-extension-definitions
+        run: |
+          set -eu
+
+          echo "${{ needs.prepare.outputs.version }}" | .ci/write-version
+
+          mkdir blobs.d
+          tar czf blobs.d/extension_definitions.tar.gz extension-definitions.yaml
+      - uses: gardener/cc-utils/.github/actions/export-ocm-fragments@v1
+        with:
+          blobs-directory: blobs.d
+          ocm-resources: |
+            name: odg-extension-definitions
+            type: odg-extension
+            relation: local
+            access:
+              type: localBlob
+              localReference: extension_definitions.tar.gz
+
+  helmchart:
+    name: Build Helmchart
+    uses: gardener/cc-utils/.github/workflows/helmchart-ocm.yaml@v1
+    needs:
+      - prepare
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    with:
+      name: network
+      dir: charts/network
+      oci-registry: ${{ needs.prepare.outputs.oci-registry }}
+      oci-repository: charts/odg
+      ocm-mappings: '[]'
+
+  helmchart-imagemap:
+    runs-on: ubuntu-latest
+    needs:
+      - prepare
+    permissions:
+      contents: read
+    steps:
+      - uses: gardener/cc-utils/.github/actions/trusted-checkout@v1
+      - name: Export Helmchart-Imagemap
+        run: |
+          set -eu
+
+          mkdir blobs.d
+          mv envoy-helmchart-imagemap.json blobs.d
+      - uses: gardener/cc-utils/.github/actions/export-ocm-fragments@v1
+        with:
+          blobs-directory: blobs.d
+          ocm-resources: |
+            - name: envoy-gateway
+              type: helmchart-imagemap
+              extraIdentity:
+                type: helmchart-imagemap
+              relation: local
+              access:
+                type: localBlob
+                localReference: envoy-helmchart-imagemap.json

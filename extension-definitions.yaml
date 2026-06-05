@@ -1,0 +1,59 @@
+dependencies: []
+installation:
+  ocm_references:
+    - artefact:
+        name: envoy-gateway
+        version: v1.8.0
+      helm_chart_name: gateway-helm
+      mappings:
+        - artefact_type: helmchart-imagemap
+          name: envoy-gateway
+          version: 0.1.0-dev
+      name: ocm.software/open-delivery-gear
+      version: 0.1.0-dev
+    - artefact:
+        name: network
+        version: 0.1.0-dev
+      helm_chart_name: network
+      mappings: []
+      name: ocm.software/open-delivery-gear
+      version: 0.1.0-dev
+  value_templates:
+    - helm_attribute: fullnameOverride
+      helm_chart_name: gateway-helm
+      value: envoy-gateway-${target_namespace}
+      value_type: python-string-template
+    - helm_attribute: topologyInjector.enabled
+      helm_chart_name: gateway-helm
+      value: false
+      value_type: literal
+    - helm_attribute: config.envoyGateway.envoyProxy.provider.type
+      helm_chart_name: gateway-helm
+      value: Kubernetes
+      value_type: literal
+    - helm_attribute: config.envoyGateway.gateway.controllerName
+      helm_chart_name: gateway-helm
+      value: gateway.envoyproxy.io/gatewayclass-controller-${target_namespace}
+      value_type: python-string-template
+    - helm_attribute: certgen.job.ttlSecondsAfterFinished
+      helm_chart_name: gateway-helm
+      value: 2147483647
+      value_type: literal
+    - helm_attribute: gateway.annotations."cert.gardener.cloud/purpose"
+      helm_chart_name: network
+      value: managed
+      value_type: literal
+    - helm_attribute: gateway.annotations."cert.gardener.cloud/dnsnames"
+      helm_chart_name: network
+      value: '"*.${base_url}"'
+      value_type: python-string-template
+    - helm_attribute: gateway.annotations."dns.gardener.cloud/class"
+      helm_chart_name: network
+      value: garden
+      value_type: literal
+    - helm_attribute: gateway.annotations."dns.gardener.cloud/dnsnames"
+      helm_chart_name: network
+      value: '"*"'
+      value_type: literal
+name: envoy-gateway
+outputs: []

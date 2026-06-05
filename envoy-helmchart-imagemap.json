@@ -1,0 +1,25 @@
+{
+  "helmchartResource": {
+    "name": "envoy-gateway"
+  },
+  "imageMapping": [
+    {
+      "resource": {
+        "name": "envoy-gateway"
+      },
+      "image": "images.envoyGateway.image"
+    },
+    {
+      "resource": {
+        "name": "envoy-gateway"
+      },
+      "image": "global.images.envoyGateway.image"
+    },
+    {
+      "resource": {
+        "name": "envoy-proxy"
+      },
+      "image": "config.envoyGateway.envoyProxy.provider.kubernetes.envoyDeployment.container.image"
+    }
+  ]
+}

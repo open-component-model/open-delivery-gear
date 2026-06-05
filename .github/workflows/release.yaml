@@ -1,0 +1,31 @@
+name: Release
+on:
+  workflow_dispatch:
+    inputs:
+      next-version:
+        type: choice
+        options:
+          - bump-minor
+          - bump-patch
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yaml
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    with:
+      mode: release
+
+  release-to-github-and-bump:
+    uses: gardener/cc-utils/.github/workflows/release.yaml@v1
+    needs:
+      - build
+    permissions:
+      contents: write
+      packages: write
+      id-token: write
+    with:
+      next-version: ${{ inputs.next-version }}
+      github-release-notes-recursion-depth: -1
