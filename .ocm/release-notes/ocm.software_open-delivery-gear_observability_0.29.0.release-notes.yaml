@@ -1,0 +1,14 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/observability
+  component_version: 0.29.0
+release_notes:
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: breaking
+  contents: The `ocm.software/ocm-gear/prometheus` has been renamed to `ocm.software/open-delivery-gear/observability`
+  mimetype: text/markdown
+  reference: '[#22](https://github.com/open-component-model/odg-observability/pull/22)'
+  type: standard
