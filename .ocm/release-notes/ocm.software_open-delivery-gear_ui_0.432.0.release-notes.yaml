@@ -1,0 +1,24 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/ui
+  component_version: 0.432.0
+release_notes:
+- audience: user
+  author:
+    hostname: github.com
+    type: githubUser
+    username: zkdev
+  category: noteworthy
+  contents: Compliance query now uses "recursive" mode by default
+  mimetype: text/markdown
+  reference: '[#465](https://github.com/open-component-model/odg-ui/pull/465)'
+  type: standard
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: breaking
+  contents: The `ocm.software/ocm-gear/delivery-dashboard` OCM component has been renamed to `ocm.software/open-delivery-gear/ui`
+  mimetype: text/markdown
+  reference: '[#464](https://github.com/open-component-model/odg-ui/pull/464)'
+  type: standard
