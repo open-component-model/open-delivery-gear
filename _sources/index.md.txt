@@ -1,0 +1,57 @@
+# Open Delivery Gear
+
+Compliance is not living next to Software, instead is an integral part of it.
+The way we are integrating Compliance into Software is by building automations naturally integrated into the Software Lifecycle.
+
+## Overview
+
+```{toctree}
+:maxdepth: 1
+:caption: Overview
+
+contents/concepts/00-odg-architecture.md
+```
+
+## Concepts
+
+```{toctree}
+:maxdepth: 1
+:caption: Concepts
+
+contents/concepts/01-data-model.md
+contents/concepts/02-artefact-enumerator.md
+contents/concepts/03-issue-replicator.md
+contents/concepts/05-responsibles.md
+contents/concepts/06-extending.md
+```
+
+## How-to Guides
+
+```{toctree}
+:maxdepth: 1
+:caption: How-to Guides
+
+contents/how-to/00-hybrid-dev-setup.md
+contents/how-to/01-local-setup.md
+contents/how-to/02-use-odg-api.md
+contents/how-to/03-vulnerabilities-for-component.md
+contents/how-to/04-diki.md
+```
+
+## Tutorials
+
+```{toctree}
+:maxdepth: 1
+:caption: Tutorials
+
+contents/tutorial/00-contributing-extension.md
+```
+
+## References
+
+```{toctree}
+:maxdepth: 1
+:caption: References
+
+contents/reference/00-artefact-metadata-query.md
+```
