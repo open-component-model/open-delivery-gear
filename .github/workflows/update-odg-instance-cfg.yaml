@@ -32,8 +32,8 @@ jobs:
           pip3 install \
             mako
 
-          component_name=ocm.software/ocm-gear/delivery-service
-          component_version=${{ inputs.bootstrapping-version }}
+          export component_name=ocm.software/open-delivery-gear/core
+          export component_version=$(yq ".componentReferences[] | select(.componentName==strenv(component_name)) | .version" .ocm/base-component.yaml)
 
           echo ">>> Retrieving OCM component descriptor"
 

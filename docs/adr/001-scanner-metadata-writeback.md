@@ -25,7 +25,7 @@ Adding a general purpose back channel from ODG to scanners to simply push writeb
 * **Loose Coupling**: Scanners must remain exchangeable, whereas multiple scanners can be used to produce similar outcomes for the very same input
 * **Persistency**: Writebacks must live outside of the scanners so they remain transportable
 * **Transparency**: Users must be aware of used writebacks to avoid confusion
-* **OCM Label Compatibility**: ODG's writeback mechanism for `finding/vulnerability` must not conflict with Gardener's approach to [OCM-label based package version overwrites](https://github.com/open-component-model/delivery-service/blob/6bd2de7954f02d4c83cf26b23ac46f376417d4be/bdba_utils/scan.py#L281-L299)
+* **OCM Label Compatibility**: ODG's writeback mechanism for `finding/vulnerability` must not conflict with Gardener's approach to [OCM-label based package version overwrites](https://github.com/open-component-model/odg-core/blob/6bd2de7954f02d4c83cf26b23ac46f376417d4be/bdba_utils/scan.py#L281-L299)
 * **Reusability**: Writebacks must not only be implemented as custom solution for vulnerabilities, but work in general for all ODG scanner extensions and finding types
 * **UX**: There is already a lowlevel package overwrite using OCM labels, thus this approach must focus on UX
 
@@ -147,7 +147,7 @@ data:
   license_to: <str> | null
 ```
 
-_Remarks: In case no `package_version` is specified, the `license_to` is to be applied to all detected pacakge versions of `package_name`.
+_Remarks: In case no `package_version` is specified, the `license_to` is to be applied to all detected package versions of `package_name`.
 In case no `license_from` is specified, the `license_to` will be **added**.
 In case no `license_to` is specified, the `license_from` will be **removed**.
 In case both `license_from` and `license_to` are specified, the `license_from` will be **overwritten** by `license_to`.

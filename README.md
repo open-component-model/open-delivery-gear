@@ -69,9 +69,9 @@ To get a feel for ODG before setting it up yourself, visit the [Demo Playground]
 It provides a live instance of ODG connected to real data, so you can explore OCM components, findings, and the overall user experience without any installation required.
 
 - [Demo Playground](https://delivery-dashboard.demo.ci.gardener.cloud)
-- [Local Setup using Kind](https://github.com/open-component-model/delivery-service/blob/master/local-setup/local-setup.md)
-- [Standalone installation using Helm](https://github.com/open-component-model/delivery-service/tree/master/charts)
-- [K8s ODG Operator](https://github.com/open-component-model/delivery-service/tree/master/odg_operator)
+- [Local Setup using Kind](https://github.com/open-component-model/odg-core/blob/master/local-setup/local-setup.md)
+- [Standalone installation using Helm](https://github.com/open-component-model/odg-core/tree/master/charts)
+- [K8s ODG Operator](https://github.com/open-component-model/odg-core/tree/master/odg_operator)
 - [🚧 openMCP Provider](https://github.com/openmcp-project)
 
 <details>
@@ -81,42 +81,42 @@ It provides a live instance of ODG connected to real data, so you can explore OC
 
 The codebase is distributed across multiple repositories.
 
-#### delivery-service
+#### ODG Core
 
 ##### Core APIs
 
-- [Core API](https://github.com/open-component-model/delivery-service/blob/master/app.py)
-- [ODG Database](https://github.com/open-component-model/delivery-service/tree/master/deliverydb)
-- [ODG Operator](https://github.com/open-component-model/delivery-service/tree/master/odg_operator)
-- [OCM Artefact Enumerator](https://github.com/open-component-model/delivery-service/blob/master/artefact_enumerator.py)
-- [Assisted Rescoring](https://github.com/open-component-model/delivery-service/tree/master/rescore)
-- [Scan Backlog Controller](https://github.com/open-component-model/delivery-service/blob/master/backlog_controller.py)
-- [ODG Database Backup](https://github.com/open-component-model/delivery-service/blob/master/delivery_db_backup.py)
+- [Core API](https://github.com/open-component-model/odg-core/blob/master/app.py)
+- [Core API Client](https://github.com/open-component-model/odg-core/tree/master/odg_client)
+- [ODG Database](https://github.com/open-component-model/odg-core/tree/master/deliverydb)
+- [ODG Operator](https://github.com/open-component-model/odg-core/tree/master/odg_operator)
+- [OCM Artefact Enumerator](https://github.com/open-component-model/odg-core/blob/master/artefact_enumerator.py)
+- [Assisted Rescoring](https://github.com/open-component-model/odg-core/tree/master/rescore)
+- [Scan Backlog Controller](https://github.com/open-component-model/odg-core/blob/master/backlog_controller.py)
+- [ODG Database Backup](https://github.com/open-component-model/odg-core/blob/master/delivery_db_backup.py)
 
 ##### Extensions
 
-- [Cryptographic Asset Inventory](https://github.com/open-component-model/delivery-service/tree/master/crypto_extension)
-- [Vulnerability Scanner (BDBA)](https://github.com/open-component-model/delivery-service/tree/master/bdba)
-- [GitHub Issues-Based Finding Tracker](https://github.com/open-component-model/delivery-service/tree/master/issue_replicator)
-- [Malware Scanner (ClamAV)](https://github.com/open-component-model/delivery-service/tree/master/malware)
-- [Operating System EoL Detection](https://github.com/open-component-model/delivery-service/tree/master/osid_extension)
-- [DORA Metrics](https://github.com/open-component-model/delivery-service/blob/master/dora.py)
-- [GitHub Secret Scanner](https://github.com/open-component-model/delivery-service/blob/master/ghas.py)
-- [SBoM Generator](https://github.com/open-component-model/delivery-service/blob/master/sbom_generator.py)
+- [Cryptographic Asset Inventory](https://github.com/open-component-model/odg-core/tree/master/crypto_extension)
+- [Vulnerability Scanner (BDBA)](https://github.com/open-component-model/odg-core/tree/master/bdba)
+- [GitHub Issues-Based Finding Tracker](https://github.com/open-component-model/odg-core/tree/master/issue_replicator)
+- [Malware Scanner (ClamAV)](https://github.com/open-component-model/odg-core/tree/master/malware)
+- [Operating System EoL Detection](https://github.com/open-component-model/odg-core/tree/master/osid_extension)
+- [DORA Metrics](https://github.com/open-component-model/odg-core/blob/master/dora.py)
+- [GitHub Secret Scanner](https://github.com/open-component-model/odg-core/blob/master/ghas.py)
+- [SBoM Generator](https://github.com/open-component-model/odg-core/blob/master/sbom_generator.py)
 
-#### delivery-dashboard
+#### UI
 
-- [ODG User Interface](https://github.com/open-component-model/delivery-dashboard)
+- [ODG User Interface](https://github.com/open-component-model/odg-ui)
 
 #### cc-utils
 
 - [OCM Language Bindings](https://github.com/gardener/cc-utils/tree/master/ocm)
 - [OCI Client](https://github.com/gardener/cc-utils/tree/master/oci)
-- [ODG Core API Client](https://github.com/gardener/cc-utils/tree/master/delivery)
 
-#### odg-prometheus
+#### Observability
 
-- [Monitoring Stack](https://github.com/open-component-model/prometheus)
+- [Monitoring Stack](https://github.com/open-component-model/odg-observability)
 
 </details>
 
@@ -129,7 +129,7 @@ Open Delivery Gear is part of the [OCM community](https://ocm.software/community
 
 ## Documentation
 
-- [Technical Documentation](https://open-component-model.github.io/delivery-service/)
+- [Technical Documentation](https://open-component-model.github.io/odg-core/)
 - [ODG Project Board](https://github.com/orgs/open-component-model/projects/17)
 
 ## Contributing
