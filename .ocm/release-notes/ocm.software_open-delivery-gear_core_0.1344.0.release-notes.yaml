@@ -1,0 +1,14 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1344.0
+release_notes:
+- audience: developer
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: bugfix
+  contents: The SAP CA certificates are now linked (again) to Python's trust bundle
+  mimetype: text/markdown
+  reference: '[#850](https://github.com/open-component-model/odg-core/pull/850)'
+  type: standard
