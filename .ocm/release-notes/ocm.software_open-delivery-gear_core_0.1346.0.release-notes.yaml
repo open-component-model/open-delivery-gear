@@ -1,0 +1,49 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1346.0
+release_notes:
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: feature
+  contents: The sprints configuration now allows to configure a "finding_due_date_offset_name"
+    which is used as due date of the sprint (e.g. for display in the ODG UI or for
+    the to-be created GitHub milestones)
+  mimetype: text/markdown
+  reference: '[#854](https://github.com/open-component-model/odg-core/pull/854)'
+  type: standard
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: zkdev
+  category: bugfix
+  contents: Backlog Controller optionally mounts GitHub secrets now, to properly resolve
+    extensions-cfg
+  mimetype: text/markdown
+  reference: '[#852](https://github.com/open-component-model/odg-core/pull/852)'
+  type: standard
+- audience: user
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: feature
+  contents: The GitHub Secret Scanning alerts now include more information on the
+    location, especially the location URL
+  mimetype: text/markdown
+  reference: '[#853](https://github.com/open-component-model/odg-core/pull/853)'
+  type: standard
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: breaking
+  contents: Removed the option to configure the due date for the GitHub milestones
+    in favour of the configuration of the due date for sprints in general
+  mimetype: text/markdown
+  reference: '[#854](https://github.com/open-component-model/odg-core/pull/854)'
+  type: standard
