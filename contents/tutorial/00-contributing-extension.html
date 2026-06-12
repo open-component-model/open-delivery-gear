@@ -3,13 +3,14 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Artefact Metadata Search" href="../reference/00-artefact-metadata-query.html"><link rel="prev" title="Send Diki findings to ODG-API" href="../how-to/04-diki.html">
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Artefact Metadata Search" href="../reference/00-artefact-metadata-query.html"><link rel="prev" title="Diagnose Failed SBOM Generation" href="../how-to/06-sbom-diagnose-failures.html">
         <link rel="prefetch" href="../../_static/odg.svg" as="image">
 
     <link rel="shortcut icon" href="../../_static/odg.svg"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
         <title>Contribute a new Extension - Open Delivery Gear documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
     
     
@@ -194,17 +195,15 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+  <p class="caption" role="heading"><span class="caption-text">Concepts</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../concepts/00-odg-architecture.html">Architectural Overview</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Concepts</span></p>
-<ul>
+<li class="toctree-l1"><a class="reference internal" href="../concepts/00-odg-architecture.html">ODG System Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../concepts/01-data-model.html">Correlating metadata to OCM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../concepts/02-artefact-enumerator.html">Reacting upon OCM events</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../concepts/03-issue-replicator.html">Lifecycling GitHub Issues</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../concepts/05-responsibles.html">Overwriting OCM component responsibles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../concepts/06-extending.html">Extending ODG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../concepts/07-sbom-generator.html">Generating Software Bill of Materials</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
 <ul>
@@ -213,6 +212,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../how-to/02-use-odg-api.html">Use the ODG Python Package to resolve an OCM component</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../how-to/03-vulnerabilities-for-component.html">Get all vulnerabilities for a Component</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../how-to/04-diki.html">Send Diki findings to ODG-API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how-to/05-sbom-download.html">Download SBOM Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how-to/06-sbom-diagnose-failures.html">Diagnose Failed SBOM Generation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="current">
@@ -221,6 +222,7 @@
 <p class="caption" role="heading"><span class="caption-text">References</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../reference/00-artefact-metadata-query.html">Artefact Metadata Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/01-sbom-generator-config.html">SBOM-Generator Configuration Reference</a></li>
 </ul>
 
 </div>
@@ -275,7 +277,7 @@ refer to <a class="reference internal" href="../concepts/01-data-model.html"><sp
 <span id="id1"></span><h2>Extensions Configuration<a class="headerlink" href="#extensions-configuration" title="Link to this heading">¶</a></h2>
 <p>Configuration for each extension should be provided via the interface defined
 in the <code class="docutils literal notranslate"><span class="pre">odg.extensions_cfg</span></code> module
-(<a class="reference external" href="https://github.com/open-component-model/delivery-service/blob/master/odg/extensions.py">ref</a>).
+(<a class="reference external" href="https://github.com/open-component-model/odg-core/blob/master/src/odg/extensions.py">ref</a>).
 A minimal set of configuration parameters is defined by the required base class
 <code class="docutils literal notranslate"><span class="pre">ExtensionCfgMixins</span></code>. In case the extension is expected to be working with
 backlog items (more on that topic in <a class="reference internal" href="#extension-triggers">extension-triggers</a> and
@@ -289,7 +291,7 @@ be defined to be able to access the delivery-service and an <code class="docutil
 a mounted ConfigMap (more on that topic in <a class="reference internal" href="#helm-chart">helm-chart</a>).</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>See <a class="reference external" href="https://github.com/open-component-model/delivery-service/commit/b6354706c7545eacd571271472807c95aa2525da">open-component-model/delivery-service&#64;b635470</a>
+<p>See <a class="reference external" href="https://github.com/open-component-model/odg-core/commit/b6354706c7545eacd571271472807c95aa2525da">open-component-model/odg-core&#64;b635470</a>
 as an example for this chapter.</p>
 </div>
 </section>
@@ -306,7 +308,7 @@ issues, the <code class="docutils literal notranslate"><span class="pre">issues<
 <a class="reference internal" href="#issue-replicator">issue-replicator</a> as well).</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>See <a class="reference external" href="https://github.com/open-component-model/delivery-service/commit/15dabcf1b9f439b0d4eff6b60aa7f7310819bd09">open-component-model/delivery-service&#64;15dabcf</a>
+<p>See <a class="reference external" href="https://github.com/open-component-model/odg-core/commit/15dabcf1b9f439b0d4eff6b60aa7f7310819bd09">open-component-model/odg-core&#64;15dabcf</a>
 as an example for this chapter.</p>
 </div>
 </section>
@@ -327,7 +329,7 @@ integrated, it also has to be considered <em>when</em> the extension should run
 </li>
 <li><p><strong>Lightly Integrated / Running Out-Of-Cluster</strong></p>
 <p>In the lightly integrated variant, the extension is running standalone and
-only uploads <code class="docutils literal notranslate"><span class="pre">ArtefactMetadata</span></code> via the delivery-service API to make use of
+only uploads <code class="docutils literal notranslate"><span class="pre">ArtefactMetadata</span></code> via the ODG API to make use of
 the reporting capabilities of the ODG. In that case, the extension must take
 care of deployment and triggering on its own, hence the chapters
 <a class="reference internal" href="#extension-triggers">extension-triggers</a>, <a class="reference internal" href="#helm-chart">helm-chart</a>, <a class="reference internal" href="#oci-image">oci-image</a> and
@@ -341,7 +343,7 @@ care of deployment and triggering on its own, hence the chapters
 <li><p><em>Kubernetes Cronjob</em></p>
 <p>As the title already states, an extension can be modelled as regular
 Kubernetes Cronjob with a well-defined <code class="docutils literal notranslate"><span class="pre">schedule</span></code>. If running as a Cronjob,
-the extension might has to be able to retrieve the information for which
+the extension might have to be able to retrieve the information for which
 artefacts it should run. This is relevant as the
 <a class="reference internal" href="../concepts/01-data-model.html"><span class="doc">Correlating metadata to OCM</span></a> requires the data to be always correlated to a certain
 <code class="docutils literal notranslate"><span class="pre">artefact</span></code>. This information should be passed to the extension using the
@@ -360,13 +362,13 @@ the affected extension accordingly. This means, if the new extension uses
 this trigger, it should be designed to always process the <code class="docutils literal notranslate"><span class="pre">artefact</span></code> defined
 by one <code class="docutils literal notranslate"><span class="pre">BacklogItem</span></code> at a time. For that, the <code class="docutils literal notranslate"><span class="pre">process_backlog_items</span></code>
 utility function, defined in the <code class="docutils literal notranslate"><span class="pre">odg.util</span></code> module
-(<a class="reference external" href="https://github.com/open-component-model/delivery-service/blob/master/odg/util.py">ref</a>),
+(<a class="reference external" href="https://github.com/open-component-model/odg-core/blob/master/src/odg/util.py">ref</a>),
 should be used.</p>
 </li>
 </ol>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The <a class="reference external" href="https://github.com/open-component-model/delivery-service/tree/master/charts/extensions/charts">already existing extensions</a>
+<p>The <a class="reference external" href="https://github.com/open-component-model/odg-core/tree/master/charts/extensions/charts">already existing extensions</a>
 and their respective implementations can be always used as a reference how
 either a Kubernetes Cronjob or a <code class="docutils literal notranslate"><span class="pre">BacklogItem</span></code> based approach via the
 artefact-enumerator might look like.</p>
@@ -375,7 +377,7 @@ artefact-enumerator might look like.</p>
 <section id="general-flow">
 <h3>General Flow<a class="headerlink" href="#general-flow" title="Link to this heading">¶</a></h3>
 <p>The general flow for extensions which are intended to submit
-<a class="reference internal" href="../concepts/01-data-model.html"><span class="doc">Correlating metadata to OCM</span></a> via the delivery-service API is usually very similar. In case of
+<a class="reference internal" href="../concepts/01-data-model.html"><span class="doc">Correlating metadata to OCM</span></a> via the ODG API is usually very similar. In case of
 findings, there is a well-defined overview of the supported states of a finding
 (see Fig. 1).</p>
 <figure class="align-center" id="id9" style="width: 50%">
@@ -384,19 +386,19 @@ findings, there is a well-defined overview of the supported states of a finding
 <p><span class="caption-text">Fig. 1: Finding State Machine</span><a class="headerlink" href="#id9" title="Link to this image">¶</a></p>
 </figcaption>
 </figure>
-<p>If the extension is written in Python, the <a class="reference external" href="https://github.com/gardener/cc-utils/blob/master/delivery/client.py">delivery-service-client</a> should
+<p>If the extension is written in Python, the <a class="reference external" href="https://github.com/gardener/cc-utils/blob/master/delivery/client.py">odg-client</a> should
 be used which already contains functionality for the below described points:</p>
 <ol class="arabic">
 <li><p>Fetch existing <code class="docutils literal notranslate"><span class="pre">ArtefactMetadata</span></code> entries</p>
 <p>As a first step, the existing <code class="docutils literal notranslate"><span class="pre">ArtefactMetadata</span></code> entries for the current
 <code class="docutils literal notranslate"><span class="pre">artefact</span></code> should be queried using the <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/artefacts/metadata/query</span></code>
-endpoint of the delivery-service. This is required to be able to delete the
+endpoint of the ODG API. This is required to be able to delete the
 obsolete entries afterwards in step (3).</p>
 </li>
 <li><p>Submit new entries and update existing ones</p>
 <p>The new or updated entries must be submitted using the
 <code class="docutils literal notranslate"><span class="pre">PUT</span> <span class="pre">/artefacts/metadata</span></code> endpoint. This will upload new entries to the
-delivery-db or update existing entries in case the defined <code class="docutils literal notranslate"><span class="pre">key</span></code> matches.
+ODG database or update existing entries in case the defined <code class="docutils literal notranslate"><span class="pre">key</span></code> matches.
 Apart from the entries containing the findings, an extra entry of type
 <code class="docutils literal notranslate"><span class="pre">meta/artefact_scan_info</span></code> must be submitted for each <code class="docutils literal notranslate"><span class="pre">artefact</span></code>. This info
 object is used to store information about the last execution and that an
@@ -416,7 +418,7 @@ are not reported anymore.</p>
 <p>If the artefact-enumerator was chosen as trigger in <a class="reference internal" href="#extension-triggers">extension-triggers</a>,
 it is necessary to inform the artefact-enumerator about this extension and that
 it should create <code class="docutils literal notranslate"><span class="pre">BacklogItems</span></code> for it. Therefore, a minor change must be added
-to the artefact-enumerator (see <a class="reference external" href="https://github.com/open-component-model/delivery-service/commit/68d6f5bd322bd018a67e54784804d65dde3f2a38">open-component-model/delivery-service&#64;68d6f5b</a>).</p>
+to the artefact-enumerator (see <a class="reference external" href="https://github.com/open-component-model/odg-core/commit/68d6f5bd322bd018a67e54784804d65dde3f2a38">open-component-model/odg-core&#64;68d6f5b</a>).</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>In the future, it is planned that this must not be explicitly defined
@@ -430,7 +432,7 @@ which extensions require <code class="docutils literal notranslate"><span class=
 <a class="reference internal" href="../concepts/03-issue-replicator.html"><span class="doc">issue-replicator extension</span></a> to also report
 findings for the new extension, it must be defined how the findings should be
 templated into a GitHub issue. Therefore, a minor change must be added to the
-issue-replicator (see <a class="reference external" href="https://github.com/open-component-model/delivery-service/commit/adb723957c2f6ec115ac702463f94802b35ed6df">open-component-model/delivery-service&#64;adb7239</a>).
+issue-replicator (see <a class="reference external" href="https://github.com/open-component-model/odg-core/commit/adb723957c2f6ec115ac702463f94802b35ed6df">open-component-model/odg-core&#64;adb7239</a>).
 Also, the <code class="docutils literal notranslate"><span class="pre">issues</span></code> property of the <a class="reference internal" href="#findings-configuration">findings-configuration</a> must be
 configured accordingly.</p>
 </section>
@@ -438,7 +440,7 @@ configured accordingly.</p>
 <span id="id6"></span><h2>Helm Chart<a class="headerlink" href="#helm-chart" title="Link to this heading">¶</a></h2>
 <p>If the extension should be deployed as part of the Open Delivery Gear
 deployment, it must be added as subchart to the <code class="docutils literal notranslate"><span class="pre">extensions</span></code> Helm chart
-(<a class="reference external" href="https://github.com/open-component-model/delivery-service/tree/master/charts/extensions/charts">ref</a>).
+(<a class="reference external" href="https://github.com/open-component-model/odg-core/tree/master/charts/extensions/charts">ref</a>).
 Based on the trigger (see <a class="reference internal" href="#extension-triggers">extension-triggers</a>), either a Kubernetes
 Deployment or Cronjob should be used. In all cases, it can be assumed that
 an <code class="docutils literal notranslate"><span class="pre">extensions-cfg</span></code> and a <code class="docutils literal notranslate"><span class="pre">findings-cfg</span></code> ConfigMap exists which may be mounted
@@ -448,25 +450,24 @@ can be mounted as well by referencing the Secrets
 <code class="docutils literal notranslate"><span class="pre">secret-factory-&lt;SECRET_TYPE&gt;</span></code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>It might be very helpful to use the <a class="reference external" href="https://github.com/open-component-model/delivery-service/tree/master/charts/extensions/charts">already existing extensions</a>
+<p>It might be very helpful to use the <a class="reference external" href="https://github.com/open-component-model/odg-core/tree/master/charts/extensions/charts">already existing extensions</a>
 as reference and adjust them accordingly.</p>
 </div>
 </section>
 <section id="oci-image">
 <span id="id7"></span><h2>OCI Image<a class="headerlink" href="#oci-image" title="Link to this heading">¶</a></h2>
 <p>In case the extension does not require any additional installations, the
-general purpose extensions OCI image can be re-used (<a class="reference external" href="https://github.com/open-component-model/delivery-service/blob/master/Dockerfile.extensions">ref</a>).
-Otherwise, a new Dockerfile <code class="docutils literal notranslate"><span class="pre">Dockerfile.extensions.&lt;EXTENSION_NAME&gt;</span></code> must be
-created and added to the <a class="reference external" href="https://github.com/open-component-model/delivery-service/blob/master/.github/workflows/build.yaml">build</a>.
-In both cases, a Helm chart mapping must be added to the <a class="reference external" href="https://github.com/open-component-model/delivery-service/blob/master/.github/workflows/build.yaml">build</a>
+general purpose core OCI image can be re-used (<a class="reference external" href="https://github.com/open-component-model/odg-core/blob/master/Dockerfile">ref</a>).
+The core image contains all the necessary components and extensions.
+A Helm chart mapping must be added to the <a class="reference external" href="https://github.com/open-component-model/odg-core/blob/master/.github/workflows/build.yaml">build</a>
 as well.</p>
 </section>
 <section id="python-package">
 <span id="id8"></span><h2>Python Package<a class="headerlink" href="#python-package" title="Link to this heading">¶</a></h2>
 <p>The default extensions image built from <code class="docutils literal notranslate"><span class="pre">Dockerfile.extensions</span></code> installs the
-Python package <code class="docutils literal notranslate"><span class="pre">ocm-gear-extensions</span></code> which contains the sources of all Python
+Python package <code class="docutils literal notranslate"><span class="pre">odg-core-libs</span></code> which contains the sources of all Python
 extensions. In case this image is re-used, the module(s) of the new extension
-must be included in the Python package (<a class="reference external" href="https://github.com/open-component-model/delivery-service/blob/master/setup.extensions.py">ref</a>).</p>
+must be included in the Python package (<a class="reference external" href="https://github.com/open-component-model/odg-core/blob/master/setup.py">ref</a>).</p>
 </section>
 </section>
 
@@ -484,14 +485,14 @@ must be included in the Python package (<a class="reference external" href="http
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="../how-to/04-diki.html">
+          <a class="prev-page" href="../how-to/06-sbom-diagnose-failures.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Send Diki findings to ODG-API</div>
+                <div class="title">Diagnose Failed SBOM Generation</div>
                 
               </div>
             </a>
@@ -555,5 +556,6 @@ must be included in the Python package (<a class="reference external" href="http
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     </body>
 </html>

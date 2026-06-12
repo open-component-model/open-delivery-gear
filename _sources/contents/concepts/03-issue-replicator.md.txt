@@ -78,13 +78,13 @@ is tried, but if one lookup yields an empty list `[]`, this is interpreted as
 
 3. *Delivery-Service*
 
-   The responsibles retrieved from the delivery-service api
+   The responsibles retrieved from the ODG API
    `/ocm/component/responsibles` are used as last fallback. Those are not
    persisted as `ArtefactMetadata` but calculated ad-hoc (or consumed from
    persistent cache).
 
 The **behavioural contract** in case a GitHub issue already has assignees which
-are different to those the current execution yields, can be defined via the
+are different from those the current execution yields, can be defined via the
 `assignee_mode`. In (1) and (2), this mode can be set via the `.meta` property.
 In (3) or if it is not set (or explicitly set to `None`), the
 `default_assignee_mode` configured in the respective findings configuration is

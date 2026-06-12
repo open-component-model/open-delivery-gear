@@ -3,13 +3,14 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Reacting upon OCM events" href="02-artefact-enumerator.html"><link rel="prev" title="Architectural Overview" href="00-odg-architecture.html">
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Reacting upon OCM events" href="02-artefact-enumerator.html"><link rel="prev" title="ODG System Architecture" href="00-odg-architecture.html">
         <link rel="prefetch" href="../../_static/odg.svg" as="image">
 
     <link rel="shortcut icon" href="../../_static/odg.svg"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
         <title>Correlating metadata to OCM - Open Delivery Gear documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
     
     
@@ -194,17 +195,15 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="00-odg-architecture.html">Architectural Overview</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Concepts</span></p>
+  <p class="caption" role="heading"><span class="caption-text">Concepts</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="00-odg-architecture.html">ODG System Architecture</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Correlating metadata to OCM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="02-artefact-enumerator.html">Reacting upon OCM events</a></li>
 <li class="toctree-l1"><a class="reference internal" href="03-issue-replicator.html">Lifecycling GitHub Issues</a></li>
 <li class="toctree-l1"><a class="reference internal" href="05-responsibles.html">Overwriting OCM component responsibles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="06-extending.html">Extending ODG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07-sbom-generator.html">Generating Software Bill of Materials</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
 <ul>
@@ -213,6 +212,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../how-to/02-use-odg-api.html">Use the ODG Python Package to resolve an OCM component</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../how-to/03-vulnerabilities-for-component.html">Get all vulnerabilities for a Component</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../how-to/04-diki.html">Send Diki findings to ODG-API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how-to/05-sbom-download.html">Download SBOM Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how-to/06-sbom-diagnose-failures.html">Diagnose Failed SBOM Generation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul>
@@ -221,6 +222,7 @@
 <p class="caption" role="heading"><span class="caption-text">References</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../reference/00-artefact-metadata-query.html">Artefact Metadata Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/01-sbom-generator-config.html">SBOM-Generator Configuration Reference</a></li>
 </ul>
 
 </div>
@@ -270,11 +272,11 @@ coordinates with optional extensions.</p>
 <p>At its core, the Open Delivery Gear’s data model consists of the
 <code class="docutils literal notranslate"><span class="pre">ArtefactMetadata</span></code> meta-type, which allows describing such metadata, and
 correlating it to an <a class="reference internal" href="#artefact">artefact</a>. It is the output of an extension which is
-uploaded to the Delivery-Database via the Delivery-Service, and then may be
+uploaded to the ODG database via the ODG API, and then may be
 used for further processing and reporting. In the most basic form, it consists
 of an <a class="reference internal" href="#artefact">artefact</a>, some <a class="reference internal" href="#metadata">metadata</a> and an extension specific
 <a class="reference internal" href="#payload">payload</a> (see Fig. 1). The model is defined in the <code class="docutils literal notranslate"><span class="pre">odg.model</span></code> module of
-the delivery-service (<a class="reference external" href="https://github.com/open-component-model/delivery-service/blob/master/odg/model.py">ref</a>).</p>
+the odg-core (<a class="reference external" href="https://github.com/open-component-model/odg-core/blob/master/src/odg/model.py">ref</a>).</p>
 <figure class="align-center" id="id6" style="width: 50%">
 <img alt="../../_images/artefact-metadata.svg" src="../../_images/artefact-metadata.svg" />
 <figcaption>
@@ -353,7 +355,7 @@ grouped together (i.e. there must be some shared properties, e.g. the
 </span><span class="w">  </span><span class="nt">artefact</span><span class="p">:</span>
 <span class="hll"><span class="w">    </span><span class="nt">artefact_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">managed-seeds</span><span class="w"> </span><span class="c1"># group of Kubernetes clusters, might also be a project etc.</span>
 </span><span class="w">    </span><span class="nt">artefact_version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">diki</span><span class="w"> </span><span class="c1"># Diki does not specify an actual version here</span>
-<span class="hll"><span class="w">    </span><span class="nt">artefact_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dikiReport</span><span class="w"> </span><span class="c1"># Diki does not specifiy multiple artefact types</span>
+<span class="hll"><span class="w">    </span><span class="nt">artefact_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dikiReport</span><span class="w"> </span><span class="c1"># Diki does not specify multiple artefact types</span>
 </span></pre></div>
 </div>
 </div>
@@ -379,7 +381,7 @@ that this <strong>correlation-id</strong> is used to find related data or to cre
 groups which may be used, for example, to group items into the same issue as
 part of the GitHub issue reporting. The attributes which are used for this kind
 of grouping can be configured freely, but it must be ensured that the content
-of the included properties is “stable”. That means, it might be not benefical
+of the included properties is “stable”. That means, it might not be beneficial
 to include a <em>version</em> property or a temporary <em>instance-id</em> as a grouping
 relevant properties as this would not allow to correlate the same
 <a class="reference internal" href="#payload">payload</a> between multiple versions or instances, ultimately causing for
@@ -458,7 +460,7 @@ of <code class="docutils literal notranslate"><span class="pre">artefact</span><
 <p>See <a class="reference external" href="https://github.com/gardener/cc-utils/pull/1166/files">gardener/cc-utils#1166</a>
 as an example for this chapter. Please note that the <code class="docutils literal notranslate"><span class="pre">dso.model</span></code> module in
 the pull request has been replaced by the <code class="docutils literal notranslate"><span class="pre">odg.model</span></code> module in the
-delivery-service.</p>
+odg-core.</p>
 </div>
 </section>
 </section>
@@ -471,7 +473,7 @@ must be retained during subsequent updates. Therefore, the <code class="docutils
 part of the <code class="docutils literal notranslate"><span class="pre">ArtefactMetadata</span></code> model. By default, the initial <code class="docutils literal notranslate"><span class="pre">discovery_date</span></code>
 of a finding is re-used in case the OCM identity (except its version and extra
 identity) and the <code class="docutils literal notranslate"><span class="pre">key</span></code> property of the finding match. In case it is desired to
-deviate from this defalt behaviour (e.g. in case the <code class="docutils literal notranslate"><span class="pre">key</span></code> contains a package
+deviate from this default behaviour (e.g. in case the <code class="docutils literal notranslate"><span class="pre">key</span></code> contains a package
 version which should not be considered for the re-use), a custom check must be
 implemented as part of the upload metadata route.</p>
 <section id="considerations">
@@ -482,7 +484,7 @@ vulnerability findings, the <code class="docutils literal notranslate"><span cla
 and the package is the same, even if the package-version (which is part of the
 <code class="docutils literal notranslate"><span class="pre">data</span></code> key) changes. Therefore, the behaviour must be defined in the
 <code class="docutils literal notranslate"><span class="pre">PUT</span> <span class="pre">/artefacts/metadata</span></code> route
-(see <a class="reference external" href="https://github.com/open-component-model/delivery-service/commit/6697e5045d080d72c70b2ccaa214ffcaa8d0e244">open-component-model/delivery-service&#64;6697e50</a>
+(see <a class="reference external" href="https://github.com/open-component-model/odg-core/commit/6697e5045d080d72c70b2ccaa214ffcaa8d0e244">open-component-model/odg-core&#64;6697e50</a>
 as an example how to define this behaviour). In case it is not defined, the
 <code class="docutils literal notranslate"><span class="pre">discovery_date</span></code> will be always consumed as it is defined in the new
 <code class="docutils literal notranslate"><span class="pre">ArtefactMetadata</span></code> entry.</p>
@@ -533,7 +535,7 @@ as an example how to define this behaviour). In case it is not defined, the
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Architectural Overview</div>
+                <div class="title">ODG System Architecture</div>
                 
               </div>
             </a>
@@ -597,5 +599,6 @@ as an example how to define this behaviour). In case it is not defined, the
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     </body>
 </html>

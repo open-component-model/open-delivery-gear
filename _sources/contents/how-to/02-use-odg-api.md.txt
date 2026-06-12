@@ -2,7 +2,7 @@
 
 ## Goal
 
-Resolve an OCM component using the ODG API and the ODG Python Packge.
+Resolve an OCM component using the ODG API and the ODG Python Package.
 
 ## You will end up with
 
@@ -24,7 +24,7 @@ The package [is published to pypi.org](https://pypi.org/project/odg-client/), th
 pip3 install odg-client
 ```
 
-**Hint**: if you are not using virtual environments, you have to additional provide the `--break-system-packages` flag
+**Hint**: if you are not using virtual environments, you have to additionally provide the `--break-system-packages` flag
 
 ### Initialise the client
 
@@ -47,9 +47,9 @@ odg_api = odg_client.DeliveryServiceClient(
 ### Resolve OCM component
 
 The odg-client features functions wrapping ODG-API endpoints for convenience.
-There is no guarantee that all endpoints are covered, but the lowlevel client functions could be used to fill the gap, as they are implementing authencation and the overall request flow.
+There is no guarantee that all endpoints are covered, but the low-level client functions could be used to fill the gap, as they implement authentication and the overall request flow.
 
-An OCM component is resolved via `GET /ocm/component` endpoints, which features parameteres like `component-name` and `ocm-repo`.
+An OCM component is resolved via `GET /ocm/component` endpoints, which features parameters like `component-name` and `ocm-repo`.
 The corresponding python implementation to resolve the OCM component `acme.org/sovereign/postgres` in a certain version looks like this.
 
 ```python

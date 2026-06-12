@@ -3,13 +3,14 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Architectural Overview" href="contents/concepts/00-odg-architecture.html">
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="ODG System Architecture" href="contents/concepts/00-odg-architecture.html">
         <link rel="prefetch" href="_static/odg.svg" as="image">
 
     <link rel="shortcut icon" href="_static/odg.svg"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
         <title>Open Delivery Gear documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
     
     
@@ -194,17 +195,15 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+  <p class="caption" role="heading"><span class="caption-text">Concepts</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="contents/concepts/00-odg-architecture.html">Architectural Overview</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Concepts</span></p>
-<ul>
+<li class="toctree-l1"><a class="reference internal" href="contents/concepts/00-odg-architecture.html">ODG System Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contents/concepts/01-data-model.html">Correlating metadata to OCM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contents/concepts/02-artefact-enumerator.html">Reacting upon OCM events</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contents/concepts/03-issue-replicator.html">Lifecycling GitHub Issues</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contents/concepts/05-responsibles.html">Overwriting OCM component responsibles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contents/concepts/06-extending.html">Extending ODG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/concepts/07-sbom-generator.html">Generating Software Bill of Materials</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
 <ul>
@@ -213,6 +212,8 @@
 <li class="toctree-l1"><a class="reference internal" href="contents/how-to/02-use-odg-api.html">Use the ODG Python Package to resolve an OCM component</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contents/how-to/03-vulnerabilities-for-component.html">Get all vulnerabilities for a Component</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contents/how-to/04-diki.html">Send Diki findings to ODG-API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/how-to/05-sbom-download.html">Download SBOM Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/how-to/06-sbom-diagnose-failures.html">Diagnose Failed SBOM Generation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul>
@@ -221,6 +222,7 @@
 <p class="caption" role="heading"><span class="caption-text">References</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="contents/reference/00-artefact-metadata-query.html">Artefact Metadata Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/reference/01-sbom-generator-config.html">SBOM-Generator Configuration Reference</a></li>
 </ul>
 
 </div>
@@ -261,32 +263,119 @@
         <article role="main" id="furo-main-content">
           <section id="open-delivery-gear">
 <h1>Open Delivery Gear<a class="headerlink" href="#open-delivery-gear" title="Link to this heading">¶</a></h1>
-<p>Compliance is not living next to Software, instead is an integral part of it.
-The way we are integrating Compliance into Software is by building automations naturally integrated into the Software Lifecycle.</p>
-<section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
-<div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">Overview</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="contents/concepts/00-odg-architecture.html">Architectural Overview</a></li>
+<p><strong>Compliance is not living next to Software; instead, it is an integral part of it.</strong></p>
+<p>Open Delivery Gear (ODG) integrates compliance into the software lifecycle through automated scanning, tracking, and reporting of security findings, vulnerabilities, and compliance issues for your OCM components.</p>
+<section id="what-is-odg">
+<h2>What is ODG?<a class="headerlink" href="#what-is-odg" title="Link to this heading">¶</a></h2>
+<p>Open Delivery Gear is a comprehensive compliance automation platform that:</p>
+<ul class="simple">
+<li><p><strong>Scans OCM components</strong> for vulnerabilities, license compliance, and security issues</p></li>
+<li><p><strong>Tracks findings</strong> throughout the component lifecycle with configurable processing times</p></li>
+<li><p><strong>Replicates issues</strong> to GitHub for visibility and workflow integration</p></li>
+<li><p><strong>Generates SBOMs</strong> (Software Bill of Materials) for transparency and compliance</p></li>
+<li><p><strong>Manages responsibles</strong> by automatically assigning findings to the right teams</p></li>
 </ul>
+</section>
+<section id="key-features">
+<h2>Key Features<a class="headerlink" href="#key-features" title="Link to this heading">¶</a></h2>
+<div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-2 sd-row-cols-lg-2 sd-g-3 sd-g-xs-3 sd-g-sm-3 sd-g-md-3 sd-g-lg-3 docutils">
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+🔍 Automated Scanning</div>
+<p class="sd-card-text">Continuous scanning of OCI images, source code, and runtime artefacts using industry-standard tools like BDBA, ClamAV, and Syft.</p>
+</div>
+</div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+📊 Compliance Dashboard</div>
+<p class="sd-card-text">Centralized view of all findings with filtering, sorting, and drill-down capabilities to understand your security posture.</p>
+</div>
+</div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+🔄 Issue Lifecycle Management</div>
+<p class="sd-card-text">Automatic creation, updating, and closing of GitHub issues based on finding state and processing times.</p>
+</div>
+</div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+🎯 Responsible Assignment</div>
+<p class="sd-card-text">Intelligent assignment of findings to component owners and teams based on configurable rules and strategies.</p>
+</div>
+</div>
+</div>
+</div>
 </div>
 </section>
+<section id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">¶</a></h2>
+<div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-3 sd-row-cols-lg-3 sd-g-2 sd-g-xs-2 sd-g-sm-2 sd-g-md-2 sd-g-lg-2 docutils">
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
+<div class="sd-card-header sd-bg-primary sd-text-white docutils">
+<p class="sd-card-text"><strong>New Users</strong></p>
+</div>
+<div class="sd-card-body docutils">
+<p class="sd-card-text">Start with <a class="reference internal" href="contents/concepts/00-odg-architecture.html"><span class="doc">ODG System Architecture</span></a> to understand how ODG works.</p>
+</div>
+</div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
+<div class="sd-card-header sd-bg-success sd-text-white docutils">
+<p class="sd-card-text"><strong>Operators</strong></p>
+</div>
+<div class="sd-card-body docutils">
+<p class="sd-card-text">Set up your environment with <a class="reference internal" href="contents/how-to/01-local-setup.html"><span class="doc">Setup Local Development Environment</span></a>.</p>
+</div>
+</div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
+<div class="sd-card-header sd-bg-info sd-text-white docutils">
+<p class="sd-card-text"><strong>Developers</strong></p>
+</div>
+<div class="sd-card-body docutils">
+<p class="sd-card-text">Learn to extend ODG with <a class="reference internal" href="contents/tutorial/00-contributing-extension.html"><span class="doc">Contribute a new Extension</span></a>.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
 <section id="concepts">
 <h2>Concepts<a class="headerlink" href="#concepts" title="Link to this heading">¶</a></h2>
+<p><em>Deep-dive into ODG architecture, data models, and how extensions work</em></p>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Concepts</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="contents/concepts/00-odg-architecture.html">ODG System Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contents/concepts/01-data-model.html">Correlating metadata to OCM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contents/concepts/02-artefact-enumerator.html">Reacting upon OCM events</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contents/concepts/03-issue-replicator.html">Lifecycling GitHub Issues</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contents/concepts/05-responsibles.html">Overwriting OCM component responsibles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contents/concepts/06-extending.html">Extending ODG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/concepts/07-sbom-generator.html">Generating Software Bill of Materials</a></li>
 </ul>
 </div>
 </section>
 <section id="how-to-guides">
 <h2>How-to Guides<a class="headerlink" href="#how-to-guides" title="Link to this heading">¶</a></h2>
+<p><em>Step-by-step instructions for common tasks and workflows</em></p>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
 <ul>
@@ -295,11 +384,14 @@ The way we are integrating Compliance into Software is by building automations n
 <li class="toctree-l1"><a class="reference internal" href="contents/how-to/02-use-odg-api.html">Use the ODG Python Package to resolve an OCM component</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contents/how-to/03-vulnerabilities-for-component.html">Get all vulnerabilities for a Component</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contents/how-to/04-diki.html">Send Diki findings to ODG-API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/how-to/05-sbom-download.html">Download SBOM Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/how-to/06-sbom-diagnose-failures.html">Diagnose Failed SBOM Generation</a></li>
 </ul>
 </div>
 </section>
 <section id="tutorials">
 <h2>Tutorials<a class="headerlink" href="#tutorials" title="Link to this heading">¶</a></h2>
+<p><em>Guided lessons to learn ODG by doing</em></p>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul>
@@ -309,10 +401,57 @@ The way we are integrating Compliance into Software is by building automations n
 </section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Link to this heading">¶</a></h2>
+<p><em>Technical specifications, API documentation, and configuration references</em></p>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">References</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="contents/reference/00-artefact-metadata-query.html">Artefact Metadata Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents/reference/01-sbom-generator-config.html">SBOM-Generator Configuration Reference</a></li>
+</ul>
+</div>
+</section>
+<hr class="docutils" />
+<section id="additional-resources">
+<h2>Additional Resources<a class="headerlink" href="#additional-resources" title="Link to this heading">¶</a></h2>
+<div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-3 sd-row-cols-lg-3 sd-g-2 sd-g-xs-2 sd-g-sm-2 sd-g-md-2 sd-g-lg-2 docutils">
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+💻 GitHub Repository</div>
+<p class="sd-card-text">Source code, issues, and contributions</p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference external" href="https://github.com/open-component-model/open-delivery-gear"><span>https://github.com/open-component-model/open-delivery-gear</span></a></div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+🏗️ ODG Core</div>
+<p class="sd-card-text">Core service implementation</p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference external" href="https://github.com/open-component-model/odg-core"><span>https://github.com/open-component-model/odg-core</span></a></div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+📦 Open Component Model</div>
+<p class="sd-card-text">Learn about OCM</p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference external" href="https://ocm.software"><span>https://ocm.software</span></a></div>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This documentation is organized using the <a class="reference external" href="https://diataxis.fr/">Diataxis framework</a>:</p>
+<ul class="simple">
+<li><p><strong>Tutorials</strong>: Learning-oriented lessons</p></li>
+<li><p><strong>How-to Guides</strong>: Problem-oriented, goal-focused instructions</p></li>
+<li><p><strong>Concepts</strong>: Understanding-oriented explanations</p></li>
+<li><p><strong>References</strong>: Information-oriented technical descriptions</p></li>
 </ul>
 </div>
 </section>
@@ -328,7 +467,7 @@ The way we are integrating Compliance into Software is by building automations n
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Architectural Overview</div>
+                <div class="title">ODG System Architecture</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -364,11 +503,14 @@ The way we are integrating Compliance into Software is by building automations n
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Open Delivery Gear</a><ul>
-<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#what-is-odg">What is ODG?</a></li>
+<li><a class="reference internal" href="#key-features">Key Features</a></li>
+<li><a class="reference internal" href="#getting-started">Getting Started</a></li>
 <li><a class="reference internal" href="#concepts">Concepts</a></li>
 <li><a class="reference internal" href="#how-to-guides">How-to Guides</a></li>
 <li><a class="reference internal" href="#tutorials">Tutorials</a></li>
 <li><a class="reference internal" href="#references">References</a></li>
+<li><a class="reference internal" href="#additional-resources">Additional Resources</a></li>
 </ul>
 </li>
 </ul>
@@ -384,5 +526,6 @@ The way we are integrating Compliance into Software is by building automations n
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
     </body>
 </html>

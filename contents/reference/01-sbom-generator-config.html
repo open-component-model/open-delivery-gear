@@ -3,11 +3,11 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Get all vulnerabilities for a Component" href="03-vulnerabilities-for-component.html"><link rel="prev" title="Setup Local Development Environment" href="01-local-setup.html">
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="prev" title="Artefact Metadata Search" href="00-artefact-metadata-query.html">
         <link rel="prefetch" href="../../_static/odg.svg" as="image">
 
     <link rel="shortcut icon" href="../../_static/odg.svg"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Use the ODG Python Package to resolve an OCM component - Open Delivery Gear documentation</title>
+        <title>SBOM-Generator Configuration Reference - Open Delivery Gear documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
@@ -206,23 +206,23 @@
 <li class="toctree-l1"><a class="reference internal" href="../concepts/07-sbom-generator.html">Generating Software Bill of Materials</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="00-hybrid-dev-setup.html">Setting up a hybrid dev setup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="01-local-setup.html">Setup Local Development Environment</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Use the ODG Python Package to resolve an OCM component</a></li>
-<li class="toctree-l1"><a class="reference internal" href="03-vulnerabilities-for-component.html">Get all vulnerabilities for a Component</a></li>
-<li class="toctree-l1"><a class="reference internal" href="04-diki.html">Send Diki findings to ODG-API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="05-sbom-download.html">Download SBOM Documents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="06-sbom-diagnose-failures.html">Diagnose Failed SBOM Generation</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../how-to/00-hybrid-dev-setup.html">Setting up a hybrid dev setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how-to/01-local-setup.html">Setup Local Development Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how-to/02-use-odg-api.html">Use the ODG Python Package to resolve an OCM component</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how-to/03-vulnerabilities-for-component.html">Get all vulnerabilities for a Component</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how-to/04-diki.html">Send Diki findings to ODG-API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how-to/05-sbom-download.html">Download SBOM Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how-to/06-sbom-diagnose-failures.html">Diagnose Failed SBOM Generation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/00-contributing-extension.html">Contribute a new Extension</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">References</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../reference/00-artefact-metadata-query.html">Artefact Metadata Search</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../reference/01-sbom-generator-config.html">SBOM-Generator Configuration Reference</a></li>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="00-artefact-metadata-query.html">Artefact Metadata Search</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">SBOM-Generator Configuration Reference</a></li>
 </ul>
 
 </div>
@@ -243,7 +243,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="../../_sources/contents/how-to/02-use-odg-api.md.txt" title="View this page">
+  <a class="muted-link" href="../../_sources/contents/reference/01-sbom-generator-config.md.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -261,66 +261,152 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="use-the-odg-python-package-to-resolve-an-ocm-component">
-<h1>Use the ODG Python Package to resolve an OCM component<a class="headerlink" href="#use-the-odg-python-package-to-resolve-an-ocm-component" title="Link to this heading">¶</a></h1>
-<section id="goal">
-<h2>Goal<a class="headerlink" href="#goal" title="Link to this heading">¶</a></h2>
-<p>Resolve an OCM component using the ODG API and the ODG Python Package.</p>
+          <section id="sbom-generator-configuration-reference">
+<h1>SBOM-Generator Configuration Reference<a class="headerlink" href="#sbom-generator-configuration-reference" title="Link to this heading">¶</a></h1>
+<p>The SBOM-Generator extension is configured under the <code class="docutils literal notranslate"><span class="pre">sbom_generator</span></code> key.</p>
+<section id="configuration-example">
+<h2>Configuration Example<a class="headerlink" href="#configuration-example" title="Link to this heading">¶</a></h2>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">sbom_generator</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">delivery_service_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://delivery-service:5000</span>
+<span class="w">  </span><span class="nt">output_format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cyclonedx</span><span class="w">       </span><span class="c1"># or &#39;spdx&#39;</span>
+<span class="w">  </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">86400</span><span class="w">                </span><span class="c1"># re-scan every 24 hours</span>
+<span class="w">  </span><span class="nt">mappings</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;&#39;</span><span class="w">                 </span><span class="c1"># matches all components</span>
+<span class="w">      </span><span class="nt">aws_secret_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">~</span><span class="w">         </span><span class="c1"># AWS secret name (required for S3 artefacts)</span>
+</pre></div>
+</div>
 </section>
-<section id="you-will-end-up-with">
-<h2>You will end up with<a class="headerlink" href="#you-will-end-up-with" title="Link to this heading">¶</a></h2>
+<section id="top-level-options">
+<h2>Top-Level Options<a class="headerlink" href="#top-level-options" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">enabled</span></code></p></td>
+<td><p>bool</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code></p></td>
+<td><p>Enable or disable the extension.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">delivery_service_url</span></code></p></td>
+<td><p>string</p></td>
+<td><p>—</p></td>
+<td><p>URL of the delivery service instance.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">output_format</span></code></p></td>
+<td><p>string</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cyclonedx</span></code></p></td>
+<td><p>Output format: <code class="docutils literal notranslate"><span class="pre">cyclonedx</span></code> or <code class="docutils literal notranslate"><span class="pre">spdx</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">interval</span></code></p></td>
+<td><p>int (seconds)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">86400</span></code></p></td>
+<td><p>Maximum time before an artefact is re-scanned.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mappings</span></code></p></td>
+<td><p>list</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">[]</span></code></p></td>
+<td><p>Per-prefix component mappings. See mapping fields below.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="mapping-fields">
+<h2>Mapping Fields<a class="headerlink" href="#mapping-fields" title="Link to this heading">¶</a></h2>
+<p>Each entry in the <code class="docutils literal notranslate"><span class="pre">mappings</span></code> list supports the following fields:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">prefix</span></code></p></td>
+<td><p>string</p></td>
+<td><p>yes</p></td>
+<td><p>Component name prefix. Use <code class="docutils literal notranslate"><span class="pre">''</span></code> to match all components.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">aws_secret_name</span></code></p></td>
+<td><p>string</p></td>
+<td><p>no</p></td>
+<td><p>Name of the AWS secret used to access S3 artefacts. Required when multiple AWS secrets are configured.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="configuration-details">
+<h2>Configuration Details<a class="headerlink" href="#configuration-details" title="Link to this heading">¶</a></h2>
+<section id="enabled">
+<h3><code class="docutils literal notranslate"><span class="pre">enabled</span></code><a class="headerlink" href="#enabled" title="Link to this heading">¶</a></h3>
+<p>Controls whether the SBOM-Generator extension is active. When set to <code class="docutils literal notranslate"><span class="pre">false</span></code>,
+no SBOM generation will occur.</p>
+</section>
+<section id="delivery-service-url">
+<h3><code class="docutils literal notranslate"><span class="pre">delivery_service_url</span></code><a class="headerlink" href="#delivery-service-url" title="Link to this heading">¶</a></h3>
+<p>The URL where the ODG core service is accessible. This is used to upload
+generated SBOMs and record metadata.</p>
+</section>
+<section id="output-format">
+<h3><code class="docutils literal notranslate"><span class="pre">output_format</span></code><a class="headerlink" href="#output-format" title="Link to this heading">¶</a></h3>
+<p>Specifies the SBOM format to generate:</p>
 <ul class="simple">
-<li><p>a python script calling the ODG API to resolve an OCM component</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cyclonedx</span></code>: Generates CycloneDX format SBOMs (default)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">spdx</span></code>: Generates SPDX format SBOMs</p></li>
 </ul>
 </section>
-<section id="prerequisites">
-<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">¶</a></h2>
+<section id="interval">
+<h3><code class="docutils literal notranslate"><span class="pre">interval</span></code><a class="headerlink" href="#interval" title="Link to this heading">¶</a></h3>
+<p>The maximum time (in seconds) before a component’s artefacts are rescanned.
+Default is 86400 seconds (24 hours).</p>
+</section>
+<section id="mappings">
+<h3><code class="docutils literal notranslate"><span class="pre">mappings</span></code><a class="headerlink" href="#mappings" title="Link to this heading">¶</a></h3>
+<p>Allows per-component-prefix configuration. This is particularly useful when:</p>
 <ul class="simple">
-<li><p>An ODG instance</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">python3</span></code>, <code class="docutils literal notranslate"><span class="pre">pip3</span></code></p></li>
-<li><p>A GitHub token privileged to read-access the ODG instance</p></li>
+<li><p>Different components require different AWS credentials for S3 access</p></li>
+<li><p>You need to handle components from different sources differently</p></li>
 </ul>
+<section id="prefix-matching">
+<h4>Prefix Matching<a class="headerlink" href="#prefix-matching" title="Link to this heading">¶</a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">prefix</span></code> field uses simple string prefix matching:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">prefix:</span> <span class="pre">'acme.org'</span></code> matches <code class="docutils literal notranslate"><span class="pre">acme.org/product</span></code> and <code class="docutils literal notranslate"><span class="pre">acme.org/another-product</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">prefix:</span> <span class="pre">''</span></code> (empty string) matches all components (use as a catch-all)</p></li>
+</ul>
+<p>Multiple mappings are evaluated in order, and the first matching prefix is used.</p>
 </section>
-<section id="actions">
-<h2>Actions<a class="headerlink" href="#actions" title="Link to this heading">¶</a></h2>
-<section id="installing-the-package">
-<h3>Installing the Package<a class="headerlink" href="#installing-the-package" title="Link to this heading">¶</a></h3>
-<p>The package <a class="reference external" href="https://pypi.org/project/odg-client/">is published to pypi.org</a>, thus can be installed with <code class="docutils literal notranslate"><span class="pre">pip3</span></code>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip3</span> <span class="n">install</span> <span class="n">odg</span><span class="o">-</span><span class="n">client</span>
+<section id="aws-secret-configuration">
+<h4>AWS Secret Configuration<a class="headerlink" href="#aws-secret-configuration" title="Link to this heading">¶</a></h4>
+<p>When scanning S3 resources, the SBOM-Generator needs AWS credentials. The
+<code class="docutils literal notranslate"><span class="pre">aws_secret_name</span></code> field specifies which AWS secret to use from your ODG
+secrets configuration.</p>
+<p><strong>Example with multiple prefixes:</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">sbom_generator</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">delivery_service_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://delivery-service:5000</span>
+<span class="w">  </span><span class="nt">output_format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cyclonedx</span>
+<span class="w">  </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">86400</span>
+<span class="w">  </span><span class="nt">mappings</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;acme.org/product-a&#39;</span>
+<span class="w">      </span><span class="nt">aws_secret_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aws-account-prod</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;acme.org&#39;</span>
+<span class="w">      </span><span class="nt">aws_secret_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aws-account-dev</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;&#39;</span>
+<span class="w">      </span><span class="nt">aws_secret_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aws-account-default</span>
 </pre></div>
 </div>
-<p><strong>Hint</strong>: if you are not using virtual environments, you have to additionally provide the <code class="docutils literal notranslate"><span class="pre">--break-system-packages</span></code> flag</p>
 </section>
-<section id="initialise-the-client">
-<h3>Initialise the client<a class="headerlink" href="#initialise-the-client" title="Link to this heading">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">odg_client</span>
-
-<span class="n">ODG_API</span> <span class="o">=</span> <span class="s1">&#39;https://delivery-service.demo.ci.gardener.cloud&#39;</span>
-<span class="n">GH_TOKEN</span> <span class="o">=</span> <span class="s1">&#39;github_pat_xxx&#39;</span>
-<span class="n">GH_API</span> <span class="o">=</span> <span class="s1">&#39;https://api.github.com&#39;</span>
-
-<span class="n">odg_api</span> <span class="o">=</span> <span class="n">odg_client</span><span class="o">.</span><span class="n">DeliveryServiceClient</span><span class="p">(</span>
-    <span class="n">routes</span><span class="o">=</span><span class="n">odg_client</span><span class="o">.</span><span class="n">DeliveryServiceRoutes</span><span class="p">(</span>
-        <span class="n">base_url</span><span class="o">=</span><span class="n">ODG_API</span><span class="p">,</span>
-    <span class="p">),</span>
-    <span class="n">auth_token</span><span class="o">=</span><span class="n">GH_TOKEN</span><span class="p">,</span>
-    <span class="n">api_url</span><span class="o">=</span><span class="n">GH_API</span><span class="p">,</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-</section>
-<section id="resolve-ocm-component">
-<h3>Resolve OCM component<a class="headerlink" href="#resolve-ocm-component" title="Link to this heading">¶</a></h3>
-<p>The odg-client features functions wrapping ODG-API endpoints for convenience.
-There is no guarantee that all endpoints are covered, but the low-level client functions could be used to fill the gap, as they implement authentication and the overall request flow.</p>
-<p>An OCM component is resolved via <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/ocm/component</span></code> endpoints, which features parameters like <code class="docutils literal notranslate"><span class="pre">component-name</span></code> and <code class="docutils literal notranslate"><span class="pre">ocm-repo</span></code>.
-The corresponding python implementation to resolve the OCM component <code class="docutils literal notranslate"><span class="pre">acme.org/sovereign/postgres</span></code> in a certain version looks like this.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">component_descriptor</span> <span class="o">=</span> <span class="n">odg_api</span><span class="o">.</span><span class="n">component_descriptor</span><span class="p">(</span>
-    <span class="n">name</span><span class="o">=</span><span class="s1">&#39;acme.org/sovereign/postgres&#39;</span><span class="p">,</span>
-    <span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.0.0&#39;</span>
-<span class="p">)</span>
-</pre></div>
-</div>
 </section>
 </section>
 </section>
@@ -330,23 +416,15 @@ The corresponding python implementation to resolve the OCM component <code class
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="03-vulnerabilities-for-component.html">
-              <div class="page-info">
-                <div class="context">
-                  <span>Next</span>
-                </div>
-                <div class="title">Get all vulnerabilities for a Component</div>
-              </div>
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-            </a>
-          <a class="prev-page" href="01-local-setup.html">
+          
+          <a class="prev-page" href="00-artefact-metadata-query.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Setup Local Development Environment</div>
+                <div class="title">Artefact Metadata Search</div>
                 
               </div>
             </a>
@@ -380,14 +458,20 @@ The corresponding python implementation to resolve the OCM component <code class
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Use the ODG Python Package to resolve an OCM component</a><ul>
-<li><a class="reference internal" href="#goal">Goal</a></li>
-<li><a class="reference internal" href="#you-will-end-up-with">You will end up with</a></li>
-<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
-<li><a class="reference internal" href="#actions">Actions</a><ul>
-<li><a class="reference internal" href="#installing-the-package">Installing the Package</a></li>
-<li><a class="reference internal" href="#initialise-the-client">Initialise the client</a></li>
-<li><a class="reference internal" href="#resolve-ocm-component">Resolve OCM component</a></li>
+<li><a class="reference internal" href="#">SBOM-Generator Configuration Reference</a><ul>
+<li><a class="reference internal" href="#configuration-example">Configuration Example</a></li>
+<li><a class="reference internal" href="#top-level-options">Top-Level Options</a></li>
+<li><a class="reference internal" href="#mapping-fields">Mapping Fields</a></li>
+<li><a class="reference internal" href="#configuration-details">Configuration Details</a><ul>
+<li><a class="reference internal" href="#enabled"><code class="docutils literal notranslate"><span class="pre">enabled</span></code></a></li>
+<li><a class="reference internal" href="#delivery-service-url"><code class="docutils literal notranslate"><span class="pre">delivery_service_url</span></code></a></li>
+<li><a class="reference internal" href="#output-format"><code class="docutils literal notranslate"><span class="pre">output_format</span></code></a></li>
+<li><a class="reference internal" href="#interval"><code class="docutils literal notranslate"><span class="pre">interval</span></code></a></li>
+<li><a class="reference internal" href="#mappings"><code class="docutils literal notranslate"><span class="pre">mappings</span></code></a><ul>
+<li><a class="reference internal" href="#prefix-matching">Prefix Matching</a></li>
+<li><a class="reference internal" href="#aws-secret-configuration">AWS Secret Configuration</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

@@ -10,6 +10,7 @@
         <title>Reacting upon OCM events - Open Delivery Gear documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
     
     
@@ -194,17 +195,15 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="00-odg-architecture.html">Architectural Overview</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Concepts</span></p>
+  <p class="caption" role="heading"><span class="caption-text">Concepts</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="00-odg-architecture.html">ODG System Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="01-data-model.html">Correlating metadata to OCM</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Reacting upon OCM events</a></li>
 <li class="toctree-l1"><a class="reference internal" href="03-issue-replicator.html">Lifecycling GitHub Issues</a></li>
 <li class="toctree-l1"><a class="reference internal" href="05-responsibles.html">Overwriting OCM component responsibles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="06-extending.html">Extending ODG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07-sbom-generator.html">Generating Software Bill of Materials</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
 <ul>
@@ -213,6 +212,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../how-to/02-use-odg-api.html">Use the ODG Python Package to resolve an OCM component</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../how-to/03-vulnerabilities-for-component.html">Get all vulnerabilities for a Component</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../how-to/04-diki.html">Send Diki findings to ODG-API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how-to/05-sbom-download.html">Download SBOM Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how-to/06-sbom-diagnose-failures.html">Diagnose Failed SBOM Generation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul>
@@ -221,6 +222,7 @@
 <p class="caption" role="heading"><span class="caption-text">References</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../reference/00-artefact-metadata-query.html">Artefact Metadata Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/01-sbom-generator-config.html">SBOM-Generator Configuration Reference</a></li>
 </ul>
 
 </div>
@@ -281,7 +283,7 @@ reported, etc.). Apart from these periodical triggers initiated by the
 artefact-enumerator, certain extensions might be triggered manually by creating
 a respective <strong>backlog item</strong> for the desired extension and <code class="docutils literal notranslate"><span class="pre">artefact</span></code> (see
 <a class="reference internal" href="#example-backlog-item">example</a>), for example via delivery-dashboard or
-directly via delivery-service or cluster API. In general, creating backlog
+directly via ODG API or cluster API. In general, creating backlog
 items is the same trigger as used by the artefact-enumerator, however, certain
 extensions might require the artefacts to be configured here in order to
 process them (e.g.
@@ -303,7 +305,7 @@ parsed into such a <code class="docutils literal notranslate"><span class="pre">
 <p>To be also able to process artefacts which are not (yet) subject of being
 modelled via OCM, i.e. volatile <strong>runtime artefacts</strong>, those can be added to
 the list of artefacts “of interest” by creating respective <code class="docutils literal notranslate"><span class="pre">RuntimeArtefact</span></code>
-custom resources, either via delivery-service or via cluster API (see
+custom resources, either via ODG API or via cluster API (see
 <a class="reference internal" href="#example-runtime-artefact">example</a>). Note that, because these artefacts
 are not modelled via OCM, the artefact-enumerator is not able to resolve any
 dependencies and thus each artefact must be specified via a dedicated runtime
@@ -315,7 +317,7 @@ later processed equally as the before mentioned OCM resources and sources.</p>
 <span id="id4"></span><h3>Compliance Snapshots<a class="headerlink" href="#compliance-snapshots" title="Link to this heading">¶</a></h3>
 <p>Compliance snapshots are used as internal state for the configured
 <a class="reference internal" href="#artefacts">artefacts</a>, e.g. to store information on the last execution
-time by a extension or to keep track of artefacts which should be reported
+time by an extension or to keep track of artefacts which should be reported
 before but, by now, they are not “of interest” anymore, and thus, for example,
 remaining open GitHub issues must be closed. Therefore, for each artefact, a
 respective compliance snapshot is being created. Already existing compliance
@@ -477,5 +479,6 @@ changes (e.g. to close related GitHub issues).</p>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     </body>
 </html>

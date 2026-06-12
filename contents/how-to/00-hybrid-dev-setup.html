@@ -3,13 +3,14 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Setup Local Development Environment" href="01-local-setup.html"><link rel="prev" title="Extending ODG" href="../concepts/06-extending.html">
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Setup Local Development Environment" href="01-local-setup.html"><link rel="prev" title="Generating Software Bill of Materials" href="../concepts/07-sbom-generator.html">
         <link rel="prefetch" href="../../_static/odg.svg" as="image">
 
     <link rel="shortcut icon" href="../../_static/odg.svg"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
         <title>Setting up a hybrid dev setup - Open Delivery Gear documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
     
     
@@ -194,17 +195,15 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+  <p class="caption" role="heading"><span class="caption-text">Concepts</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../concepts/00-odg-architecture.html">Architectural Overview</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Concepts</span></p>
-<ul>
+<li class="toctree-l1"><a class="reference internal" href="../concepts/00-odg-architecture.html">ODG System Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../concepts/01-data-model.html">Correlating metadata to OCM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../concepts/02-artefact-enumerator.html">Reacting upon OCM events</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../concepts/03-issue-replicator.html">Lifecycling GitHub Issues</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../concepts/05-responsibles.html">Overwriting OCM component responsibles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../concepts/06-extending.html">Extending ODG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../concepts/07-sbom-generator.html">Generating Software Bill of Materials</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
 <ul class="current">
@@ -213,6 +212,8 @@
 <li class="toctree-l1"><a class="reference internal" href="02-use-odg-api.html">Use the ODG Python Package to resolve an OCM component</a></li>
 <li class="toctree-l1"><a class="reference internal" href="03-vulnerabilities-for-component.html">Get all vulnerabilities for a Component</a></li>
 <li class="toctree-l1"><a class="reference internal" href="04-diki.html">Send Diki findings to ODG-API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05-sbom-download.html">Download SBOM Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06-sbom-diagnose-failures.html">Diagnose Failed SBOM Generation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul>
@@ -221,6 +222,7 @@
 <p class="caption" role="heading"><span class="caption-text">References</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../reference/00-artefact-metadata-query.html">Artefact Metadata Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/01-sbom-generator-config.html">SBOM-Generator Configuration Reference</a></li>
 </ul>
 
 </div>
@@ -281,12 +283,12 @@
 <h2>Actions<a class="headerlink" href="#actions" title="Link to this heading">¶</a></h2>
 <section id="preparation">
 <h3>Preparation<a class="headerlink" href="#preparation" title="Link to this heading">¶</a></h3>
-<p>Pull the <a class="reference external" href="https://github.com/open-component-model/delivery-service">ODG Core repository</a>.
+<p>Pull the <a class="reference external" href="https://github.com/open-component-model/odg-core">ODG Core repository</a>.
 Install dependencies using <code class="docutils literal notranslate"><span class="pre">pip3</span></code>.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip3</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">-</span><span class="n">dev</span><span class="o">.</span><span class="n">txt</span>
 </pre></div>
 </div>
-<p><strong>Hint</strong>: if you are not using virtual environments, you have to additional provide the <code class="docutils literal notranslate"><span class="pre">--break-system-packages</span></code> flag</p>
+<p><strong>Hint</strong>: if you are not using virtual environments, you have to additionally provide the <code class="docutils literal notranslate"><span class="pre">--break-system-packages</span></code> flag</p>
 </section>
 <section id="configuration-and-secrets">
 <h3>Configuration and Secrets<a class="headerlink" href="#configuration-and-secrets" title="Link to this heading">¶</a></h3>
@@ -295,27 +297,27 @@ In a Kubernetes environment, this is implemented using mounted ConfigMaps and Se
 On a local machine these files are created manually.</p>
 <section id="configuration">
 <h4>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h4>
-<p>The <a class="reference external" href="https://github.com/open-component-model/delivery-service">ODG Core repository</a> features blueprints and default configuration files already.
+<p>The <a class="reference external" href="https://github.com/open-component-model/odg-core">ODG Core repository</a> features blueprints and default configuration files already.
 They can just be adjusted, as ODG will use them by default.</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://github.com/open-component-model/delivery-service/blob/master/odg/extensions_cfg.yaml">Configuring your Extensions</a></p></li>
-<li><p><a class="reference external" href="https://github.com/open-component-model/delivery-service/blob/master/odg/findings_cfg.yaml">Configuring your supported Findings</a></p></li>
+<li><p><a class="reference external" href="https://github.com/open-component-model/odg-core/blob/master/odg/extensions_cfg.yaml">Configuring your Extensions</a></p></li>
+<li><p><a class="reference external" href="https://github.com/open-component-model/odg-core/blob/master/odg/findings_cfg.yaml">Configuring your supported Findings</a></p></li>
 </ul>
-<p>An in-depth documentation for all the available configuration options is <a class="reference external" href="https://github.com/open-component-model/delivery-service/blob/master/charts/bootstrapping/values.documentation.yaml">here</a>.</p>
+<p>An in-depth documentation for all the available configuration options is <a class="reference external" href="https://github.com/open-component-model/odg-core/blob/master/charts/bootstrapping/values.documentation.yaml">here</a>.</p>
 </section>
 <section id="secrets">
 <h4>Secrets<a class="headerlink" href="#secrets" title="Link to this heading">¶</a></h4>
-<p>ODG features a typed Secret system. There is a opinion on how a secret has to be structured and named.
-<a class="reference external" href="https://github.com/open-component-model/delivery-service/tree/master/secrets">secrets directory</a> features templates for supported secret types. To make them effective, the <code class="docutils literal notranslate"><span class="pre">.template</span></code> string has to be dropped from the filename.</p>
-<p>Also for the secret structure and semantics, <a class="reference external" href="https://github.com/open-component-model/delivery-service/blob/c8b4f4fe055b8719a0dd849026678f6ab8127d76/charts/bootstrapping/values.documentation.yaml#L1558">there is detailed documentation</a>.</p>
+<p>ODG features a typed Secret system. There is an opinion on how a secret has to be structured and named.
+The <a class="reference external" href="https://github.com/open-component-model/odg-core/tree/master/secrets">secrets directory</a> features templates for supported secret types. To make them effective, the <code class="docutils literal notranslate"><span class="pre">.template</span></code> string has to be dropped from the filename.</p>
+<p>Also for the secret structure and semantics, <a class="reference external" href="https://github.com/open-component-model/odg-core/blob/c8b4f4fe055b8719a0dd849026678f6ab8127d76/charts/bootstrapping/values.documentation.yaml#L1558">there is detailed documentation</a>.</p>
 </section>
 </section>
 <section id="connecting-with-an-odg-instance">
 <h3>Connecting with an ODG instance<a class="headerlink" href="#connecting-with-an-odg-instance" title="Link to this heading">¶</a></h3>
-<p>ODG code connects in two ways with a running instance, on Kubernetes level and with ODG-API.</p>
+<p>ODG code connects in two ways with a running instance: on Kubernetes level and with ODG-API.</p>
 <section id="kubernetes">
 <h4>Kubernetes<a class="headerlink" href="#kubernetes" title="Link to this heading">¶</a></h4>
-<p>To connect ODG code to a running cluster, you need to obtain valid <code class="docutils literal notranslate"><span class="pre">kubeconfig</span></code> (with static credentials) and put it to a local file.
+<p>To connect ODG code to a running cluster, you need to obtain a valid <code class="docutils literal notranslate"><span class="pre">kubeconfig</span></code> (with static credentials) and put it into a local file.
 ODG will pick it up when referencing via <code class="docutils literal notranslate"><span class="pre">--kubeconfig</span></code> parameter on startup.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">my</span><span class="o">-</span><span class="n">odg</span><span class="o">-</span><span class="n">extension</span> <span class="o">--</span><span class="n">kubeconfig</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">kubeconfig</span>
 </pre></div>
@@ -323,7 +325,7 @@ ODG will pick it up when referencing via <code class="docutils literal notransla
 </section>
 <section id="odg-api">
 <h4>ODG API<a class="headerlink" href="#odg-api" title="Link to this heading">¶</a></h4>
-<p>Depending to the GitHub instances the ODG API supports, create a GitHub secret in the ODG secret structure.</p>
+<p>Depending on the GitHub instances the ODG API supports, create a GitHub secret in the ODG secret structure.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39; &gt; /path/to/odg-api/secrets/github/odg-api.yaml</span>
 <span class="s">api_url: https://api.github.com</span>
 <span class="s">http_url: https://github.com</span>
@@ -341,7 +343,7 @@ ODG will pick it up when referencing via <code class="docutils literal notransla
 </section>
 <section id="ensure-code-quality">
 <h3>Ensure Code Quality<a class="headerlink" href="#ensure-code-quality" title="Link to this heading">¶</a></h3>
-<p>The <a class="reference external" href="https://github.com/open-component-model/delivery-service">ODG Core repository</a> features linters, formatters, and tests. There are callback to run them properly configured.</p>
+<p>The <a class="reference external" href="https://github.com/open-component-model/odg-core">ODG Core repository</a> features linters, formatters, and tests. There are callbacks to run them properly configured.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>.ci/lint
 .ci/check-format
 .ci/test
@@ -365,14 +367,14 @@ ODG will pick it up when referencing via <code class="docutils literal notransla
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="../concepts/06-extending.html">
+          <a class="prev-page" href="../concepts/07-sbom-generator.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Extending ODG</div>
+                <div class="title">Generating Software Bill of Materials</div>
                 
               </div>
             </a>
@@ -440,5 +442,6 @@ ODG will pick it up when referencing via <code class="docutils literal notransla
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     </body>
 </html>

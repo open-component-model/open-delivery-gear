@@ -4,7 +4,7 @@ The responsibles extension is able to determine responsibles based on
 configured `rules`. The determined responsibles are uploaded as
 `ArtefactMetadata` of type `meta/responsibles`. A rule in this context is made
 up by a list of `filters` and a list of assigned `strategies`. A rule is
-considered to be a match iff all of the filters of a rule match the given
+considered to be a match if and only if all of the filters of a rule match the given
 artefact + datatype. The first matching rule "wins". In case no rule matches,
 no responsible objects are uploaded.
 
@@ -16,7 +16,7 @@ responsibles.
 
 Next to the filters and strategies, a rule can define an optional
 `assignee_mode` as well. This mode defines the behavioural contract in case a
-GitHub issue already has assignees which are different to those the current
+GitHub issue already has assignees which are different from those the current
 execution yields.
 
 ```{note}

@@ -15,7 +15,7 @@ refer to {doc}`/contents/concepts/01-data-model`.
 
 Configuration for each extension should be provided via the interface defined
 in the `odg.extensions_cfg` module
-([ref](https://github.com/open-component-model/delivery-service/blob/master/odg/extensions.py)).
+([ref](https://github.com/open-component-model/odg-core/blob/master/src/odg/extensions.py)).
 A minimal set of configuration parameters is defined by the required base class
 `ExtensionCfgMixins`. In case the extension is expected to be working with
 backlog items (more on that topic in [extension-triggers](#extension-triggers) and
@@ -30,7 +30,7 @@ Once a suitable dataclass for the extension is defined, it must be added to the
 a mounted ConfigMap (more on that topic in [helm-chart](#helm-chart)).
 
 ```{note}
-See [open-component-model/delivery-service@b635470](https://github.com/open-component-model/delivery-service/commit/b6354706c7545eacd571271472807c95aa2525da)
+See [open-component-model/odg-core@b635470](https://github.com/open-component-model/odg-core/commit/b6354706c7545eacd571271472807c95aa2525da)
 as an example for this chapter.
 ```
 
@@ -48,7 +48,7 @@ issues, the `issues` property has to be configured accordingly too (see
 [issue-replicator](#issue-replicator) as well).
 
 ```{note}
-See [open-component-model/delivery-service@15dabcf](https://github.com/open-component-model/delivery-service/commit/15dabcf1b9f439b0d4eff6b60aa7f7310819bd09)
+See [open-component-model/odg-core@15dabcf](https://github.com/open-component-model/odg-core/commit/15dabcf1b9f439b0d4eff6b60aa7f7310819bd09)
 as an example for this chapter.
 ```
 
@@ -71,7 +71,7 @@ specifying the level of integration are supported:
 * **Lightly Integrated / Running Out-Of-Cluster**
 
    In the lightly integrated variant, the extension is running standalone and
-   only uploads `ArtefactMetadata` via the delivery-service API to make use of
+   only uploads `ArtefactMetadata` via the ODG API to make use of
    the reporting capabilities of the ODG. In that case, the extension must take
    care of deployment and triggering on its own, hence the chapters
    [extension-triggers](#extension-triggers), [helm-chart](#helm-chart), [oci-image](#oci-image) and
@@ -86,7 +86,7 @@ The Open Delivery Gear currently features two kinds of triggers:
 
    As the title already states, an extension can be modelled as regular
    Kubernetes Cronjob with a well-defined `schedule`. If running as a Cronjob,
-   the extension might has to be able to retrieve the information for which
+   the extension might have to be able to retrieve the information for which
    artefacts it should run. This is relevant as the
    {doc}`/contents/concepts/01-data-model` requires the data to be always correlated to a certain
    `artefact`. This information should be passed to the extension using the
@@ -106,11 +106,11 @@ The Open Delivery Gear currently features two kinds of triggers:
    this trigger, it should be designed to always process the `artefact` defined
    by one `BacklogItem` at a time. For that, the `process_backlog_items`
    utility function, defined in the `odg.util` module
-   ([ref](https://github.com/open-component-model/delivery-service/blob/master/odg/util.py)),
+   ([ref](https://github.com/open-component-model/odg-core/blob/master/src/odg/util.py)),
    should be used.
 
 ```{note}
-The [already existing extensions](https://github.com/open-component-model/delivery-service/tree/master/charts/extensions/charts)
+The [already existing extensions](https://github.com/open-component-model/odg-core/tree/master/charts/extensions/charts)
 and their respective implementations can be always used as a reference how
 either a Kubernetes Cronjob or a `BacklogItem` based approach via the
 artefact-enumerator might look like.
@@ -119,7 +119,7 @@ artefact-enumerator might look like.
 ### General Flow
 
 The general flow for extensions which are intended to submit
-{doc}`/contents/concepts/01-data-model` via the delivery-service API is usually very similar. In case of
+{doc}`/contents/concepts/01-data-model` via the ODG API is usually very similar. In case of
 findings, there is a well-defined overview of the supported states of a finding
 (see Fig. 1).
 
@@ -130,21 +130,21 @@ findings, there is a well-defined overview of the supported states of a finding
 Fig. 1: Finding State Machine
 ```
 
-If the extension is written in Python, the [delivery-service-client](https://github.com/gardener/cc-utils/blob/master/delivery/client.py) should
+If the extension is written in Python, the [odg-client](https://github.com/gardener/cc-utils/blob/master/delivery/client.py) should
 be used which already contains functionality for the below described points:
 
 1. Fetch existing `ArtefactMetadata` entries
 
    As a first step, the existing `ArtefactMetadata` entries for the current
    `artefact` should be queried using the `POST /artefacts/metadata/query`
-   endpoint of the delivery-service. This is required to be able to delete the
+   endpoint of the ODG API. This is required to be able to delete the
    obsolete entries afterwards in step (3).
 
 2. Submit new entries and update existing ones
 
    The new or updated entries must be submitted using the
    `PUT /artefacts/metadata` endpoint. This will upload new entries to the
-   delivery-db or update existing entries in case the defined `key` matches.
+   ODG database or update existing entries in case the defined `key` matches.
    Apart from the entries containing the findings, an extra entry of type
    `meta/artefact_scan_info` must be submitted for each `artefact`. This info
    object is used to store information about the last execution and that an
@@ -163,7 +163,7 @@ be used which already contains functionality for the below described points:
 If the artefact-enumerator was chosen as trigger in [extension-triggers](#extension-triggers),
 it is necessary to inform the artefact-enumerator about this extension and that
 it should create `BacklogItems` for it. Therefore, a minor change must be added
-to the artefact-enumerator (see [open-component-model/delivery-service@68d6f5b](https://github.com/open-component-model/delivery-service/commit/68d6f5bd322bd018a67e54784804d65dde3f2a38)).
+to the artefact-enumerator (see [open-component-model/odg-core@68d6f5b](https://github.com/open-component-model/odg-core/commit/68d6f5bd322bd018a67e54784804d65dde3f2a38)).
 
 ```{note}
 In the future, it is planned that this must not be explicitly defined
@@ -178,7 +178,7 @@ In order to enable the
 {doc}`issue-replicator extension </contents/concepts/03-issue-replicator>` to also report
 findings for the new extension, it must be defined how the findings should be
 templated into a GitHub issue. Therefore, a minor change must be added to the
-issue-replicator (see [open-component-model/delivery-service@adb7239](https://github.com/open-component-model/delivery-service/commit/adb723957c2f6ec115ac702463f94802b35ed6df)).
+issue-replicator (see [open-component-model/odg-core@adb7239](https://github.com/open-component-model/odg-core/commit/adb723957c2f6ec115ac702463f94802b35ed6df)).
 Also, the `issues` property of the [findings-configuration](#findings-configuration) must be
 configured accordingly.
 
@@ -187,7 +187,7 @@ configured accordingly.
 
 If the extension should be deployed as part of the Open Delivery Gear
 deployment, it must be added as subchart to the `extensions` Helm chart
-([ref](https://github.com/open-component-model/delivery-service/tree/master/charts/extensions/charts)).
+([ref](https://github.com/open-component-model/odg-core/tree/master/charts/extensions/charts)).
 Based on the trigger (see [extension-triggers](#extension-triggers)), either a Kubernetes
 Deployment or Cronjob should be used. In all cases, it can be assumed that
 an `extensions-cfg` and a `findings-cfg` ConfigMap exists which may be mounted
@@ -197,7 +197,7 @@ can be mounted as well by referencing the Secrets
 `secret-factory-<SECRET_TYPE>`.
 
 ```{note}
-It might be very helpful to use the [already existing extensions](https://github.com/open-component-model/delivery-service/tree/master/charts/extensions/charts)
+It might be very helpful to use the [already existing extensions](https://github.com/open-component-model/odg-core/tree/master/charts/extensions/charts)
 as reference and adjust them accordingly.
 ```
 
@@ -205,16 +205,15 @@ as reference and adjust them accordingly.
 ## OCI Image
 
 In case the extension does not require any additional installations, the
-general purpose extensions OCI image can be re-used ([ref](https://github.com/open-component-model/delivery-service/blob/master/Dockerfile.extensions)).
-Otherwise, a new Dockerfile `Dockerfile.extensions.<EXTENSION_NAME>` must be
-created and added to the [build](https://github.com/open-component-model/delivery-service/blob/master/.github/workflows/build.yaml).
-In both cases, a Helm chart mapping must be added to the [build](https://github.com/open-component-model/delivery-service/blob/master/.github/workflows/build.yaml)
+general purpose core OCI image can be re-used ([ref](https://github.com/open-component-model/odg-core/blob/master/Dockerfile)).
+The core image contains all the necessary components and extensions.
+A Helm chart mapping must be added to the [build](https://github.com/open-component-model/odg-core/blob/master/.github/workflows/build.yaml)
 as well.
 
 (python-package)=
 ## Python Package
 
 The default extensions image built from `Dockerfile.extensions` installs the
-Python package `ocm-gear-extensions` which contains the sources of all Python
+Python package `odg-core-libs` which contains the sources of all Python
 extensions. In case this image is re-used, the module(s) of the new extension
-must be included in the Python package ([ref](https://github.com/open-component-model/delivery-service/blob/master/setup.extensions.py)).
+must be included in the Python package ([ref](https://github.com/open-component-model/odg-core/blob/master/setup.py)).

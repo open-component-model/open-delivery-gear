@@ -10,11 +10,11 @@ coordinates with optional extensions.
 At its core, the Open Delivery Gear's data model consists of the
 `ArtefactMetadata` meta-type, which allows describing such metadata, and
 correlating it to an [artefact](#artefact). It is the output of an extension which is
-uploaded to the Delivery-Database via the Delivery-Service, and then may be
+uploaded to the ODG database via the ODG API, and then may be
 used for further processing and reporting. In the most basic form, it consists
 of an [artefact](#artefact), some [metadata](#metadata) and an extension specific
 [payload](#payload) (see Fig. 1). The model is defined in the `odg.model` module of
-the delivery-service ([ref](https://github.com/open-component-model/delivery-service/blob/master/odg/model.py)).
+the odg-core ([ref](https://github.com/open-component-model/odg-core/blob/master/src/odg/model.py)).
 
 ```{figure} /res/artefact-metadata.svg
 :figwidth: 50%
@@ -105,7 +105,7 @@ The *Artefact* identifies where the [Payload](#payload) belongs to. These
      artefact:
        artefact_name: managed-seeds # group of Kubernetes clusters, might also be a project etc.
        artefact_version: diki # Diki does not specify an actual version here
-       artefact_type: dikiReport # Diki does not specifiy multiple artefact types
+       artefact_type: dikiReport # Diki does not specify multiple artefact types
    ```
 
    ```{code-block} yaml
@@ -129,7 +129,7 @@ that this **correlation-id** is used to find related data or to create logical
 groups which may be used, for example, to group items into the same issue as
 part of the GitHub issue reporting. The attributes which are used for this kind
 of grouping can be configured freely, but it must be ensured that the content
-of the included properties is "stable". That means, it might be not benefical
+of the included properties is "stable". That means, it might not be beneficial
 to include a *version* property or a temporary *instance-id* as a grouping
 relevant properties as this would not allow to correlate the same
 [payload](#payload) between multiple versions or instances, ultimately causing for
@@ -216,7 +216,7 @@ of `artefact`, `Datasource` and `Datatype`, the new class must define a unique
 See [gardener/cc-utils#1166](https://github.com/gardener/cc-utils/pull/1166/files)
 as an example for this chapter. Please note that the `dso.model` module in
 the pull request has been replaced by the `odg.model` module in the
-delivery-service.
+odg-core.
 ```
 
 (discovery-date)=
@@ -229,7 +229,7 @@ must be retained during subsequent updates. Therefore, the `discovery_date` is
 part of the `ArtefactMetadata` model. By default, the initial `discovery_date`
 of a finding is re-used in case the OCM identity (except its version and extra
 identity) and the `key` property of the finding match. In case it is desired to
-deviate from this defalt behaviour (e.g. in case the `key` contains a package
+deviate from this default behaviour (e.g. in case the `key` contains a package
 version which should not be considered for the re-use), a custom check must be
 implemented as part of the upload metadata route.
 
@@ -241,7 +241,7 @@ vulnerability findings, the `discovery_date` must be re-used in case the CVE
 and the package is the same, even if the package-version (which is part of the
 `data` key) changes. Therefore, the behaviour must be defined in the
 `PUT /artefacts/metadata` route
-(see [open-component-model/delivery-service@6697e50](https://github.com/open-component-model/delivery-service/commit/6697e5045d080d72c70b2ccaa214ffcaa8d0e244)
+(see [open-component-model/odg-core@6697e50](https://github.com/open-component-model/odg-core/commit/6697e5045d080d72c70b2ccaa214ffcaa8d0e244)
 as an example how to define this behaviour). In case it is not defined, the
 `discovery_date` will be always consumed as it is defined in the new
 `ArtefactMetadata` entry.
