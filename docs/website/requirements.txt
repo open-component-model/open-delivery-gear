@@ -1,0 +1,5 @@
+furo # the sphinx theme
+sphinx
+myst-parser # markdown support for sphinx
+sphinx-autobuild # watch, rebuild, and live-reload for development
+sphinx-design # grid layouts, cards, badges, and other design components

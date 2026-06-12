@@ -1,0 +1,84 @@
+name: Publish Website
+run-name: Publishing Website
+on:
+  workflow_dispatch:
+  push:
+    branches:
+    - main
+    paths:
+    - docs/website/**
+
+jobs:
+  website:
+    name: Build Website
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v6
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+    - name: Install Dependencies
+      run: make website-setup
+    - name: Build Website
+      run: make website-build
+    - uses: gardener/cc-utils/.github/actions/upload-artifact@master
+      with:
+        name: website
+        path: website-out
+
+  publish-website:
+    # do not publish on forks
+    if: ${{ github.repository == 'open-delivery-gear/open-delivery-gear' }}
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    needs:
+      - website
+    steps:
+      - uses: gardener/cc-utils/.github/actions/github-auth@b621bb72c87428ccf6f5fee74e115822a4ec1914
+        if: ${{ vars.FEDERATED_GITHUB_ACCESS_TOKEN_SERVER != '' }}
+        id: fed-token
+        with:
+          token-server: ${{ vars.FEDERATED_GITHUB_ACCESS_TOKEN_SERVER }}
+          repositories: |
+            open-delivery-gear
+
+      - uses: actions/checkout@v6
+        with:
+          ref: refs/heads/website
+          token: ${{ steps.fed-token.outputs.token }}
+
+      - name: Retrieve Website
+        uses: gardener/cc-utils/.github/actions/download-artifact@82182d9772dcfc104222884e4339c6cffa99df87
+        with:
+          name: website
+          path: /tmp/website-out
+
+      - name: Setup Git Identity
+        uses: gardener/cc-utils/.github/actions/setup-git-identity@1c30fcbc667dfe6435d2e314f85f98f4bf1331ce
+
+      - name: Publish Website
+        run: |
+          # Remove all existing files except .git and .nojekyll
+          find . -maxdepth 1 ! -name '.git' ! -name '.nojekyll' ! -name '.' ! -name '..' -exec rm -rf {} +
+
+          # Extract website content
+          tar c -C /tmp/website-out . | tar x -C.
+
+          # Ensure .nojekyll exists
+          touch .nojekyll
+
+          git status
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "no changes in website - no need to update"
+            exit 0
+          fi
+          git add -A
+          git commit -m "Update website"
+          git push origin refs/heads/website
