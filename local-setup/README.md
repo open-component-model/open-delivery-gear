@@ -39,6 +39,11 @@ retrieve the greatest version. Upon execution, this command will create
 the ODG cluster. Also, it will forward the delivery-service to
 `http://localhost:5000` and the delivery-dashboard to `http://localhost:3000`.
 
+> [!NOTE]  
+> Currently, the listing of available versions via OCM CLI is not working for
+> the OCM component descriptor of ODG. Therefore, an explicit version MUST be
+> set via the `ODG_VERSION` environment variable.
+
 ## Configuration Update
 To update the ODG deployment in case your local configuration has changed, just
 run the `make kind-update` command. This will upgrade the existing Helm charts
