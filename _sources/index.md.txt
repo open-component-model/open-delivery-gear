@@ -120,11 +120,12 @@ contents/tutorial/00-contributing-extension.md
 *Technical specifications, API documentation, and configuration references*
 
 ```{toctree}
-:maxdepth: 1
+:maxdepth: 2
 :caption: References
 
 contents/reference/00-artefact-metadata-query.md
-contents/reference/01-sbom-generator-config.md
+contents/reference/core/index.md
+contents/reference/extensions/index.md
 ```
 
 ---

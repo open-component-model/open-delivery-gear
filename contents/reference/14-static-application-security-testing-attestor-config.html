@@ -3,11 +3,11 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Generating Software Bill of Materials" href="07-sbom-generator.html"><link rel="prev" title="Overwriting OCM component responsibles" href="05-responsibles.html">
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="prev" title="GitHub Secret Scanner" href="13-github-secret-scanner-config.html">
         <link rel="prefetch" href="../../_static/odg.svg" as="image">
 
     <link rel="shortcut icon" href="../../_static/odg.svg"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Extending ODG - Open Delivery Gear documentation</title>
+        <title>Static Application Security Testing Attestor - Open Delivery Gear documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
@@ -174,7 +174,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
       </label>
     </div>
@@ -196,14 +196,14 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Concepts</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="00-odg-architecture.html">ODG System Architecture</a></li>
-<li class="toctree-l1"><a class="reference internal" href="01-data-model.html">Correlating metadata to OCM</a></li>
-<li class="toctree-l1"><a class="reference internal" href="02-artefact-enumerator.html">Reacting upon OCM events</a></li>
-<li class="toctree-l1"><a class="reference internal" href="03-issue-replicator.html">Lifecycling GitHub Issues</a></li>
-<li class="toctree-l1"><a class="reference internal" href="05-responsibles.html">Overwriting OCM component responsibles</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Extending ODG</a></li>
-<li class="toctree-l1"><a class="reference internal" href="07-sbom-generator.html">Generating Software Bill of Materials</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../concepts/00-odg-architecture.html">ODG System Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../concepts/01-data-model.html">Correlating metadata to OCM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../concepts/02-artefact-enumerator.html">Reacting upon OCM events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../concepts/03-issue-replicator.html">Lifecycling GitHub Issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../concepts/05-responsibles.html">Overwriting OCM component responsibles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../concepts/06-extending.html">Extending ODG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../concepts/07-sbom-generator.html">Generating Software Bill of Materials</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
 <ul>
@@ -220,27 +220,27 @@
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/00-contributing-extension.html">Contribute a new Extension</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">References</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../reference/00-artefact-metadata-query.html">Artefact Metadata Search</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../reference/core/index.html">Core Configuration</a><input aria-label="Toggle navigation of Core Configuration" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../reference/02-artefact-enumerator-config.html">Artefact Enumerator</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../reference/07-backlog-controller-config.html">Backlog Controller</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../reference/09-cache-manager-config.html">Cache Manager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../reference/11-delivery-db-backup-config.html">Delivery Database Backup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../reference/06-issue-replicator-config.html">Issue Replicator</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../reference/15-responsibles-config.html">Responsibles</a></li>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="00-artefact-metadata-query.html">Artefact Metadata Search</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="core/index.html">Core Configuration</a><input aria-label="Toggle navigation of Core Configuration" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="02-artefact-enumerator-config.html">Artefact Enumerator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07-backlog-controller-config.html">Backlog Controller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09-cache-manager-config.html">Cache Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11-delivery-db-backup-config.html">Delivery Database Backup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06-issue-replicator-config.html">Issue Replicator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15-responsibles-config.html">Responsibles</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../reference/extensions/index.html">Extension Configuration</a><input aria-label="Toggle navigation of Extension Configuration" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../reference/01-software-bill-of-material-generator-config.html">Software Bill of Material Generator</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../reference/03-vulnerability-scanner-config.html">Vulnerability Scanner</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../reference/04-malware-scanner-config.html">Malware Scanner</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../reference/05-operating-system-scanner-config.html">Operating System Scanner</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../reference/08-license-and-intellectual-property-scanner-config.html">License and Intellectual Property Scanner</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../reference/10-cryptographic-asset-scanner-config.html">Cryptographic Asset Scanner</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../reference/12-findings-report-generator-config.html">Findings Report Generator</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../reference/13-github-secret-scanner-config.html">GitHub Secret Scanner</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../reference/14-static-application-security-testing-attestor-config.html">Static Application Security Testing Attestor</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="extensions/index.html">Extension Configuration</a><input aria-label="Toggle navigation of Extension Configuration" checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01-software-bill-of-material-generator-config.html">Software Bill of Material Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03-vulnerability-scanner-config.html">Vulnerability Scanner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04-malware-scanner-config.html">Malware Scanner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05-operating-system-scanner-config.html">Operating System Scanner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08-license-and-intellectual-property-scanner-config.html">License and Intellectual Property Scanner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10-cryptographic-asset-scanner-config.html">Cryptographic Asset Scanner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12-findings-report-generator-config.html">Findings Report Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13-github-secret-scanner-config.html">GitHub Secret Scanner</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Static Application Security Testing Attestor</a></li>
 </ul>
 </li>
 </ul>
@@ -263,7 +263,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="../../_sources/contents/concepts/06-extending.md.txt" title="View this page">
+  <a class="muted-link" href="../../_sources/contents/reference/14-static-application-security-testing-attestor-config.md.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -276,13 +276,71 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="extending-odg">
-<h1>Extending ODG<a class="headerlink" href="#extending-odg" title="Link to this heading">¶</a></h1>
+          <section id="static-application-security-testing-attestor">
+<h1>Static Application Security Testing Attestor<a class="headerlink" href="#static-application-security-testing-attestor" title="Link to this heading">¶</a></h1>
+<p>The Static Application Security Testing Attestor extension checks whether static analysis scans have been executed for components and creates findings when scans are missing or outdated.</p>
+<section id="configuration-example">
+<h2>Configuration Example<a class="headerlink" href="#configuration-example" title="Link to this heading">¶</a></h2>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">sast</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">86400</span><span class="w">                    </span><span class="c1"># 24 hours</span>
+<span class="w">  </span><span class="nt">on_unsupported</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">warning</span>
+</pre></div>
+</div>
+</section>
+<section id="top-level-options">
+<h2>Top-Level Options<a class="headerlink" href="#top-level-options" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">interval</span></code></p></td>
+<td><p>int (seconds)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">86400</span></code></p></td>
+<td><p>Maximum time before a component is re-checked.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">on_unsupported</span></code></p></td>
+<td><p>string</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">warning</span></code></p></td>
+<td><p>Behavior when artefact kind/type/access is unsupported. Options: <code class="docutils literal notranslate"><span class="pre">fail</span></code>, <code class="docutils literal notranslate"><span class="pre">ignore</span></code>, <code class="docutils literal notranslate"><span class="pre">warning</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="configuration-details">
+<h2>Configuration Details<a class="headerlink" href="#configuration-details" title="Link to this heading">¶</a></h2>
+<section id="interval">
+<h3><code class="docutils literal notranslate"><span class="pre">interval</span></code><a class="headerlink" href="#interval" title="Link to this heading">¶</a></h3>
+<p>The maximum time (in seconds) before a component is re-checked for SAST
+scan execution. Default is 86400 seconds (24 hours).</p>
+<p>This interval ensures:</p>
+<ul class="simple">
+<li><p>Components are regularly verified for SAST coverage</p></li>
+<li><p>New components are identified quickly if they lack scans</p></li>
+<li><p>Scan execution tracking remains current</p></li>
+</ul>
+</section>
+<section id="on-unsupported">
+<h3><code class="docutils literal notranslate"><span class="pre">on_unsupported</span></code><a class="headerlink" href="#on-unsupported" title="Link to this heading">¶</a></h3>
+<p>Defines the behavior when an artefact kind, type, or access method is not supported:</p>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">fail</span></code></strong>: Raise an exception and stop processing</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">ignore</span></code></strong>: Silently skip the unsupported artefact</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">warning</span></code></strong> (default): Skip the artefact and log a warning message</p></li>
+</ul>
+</section>
+</section>
 </section>
 
         </article>
@@ -290,23 +348,15 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="07-sbom-generator.html">
-              <div class="page-info">
-                <div class="context">
-                  <span>Next</span>
-                </div>
-                <div class="title">Generating Software Bill of Materials</div>
-              </div>
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-            </a>
-          <a class="prev-page" href="05-responsibles.html">
+          
+          <a class="prev-page" href="13-github-secret-scanner-config.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Overwriting OCM component responsibles</div>
+                <div class="title">GitHub Secret Scanner</div>
                 
               </div>
             </a>
@@ -328,8 +378,33 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Static Application Security Testing Attestor</a><ul>
+<li><a class="reference internal" href="#configuration-example">Configuration Example</a></li>
+<li><a class="reference internal" href="#top-level-options">Top-Level Options</a></li>
+<li><a class="reference internal" href="#configuration-details">Configuration Details</a><ul>
+<li><a class="reference internal" href="#interval"><code class="docutils literal notranslate"><span class="pre">interval</span></code></a></li>
+<li><a class="reference internal" href="#on-unsupported"><code class="docutils literal notranslate"><span class="pre">on_unsupported</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
