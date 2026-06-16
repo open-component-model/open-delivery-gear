@@ -25,6 +25,9 @@ primary:
     #
     # TODO: make root filesystem read-only again and rather use config means to overwrite lock-file path
     readOnlyRootFilesystem: false
+  extraEnvVars:
+    - name: POSTGRESQL_MAX_CONNECTIONS
+      value: '200'
   resources:
     requests:
       cpu: 250m
@@ -34,7 +37,3 @@ primary:
 # cluster re-creations (-> this allows using a stable host file mount on the host)
 persistence:
   existingClaim: pvc-delivery-db-0
-
-# required for the delivery-db pod to have write access to the custom pvc
-volumePermissions:
-  enabled: true

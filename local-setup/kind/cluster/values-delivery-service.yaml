@@ -1,1 +1,3 @@
-host: delivery-service
+autoscaler:
+  minReplicas: 1
+  maxReplicas: 1
