@@ -78,4 +78,5 @@ helm upgrade -i extensions oci://${EXTENSIONS_CHART} \
   --values ${CHART}/values-extensions.yaml \
   --wait
 
+kubectl port-forward service/delivery-dashboard 3000:8080 > /dev/null &
 kubectl port-forward service/delivery-service 5000:8080 > /dev/null &
