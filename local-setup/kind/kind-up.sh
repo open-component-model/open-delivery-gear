@@ -30,56 +30,52 @@ kind create cluster \
   --name "$CLUSTER_NAME" \
   --config <(helm template $CHART)
 
-NAMESPACE="${NAMESPACE:-delivery}"
+NAMESPACE="${NAMESPACE:-odg}"
 
 kubectl create ns $NAMESPACE
 kubectl config set-context --current --namespace=$NAMESPACE
 
-OCM_GEAR_COMPONENT_REF="europe-docker.pkg.dev/gardener-project/releases//ocm.software/ocm-gear"
-OCM_GEAR_VERSION="${OCM_GEAR_VERSION:-$(ocm show versions ${OCM_GEAR_COMPONENT_REF} | tail -1)}"
-COMPONENT_DESCRIPTORS=$(ocm get cv ${OCM_GEAR_COMPONENT_REF}:${OCM_GEAR_VERSION} -o yaml -r)
-echo "Installing OCM-Gear with version $OCM_GEAR_VERSION"
+ODG_COMPONENT_REF="europe-docker.pkg.dev/gardener-project/releases//ocm.software/open-delivery-gear"
+ODG_VERSION="${ODG_VERSION:-$(ocm get cv ${ODG_COMPONENT_REF} --latest -o yaml | yq .[].component.version)}"
+COMPONENT_DESCRIPTORS=$(ocm get cv ${ODG_COMPONENT_REF}:${ODG_VERSION} -o yaml --recursive)
+echo "Installing Open Delivery Gear with version $ODG_VERSION"
 
-BOOTSTRAPPING_CHART=$(echo "${COMPONENT_DESCRIPTORS}" | yq eval '.component.resources.[] | select(.name == "bootstrapping" and .type | test("helmChart")) | .access.imageReference')
-DELIVERY_SERVICE_CHART=$(echo "${COMPONENT_DESCRIPTORS}" | yq eval '.component.resources.[] | select(.name == "delivery-service" and .type | test("helmChart")) | .access.imageReference')
-DELIVERY_DASHBOARD_CHART=$(echo "${COMPONENT_DESCRIPTORS}" | yq eval '.component.resources.[] | select(.name == "delivery-dashboard" and .type | test("helmChart")) | .access.imageReference')
-EXTENSIONS_CHART=$(echo "${COMPONENT_DESCRIPTORS}" | yq eval '.component.resources.[] | select(.name == "extensions" and .type | test("helmChart")) | .access.imageReference')
-DELIVERY_DATABASE_CHART=$(echo "${COMPONENT_DESCRIPTORS}" | yq eval '.component.resources.[] | select(.name == "postgresql" and .type | test("helmChart")) | .access.imageReference')
+BOOTSTRAPPING_CHART=$(echo "${COMPONENT_DESCRIPTORS}" | yq eval '.[].component.resources.[] | select(.name == "bootstrapping" and .type | test("helmChart")) | .access.imageReference')
+DELIVERY_SERVICE_CHART=$(echo "${COMPONENT_DESCRIPTORS}" | yq eval '.[].component.resources.[] | select(.name == "delivery-service" and .type | test("helmChart")) | .access.imageReference')
+DELIVERY_DASHBOARD_CHART=$(echo "${COMPONENT_DESCRIPTORS}" | yq eval '.[].component.resources.[] | select(.name == "delivery-dashboard" and .type | test("helmChart")) | .access.imageReference')
+EXTENSIONS_CHART=$(echo "${COMPONENT_DESCRIPTORS}" | yq eval '.[].component.resources.[] | select(.name == "extensions" and .type | test("helmChart")) | .access.imageReference')
+DELIVERY_DATABASE_CHART=$(echo "${COMPONENT_DESCRIPTORS}" | yq eval '.[].component.resources.[] | select(.name == "postgresql" and .type | test("helmChart")) | .access.imageReference')
 
 echo ">>> Installing bootstrapping chart from ${BOOTSTRAPPING_CHART}"
-helm upgrade -i bootstrapping oci://${BOOTSTRAPPING_CHART%:*} \
+helm upgrade -i bootstrapping oci://${BOOTSTRAPPING_CHART} \
   --namespace ${NAMESPACE} \
-  --version ${BOOTSTRAPPING_CHART#*:} \
-  --values ${CHART}/values-bootstrapping.yaml
+  --values ${CHART}/values-bootstrapping.yaml \
+  --wait
 
 echo ">>> Installing delivery-database from ${DELIVERY_DATABASE_CHART}"
 # First, install custom pv and pvc to allow re-usage of host's filesystem mount
 kubectl apply -f "${CHART}/delivery-db-pv" --namespace $NAMESPACE
-helm upgrade -i delivery-db oci://${DELIVERY_DATABASE_CHART%:*} \
-    --namespace $NAMESPACE \
-    --version ${DELIVERY_DATABASE_CHART#*:} \
-    --values ${CHART}/values-delivery-db.yaml
+helm upgrade -i delivery-db oci://${DELIVERY_DATABASE_CHART} \
+  --namespace $NAMESPACE \
+  --values ${CHART}/values-delivery-db.yaml \
+  --wait
 
 echo ">>> Installing delivery-service from ${DELIVERY_SERVICE_CHART}"
-helm upgrade -i delivery-service oci://${DELIVERY_SERVICE_CHART%:*} \
-    --namespace $NAMESPACE \
-    --version ${DELIVERY_SERVICE_CHART#*:} \
-    --values ${CHART}/values-delivery-service.yaml
-echo "Waiting for delivery-service to become ready, this can take up to 3 minutes..."
-kubectl rollout status deployment delivery-service \
-    --namespace $NAMESPACE \
-    --timeout=180s
+helm upgrade -i delivery-service oci://${DELIVERY_SERVICE_CHART} \
+  --namespace $NAMESPACE \
+  --values ${CHART}/values-delivery-service.yaml \
+  --wait
 
 echo ">>> Installing delivery-dashboard from ${DELIVERY_DASHBOARD_CHART}"
-helm upgrade -i delivery-dashboard oci://${DELIVERY_DASHBOARD_CHART%:*} \
-    --namespace $NAMESPACE \
-    --version ${DELIVERY_DASHBOARD_CHART#*:} \
-    --values ${CHART}/values-delivery-dashboard.yaml
+helm upgrade -i delivery-dashboard oci://${DELIVERY_DASHBOARD_CHART} \
+  --namespace $NAMESPACE \
+  --values ${CHART}/values-delivery-dashboard.yaml \
+  --wait
 
 echo ">>> Installing extensions from ${EXTENSIONS_CHART}"
-helm upgrade -i extensions oci://${EXTENSIONS_CHART%:*} \
-    --namespace $NAMESPACE \
-    --version ${EXTENSIONS_CHART#*:} \
-    --values ${CHART}/values-extensions.yaml
+helm upgrade -i extensions oci://${EXTENSIONS_CHART} \
+  --namespace $NAMESPACE \
+  --values ${CHART}/values-extensions.yaml \
+  --wait
 
 kubectl port-forward service/delivery-service 5000:8080 > /dev/null &
