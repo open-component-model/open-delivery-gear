@@ -50,7 +50,7 @@ DELIVERY_DATABASE_CHART=$(echo "${COMPONENT_DESCRIPTORS}" | yq eval '.[].compone
 echo ">>> Installing bootstrapping chart from ${BOOTSTRAPPING_CHART}"
 helm upgrade -i bootstrapping oci://${BOOTSTRAPPING_CHART} \
   --namespace ${NAMESPACE} \
-  --values ${CHART}/values-bootstrapping.yaml \
+  --values ${CHART}/../values.yaml \
   --wait
 
 echo ">>> Installing delivery-database from ${DELIVERY_DATABASE_CHART}"
