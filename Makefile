@@ -1,6 +1,6 @@
 REPO_ROOT := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
-kind-up kind-down: export CLUSTER_NAME = ocm-gear-local
+kind-up kind-down: export CLUSTER_NAME = odg-local
 kind-up kind-update: export KUBECONFIG = $(REPO_ROOT)/local-setup/kind/kubeconfig
 kind-up kind-update: export PATH_CLUSTER_CHART = $(REPO_ROOT)/local-setup/kind/cluster
 
