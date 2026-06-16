@@ -36,6 +36,7 @@ EXTENSIONS_CHART=$(echo "${COMPONENT_DESCRIPTORS}" | yq eval '.[].component.reso
 DELIVERY_DATABASE_CHART=$(echo "${COMPONENT_DESCRIPTORS}" | yq eval '.[].component.resources.[] | select(.name == "postgresql" and .type | test("helmChart")) | .access.imageReference')
 
 kubectl config set-context --current --namespace=$NAMESPACE
+kubectl replace -f "${CHART}/crd.yaml"
 
 echo ">>> Installing bootstrapping chart from ${BOOTSTRAPPING_CHART}"
 helm upgrade -i bootstrapping oci://${BOOTSTRAPPING_CHART} \

@@ -34,6 +34,7 @@ NAMESPACE="${NAMESPACE:-odg}"
 
 kubectl create ns $NAMESPACE
 kubectl config set-context --current --namespace=$NAMESPACE
+kubectl create -f "${CHART}/crd.yaml"
 
 ODG_COMPONENT_REF="europe-docker.pkg.dev/gardener-project/releases//ocm.software/open-delivery-gear"
 ODG_VERSION="${ODG_VERSION:-$(ocm get cv ${ODG_COMPONENT_REF} --latest -o yaml | yq .[].component.version)}"
