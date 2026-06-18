@@ -1,0 +1,43 @@
+name: Create Hotfix Branch
+on:
+  workflow_dispatch:
+    inputs:
+      odg-version:
+        type: string
+        required: true
+        description: |
+          ODG version to create hotfix branch for (`major.minor`)
+
+jobs:
+  create-hotfix-branch:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - uses: gardener/cc-utils/.github/actions/trusted-checkout@v1
+        with:
+          token-server: ${{ vars.FEDERATED_GITHUB_ACCESS_TOKEN_SERVER }}
+          github-auth-token-permissions: |
+            contents: write
+            workflows: write
+          init-git-identity: true
+      - name: Create and push hotfix branch
+        shell: bash
+        env:
+          ODG_VERSION: ${{ inputs.odg-version }}
+        run: |
+          odg_version="$ODG_VERSION"
+
+          if [[ ! "$odg_version" =~ ^[0-9]+\.[0-9]+$ ]]; then
+            echo "Error: odg-version must adhere 'major.minor' format"
+            exit 1
+          fi
+
+          git fetch origin "refs/tags/${odg_version}.0:refs/tags/${odg_version}.0"
+          git checkout "${odg_version}.0"
+
+          next_version="${odg_version}.1-dev"
+          echo "$next_version" | .ci/write-version
+          git commit --all -m "next version: ${next_version}"
+
+          git push origin "@:refs/heads/hotfix-$odg_version"
