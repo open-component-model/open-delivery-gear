@@ -4,7 +4,6 @@ set -euo pipefail
 
 CLUSTER_NAME=""
 CHART=""
-REPO_ROOT=""
 
 parse_flags() {
   while test $# -gt 0; do
@@ -14,9 +13,6 @@ parse_flags() {
       ;;
     --path-cluster-chart)
       shift; CHART="$1"
-      ;;
-    --repo-root)
-      shift; REPO_ROOT="$1"
       ;;
     esac
 

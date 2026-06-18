@@ -7,12 +7,10 @@ kind-up kind-update: export PATH_CLUSTER_CHART = $(REPO_ROOT)/local-setup/kind/c
 kind-up: $(KIND) $(KUBECTL) $(HELM) $(OCM)
 	./local-setup/kind/kind-up.sh \
 		--cluster-name $(CLUSTER_NAME) \
-		--path-cluster-chart $(PATH_CLUSTER_CHART) \
-		--repo-root $(REPO_ROOT)
+		--path-cluster-chart $(PATH_CLUSTER_CHART)
 kind-update: $(KIND) $(KUBECTL) $(HELM) $(OCM)
 	./local-setup/kind/kind-update.sh \
-		--path-cluster-chart $(PATH_CLUSTER_CHART) \
-		--repo-root $(REPO_ROOT)
+		--path-cluster-chart $(PATH_CLUSTER_CHART)
 kind-down: $(KIND)
 	./local-setup/kind/kind-down.sh \
 		--cluster-name $(CLUSTER_NAME)

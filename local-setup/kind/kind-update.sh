@@ -3,16 +3,12 @@
 set -euo pipefail
 
 CHART=""
-REPO_ROOT=""
 
 parse_flags() {
   while test $# -gt 0; do
     case "$1" in
     --path-cluster-chart)
       shift; CHART="$1"
-      ;;
-    --repo-root)
-      shift; REPO_ROOT="$1"
       ;;
     esac
 
