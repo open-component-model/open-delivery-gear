@@ -20,11 +20,25 @@ parse_flags() {
   done
 }
 
+check_required_flags() {
+  flags=("$@")
+  flag_unset=""
+
+  for flag in "${flags[@]}"; do
+    [ -z "${!flag}" ] && echo "--$(echo ${flag} | tr '[:upper:]' '[:lower:]' | tr '_' '-') must be set" && flag_unset=true
+  done
+
+  [ -n "${flag_unset}" ] && exit 1
+
+  return 0
+}
+
 parse_flags "$@"
+check_required_flags CLUSTER_NAME CHART
 
 kind create cluster \
   --name "$CLUSTER_NAME" \
-  --config <(helm template $CHART)
+  --config <(helm template "$CHART")
 
 NAMESPACE="${NAMESPACE:-odg}"
 

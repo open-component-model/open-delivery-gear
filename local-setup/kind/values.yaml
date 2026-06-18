@@ -320,6 +320,8 @@ secrets:
     local:
       id: d358756d-a917-458f-80f8-9bb47485b5dc
       algorithm: RS256
+      # key pair is only used to sign auth token bound to this _local_ instance, hence there is no
+      # need to have users of this local setup to bring their own key pair
       private_key: |
         -----BEGIN RSA PRIVATE KEY-----
         MIIJKAIBAAKCAgEAmKrfJpVz6h6XCi2prOH6vTKmCVPlRm3GLXYGV01qGGSypIsN
