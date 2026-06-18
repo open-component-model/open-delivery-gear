@@ -1,0 +1,16 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1348.1
+release_notes:
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: noteworthy
+  contents: The issue replicator now early-skips artefacts which are filtered out for a
+    specific finding type, thus potentially leaving issues open for artefacts which were
+    once included by the filter configuration but then excluded at a later point in time
+  mimetype: text/markdown
+  reference: '[#864](https://github.com/open-component-model/odg-core/pull/864)'
+  type: standard
