@@ -1,6 +1,6 @@
 # License and Intellectual Property Scanner
 
-The License and Intellectual Property Scanner extension re-uploads BDBA scan results to BlackDuck instances and retrieves findings (including vulnerability and intellectual property findings) for tracked components.
+The License and Intellectual Property Scanner extension uploads SBoMs to BlackDuck instances and retrieves findings (including vulnerability and intellectual property findings) for tracked components.
 
 ## Configuration Example
 
