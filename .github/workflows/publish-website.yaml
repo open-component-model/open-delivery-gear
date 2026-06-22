@@ -24,7 +24,7 @@ jobs:
       run: make website-setup
     - name: Build Website
       run: make website-build
-    - uses: gardener/cc-utils/.github/actions/upload-artifact@master
+    - uses: gardener/cc-utils/.github/actions/upload-artifact@v1
       with:
         name: website
         path: website-out
@@ -40,7 +40,7 @@ jobs:
     needs:
       - website
     steps:
-      - uses: gardener/cc-utils/.github/actions/github-auth@b621bb72c87428ccf6f5fee74e115822a4ec1914
+      - uses: gardener/cc-utils/.github/actions/github-auth@v1
         if: ${{ vars.FEDERATED_GITHUB_ACCESS_TOKEN_SERVER != '' }}
         id: fed-token
         with:
@@ -54,13 +54,13 @@ jobs:
           token: ${{ steps.fed-token.outputs.token }}
 
       - name: Retrieve Website
-        uses: gardener/cc-utils/.github/actions/download-artifact@82182d9772dcfc104222884e4339c6cffa99df87
+        uses: gardener/cc-utils/.github/actions/download-artifact@v1
         with:
           name: website
           path: /tmp/website-out
 
       - name: Setup Git Identity
-        uses: gardener/cc-utils/.github/actions/setup-git-identity@1c30fcbc667dfe6435d2e314f85f98f4bf1331ce
+        uses: gardener/cc-utils/.github/actions/setup-git-identity@v1
 
       - name: Publish Website
         run: |
