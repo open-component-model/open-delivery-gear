@@ -1,3 +1,4 @@
+reference_version: 0.10.0
 ocm:
   component_name: ocm.software/open-delivery-gear/ui
   component_version: 0.433.0
