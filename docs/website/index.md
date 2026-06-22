@@ -152,7 +152,7 @@ Learn about OCM
 
 ```{eval-rst}
 .. note::
-   This documentation is organized using the `Diataxis framework <https://diataxis.fr/>`_:
+   This documentation is organised using the `Diataxis framework <https://diataxis.fr/>`_:
    
    - **Tutorials**: Learning-oriented lessons
    - **How-to Guides**: Problem-oriented, goal-focused instructions

@@ -1,6 +1,6 @@
 # Cache Manager
 
-The Cache Manager is a cronjob which regularly updates persistent cache entries and purges stale cache entries when the cache size exceeds configured limits. It optimizes performance by pre-calculating expensive operations and intelligently managing cache eviction.
+The Cache Manager is a cronjob which regularly updates persistent cache entries and purges stale cache entries when the cache size exceeds configured limits. It optimises performance by pre-calculating expensive operations and intelligently managing cache eviction.
 
 ## Configuration Example
 

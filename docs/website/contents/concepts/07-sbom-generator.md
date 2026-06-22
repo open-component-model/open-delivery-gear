@@ -35,7 +35,7 @@ The scanning approach varies by resource type:
 
 Once the SBOM is produced:
 
-1. **Serialization**: The SBOM is serialized to JSON
+1. **Serialisation**: The SBOM is serialised to JSON
 2. **Hashing**: A SHA-256 hash is computed
 3. **Upload**: The SBOM is uploaded to the ODG blob storage
 4. **Metadata Recording**: The digest, file size, and output format are recorded
@@ -59,7 +59,7 @@ The SBOM-Generator supports two standard SBOM formats:
 
 The format is configurable per ODG instance.
 
-## Rescanning Behavior
+## Rescanning Behaviour
 
 Components are automatically rescanned based on the configured `interval`
 (default: 24 hours). This ensures that SBOMs remain up-to-date as component
