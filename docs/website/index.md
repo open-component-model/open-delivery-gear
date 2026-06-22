@@ -39,23 +39,15 @@ Intelligent assignment of findings to component owners and teams based on config
 
 ## Getting Started
 
-::::{grid} 1 1 3 3
+::::{grid} 1 1 2 2
 :gutter: 2
-
-:::{grid-item-card}
-:class-header: sd-bg-primary sd-text-white
-
-**New Users**
-^^^
-Start with {doc}`contents/concepts/00-odg-architecture` to understand how ODG works.
-:::
 
 :::{grid-item-card}
 :class-header: sd-bg-success sd-text-white
 
 **Operators**
 ^^^
-Set up your environment with {doc}`contents/how-to/01-local-setup`.
+Start with {doc}`contents/concepts/00-odg-architecture` to understand how ODG works.
 :::
 
 :::{grid-item-card}
@@ -63,7 +55,7 @@ Set up your environment with {doc}`contents/how-to/01-local-setup`.
 
 **Developers**
 ^^^
-Learn to extend ODG with {doc}`contents/tutorial/00-contributing-extension`.
+Set up your environment with {doc}`contents/how-to/01-local-setup` and learn to extend ODG with {doc}`contents/tutorial/00-contributing-extension`.
 :::
 
 ::::
