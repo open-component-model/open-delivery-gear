@@ -1,0 +1,391 @@
+extensions_cfg:
+  defaults:
+    delivery_dashboard_url: http://localhost:3000
+    delivery_service_url: http://delivery-service.odg.svc.cluster.local:8080
+  access_manager:
+    enabled: true
+  artefact_enumerator:
+    components:
+      - component_name: ocm.software/open-delivery-gear
+  backlog_controller:
+    enabled: true
+  bdba:
+    enabled: false # disable in default because of missing BDBA credentials
+    mappings:
+      - prefix: ''
+        group_id: -1
+  cache_manager:
+    prefill_function_caches:
+      components:
+        - component_name: ocm.software/open-delivery-gear
+  clamav:
+    enabled: false # disable in default because of high memory
+    mappings:
+      - prefix: ''
+  crypto:
+    enabled: false # disable in default because of high memory
+    mappings:
+      - prefix: ''
+        standards:
+          - name: FIPS
+            version: 140-3
+            ref:
+              path: odg/crypto_defaults.yaml
+          - name: NCS
+            version: '1.0'
+            ref:
+              path: odg/crypto_defaults.yaml
+        libraries:
+          - ref:
+              path: odg/crypto_defaults.yaml
+  delivery_db_backup:
+    enabled: false # disable in default because of missing `component_name` and `ocm_repo_url`
+    component_name: ''
+    ocm_repo_url: ''
+    backup_retention_count: 1
+  ghas:
+    enabled: true
+    github_instances: []
+  issue_replicator:
+    enabled: false # disable in default because of missing `github_repository`
+    mappings:
+      - prefix: ''
+        github_repository: ''
+  osid:
+    enabled: false # disable in default because of high memory
+  responsibles:
+    enabled: true
+  sast:
+    enabled: true
+  sbom_generator:
+    enabled: true
+  sla_violation_profiler:
+    enabled: true
+    components:
+      - component_name: ocm.software/open-delivery-gear
+        time_range:
+          days_from: -365
+          days_to: 0
+
+findings:
+  - type: finding/crypto
+    issues:
+      enable_assignees: false
+    sprint_assignment_offset: -1
+    categorisations:
+      - id: false-positive
+        display_name: False Positive
+        value: 0
+        rescoring: manual
+      - id: security-irrelevant
+        display_name: Security Irrelevant
+        value: 0
+        rescoring: manual
+      - id: compliant
+        display_name: Compliant
+        value: 0
+        rescoring: manual
+        selector:
+          ratings:
+            - compliant
+      - id: maybe-standard-compliant
+        display_name: Maybe Compliant
+        value: 2
+        allowed_processing_time: 90
+        rescoring: manual
+        selector:
+          ratings:
+            - maybe-compliant
+      - id: not-standard-compliant
+        display_name: Not Compliant
+        value: 8
+        allowed_processing_time: 30
+        rescoring: manual
+        selector:
+          ratings:
+            - not-compliant
+    filter:
+      - semantics: include
+        artefact_kind: resource
+  - type: finding/ghas
+    issues:
+      enable_assignees: false
+      enable_per_finding: true
+      title_template: '[{meta.type}] - {artefact.component_name} - {data.secret_type_display_name}'
+    sprint_assignment_offset: -1
+    categorisations:
+      - id: pattern-edited
+        display_name: Pattern Edited
+        value: 0
+        allowed_processing_time: ~
+        rescoring: manual
+        selector:
+          resolutions:
+            - pattern_edited
+      - id: false-positive
+        display_name: False Positive
+        value: 0
+        allowed_processing_time: ~
+        rescoring: manual
+        selector:
+          resolutions:
+            - false_positive
+      - id: revoked
+        display_name: Revoked
+        value: 0
+        allowed_processing_time: ~
+        rescoring: manual
+        selector:
+          resolutions:
+            - revoked
+      - id: wont-fix
+        display_name: Won't Fix
+        value: 0
+        allowed_processing_time: ~
+        rescoring: manual
+        selector:
+          resolutions:
+            - wont_fix
+      - id: used-in-tests
+        display_name: Used In Tests
+        value: 0
+        allowed_processing_time: ~
+        rescoring: manual
+        selector:
+          resolutions:
+            - used_in_tests
+      - id: secret-found
+        display_name: Secret Found
+        value: 2
+        allowed_processing_time: 90
+        rescoring: manual
+        selector:
+          resolutions:
+            - null
+    filter:
+      - semantics: include
+        artefact_kind: source
+  - type: finding/license
+    issues:
+      enable_assignees: false
+    categorisations: &gardener_default
+      cfg_name: gardener
+      ref:
+        path: odg/defaults.yaml
+    filter:
+      - semantics: include
+        artefact_kind: resource
+  - type: finding/malware
+    issues:
+      enable_assignees: false
+    categorisations:
+      <<: *gardener_default
+    filter:
+      - semantics: include
+        artefact_kind: resource
+  - type: finding/osid
+    issues:
+      enable_assignees: false
+    sprint_assignment_offset: -1
+    categorisations:
+      <<: *gardener_default
+    filter:
+      - semantics: include
+        artefact_kind: resource
+  - type: finding/sast
+    issues:
+      enable_assignees: false
+    categorisations:
+      <<: *gardener_default
+    default_scope: single
+    filter:
+      - semantics: include
+        artefact_kind: source
+  - type: finding/vulnerability
+    issues:
+      enable_assignees: false
+    sprint_assignment_offset: -1
+    categorisations:
+      <<: *gardener_default
+    rescoring_ruleset:
+      <<: *gardener_default
+    filter:
+      - semantics: include
+        artefact_kind: resource
+
+ocm_repo_mappings:
+  - type: virtual
+    name: <auto>
+    selectors:
+      - version_filter_overwrite: semver_releases
+  - repository: europe-docker.pkg.dev/gardener-project/releases
+  - repository: europe-docker.pkg.dev/gardener-project/snapshots
+
+features_cfg:
+  specialComponents:
+    - id: c33230c0-3c3e-4cce-9b89-99df93878948
+      name: ocm.software/open-delivery-gear
+      displayName: Open Delivery Gear
+      type: ODG
+      version: greatest
+      icon: home
+      dependencies: []
+  sprints:
+    sprint_name_pattern: '%y%S%C'
+    meta:
+      offsets:
+        - name: release_decision
+          display_name: Release Decision
+          offset_days: -1
+
+addressbook:
+  - name: My name
+    email: my-name@my-domain.com
+    github:
+      public: my-github-username
+
+github_mappings:
+  - name: public
+    api_url: https://api.github.com
+
+profiles:
+  - name: default
+    finding_types:
+      - finding/crypto
+      - finding/ghas
+      - finding/license
+      - finding/malware
+      - finding/osid
+      - finding/sast
+      - finding/vulnerability
+    special_component_ids:
+      - c33230c0-3c3e-4cce-9b89-99df93878948
+
+secrets:
+  # bdba:
+  #   local:
+  #     api_url: ...
+  #     token: ...
+  #     group_ids:
+  #       - ...
+  delivery-db:
+    local:
+      username: postgres
+      password: password-123
+  # github:
+  #   github_com:
+  #     api_url: https://api.github.com
+  #     http_url: https://github.com
+  #     repo_urls: ['.*']
+  #     username: ...
+  #     auth_token: ...
+  github-app:
+    github_com:
+      api_url: https://api.github.com
+      app_id: ...
+      mappings:
+        - installation_id: ...
+          org: ...
+      private_key: |
+        -----BEGIN RSA PRIVATE KEY-----
+        ...
+        -----END RSA PRIVATE KEY-----
+  oauth-cfg:
+    local:
+      client_id: ...
+      client_secret: ...
+      api_url: https://api.github.com
+      type: github
+      name: GitHub
+      role_bindings:
+        - roles:
+            - admin
+          subjects:
+            - type: github-app
+              name: ...
+            - type: github-org
+              name: ...
+            - type: github-team
+              name: ...
+            - type: github-user
+              name: ...
+  # oci-registry:
+  #   local:
+  #     image_reference_prefixes:
+  #       - europe-docker.pkg.dev/gardener-project
+  #     privileges: readonly
+  #     username: ...
+  #     password: ...
+  signing-cfg:
+    local:
+      id: d358756d-a917-458f-80f8-9bb47485b5dc
+      algorithm: RS256
+      # key pair is only used to sign auth token bound to this _local_ instance, hence there is no
+      # need to have users of this local setup to bring their own key pair
+      private_key: |
+        -----BEGIN RSA PRIVATE KEY-----
+        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
+        -----END RSA PRIVATE KEY-----
+      public_key: |
+        -----BEGIN PUBLIC KEY-----
+        MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAmKrfJpVz6h6XCi2prOH6
+        vTKmCVPlRm3GLXYGV01qGGSypIsN8YEqsEXtQkbzhnxMb4aUoe2gI5x0D2U3k3y9
+        68OUb8DKc4b05Y83DdGZCGBN/vMmyh8nXrSi4rUCiEmke04HQHB0G+7CsiFHzlCW
+        Kr5IbYNqo/Y2j7fnHgL3WQmDpz51lw/qqJVhDL6kOF85lA0kX6mHfsJye/g4gOem
+        DAnZdx3ncJLrZbzSOLxR0yjaraeZswZ0l5GiYelBrk9LDYo9/fSJU992JRrEge2Q
+        OyK80icbXJNN0mCVAwJFqvUNtrcXXX6Svwr5IM7YDiVDSUAxqKz51qfPaE6DTww2
+        kVpO5uV9H5lOFmCuGMUoMV7sUHoMTAEqN128J1BGtB2WwUgVB2jsVFQgzII4ayzn
+        6JDQx9UVLvqYMbTJmjjjTdiR+Dr53UCi5N1onUFCIkYQnPGvPRC/7VzmbTcmF5oS
+        BXVi0pM+zQn44829iibOoJTI6Xbr4U+5bTPCAGIepOVb/mfcfJmpMT0aBMyOVSLP
+        emO4aWnwMt7yaPov8a9uyXCjpTkLif9kAfX2mFJ9MwuVwOOy1RMrPG6EWEoZva+m
+        pWHfm2Zjrx2nG5G/bG3CYccKS0gVVItbqb9iQ6wrUQNp673KUPRKk6mTpdfgu/Tp
+        CPCB6gTc+WqzSsS5tsQzU2sCAwEAAQ==
+        -----END PUBLIC KEY-----

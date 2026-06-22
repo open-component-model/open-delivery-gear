@@ -1,0 +1,30 @@
+access-manager:
+  enabled: true
+artefact-enumerator:
+  enabled: true
+backlog-controller:
+  enabled: true
+bdba:
+  enabled: true
+cache-manager:
+  enabled: true
+clamav:
+  enabled: true
+crypto:
+  enabled: true
+delivery-db-backup:
+  enabled: false
+ghas:
+  enabled: true
+issue-replicator:
+  enabled: true
+osid:
+  enabled: true
+responsibles:
+  enabled: true
+sast:
+  enabled: true
+sbom-generator:
+  enabled: true
+sla-violation-profiler:
+  enabled: true
