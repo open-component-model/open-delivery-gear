@@ -74,9 +74,8 @@ contents/concepts/00-odg-architecture.md
 contents/concepts/01-data-model.md
 contents/concepts/02-artefact-enumerator.md
 contents/concepts/03-issue-replicator.md
-contents/concepts/05-responsibles.md
-contents/concepts/06-extending.md
-contents/concepts/07-sbom-generator.md
+contents/concepts/04-responsibles.md
+contents/concepts/05-sbom-generator.md
 ```
 
 ## How-to Guides
