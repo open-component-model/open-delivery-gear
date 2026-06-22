@@ -70,7 +70,7 @@ is tried, but if one lookup yields an empty list `[]`, this is interpreted as
 
 2. *Extension*
 
-   The {doc}`responsibles extension </contents/concepts/05-responsibles>` tries to
+   The {doc}`responsibles extension </contents/concepts/04-responsibles>` tries to
    resolve responsibles by examining configured `rules` for the components of
    interest. If a rule matches, the responsibles retrieved via the configured
    `strategies` are uploaded as `ArtefactMetadata` of type
