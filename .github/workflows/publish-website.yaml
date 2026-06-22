@@ -31,7 +31,7 @@ jobs:
 
   publish-website:
     # do not publish on forks
-    if: ${{ github.repository == 'open-delivery-gear/open-delivery-gear' }}
+    if: ${{ github.repository == 'open-component-model/open-delivery-gear' }}
 
     runs-on: ubuntu-latest
     permissions:
