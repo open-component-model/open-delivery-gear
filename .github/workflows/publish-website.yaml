@@ -1,5 +1,4 @@
 name: Publish Website
-run-name: Publishing Website
 on:
   workflow_dispatch:
   push:
