@@ -8,16 +8,16 @@ installation:
     mappings:
     - artefact_type: helmchart-imagemap
       name: envoy-gateway
-      version: 0.11.0-dev
+      version: 0.11.0
     name: ocm.software/open-delivery-gear
-    version: 0.11.0-dev
+    version: 0.11.0
   - artefact:
       name: network
-      version: 0.11.0-dev
+      version: 0.11.0
     helm_chart_name: network
     mappings: []
     name: ocm.software/open-delivery-gear
-    version: 0.11.0-dev
+    version: 0.11.0
   value_templates:
   - helm_attribute: fullnameOverride
     helm_chart_name: gateway-helm
