@@ -1,0 +1,15 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1350.0
+release_notes:
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: noteworthy
+  contents: The logs of the delivery-service do not include request query parameters
+    anymore
+  mimetype: text/markdown
+  reference: '[#867](https://github.com/open-component-model/odg-core/pull/867)'
+  type: standard
