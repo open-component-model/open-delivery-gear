@@ -24,7 +24,7 @@ ghas:
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `on_unsupported` | string | `warning` | Behavior when artefact kind/type/access is unsupported. Options: `fail`, `ignore`, `warning`. |
+| `on_unsupported` | string | `warning` | Behaviour when artefact kind/type/access is unsupported. Options: `fail`, `ignore`, `warning`. |
 | `schedule` | string | `0 0 * * *` | Cron schedule for running the cronjob (daily at midnight by default). |
 | `successful_jobs_history_limit` | int | `1` | Number of successful job executions to retain in history. |
 | `failed_jobs_history_limit` | int | `1` | Number of failed job executions to retain in history. |
@@ -43,7 +43,7 @@ Each entry in the `github_instances` list supports the following fields:
 
 ### `on_unsupported`
 
-Defines the behavior when an artefact kind, type, or access method is not supported:
+Defines the behaviour when an artefact kind, type, or access method is not supported:
 
 - **`fail`**: Raise an exception and stop processing
 - **`ignore`**: Silently skip the unsupported artefact

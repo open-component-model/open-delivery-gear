@@ -123,7 +123,7 @@ The general flow for extensions which are intended to submit
 findings, there is a well-defined overview of the supported states of a finding
 (see Fig. 1).
 
-```{figure} /res/finding-states.svg
+```{figure} /_static/finding-states.svg
 :figwidth: 50%
 :align: center
 

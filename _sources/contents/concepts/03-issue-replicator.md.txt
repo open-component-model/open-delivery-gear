@@ -50,7 +50,7 @@ associated GitHub issues (if there are any) will be closed. However, please
 note that compliance snapshots are not intended to be managed manually but only
 via the {doc}`artefact-enumerator extension </contents/concepts/02-artefact-enumerator>`.
 
-![Issues Overview](/res/issues-overview.svg)
+![Issues Overview](/_static/issues-overview.svg)
 
 ### GitHub Issue Assignees
 
@@ -70,7 +70,7 @@ is tried, but if one lookup yields an empty list `[]`, this is interpreted as
 
 2. *Extension*
 
-   The {doc}`responsibles extension </contents/concepts/05-responsibles>` tries to
+   The {doc}`responsibles extension </contents/concepts/04-responsibles>` tries to
    resolve responsibles by examining configured `rules` for the components of
    interest. If a rule matches, the responsibles retrieved via the configured
    `strategies` are uploaded as `ArtefactMetadata` of type

@@ -40,7 +40,7 @@ crypto:
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `interval` | int (seconds) | `86400` | Maximum time before a component is re-scanned. |
-| `on_unsupported` | string | `warning` | Behavior when artefact kind/type/access is unsupported. Options: `fail`, `ignore`, `warning`. |
+| `on_unsupported` | string | `warning` | Behaviour when artefact kind/type/access is unsupported. Options: `fail`, `ignore`, `warning`. |
 | `mappings` | list | `[]` | Per-prefix component mappings. See mapping fields below. |
 
 ## Mapping Fields
@@ -52,7 +52,7 @@ Each entry in the `mappings` list supports the following fields:
 | `prefix` | string | yes | Component name prefix. Use `''` (empty string) to match all components. |
 | `standards` | list | yes | Cryptographic standards to validate against. See standard fields below. |
 | `libraries` | list | yes | References to files containing known cryptographic library names. |
-| `included_asset_types` | list or null | no | Filter which cryptographic asset types to analyze. `null` = all types. Options: `algorithm`, `certificate`, `library`, `protocol`, `related-crypto-material`. |
+| `included_asset_types` | list or null | no | Filter which cryptographic asset types to analyse. `null` = all types. Options: `algorithm`, `certificate`, `library`, `protocol`, `related-crypto-material`. |
 | `aws_secret_name` | string | no | Name of the AWS secret to use for S3 artefacts. |
 
 ## Standard Fields
@@ -78,16 +78,16 @@ Each entry in the `libraries` list can be a string (library name) or a reference
 ### `interval`
 
 The maximum time (in seconds) before a component's cryptographic assets are
-re-analyzed. Default is 86400 seconds (24 hours).
+re-analysed. Default is 86400 seconds (24 hours).
 
 This interval ensures:
 - Cryptographic compliance is regularly re-evaluated
 - New standards or library definitions are applied to existing components
-- Changes in artefacts are detected and analyzed
+- Changes in artefacts are detected and analysed
 
 ### `on_unsupported`
 
-Defines the behavior when an artefact kind, type, or access method is not supported:
+Defines the behaviour when an artefact kind, type, or access method is not supported:
 
 - **`fail`**: Raise an exception and stop processing
 - **`ignore`**: Silently skip the unsupported artefact
@@ -153,7 +153,7 @@ You can also reference files in external GitHub repositories or OCM resources.
 
 ### `included_asset_types`
 
-Filters which cryptographic asset types to analyze. Set to `null` to analyze all types,
+Filters which cryptographic asset types to analyse. Set to `null` to analyse all types,
 or provide a list to restrict analysis to specific categories:
 
 - **`algorithm`**: Cryptographic algorithms (AES, RSA, SHA, etc.)
@@ -165,15 +165,15 @@ or provide a list to restrict analysis to specific categories:
 **Examples:**
 
 ```yaml
-# Analyze all asset types
+# Analyse all asset types
 included_asset_types: null
 
-# Only analyze algorithms and libraries
+# Only analyse algorithms and libraries
 included_asset_types:
   - algorithm
   - library
 
-# Only analyze certificates
+# Only analyse certificates
 included_asset_types:
   - certificate
 ```

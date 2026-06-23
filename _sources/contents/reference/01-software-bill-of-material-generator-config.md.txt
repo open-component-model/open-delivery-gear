@@ -26,7 +26,7 @@ sbom_generator:
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `interval` | int (seconds) | `86400` | Maximum time before an artefact is re-scanned. |
-| `on_unsupported` | string | `warning` | Behavior when artefact kind/type/access is unsupported. Options: `fail`, `ignore`, `warning`. |
+| `on_unsupported` | string | `warning` | Behaviour when artefact kind/type/access is unsupported. Options: `fail`, `ignore`, `warning`. |
 | `generation_mode` | string | `syft` | SBOM generation tool: `syft`, `bdba`. |
 | `output_format` | string | `cyclonedx` | Output format: `cyclonedx`, `spdx`, `bdio`. |
 | `create_new_scan_if_missing` | bool | `false` | BDBA mode: create new scan if none exists. |
@@ -52,7 +52,7 @@ Default is 86400 seconds (24 hours).
 
 ### `on_unsupported`
 
-Defines the behavior when an artefact kind, type, or access method is not supported:
+Defines the behaviour when an artefact kind, type, or access method is not supported:
 
 - **`fail`**: Raise an exception and stop processing
 - **`ignore`**: Silently skip the unsupported artefact

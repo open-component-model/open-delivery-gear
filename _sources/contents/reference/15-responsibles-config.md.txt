@@ -206,7 +206,7 @@ Assign responsibility to a specific GitHub user:
 
 Controls how determined responsibles interact with existing GitHub issue assignees:
 
-| Mode | Behavior |
+| Mode | Behaviour |
 |------|----------|
 | `null` | Use the default mode from finding configuration (`findings[].issues.default_assignee_mode`). |
 | `extend` | Add determined responsibles to existing issue assignees (union). |

@@ -197,13 +197,12 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Concepts</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../concepts/00-odg-architecture.html">ODG System Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../concepts/00-odg-architecture.html">ODG’s System Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../concepts/01-data-model.html">Correlating metadata to OCM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../concepts/02-artefact-enumerator.html">Reacting upon OCM events</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../concepts/03-issue-replicator.html">Lifecycling GitHub Issues</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../concepts/05-responsibles.html">Overwriting OCM component responsibles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../concepts/06-extending.html">Extending ODG</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../concepts/07-sbom-generator.html">Generating Software Bill of Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../concepts/04-responsibles.html">Overwriting OCM component responsibles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../concepts/05-sbom-generator.html">Generating Software Bill of Materials</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
 <ul>
@@ -227,7 +226,6 @@
 <li class="toctree-l2"><a class="reference internal" href="07-backlog-controller-config.html">Backlog Controller</a></li>
 <li class="toctree-l2"><a class="reference internal" href="09-cache-manager-config.html">Cache Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="11-delivery-db-backup-config.html">Delivery Database Backup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="06-issue-replicator-config.html">Issue Replicator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="15-responsibles-config.html">Responsibles</a></li>
 </ul>
 </li>
@@ -236,6 +234,7 @@
 <li class="toctree-l2"><a class="reference internal" href="03-vulnerability-scanner-config.html">Vulnerability Scanner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="04-malware-scanner-config.html">Malware Scanner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="05-operating-system-scanner-config.html">Operating System Scanner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06-issue-replicator-config.html">Issue Replicator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="08-license-and-intellectual-property-scanner-config.html">License and Intellectual Property Scanner</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Cryptographic Asset Scanner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="12-findings-report-generator-config.html">Findings Report Generator</a></li>
@@ -337,7 +336,7 @@
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">on_unsupported</span></code></p></td>
 <td><p>string</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">warning</span></code></p></td>
-<td><p>Behavior when artefact kind/type/access is unsupported. Options: <code class="docutils literal notranslate"><span class="pre">fail</span></code>, <code class="docutils literal notranslate"><span class="pre">ignore</span></code>, <code class="docutils literal notranslate"><span class="pre">warning</span></code>.</p></td>
+<td><p>Behaviour when artefact kind/type/access is unsupported. Options: <code class="docutils literal notranslate"><span class="pre">fail</span></code>, <code class="docutils literal notranslate"><span class="pre">ignore</span></code>, <code class="docutils literal notranslate"><span class="pre">warning</span></code>.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mappings</span></code></p></td>
 <td><p>list</p></td>
@@ -379,7 +378,7 @@
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">included_asset_types</span></code></p></td>
 <td><p>list or null</p></td>
 <td><p>no</p></td>
-<td><p>Filter which cryptographic asset types to analyze. <code class="docutils literal notranslate"><span class="pre">null</span></code> = all types. Options: <code class="docutils literal notranslate"><span class="pre">algorithm</span></code>, <code class="docutils literal notranslate"><span class="pre">certificate</span></code>, <code class="docutils literal notranslate"><span class="pre">library</span></code>, <code class="docutils literal notranslate"><span class="pre">protocol</span></code>, <code class="docutils literal notranslate"><span class="pre">related-crypto-material</span></code>.</p></td>
+<td><p>Filter which cryptographic asset types to analyse. <code class="docutils literal notranslate"><span class="pre">null</span></code> = all types. Options: <code class="docutils literal notranslate"><span class="pre">algorithm</span></code>, <code class="docutils literal notranslate"><span class="pre">certificate</span></code>, <code class="docutils literal notranslate"><span class="pre">library</span></code>, <code class="docutils literal notranslate"><span class="pre">protocol</span></code>, <code class="docutils literal notranslate"><span class="pre">related-crypto-material</span></code>.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">aws_secret_name</span></code></p></td>
 <td><p>string</p></td>
@@ -449,17 +448,17 @@
 <section id="interval">
 <h3><code class="docutils literal notranslate"><span class="pre">interval</span></code><a class="headerlink" href="#interval" title="Link to this heading">¶</a></h3>
 <p>The maximum time (in seconds) before a component’s cryptographic assets are
-re-analyzed. Default is 86400 seconds (24 hours).</p>
+re-analysed. Default is 86400 seconds (24 hours).</p>
 <p>This interval ensures:</p>
 <ul class="simple">
 <li><p>Cryptographic compliance is regularly re-evaluated</p></li>
 <li><p>New standards or library definitions are applied to existing components</p></li>
-<li><p>Changes in artefacts are detected and analyzed</p></li>
+<li><p>Changes in artefacts are detected and analysed</p></li>
 </ul>
 </section>
 <section id="on-unsupported">
 <h3><code class="docutils literal notranslate"><span class="pre">on_unsupported</span></code><a class="headerlink" href="#on-unsupported" title="Link to this heading">¶</a></h3>
-<p>Defines the behavior when an artefact kind, type, or access method is not supported:</p>
+<p>Defines the behaviour when an artefact kind, type, or access method is not supported:</p>
 <ul class="simple">
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">fail</span></code></strong>: Raise an exception and stop processing</p></li>
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">ignore</span></code></strong>: Silently skip the unsupported artefact</p></li>
@@ -525,7 +524,7 @@ re-analyzed. Default is 86400 seconds (24 hours).</p>
 </section>
 <section id="included-asset-types">
 <h3><code class="docutils literal notranslate"><span class="pre">included_asset_types</span></code><a class="headerlink" href="#included-asset-types" title="Link to this heading">¶</a></h3>
-<p>Filters which cryptographic asset types to analyze. Set to <code class="docutils literal notranslate"><span class="pre">null</span></code> to analyze all types,
+<p>Filters which cryptographic asset types to analyse. Set to <code class="docutils literal notranslate"><span class="pre">null</span></code> to analyse all types,
 or provide a list to restrict analysis to specific categories:</p>
 <ul class="simple">
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">algorithm</span></code></strong>: Cryptographic algorithms (AES, RSA, SHA, etc.)</p></li>
@@ -535,15 +534,15 @@ or provide a list to restrict analysis to specific categories:</p>
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">related-crypto-material</span></code></strong>: Keys, seeds, nonces, and other crypto material</p></li>
 </ul>
 <p><strong>Examples:</strong></p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Analyze all asset types</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Analyse all asset types</span>
 <span class="nt">included_asset_types</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
 
-<span class="c1"># Only analyze algorithms and libraries</span>
+<span class="c1"># Only analyse algorithms and libraries</span>
 <span class="nt">included_asset_types</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">algorithm</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">library</span>
 
-<span class="c1"># Only analyze certificates</span>
+<span class="c1"># Only analyse certificates</span>
 <span class="nt">included_asset_types</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">certificate</span>
 </pre></div>

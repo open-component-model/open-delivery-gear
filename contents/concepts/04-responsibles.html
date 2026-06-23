@@ -3,11 +3,11 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Setting up a hybrid dev setup" href="../how-to/00-hybrid-dev-setup.html"><link rel="prev" title="Extending ODG" href="06-extending.html">
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Generating Software Bill of Materials" href="05-sbom-generator.html"><link rel="prev" title="Lifecycling GitHub Issues" href="03-issue-replicator.html">
         <link rel="prefetch" href="../../_static/odg.svg" as="image">
 
     <link rel="shortcut icon" href="../../_static/odg.svg"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Generating Software Bill of Materials - Open Delivery Gear documentation</title>
+        <title>Overwriting OCM component responsibles - Open Delivery Gear documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
@@ -197,13 +197,12 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Concepts</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="00-odg-architecture.html">ODG System Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-odg-architecture.html">ODG’s System Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="01-data-model.html">Correlating metadata to OCM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="02-artefact-enumerator.html">Reacting upon OCM events</a></li>
 <li class="toctree-l1"><a class="reference internal" href="03-issue-replicator.html">Lifecycling GitHub Issues</a></li>
-<li class="toctree-l1"><a class="reference internal" href="05-responsibles.html">Overwriting OCM component responsibles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="06-extending.html">Extending ODG</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Generating Software Bill of Materials</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Overwriting OCM component responsibles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05-sbom-generator.html">Generating Software Bill of Materials</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
 <ul>
@@ -227,7 +226,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../reference/07-backlog-controller-config.html">Backlog Controller</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/09-cache-manager-config.html">Cache Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/11-delivery-db-backup-config.html">Delivery Database Backup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../reference/06-issue-replicator-config.html">Issue Replicator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/15-responsibles-config.html">Responsibles</a></li>
 </ul>
 </li>
@@ -236,6 +234,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../reference/03-vulnerability-scanner-config.html">Vulnerability Scanner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/04-malware-scanner-config.html">Malware Scanner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/05-operating-system-scanner-config.html">Operating System Scanner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/06-issue-replicator-config.html">Issue Replicator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/08-license-and-intellectual-property-scanner-config.html">License and Intellectual Property Scanner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/10-cryptographic-asset-scanner-config.html">Cryptographic Asset Scanner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/12-findings-report-generator-config.html">Findings Report Generator</a></li>
@@ -263,7 +262,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="../../_sources/contents/concepts/07-sbom-generator.md.txt" title="View this page">
+  <a class="muted-link" href="../../_sources/contents/concepts/04-responsibles.md.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -281,70 +280,109 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="generating-software-bill-of-materials">
-<h1>Generating Software Bill of Materials<a class="headerlink" href="#generating-software-bill-of-materials" title="Link to this heading">¶</a></h1>
-<section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
-<p>The SBOM-Generator extension automatically creates Software Bill of Materials
-(SBOM) documents for OCM resources. It uses
-<a class="reference external" href="https://github.com/anchore/syft">Syft</a> to scan artefacts and stores the
-generated SBOMs in ODG blob storage for retrieval via the dashboard or API.</p>
+          <section id="overwriting-ocm-component-responsibles">
+<h1>Overwriting OCM component responsibles<a class="headerlink" href="#overwriting-ocm-component-responsibles" title="Link to this heading">¶</a></h1>
+<p>The responsibles extension is able to determine responsibles based on
+configured <code class="docutils literal notranslate"><span class="pre">rules</span></code>. The determined responsibles are uploaded as
+<code class="docutils literal notranslate"><span class="pre">ArtefactMetadata</span></code> of type <code class="docutils literal notranslate"><span class="pre">meta/responsibles</span></code>. A rule in this context is made
+up by a list of <code class="docutils literal notranslate"><span class="pre">filters</span></code> and a list of assigned <code class="docutils literal notranslate"><span class="pre">strategies</span></code>. A rule is
+considered to be a match if and only if all of the filters of a rule match the given
+artefact + datatype. The first matching rule “wins”. In case no rule matches,
+no responsible objects are uploaded.</p>
+<p>The hereby determined responsibles are then used by the
+<a class="reference internal" href="03-issue-replicator.html"><span class="doc">issue-replicator extension</span></a> as option
+for the GitHub issue assignees. Please refer to the documentation of the
+issue-replicator for more details on the <strong>precedence behaviour</strong> of
+responsibles.</p>
+<p>Next to the filters and strategies, a rule can define an optional
+<code class="docutils literal notranslate"><span class="pre">assignee_mode</span></code> as well. This mode defines the behavioural contract in case a
+GitHub issue already has assignees which are different from those the current
+execution yields.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In order to enable the issue-replicator extension to use these responsibles
+objects as source to determine GitHub issue assignees, the responsibles must
+contain the same <code class="docutils literal notranslate"><span class="pre">github_hostname</span></code> as the target GitHub issue repository. In
+case none of the found responsibles has the correct hostname, the GitHub
+issue won’t have any updated assignees.</p>
+</div>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<section id="configuration">
+<h3>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">responsibles</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">rules</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vulnerability-responsibles</span>
+<span class="w">      </span><span class="nt">filters</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">datatype-filter</span>
+<span class="w">          </span><span class="nt">include_types</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">finding/vulnerability</span>
+<span class="w">      </span><span class="nt">strategies</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">static-responsibles</span>
+<span class="w">          </span><span class="nt">responsibles</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">githubTeam</span>
+<span class="w">              </span><span class="nt">github_hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github.com</span>
+<span class="w">              </span><span class="nt">teamname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-teamname</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">githubUser</span>
+<span class="w">              </span><span class="nt">github_hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github.com</span>
+<span class="w">              </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-username</span>
+<span class="w">      </span><span class="nt">assignee_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">overwrite</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">special-image-responsibles</span>
+<span class="w">      </span><span class="nt">filters</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">component-filter</span>
+<span class="w">          </span><span class="nt">include_component_names</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example.org/my-component</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">artefact-filter</span>
+<span class="w">          </span><span class="nt">include_artefact_types</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ociImage</span>
+<span class="w">      </span><span class="nt">strategies</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">static-responsibles</span>
+<span class="w">          </span><span class="nt">responsibles</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">githubTeam</span>
+<span class="w">              </span><span class="nt">github_hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github.com</span>
+<span class="w">              </span><span class="nt">teamname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-other-teamname</span>
+<span class="w">      </span><span class="nt">assignee_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">extend</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">remainder</span>
+<span class="w">      </span><span class="nt">filters</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">match-all</span>
+<span class="w">      </span><span class="nt">strategies</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">component-responsibles</span>
+<span class="w">      </span><span class="nt">assignee_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">skip</span>
+</pre></div>
+</div>
 </section>
-<section id="how-it-works">
-<h2>How It Works<a class="headerlink" href="#how-it-works" title="Link to this heading">¶</a></h2>
-<section id="component-scanning-process">
-<h3>Component Scanning Process<a class="headerlink" href="#component-scanning-process" title="Link to this heading">¶</a></h3>
-<p>When a component is picked up for scanning, the SBOM-Generator:</p>
-<ol class="arabic simple">
-<li><p><strong>Resolves the component descriptor</strong> from configured OCM repositories</p></li>
-<li><p><strong>Retrieves each Resource</strong> from the component</p></li>
-<li><p><strong>Scans using Syft CLI</strong> via subprocess</p></li>
-</ol>
-<p>The scanning approach varies by resource type:</p>
-<section id="resource-type-handling">
-<h4>Resource Type Handling<a class="headerlink" href="#resource-type-handling" title="Link to this heading">¶</a></h4>
-<p><strong><code class="docutils literal notranslate"><span class="pre">ociRegistry</span></code> Resources</strong>
-: The image reference is passed directly to the Syft CLI.</p>
-<p><strong><code class="docutils literal notranslate"><span class="pre">localBlob/v1</span></code> Resources</strong>
-: The blob is downloaded to a temporary file before scanning.</p>
-<p><strong><code class="docutils literal notranslate"><span class="pre">s3</span></code> Resources</strong>
-: The tar archive is downloaded and extracted to a temporary directory
-before scanning.</p>
+<section id="artefact-metadata">
+<h3>Artefact Metadata<a class="headerlink" href="#artefact-metadata" title="Link to this heading">¶</a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">artefact</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">component_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example.org/my-component</span>
+<span class="w">  </span><span class="nt">component_version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1.0</span>
+<span class="w">  </span><span class="nt">artefact_kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">resource</span>
+<span class="w">  </span><span class="nt">artefact</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">artefact_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-resource</span>
+<span class="w">    </span><span class="nt">artefact_version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1.0</span>
+<span class="w">    </span><span class="nt">artefact_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ociImage</span>
+<span class="w">    </span><span class="nt">artefact_extra_id</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1.0</span>
+<span class="nt">meta</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">meta/responsibles</span>
+<span class="w">  </span><span class="nt">datasource</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">responsibles</span>
+<span class="w">  </span><span class="nt">responsibles</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">identifiers</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">githubUser</span>
+<span class="w">          </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">responsibles</span>
+<span class="w">          </span><span class="nt">github_hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github.com</span>
+<span class="w">          </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-username</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">identifiers</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">githubUser</span>
+<span class="w">          </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">responsibles</span>
+<span class="w">          </span><span class="nt">github_hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github.com</span>
+<span class="w">          </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-second-username</span>
+<span class="w">  </span><span class="nt">assignee_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">extend</span>
+<span class="nt">data</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">referenced_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">finding/vulnerability</span>
+</pre></div>
+</div>
 </section>
-</section>
-<section id="sbom-storage-and-metadata">
-<h3>SBOM Storage and Metadata<a class="headerlink" href="#sbom-storage-and-metadata" title="Link to this heading">¶</a></h3>
-<p>Once the SBOM is produced:</p>
-<ol class="arabic simple">
-<li><p><strong>Serialization</strong>: The SBOM is serialized to JSON</p></li>
-<li><p><strong>Hashing</strong>: A SHA-256 hash is computed</p></li>
-<li><p><strong>Upload</strong>: The SBOM is uploaded to the ODG blob storage</p></li>
-<li><p><strong>Metadata Recording</strong>: The digest, file size, and output format are recorded
-as <code class="docutils literal notranslate"><span class="pre">ArtefactMetadata</span></code> of type <code class="docutils literal notranslate"><span class="pre">artefact_scan_info</span></code> for that resource</p></li>
-</ol>
-<p>The dashboard queries this metadata to determine whether an SBOM is ready for
-download.</p>
-</section>
-<section id="generation-flow">
-<h3>Generation Flow<a class="headerlink" href="#generation-flow" title="Link to this heading">¶</a></h3>
-<p>The diagram below shows the end-to-end generation flow:</p>
-<p><img alt="SBOM Generation Overview" src="../../_images/sbom-generator-overview.svg" /></p>
-</section>
-</section>
-<section id="supported-output-formats">
-<h2>Supported Output Formats<a class="headerlink" href="#supported-output-formats" title="Link to this heading">¶</a></h2>
-<p>The SBOM-Generator supports two standard SBOM formats:</p>
-<ul class="simple">
-<li><p><strong>CycloneDX</strong> (default)</p></li>
-<li><p><strong>SPDX</strong></p></li>
-</ul>
-<p>The format is configurable per ODG instance.</p>
-</section>
-<section id="rescanning-behavior">
-<h2>Rescanning Behavior<a class="headerlink" href="#rescanning-behavior" title="Link to this heading">¶</a></h2>
-<p>Components are automatically rescanned based on the configured <code class="docutils literal notranslate"><span class="pre">interval</span></code>
-(default: 24 hours). This ensures that SBOMs remain up-to-date as component
-resources change.</p>
 </section>
 </section>
 
@@ -353,23 +391,23 @@ resources change.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../how-to/00-hybrid-dev-setup.html">
+          <a class="next-page" href="05-sbom-generator.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Setting up a hybrid dev setup</div>
+                <div class="title">Generating Software Bill of Materials</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="06-extending.html">
+          <a class="prev-page" href="03-issue-replicator.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Extending ODG</div>
+                <div class="title">Lifecycling GitHub Issues</div>
                 
               </div>
             </a>
@@ -403,19 +441,12 @@ resources change.</p>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Generating Software Bill of Materials</a><ul>
-<li><a class="reference internal" href="#overview">Overview</a></li>
-<li><a class="reference internal" href="#how-it-works">How It Works</a><ul>
-<li><a class="reference internal" href="#component-scanning-process">Component Scanning Process</a><ul>
-<li><a class="reference internal" href="#resource-type-handling">Resource Type Handling</a></li>
+<li><a class="reference internal" href="#">Overwriting OCM component responsibles</a><ul>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#configuration">Configuration</a></li>
+<li><a class="reference internal" href="#artefact-metadata">Artefact Metadata</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#sbom-storage-and-metadata">SBOM Storage and Metadata</a></li>
-<li><a class="reference internal" href="#generation-flow">Generation Flow</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#supported-output-formats">Supported Output Formats</a></li>
-<li><a class="reference internal" href="#rescanning-behavior">Rescanning Behavior</a></li>
 </ul>
 </li>
 </ul>

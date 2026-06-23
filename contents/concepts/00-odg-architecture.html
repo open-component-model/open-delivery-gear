@@ -7,7 +7,7 @@
         <link rel="prefetch" href="../../_static/odg.svg" as="image">
 
     <link rel="shortcut icon" href="../../_static/odg.svg"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>ODG System Architecture - Open Delivery Gear documentation</title>
+        <title>ODG’s System Architecture - Open Delivery Gear documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
@@ -174,7 +174,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
       </label>
     </div>
@@ -197,13 +197,12 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Concepts</span></p>
 <ul class="current">
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">ODG System Architecture</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">ODG’s System Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="01-data-model.html">Correlating metadata to OCM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="02-artefact-enumerator.html">Reacting upon OCM events</a></li>
 <li class="toctree-l1"><a class="reference internal" href="03-issue-replicator.html">Lifecycling GitHub Issues</a></li>
-<li class="toctree-l1"><a class="reference internal" href="05-responsibles.html">Overwriting OCM component responsibles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="06-extending.html">Extending ODG</a></li>
-<li class="toctree-l1"><a class="reference internal" href="07-sbom-generator.html">Generating Software Bill of Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04-responsibles.html">Overwriting OCM component responsibles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05-sbom-generator.html">Generating Software Bill of Materials</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
 <ul>
@@ -227,7 +226,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../reference/07-backlog-controller-config.html">Backlog Controller</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/09-cache-manager-config.html">Cache Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/11-delivery-db-backup-config.html">Delivery Database Backup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../reference/06-issue-replicator-config.html">Issue Replicator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/15-responsibles-config.html">Responsibles</a></li>
 </ul>
 </li>
@@ -236,6 +234,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../reference/03-vulnerability-scanner-config.html">Vulnerability Scanner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/04-malware-scanner-config.html">Malware Scanner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/05-operating-system-scanner-config.html">Operating System Scanner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/06-issue-replicator-config.html">Issue Replicator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/08-license-and-intellectual-property-scanner-config.html">License and Intellectual Property Scanner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/10-cryptographic-asset-scanner-config.html">Cryptographic Asset Scanner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/12-findings-report-generator-config.html">Findings Report Generator</a></li>
@@ -276,13 +275,487 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="odg-system-architecture">
-<h1>ODG System Architecture<a class="headerlink" href="#odg-system-architecture" title="Link to this heading">¶</a></h1>
+          <section id="odg-s-system-architecture">
+<h1>ODG’s System Architecture<a class="headerlink" href="#odg-s-system-architecture" title="Link to this heading">¶</a></h1>
+<p>Open Delivery Gear (ODG) is a Kubernetes-native compliance automation engine designed for continuous security and compliance scanning of software components modelled with the Open Component Model (OCM). This document provides an architectural overview of ODG’s core components, extension mechanisms, scheduling and persistence architecture, and common entry points into the system.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<pre  class="mermaid">
+        flowchart TD
+    core[ODG Core] --&gt; db(ODG-DB)
+    db --&gt; core
+    extensions_cfg(Extension Configuration) --&gt; artefact_enumerator[Artefact Enumerator]
+    secrets(Credentials) --&gt; artefact_enumerator
+    artefact_enumerator --&gt;|Create| backlog_items(Backlog Items)
+    cronjob[Cronjob] --&gt;|trigger| artefact_enumerator
+    backlog_items --&gt; backlog_controller[Backlog Controller]
+    backlog_controller --&gt;|scale| scanner[Scanner]
+    extensions_cfg --&gt; scanner
+    findings_cfg(Finding Configuration) --&gt; scanner
+    secrets --&gt; scanner
+    scanner --&gt;|Claim| backlog_items
+    scanner --&gt;|Upload Result| core
+    scanner --&gt;|Delete| backlog_items
+    core --&gt; ui[ODG UI]
+    </pre></section>
+<section id="design-principles">
+<h2>Design Principles<a class="headerlink" href="#design-principles" title="Link to this heading">¶</a></h2>
+<p>ODG is built upon several key architectural principles:</p>
+<ul class="simple">
+<li><p><strong>Kubernetes-Native Deployment</strong>: All components are designed as Kubernetes workloads with native resource management</p></li>
+<li><p><strong>Modular and Extensible</strong>: Core functionality is minimal; features are added through extensions</p></li>
+<li><p><strong>Loose Coupling</strong>: Components communicate through well-defined APIs and can be scaled or replaced independently</p></li>
+<li><p><strong>Asynchronous Processing</strong>: Work is distributed through a queue-based system enabling autonomous operation</p></li>
+<li><p><strong>Single Source of Truth</strong>: All persistent state resides in the ODG database, ensuring consistency</p></li>
+</ul>
+</section>
+<section id="core-components">
+<h2>Core Components<a class="headerlink" href="#core-components" title="Link to this heading">¶</a></h2>
+<p>The ODG system comprises several core components that provide the foundation for all operations.</p>
+<section id="odg-database-odg-db">
+<h3>ODG Database (odg-db)<a class="headerlink" href="#odg-database-odg-db" title="Link to this heading">¶</a></h3>
+<p>The ODG Database serves as the <strong>sole persistency layer</strong> for the entire system. All findings, metadata, compliance snapshots, and configuration state flow through this component.</p>
+<p><strong>Responsibilities:</strong></p>
+<ul class="simple">
+<li><p>Store findings and metadata as <code class="docutils literal notranslate"><span class="pre">ArtefactMetadata</span></code> entries</p></li>
+<li><p>Correlate metadata with OCM coordinates (component name, version, artefact identity)</p></li>
+<li><p>Maintain compliance snapshots tracking artefact processing state</p></li>
+<li><p>Store scanner metadata writebacks and rescoring decisions</p></li>
+<li><p>Track discovery dates for SLA enforcement</p></li>
+<li><p>Cache OCM component information</p></li>
+</ul>
+<p><strong>Architecture:</strong>
+The database uses a correlation model where all data is linked to an <code class="docutils literal notranslate"><span class="pre">artefact</span></code> identifier. This allows grouping findings and metadata across different scans, versions, and extensions whilst maintaining traceability to specific OCM components or runtime artefacts.</p>
+</section>
+<section id="odg-core-odg-core">
+<h3>ODG Core (odg-core)<a class="headerlink" href="#odg-core-odg-core" title="Link to this heading">¶</a></h3>
+<p>ODG Core provides the <strong>central API</strong> layer and serves as the primary entry point for both human users and automated systems.</p>
+<p><strong>Responsibilities:</strong></p>
+<ul class="simple">
+<li><p>Expose API endpoints for CRUD operations on artefact metadata</p></li>
+<li><p>Proxy database operations with business logic enforcement</p></li>
+<li><p>Handle authentication and authorisation (implemented via OAuth)</p></li>
+<li><p>Serve data payloads for the ODG UI application</p></li>
+<li><p>Provide high-level OCM functions, e.g.:</p>
+<ul>
+<li><p>List component versions</p></li>
+<li><p>Calculate differences between OCM component versions</p></li>
+<li><p>Resolve component dependencies recursively</p></li>
+</ul>
+</li>
+<li><p>Maintain artefact scan information</p></li>
+<li><p>Coordinate metadata queries with complex filtering</p></li>
+</ul>
+<p>The core API is the single gateway through which extensions upload findings, the UI retrieves data, and external systems integrate with ODG.</p>
+</section>
+<section id="odg-ui-odg-ui">
+<h3>ODG UI (odg-ui)<a class="headerlink" href="#odg-ui-odg-ui" title="Link to this heading">¶</a></h3>
+<p>The Delivery Dashboard provides the <strong>primary user interface</strong> for interacting with ODG.</p>
+<p><strong>Capabilities:</strong></p>
+<ul class="simple">
+<li><p>Browse OCM components and their artefacts</p></li>
+<li><p>View compliance status and findings with SLA tracking</p></li>
+<li><p>Create and manage finding assessments and rescorings</p></li>
+<li><p>Submit scanner metadata writebacks</p></li>
+<li><p>Monitor ODG system health (pod status, backlog queue depth)</p></li>
+</ul>
+<p>The UI is a static web application served by a dedicated webserver, consuming data exclusively through the ODG Core API.</p>
+</section>
+<section id="artefact-enumerator">
+<h3>Artefact Enumerator<a class="headerlink" href="#artefact-enumerator" title="Link to this heading">¶</a></h3>
+<p>The Artefact Enumerator acts as the <strong>orchestration engine</strong> for automated scanning workflows.</p>
+<p><strong>Responsibilities:</strong></p>
+<ul class="simple">
+<li><p>Periodically check configured OCM components for new versions</p></li>
+<li><p>Resolve OCM component dependencies recursively</p></li>
+<li><p>Manage compliance snapshot lifecycle (create, update, delete)</p></li>
+<li><p>Evaluate which extensions need to process which artefacts</p></li>
+<li><p>Create <code class="docutils literal notranslate"><span class="pre">BacklogItem</span></code> custom resources to trigger extension processing</p></li>
+<li><p>Track grace periods for artefacts no longer of interest</p></li>
+</ul>
+<p><strong>How It Works:</strong></p>
+<p>The artefact enumerator runs as a Kubernetes CronJob on a configurable schedule. For each configured OCM component:</p>
+<ol class="arabic simple">
+<li><p><strong>Discovery</strong>: Fetch the component descriptor and recursively resolve all dependencies</p></li>
+<li><p><strong>Tracking</strong>: Create or update compliance snapshots for each artefact (resource or source)</p></li>
+<li><p><strong>Change Detection</strong>: Compare current state against previous scan information</p></li>
+<li><p><strong>Triggering</strong>: For each extension, evaluate if scanning is needed based on:</p>
+<ul class="simple">
+<li><p>New artefact versions</p></li>
+<li><p>Configured scan interval elapsed</p></li>
+<li><p>Explicit manual trigger</p></li>
+</ul>
+</li>
+<li><p><strong>Backlog Creation</strong>: Generate <code class="docutils literal notranslate"><span class="pre">BacklogItem</span></code> custom resources for required scans</p></li>
+</ol>
+<p>Compliance snapshots persist state across enumerator runs, ensuring stable tracking of what needs processing and enabling graceful cleanup when artefacts are removed from the configuration.</p>
+</section>
+<section id="backlog-items">
+<h3>Backlog Items<a class="headerlink" href="#backlog-items" title="Link to this heading">¶</a></h3>
+<p>Backlog Items are <strong>Kubernetes Custom Resources</strong> (CRDs) that represent queued work for extensions.</p>
+<p><strong>Structure:</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">delivery-gear.gardener.cloud/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">BacklogItem</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;extension&gt;-&lt;priority&gt;-&lt;hash&gt;</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">delivery</span>
+<span class="w">  </span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">delivery-gear.gardener.cloud/service</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;extensionName&gt;</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">artefact</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">component_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example.org/component</span>
+<span class="w">    </span><span class="nt">component_version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0.0</span>
+<span class="w">    </span><span class="nt">artefact_kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">resource</span>
+<span class="w">    </span><span class="nt">artefact</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">artefact_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-image</span>
+<span class="w">      </span><span class="nt">artefact_version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0.0</span>
+<span class="w">      </span><span class="nt">artefact_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ociImage</span>
+<span class="w">      </span><span class="nt">artefact_extra_id</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+<span class="w">  </span><span class="nt">priority</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<span class="w">  </span><span class="nt">timestamp</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;2025-01-01T12:00:00.000000+00:00&#39;</span>
+</pre></div>
+</div>
+<p><strong>Properties:</strong></p>
+<ul class="simple">
+<li><p><strong>Priority</strong>: Determines processing order (lower number = higher priority)</p></li>
+<li><p><strong>Service Label</strong>: Associates the item with a specific extension</p></li>
+<li><p><strong>Artefact Identity</strong>: Fully qualified OCM or runtime artefact reference</p></li>
+<li><p><strong>Timestamp</strong>: Creation time for audit and staleness detection</p></li>
+</ul>
+<p>Backlog Items implement a <strong>priority queue</strong> pattern. Extensions claim items by adding a claim annotation, process the artefact, then delete the item upon completion.</p>
+</section>
+<section id="backlog-controller">
+<h3>Backlog Controller<a class="headerlink" href="#backlog-controller" title="Link to this heading">¶</a></h3>
+<p>The Backlog Controller provides <strong>dynamic scaling</strong> of extension workers based on queue depth.</p>
+<p><strong>Responsibilities:</strong></p>
+<ul class="simple">
+<li><p>Watch <code class="docutils literal notranslate"><span class="pre">BacklogItem</span></code> custom resources across all extensions</p></li>
+<li><p>Calculate required replica count per extension based on pending items</p></li>
+<li><p>Scale Kubernetes Deployments up or down to match workload</p></li>
+<li><p>Detect and release stale claims (items claimed but not processed within timeout)</p></li>
+</ul>
+<p>The controller ensures efficient resource utilisation by scaling workers up during high load and down during idle periods, whilst preventing runaway scaling and resource exhaustion.</p>
+</section>
+</section>
+<section id="extensions">
+<h2>Extensions<a class="headerlink" href="#extensions" title="Link to this heading">¶</a></h2>
+<p>Extensions are <strong>modular components</strong> that implement specific scanning, analysis, or reporting capabilities. They operate independently and communicate only through the ODG Core API.</p>
+<section id="extension-types">
+<h3>Extension Types<a class="headerlink" href="#extension-types" title="Link to this heading">¶</a></h3>
+<p>ODG supports two integration models:</p>
+<ol class="arabic simple">
+<li><p><strong>Fully Integrated (In-Cluster)</strong></p>
+<ul class="simple">
+<li><p>Deployed as part of the ODG Helm chart</p></li>
+<li><p>Scaled automatically by the backlog controller</p></li>
+<li><p>Consume configuration from ConfigMaps</p></li>
+<li><p>Trigger via backlog items or CronJob schedule</p></li>
+</ul>
+</li>
+<li><p><strong>Lightly Integrated (Out-of-Cluster)</strong></p>
+<ul class="simple">
+<li><p>Run externally (CI pipeline, separate cluster, local machine)</p></li>
+<li><p>Upload findings via ODG Core API</p></li>
+<li><p>Manage their own deployment and triggering</p></li>
+<li><p>Benefit from ODG’s reporting and SLA tracking</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="scanner-extensions">
+<h3>Scanner Extensions<a class="headerlink" href="#scanner-extensions" title="Link to this heading">¶</a></h3>
+<p>Scanners are the most common extension type, performing security or compliance analysis on artefacts.</p>
+<p><strong>Lifecycle:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Claim</strong>: Worker queries for pending backlog items and claims one</p></li>
+<li><p><strong>Fetch</strong>: Retrieve artefact content (OCI image, source code, etc.)</p></li>
+<li><p><strong>Scan</strong>: Execute analysis (vulnerability detection, malware scanning, licence checks)</p></li>
+<li><p><strong>Upload</strong>: Submit findings as <code class="docutils literal notranslate"><span class="pre">ArtefactMetadata</span></code> to ODG Core API</p></li>
+<li><p><strong>Cleanup</strong>: Delete obsolete findings and mark scan complete</p></li>
+<li><p><strong>Delete</strong>: Remove the backlog item to signal completion</p></li>
+</ol>
+<p><strong>Examples:</strong></p>
+<ul class="simple">
+<li><p><strong>Vulnerability Scanner (BDBA)</strong>: Detects known vulnerabilities in software packages</p></li>
+<li><p><strong>Malware Scanner (ClamAV)</strong>: Scans artefacts for malicious content</p></li>
+<li><p><strong>Cryptographic Asset Inventory</strong>: Catalogues cryptographic material</p></li>
+<li><p><strong>OS End-of-Life Detection</strong>: Identifies unsupported operating system versions</p></li>
+<li><p><strong>SBoM Generator</strong>: Creates Software Bill of Materials</p></li>
+</ul>
+</section>
+<section id="extension-triggers">
+<h3>Extension Triggers<a class="headerlink" href="#extension-triggers" title="Link to this heading">¶</a></h3>
+<p>Extensions can be triggered in two ways:</p>
+<ol class="arabic simple">
+<li><p><strong>Backlog-Driven</strong> (Recommended)</p>
+<ul class="simple">
+<li><p>Extension deployed as Kubernetes Deployment</p></li>
+<li><p>Scaled automatically by backlog controller</p></li>
+<li><p>Workers run a continuous loop claiming and processing items</p></li>
+<li><p>Triggered by artefact enumerator or manual backlog item creation</p></li>
+</ul>
+</li>
+<li><p><strong>Schedule-Driven</strong></p>
+<ul class="simple">
+<li><p>Extension deployed as Kubernetes CronJob</p></li>
+<li><p>Runs at fixed intervals regardless of artefact changes</p></li>
+<li><p>Must determine target artefacts from configuration</p></li>
+<li><p>Suitable for periodic reporting or aggregation tasks</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="extension-data-model">
+<h3>Extension Data Model<a class="headerlink" href="#extension-data-model" title="Link to this heading">¶</a></h3>
+<p>Extensions communicate through the <code class="docutils literal notranslate"><span class="pre">ArtefactMetadata</span></code> model:</p>
+<p><strong>Structure:</strong></p>
+<ul class="simple">
+<li><p><strong>artefact</strong>: OCM or runtime artefact identity (correlation ID)</p></li>
+<li><p><strong>meta</strong>: Datasource, type, discovery date, processing time allowance</p></li>
+<li><p><strong>data</strong>: Extension-specific payload (findings, informational data)</p></li>
+</ul>
+<p><strong>Metadata Types:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Meta Types</strong>: System-level tracking (e.g., <code class="docutils literal notranslate"><span class="pre">meta/artefact_scan_info</span></code>)</p></li>
+<li><p><strong>Finding Types</strong>: Deviations requiring remediation (e.g., <code class="docutils literal notranslate"><span class="pre">finding/vulnerability</span></code>)</p></li>
+<li><p><strong>Informational Types</strong>: Enrichment data (e.g., file paths, package inventories)</p></li>
+</ol>
+<p>Each metadata entry has a unique <strong>key</strong> derived from artefact identity, datasource, type, and payload key, enabling idempotent updates and discovery date retention.</p>
+</section>
+<section id="common-extensions">
+<h3>Common Extensions<a class="headerlink" href="#common-extensions" title="Link to this heading">¶</a></h3>
+<p>Beyond scanners, ODG includes several specialised extensions:</p>
+<p><strong>Issue Replicator</strong></p>
+<ul class="simple">
+<li><p>Creates and manages GitHub issues for findings</p></li>
+<li><p>Groups findings by artefact, type, and due date</p></li>
+<li><p>Assigns issues to responsible teams</p></li>
+<li><p>Closes issues when findings are remediated or artefacts removed</p></li>
+</ul>
+<p><strong>Responsibles Extension</strong></p>
+<ul class="simple">
+<li><p>Determines ownership for artefacts based on configurable rules</p></li>
+<li><p>Uploads responsible information for use by issue replicator</p></li>
+<li><p>Supports multiple strategies (static, component-based, CODEOWNERS)</p></li>
+</ul>
+</section>
+</section>
+<section id="instance-specific-configuration">
+<h2>Instance-Specific Configuration<a class="headerlink" href="#instance-specific-configuration" title="Link to this heading">¶</a></h2>
+<p>ODG instances are customised through Kubernetes-native configuration resources.</p>
+<section id="extension-configuration">
+<h3>Extension Configuration<a class="headerlink" href="#extension-configuration" title="Link to this heading">¶</a></h3>
+<p>Deployed as a <strong>ConfigMap</strong> (<code class="docutils literal notranslate"><span class="pre">extensions-cfg</span></code>), this configuration defines:</p>
+<ul class="simple">
+<li><p>Which extensions are enabled</p></li>
+<li><p>Extension-specific parameters (API endpoints, intervals, filters)</p></li>
+<li><p>OCM components to track</p></li>
+<li><p>Backlog controller scaling parameters</p></li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">artefact_enumerator</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">components</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">component_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example.org/my-component</span>
+<span class="w">      </span><span class="nt">ocm_repo_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">europe-docker.pkg.dev/gardener-project/releases</span>
+<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">greatest</span>
+<span class="w">      </span><span class="nt">max_versions_limit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+</section>
+<section id="finding-configuration">
+<h3>Finding Configuration<a class="headerlink" href="#finding-configuration" title="Link to this heading">¶</a></h3>
+<p>Deployed as a <strong>ConfigMap</strong> (<code class="docutils literal notranslate"><span class="pre">findings-cfg</span></code>), this configuration defines:</p>
+<ul class="simple">
+<li><p>Supported finding types</p></li>
+<li><p>Severity categorisations</p></li>
+<li><p>Allowed processing times (SLAs) per severity</p></li>
+<li><p>GitHub issue reporting configuration</p></li>
+<li><p>Artefact grouping rules</p></li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">finding/vulnerability</span>
+<span class="w">  </span><span class="nt">categorisations</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">critical</span>
+<span class="w">      </span><span class="nt">allowed_processing_time</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7d</span>
+<span class="w">      </span><span class="nt">severity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CVSS &gt;= 9.0</span>
+<span class="w">  </span><span class="nt">issues</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enable_issues</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">attrs_to_group_by</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">component_name</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">artefact.artefact_name</span>
+</pre></div>
+</div>
+</section>
+<section id="credentials">
+<h3>Credentials<a class="headerlink" href="#credentials" title="Link to this heading">¶</a></h3>
+<p>Sensitive information (API keys, GitHub tokens, registry credentials) is stored as <strong>Kubernetes Secrets</strong> and mounted into relevant pods.</p>
+</section>
+</section>
+<section id="scheduling-and-work-distribution">
+<h2>Scheduling and Work Distribution<a class="headerlink" href="#scheduling-and-work-distribution" title="Link to this heading">¶</a></h2>
+<p>ODG uses a <strong>queue-based asynchronous processing model</strong> with dynamic scaling.</p>
+<section id="work-queue-flow">
+<h3>Work Queue Flow<a class="headerlink" href="#work-queue-flow" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Trigger Creation</strong></p>
+<ul class="simple">
+<li><p>Artefact enumerator creates <code class="docutils literal notranslate"><span class="pre">BacklogItem</span></code> CRDs periodically</p></li>
+<li><p>Manual triggers via UI or API also create backlog items</p></li>
+</ul>
+</li>
+<li><p><strong>Queue Formation</strong></p>
+<ul class="simple">
+<li><p>Kubernetes aggregates backlog items per extension via label selectors</p></li>
+<li><p>Items are prioritised by the <code class="docutils literal notranslate"><span class="pre">priority</span></code> field</p></li>
+</ul>
+</li>
+<li><p><strong>Dynamic Scaling</strong></p>
+<ul class="simple">
+<li><p>Backlog controller monitors pending items per extension</p></li>
+<li><p>Scales Kubernetes Deployments to maintain target items-per-replica ratio</p></li>
+</ul>
+</li>
+<li><p><strong>Work Claiming</strong></p>
+<ul class="simple">
+<li><p>Extension workers query for unclaimed items</p></li>
+<li><p>Worker adds claim annotation with timestamp</p></li>
+<li><p>Item is locked to prevent duplicate processing</p></li>
+</ul>
+</li>
+<li><p><strong>Processing</strong></p>
+<ul class="simple">
+<li><p>Worker executes extension logic</p></li>
+<li><p>Uploads results to ODG Core API</p></li>
+<li><p>Deletes backlog item upon completion</p></li>
+</ul>
+</li>
+<li><p><strong>Stale Claim Recovery</strong></p>
+<ul class="simple">
+<li><p>Backlog controller removes claims older than timeout</p></li>
+<li><p>Item returns to queue for retry</p></li>
+</ul>
+</li>
+</ol>
+<p>This architecture ensures:</p>
+<ul class="simple">
+<li><p><strong>Fault Tolerance</strong>: Failed workers don’t block the queue</p></li>
+<li><p><strong>Load Balancing</strong>: Work distributes across available replicas</p></li>
+<li><p><strong>Resource Efficiency</strong>: Workers scale down during idle periods</p></li>
+<li><p><strong>Priority Handling</strong>: Critical artefacts process first</p></li>
+</ul>
+</section>
+</section>
+<section id="persistence-architecture">
+<h2>Persistence Architecture<a class="headerlink" href="#persistence-architecture" title="Link to this heading">¶</a></h2>
+<p>All persistent state resides in the <strong>ODG Database</strong>, accessed exclusively through the <strong>ODG Core API</strong>.</p>
+<section id="data-organisation">
+<h3>Data Organisation<a class="headerlink" href="#data-organisation" title="Link to this heading">¶</a></h3>
+<p><strong>Artefact Metadata</strong></p>
+<ul class="simple">
+<li><p>Indexed by artefact identity (component, version, artefact name/type)</p></li>
+<li><p>Supports efficient queries by component, type, datasource, or custom attributes</p></li>
+<li><p>Retains discovery dates across updates for consistent SLA tracking</p></li>
+</ul>
+<p><strong>Compliance Snapshots</strong></p>
+<ul class="simple">
+<li><p>Track processing state per artefact</p></li>
+<li><p>Store last scan timestamps per extension</p></li>
+<li><p>Enable graceful cleanup of removed artefacts</p></li>
+</ul>
+<p><strong>Scanner Metadata Writebacks</strong></p>
+<ul class="simple">
+<li><p>Persist corrections to scanner-detected metadata</p></li>
+<li><p>Scoped from single artefact to global across components</p></li>
+<li><p>Applied by extensions before reporting results</p></li>
+</ul>
+<p><strong>Rescorings</strong></p>
+<ul class="simple">
+<li><p>Override finding severity or SLA deadlines</p></li>
+<li><p>Support temporary exceptions with expiration</p></li>
+</ul>
+<p><strong>Caching</strong></p>
+<ul class="simple">
+<li><p>OCM component descriptors cached to reduce network overhead</p></li>
+<li><p>Responsible lookups cached to accelerate issue assignment</p></li>
+</ul>
+</section>
+<section id="consistency-and-durability">
+<h3>Consistency and Durability<a class="headerlink" href="#consistency-and-durability" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Single Writer</strong>: Only ODG Core API writes to the database</p></li>
+<li><p><strong>Idempotent Updates</strong>: Metadata updates use stable keys to prevent duplication</p></li>
+<li><p><strong>Discovery Date Retention</strong>: Custom logic preserves initial discovery dates even when finding keys change</p></li>
+<li><p><strong>Backup</strong>: Database backup extension provides scheduled exports</p></li>
+</ul>
+</section>
+</section>
+<section id="common-entry-points">
+<h2>Common Entry Points<a class="headerlink" href="#common-entry-points" title="Link to this heading">¶</a></h2>
+<section id="for-end-users">
+<h3>For End Users<a class="headerlink" href="#for-end-users" title="Link to this heading">¶</a></h3>
+<p><strong>ODG UI</strong></p>
+<ul class="simple">
+<li><p>Browse components: Navigate OCM component hierarchy</p></li>
+<li><p>View findings: Filter by severity, due date, responsible team</p></li>
+<li><p>Create assessments: Rescorings, false positive markings</p></li>
+<li><p>Submit writebacks: Correct scanner-detected metadata</p></li>
+<li><p>Monitor system: View backlog depth, pod health</p></li>
+</ul>
+<p><strong>ODG Core API</strong></p>
+<ul class="simple">
+<li><p>Programmatic access to all UI capabilities</p></li>
+<li><p>Integration with CI/CD pipelines</p></li>
+<li><p>Custom tooling and automation</p></li>
+<li><p>Available at <code class="docutils literal notranslate"><span class="pre">/api/v1/doc</span></code> for OpenAPI specification</p></li>
+</ul>
+</section>
+<section id="for-extensions">
+<h3>For Extensions<a class="headerlink" href="#for-extensions" title="Link to this heading">¶</a></h3>
+<p><strong>Processing Workflow</strong></p>
+<ol class="arabic simple">
+<li><p>Claim backlog item</p></li>
+<li><p>Query existing metadata for target artefact</p></li>
+<li><p>Execute extension logic</p></li>
+<li><p>Upload new/updated metadata</p></li>
+<li><p>Delete obsolete metadata not in new results</p></li>
+<li><p>Upload <code class="docutils literal notranslate"><span class="pre">meta/artefact_scan_info</span></code> to mark completion</p></li>
+<li><p>Delete backlog item</p></li>
+</ol>
+</section>
+<section id="for-operators">
+<h3>For Operators<a class="headerlink" href="#for-operators" title="Link to this heading">¶</a></h3>
+<p><strong>Kubernetes API</strong></p>
+<ul class="simple">
+<li><p>Create/update <code class="docutils literal notranslate"><span class="pre">BacklogItem</span></code> CRDs for manual triggering</p></li>
+<li><p>Create <code class="docutils literal notranslate"><span class="pre">RuntimeArtefact</span></code> CRDs for non-OCM artefacts</p></li>
+<li><p>Monitor pod status and resource utilisation</p></li>
+<li><p>Scale extensions via Deployment replicas (auto-scaled by backlog controller)</p></li>
+</ul>
+<p><strong>Configuration Management</strong></p>
+<ul class="simple">
+<li><p>Update <code class="docutils literal notranslate"><span class="pre">extensions-cfg</span></code> ConfigMap to enable/disable extensions</p></li>
+<li><p>Update <code class="docutils literal notranslate"><span class="pre">findings-cfg</span></code> ConfigMap to adjust SLAs or issue settings</p></li>
+<li><p>Manage Secrets for credentials</p></li>
+</ul>
+</section>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">¶</a></h2>
+<p>ODG’s architecture achieves compliance automation through:</p>
+<ul class="simple">
+<li><p><strong>Separation of Concerns</strong>: Core, extensions, UI, and database operate independently</p></li>
+<li><p><strong>Queue-Based Processing</strong>: Asynchronous work distribution with automatic scaling</p></li>
+<li><p><strong>Single Persistence Layer</strong>: All state in ODG Database ensures consistency</p></li>
+<li><p><strong>Extensibility</strong>: New scanners integrate without core changes</p></li>
+<li><p><strong>Kubernetes-Native</strong>: Leverages CRDs, scaling, and native resource management</p></li>
+</ul>
+<p>This design enables ODG to continuously monitor software deliveries, track findings against SLAs, and automate remediation workflows whilst remaining adaptable to diverse security and compliance requirements.</p>
+</section>
 </section>
 
         </article>
@@ -328,8 +801,67 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">ODG’s System Architecture</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#design-principles">Design Principles</a></li>
+<li><a class="reference internal" href="#core-components">Core Components</a><ul>
+<li><a class="reference internal" href="#odg-database-odg-db">ODG Database (odg-db)</a></li>
+<li><a class="reference internal" href="#odg-core-odg-core">ODG Core (odg-core)</a></li>
+<li><a class="reference internal" href="#odg-ui-odg-ui">ODG UI (odg-ui)</a></li>
+<li><a class="reference internal" href="#artefact-enumerator">Artefact Enumerator</a></li>
+<li><a class="reference internal" href="#backlog-items">Backlog Items</a></li>
+<li><a class="reference internal" href="#backlog-controller">Backlog Controller</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#extensions">Extensions</a><ul>
+<li><a class="reference internal" href="#extension-types">Extension Types</a></li>
+<li><a class="reference internal" href="#scanner-extensions">Scanner Extensions</a></li>
+<li><a class="reference internal" href="#extension-triggers">Extension Triggers</a></li>
+<li><a class="reference internal" href="#extension-data-model">Extension Data Model</a></li>
+<li><a class="reference internal" href="#common-extensions">Common Extensions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#instance-specific-configuration">Instance-Specific Configuration</a><ul>
+<li><a class="reference internal" href="#extension-configuration">Extension Configuration</a></li>
+<li><a class="reference internal" href="#finding-configuration">Finding Configuration</a></li>
+<li><a class="reference internal" href="#credentials">Credentials</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#scheduling-and-work-distribution">Scheduling and Work Distribution</a><ul>
+<li><a class="reference internal" href="#work-queue-flow">Work Queue Flow</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#persistence-architecture">Persistence Architecture</a><ul>
+<li><a class="reference internal" href="#data-organisation">Data Organisation</a></li>
+<li><a class="reference internal" href="#consistency-and-durability">Consistency and Durability</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#common-entry-points">Common Entry Points</a><ul>
+<li><a class="reference internal" href="#for-end-users">For End Users</a></li>
+<li><a class="reference internal" href="#for-extensions">For Extensions</a></li>
+<li><a class="reference internal" href="#for-operators">For Operators</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#summary">Summary</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
@@ -339,5 +871,441 @@
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
+
+
+
+
+
+const initStyles = () => {
+    const defaultStyle = document.createElement('style');
+    defaultStyle.textContent = `pre.mermaid {
+    /* Same as .mermaid-container > pre */
+    display: block;
+    width: 100%;
+}
+
+pre.mermaid > svg {
+    /* Same as .mermaid-container > pre > svg */
+    height: 500px;
+    width: 100%;
+    max-width: 100% !important;
+}`;
+    document.head.appendChild(defaultStyle);
+
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = `.mermaid-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.mermaid-container > pre {
+    display: block;
+    width: 100%;
+}
+
+.mermaid-container > pre > svg {
+    height: 500px;
+    width: 100%;
+    max-width: 100% !important;
+}
+
+.mermaid-fullscreen-btn {
+    width: 28px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+    line-height: 1;
+    padding: 0;
+    color: #333;
+}
+
+.mermaid-fullscreen-btn:hover {
+    opacity: 100% !important;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    transform: scale(1.1);
+}
+
+.mermaid-fullscreen-btn.dark-theme {
+    background: rgba(50, 50, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #e0e0e0;
+}
+
+.mermaid-fullscreen-btn.dark-theme:hover {
+    background: rgba(60, 60, 60, 1);
+    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
+}
+
+.mermaid-fullscreen-modal {
+    display: none;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 95vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 9999;
+    padding: 20px;
+    overflow: auto;
+}
+
+.mermaid-fullscreen-modal.dark-theme {
+    background: rgba(0, 0, 0, 0.98);
+}
+
+.mermaid-fullscreen-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen {
+    position: relative;
+    width: 95vw;
+    height: 90vh;
+    max-width: 95vw;
+    max-height: 90vh;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen.dark-theme {
+    background: #1a1a1a;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
+
+.mermaid-container-fullscreen pre.mermaid {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen .mermaid svg {
+    height: 100% !important;
+    width: 100% !important;
+    cursor: grab;
+}
+
+.mermaid-fullscreen-close {
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s;
+    font-size: 24px;
+    line-height: 1;
+    color: #333;
+}
+
+.mermaid-fullscreen-close:hover {
+    background: white;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    transform: scale(1.1);
+}
+
+.mermaid-fullscreen-close.dark-theme {
+    background: rgba(50, 50, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #e0e0e0;
+}
+
+.mermaid-fullscreen-close.dark-theme:hover {
+    background: rgba(60, 60, 60, 1);
+    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
+}
+
+.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
+    display: none !important;
+}`;
+    document.head.appendChild(fullscreenStyle);
+}
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    // We use a set of heuristics:
+    // 1. Check for common dark mode classes or attributes
+    // 2. Check computed background color brightness
+    if (document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.classList.contains('dark') ||
+        document.body.getAttribute('data-theme') === 'dark') {
+        // console.log("Dark theme detected via class/attribute");
+        return true;
+    }
+    if (document.documentElement.classList.contains('light') ||
+        document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.body.classList.contains('light') ||
+        document.body.getAttribute('data-theme') === 'light') {
+        // console.log("Light theme detected via class/attribute");
+        return false;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // console.log("Dark theme detected via prefers-color-scheme");
+        return true;
+    }
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        // console.log("Background color brightness:", brightness);
+        return brightness < 128;
+    }
+    // console.log("No dark or light theme detected, defaulting to light theme");
+    return false;
+};
+
+let darkTheme = isDarkTheme();
+let modal = null;
+let modalContent = null;
+let previousScrollOffset = [window.scrollX, window.scrollY];
+
+const runMermaid = async (rerun) => {
+    console.log("Running mermaid diagrams, rerun =", rerun);
+    // clear all existing mermaid charts
+    let all_mermaids = document.querySelectorAll(".mermaid");
+
+    if (rerun) {
+        all_mermaids.forEach((el) => {
+            if(!el.hasAttribute("data-original-code")) {
+                // store original code
+                // console.log(`Storing original code for first run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+            if(el.getAttribute("data-processed") === "true") {
+                // remove and restore original
+                el.removeAttribute("data-processed");
+                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
+                el.innerHTML = el.getAttribute('data-original-code');
+            } else {
+                // store original code
+                // console.log(`Storing original code for re-run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+        });
+        await mermaid.run();
+    }
+
+    all_mermaids = document.querySelectorAll(".mermaid");
+    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
+
+    if ("False" === "True") {
+        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("");
+            if(all_mermaids.length !== mermaids_processed.length) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            } else if(svgs.size() !== mermaids_to_add_zoom) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            } else {
+                svgs.each(function() {
+                    var svg = d3.select(this);
+                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+                    var inner = svg.select("g");
+                    var zoom = d3.zoom().on("zoom", function(event) {
+                        inner.attr("transform", event.transform);
+                    });
+                    svg.call(zoom);
+                });
+            }
+        }
+    } else if(all_mermaids.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(() => runMermaid(false), 200);
+        return;
+    }
+
+    // Stop here if not adding fullscreen capability
+    if ("True" !== "True") return;
+
+    if (modal !== null ) {
+        // Destroy existing modal
+        modal.remove();
+        modal = null;
+        modalContent = null;
+    }
+
+    modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    const closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeModal();
+        }
+    });
+
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            // Already processed, adjust button class if needed
+            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
+            if (existingBtn) {
+                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+            }
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = '⛶';
+        fullscreenBtn.style.opacity = '50%';
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scroll, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.sdisplay = 'block';
+
+                if ("False" === "True") {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        container.appendChild(fullscreenBtn);
+    });
+};
+
+const load = async () => {
+    initStyles();
+
+    await runMermaid(true);
+
+    const reRunIfThemeChanges = async () => {
+        const newDarkTheme = isDarkTheme();
+        if (newDarkTheme !== darkTheme) {
+            darkTheme = newDarkTheme;
+            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
+            await mermaid.initialize(
+                {...JSON.parse(
+                    `{"startOnLoad": false}`
+                ),
+                ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+                }
+            );
+            await runMermaid(true);
+        }
+    };
+
+    // Update theme classes when theme changes
+    const themeObserver = new MutationObserver(reRunIfThemeChanges);
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    themeObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+};
+
+
+
+
+
+console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
+mermaid.initialize(
+    {...JSON.parse(
+        `{"startOnLoad": false}`
+    ),
+    ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+    }
+);
+
+window.addEventListener("load", load);
+window.runMermaid = runMermaid;</script>
     </body>
 </html>

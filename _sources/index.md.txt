@@ -1,6 +1,6 @@
 # Open Delivery Gear
 
-**Compliance is not living next to Software; instead, it is an integral part of it.**
+**Compliance is not living next to software. Instead, it is an integral part of it.**
 
 Open Delivery Gear (ODG) integrates compliance into the software lifecycle through automated scanning, tracking, and reporting of security findings, vulnerabilities, and compliance issues for your OCM components.
 
@@ -39,23 +39,15 @@ Intelligent assignment of findings to component owners and teams based on config
 
 ## Getting Started
 
-::::{grid} 1 1 3 3
+::::{grid} 1 1 2 2
 :gutter: 2
-
-:::{grid-item-card}
-:class-header: sd-bg-primary sd-text-white
-
-**New Users**
-^^^
-Start with {doc}`contents/concepts/00-odg-architecture` to understand how ODG works.
-:::
 
 :::{grid-item-card}
 :class-header: sd-bg-success sd-text-white
 
 **Operators**
 ^^^
-Set up your environment with {doc}`contents/how-to/01-local-setup`.
+Start with {doc}`contents/concepts/00-odg-architecture` to understand how ODG works.
 :::
 
 :::{grid-item-card}
@@ -63,7 +55,7 @@ Set up your environment with {doc}`contents/how-to/01-local-setup`.
 
 **Developers**
 ^^^
-Learn to extend ODG with {doc}`contents/tutorial/00-contributing-extension`.
+Set up your environment with {doc}`contents/how-to/01-local-setup` and learn to extend ODG with {doc}`contents/tutorial/00-contributing-extension`.
 :::
 
 ::::
@@ -82,9 +74,8 @@ contents/concepts/00-odg-architecture.md
 contents/concepts/01-data-model.md
 contents/concepts/02-artefact-enumerator.md
 contents/concepts/03-issue-replicator.md
-contents/concepts/05-responsibles.md
-contents/concepts/06-extending.md
-contents/concepts/07-sbom-generator.md
+contents/concepts/04-responsibles.md
+contents/concepts/05-sbom-generator.md
 ```
 
 ## How-to Guides
@@ -160,7 +151,7 @@ Learn about OCM
 
 ```{eval-rst}
 .. note::
-   This documentation is organized using the `Diataxis framework <https://diataxis.fr/>`_:
+   This documentation is organised using the `Diataxis framework <https://diataxis.fr/>`_:
    
    - **Tutorials**: Learning-oriented lessons
    - **How-to Guides**: Problem-oriented, goal-focused instructions

@@ -15,7 +15,7 @@ sast:
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `interval` | int (seconds) | `86400` | Maximum time before a component is re-checked. |
-| `on_unsupported` | string | `warning` | Behavior when artefact kind/type/access is unsupported. Options: `fail`, `ignore`, `warning`. |
+| `on_unsupported` | string | `warning` | Behaviour when artefact kind/type/access is unsupported. Options: `fail`, `ignore`, `warning`. |
 
 ## Configuration Details
 
@@ -31,7 +31,7 @@ This interval ensures:
 
 ### `on_unsupported`
 
-Defines the behavior when an artefact kind, type, or access method is not supported:
+Defines the behaviour when an artefact kind, type, or access method is not supported:
 
 - **`fail`**: Raise an exception and stop processing
 - **`ignore`**: Silently skip the unsupported artefact

@@ -9,6 +9,7 @@ Extension components that provide scanning, analysis, and compliance functionali
 ../03-vulnerability-scanner-config.md
 ../04-malware-scanner-config.md
 ../05-operating-system-scanner-config.md
+../06-issue-replicator-config.md
 ../08-license-and-intellectual-property-scanner-config.md
 ../10-cryptographic-asset-scanner-config.md
 ../12-findings-report-generator-config.md

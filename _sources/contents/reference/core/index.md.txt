@@ -9,6 +9,5 @@ Core components that handle orchestration, lifecycle management, and infrastruct
 ../07-backlog-controller-config.md
 ../09-cache-manager-config.md
 ../11-delivery-db-backup-config.md
-../06-issue-replicator-config.md
 ../15-responsibles-config.md
 ```

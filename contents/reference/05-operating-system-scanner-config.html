@@ -3,7 +3,7 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="License and Intellectual Property Scanner" href="08-license-and-intellectual-property-scanner-config.html"><link rel="prev" title="Malware Scanner" href="04-malware-scanner-config.html">
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Issue Replicator" href="06-issue-replicator-config.html"><link rel="prev" title="Malware Scanner" href="04-malware-scanner-config.html">
         <link rel="prefetch" href="../../_static/odg.svg" as="image">
 
     <link rel="shortcut icon" href="../../_static/odg.svg"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
@@ -197,13 +197,12 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Concepts</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../concepts/00-odg-architecture.html">ODG System Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../concepts/00-odg-architecture.html">ODG’s System Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../concepts/01-data-model.html">Correlating metadata to OCM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../concepts/02-artefact-enumerator.html">Reacting upon OCM events</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../concepts/03-issue-replicator.html">Lifecycling GitHub Issues</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../concepts/05-responsibles.html">Overwriting OCM component responsibles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../concepts/06-extending.html">Extending ODG</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../concepts/07-sbom-generator.html">Generating Software Bill of Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../concepts/04-responsibles.html">Overwriting OCM component responsibles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../concepts/05-sbom-generator.html">Generating Software Bill of Materials</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
 <ul>
@@ -227,7 +226,6 @@
 <li class="toctree-l2"><a class="reference internal" href="07-backlog-controller-config.html">Backlog Controller</a></li>
 <li class="toctree-l2"><a class="reference internal" href="09-cache-manager-config.html">Cache Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="11-delivery-db-backup-config.html">Delivery Database Backup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="06-issue-replicator-config.html">Issue Replicator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="15-responsibles-config.html">Responsibles</a></li>
 </ul>
 </li>
@@ -236,6 +234,7 @@
 <li class="toctree-l2"><a class="reference internal" href="03-vulnerability-scanner-config.html">Vulnerability Scanner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="04-malware-scanner-config.html">Malware Scanner</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Operating System Scanner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06-issue-replicator-config.html">Issue Replicator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="08-license-and-intellectual-property-scanner-config.html">License and Intellectual Property Scanner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="10-cryptographic-asset-scanner-config.html">Cryptographic Asset Scanner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="12-findings-report-generator-config.html">Findings Report Generator</a></li>
@@ -312,7 +311,7 @@
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">on_unsupported</span></code></p></td>
 <td><p>string</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">warning</span></code></p></td>
-<td><p>Behavior when artefact kind/type/access is unsupported. Options: <code class="docutils literal notranslate"><span class="pre">fail</span></code>, <code class="docutils literal notranslate"><span class="pre">ignore</span></code>, <code class="docutils literal notranslate"><span class="pre">warning</span></code>.</p></td>
+<td><p>Behaviour when artefact kind/type/access is unsupported. Options: <code class="docutils literal notranslate"><span class="pre">fail</span></code>, <code class="docutils literal notranslate"><span class="pre">ignore</span></code>, <code class="docutils literal notranslate"><span class="pre">warning</span></code>.</p></td>
 </tr>
 </tbody>
 </table>
@@ -322,18 +321,18 @@
 <h2>Configuration Details<a class="headerlink" href="#configuration-details" title="Link to this heading">¶</a></h2>
 <section id="interval">
 <h3><code class="docutils literal notranslate"><span class="pre">interval</span></code><a class="headerlink" href="#interval" title="Link to this heading">¶</a></h3>
-<p>The maximum time (in seconds) before a component’s artefacts are re-analyzed for
+<p>The maximum time (in seconds) before a component’s artefacts are re-analysed for
 operating system version information. Default is 86400 seconds (24 hours).</p>
 <p>This interval ensures that:</p>
 <ul class="simple">
 <li><p>New EOL data is regularly checked against existing components</p></li>
 <li><p>Components are re-evaluated as operating systems reach end-of-life</p></li>
-<li><p>Base image changes are detected and analyzed</p></li>
+<li><p>Base image changes are detected and analysed</p></li>
 </ul>
 </section>
 <section id="on-unsupported">
 <h3><code class="docutils literal notranslate"><span class="pre">on_unsupported</span></code><a class="headerlink" href="#on-unsupported" title="Link to this heading">¶</a></h3>
-<p>Defines the behavior when an artefact kind, type, or access method is not supported
+<p>Defines the behaviour when an artefact kind, type, or access method is not supported
 by the OSID scanner:</p>
 <ul class="simple">
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">fail</span></code></strong>: Raise an exception and stop processing</p></li>
@@ -349,12 +348,12 @@ by the OSID scanner:</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="08-license-and-intellectual-property-scanner-config.html">
+          <a class="next-page" href="06-issue-replicator-config.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">License and Intellectual Property Scanner</div>
+                <div class="title">Issue Replicator</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>

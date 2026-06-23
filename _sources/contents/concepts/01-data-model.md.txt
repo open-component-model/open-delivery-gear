@@ -16,7 +16,7 @@ of an [artefact](#artefact), some [metadata](#metadata) and an extension specifi
 [payload](#payload) (see Fig. 1). The model is defined in the `odg.model` module of
 the odg-core ([ref](https://github.com/open-component-model/odg-core/blob/master/src/odg/model.py)).
 
-```{figure} /res/artefact-metadata.svg
+```{figure} /_static/artefact-metadata.svg
 :figwidth: 50%
 :align: center
 
@@ -30,7 +30,7 @@ together. The [payload](#payload) in turn holds the actual content the
 extension has created, this might be for example a finding, some informational
 data or some metadata (see Fig. 2).
 
-```{figure} /res/general-overview.svg
+```{figure} /_static/general-overview.svg
 :figwidth: 70%
 :align: center
 

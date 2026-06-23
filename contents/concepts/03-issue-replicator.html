@@ -3,7 +3,7 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Overwriting OCM component responsibles" href="05-responsibles.html"><link rel="prev" title="Reacting upon OCM events" href="02-artefact-enumerator.html">
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Overwriting OCM component responsibles" href="04-responsibles.html"><link rel="prev" title="Reacting upon OCM events" href="02-artefact-enumerator.html">
         <link rel="prefetch" href="../../_static/odg.svg" as="image">
 
     <link rel="shortcut icon" href="../../_static/odg.svg"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
@@ -197,13 +197,12 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Concepts</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="00-odg-architecture.html">ODG System Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-odg-architecture.html">ODG’s System Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="01-data-model.html">Correlating metadata to OCM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="02-artefact-enumerator.html">Reacting upon OCM events</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Lifecycling GitHub Issues</a></li>
-<li class="toctree-l1"><a class="reference internal" href="05-responsibles.html">Overwriting OCM component responsibles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="06-extending.html">Extending ODG</a></li>
-<li class="toctree-l1"><a class="reference internal" href="07-sbom-generator.html">Generating Software Bill of Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04-responsibles.html">Overwriting OCM component responsibles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05-sbom-generator.html">Generating Software Bill of Materials</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
 <ul>
@@ -227,7 +226,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../reference/07-backlog-controller-config.html">Backlog Controller</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/09-cache-manager-config.html">Cache Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/11-delivery-db-backup-config.html">Delivery Database Backup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../reference/06-issue-replicator-config.html">Issue Replicator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/15-responsibles-config.html">Responsibles</a></li>
 </ul>
 </li>
@@ -236,6 +234,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../reference/03-vulnerability-scanner-config.html">Vulnerability Scanner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/04-malware-scanner-config.html">Malware Scanner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/05-operating-system-scanner-config.html">Operating System Scanner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/06-issue-replicator-config.html">Issue Replicator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/08-license-and-intellectual-property-scanner-config.html">License and Intellectual Property Scanner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/10-cryptographic-asset-scanner-config.html">Cryptographic Asset Scanner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/12-findings-report-generator-config.html">Findings Report Generator</a></li>
@@ -345,7 +344,7 @@ extensions may add information on responsibles via the <code class="docutils lit
 attribute and a corresponding assignee mode via <code class="docutils literal notranslate"><span class="pre">.meta.assignee_mode</span></code>.</p>
 </li>
 <li><p><em>Extension</em></p>
-<p>The <a class="reference internal" href="05-responsibles.html"><span class="doc">responsibles extension</span></a> tries to
+<p>The <a class="reference internal" href="04-responsibles.html"><span class="doc">responsibles extension</span></a> tries to
 resolve responsibles by examining configured <code class="docutils literal notranslate"><span class="pre">rules</span></code> for the components of
 interest. If a rule matches, the responsibles retrieved via the configured
 <code class="docutils literal notranslate"><span class="pre">strategies</span></code> are uploaded as <code class="docutils literal notranslate"><span class="pre">ArtefactMetadata</span></code> of type
@@ -420,7 +419,7 @@ used.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="05-responsibles.html">
+          <a class="next-page" href="04-responsibles.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>

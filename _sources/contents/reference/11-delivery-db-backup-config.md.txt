@@ -93,7 +93,7 @@ the minor version is automatically bumped.
 ### `extra_pg_dump_args`
 
 Additional command-line arguments passed to the `pg_dump` utility. Use this to
-customize backup behavior.
+customize backup behaviour.
 
 **Common examples:**
 ```yaml

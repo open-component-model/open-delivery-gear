@@ -197,13 +197,12 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Concepts</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../concepts/00-odg-architecture.html">ODG System Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../concepts/00-odg-architecture.html">ODG’s System Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../concepts/01-data-model.html">Correlating metadata to OCM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../concepts/02-artefact-enumerator.html">Reacting upon OCM events</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../concepts/03-issue-replicator.html">Lifecycling GitHub Issues</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../concepts/05-responsibles.html">Overwriting OCM component responsibles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../concepts/06-extending.html">Extending ODG</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../concepts/07-sbom-generator.html">Generating Software Bill of Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../concepts/04-responsibles.html">Overwriting OCM component responsibles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../concepts/05-sbom-generator.html">Generating Software Bill of Materials</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
 <ul>
@@ -227,7 +226,6 @@
 <li class="toctree-l2"><a class="reference internal" href="07-backlog-controller-config.html">Backlog Controller</a></li>
 <li class="toctree-l2"><a class="reference internal" href="09-cache-manager-config.html">Cache Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="11-delivery-db-backup-config.html">Delivery Database Backup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="06-issue-replicator-config.html">Issue Replicator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="15-responsibles-config.html">Responsibles</a></li>
 </ul>
 </li>
@@ -236,6 +234,7 @@
 <li class="toctree-l2"><a class="reference internal" href="03-vulnerability-scanner-config.html">Vulnerability Scanner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="04-malware-scanner-config.html">Malware Scanner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="05-operating-system-scanner-config.html">Operating System Scanner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06-issue-replicator-config.html">Issue Replicator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="08-license-and-intellectual-property-scanner-config.html">License and Intellectual Property Scanner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="10-cryptographic-asset-scanner-config.html">Cryptographic Asset Scanner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="12-findings-report-generator-config.html">Findings Report Generator</a></li>
@@ -312,7 +311,7 @@
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">on_unsupported</span></code></p></td>
 <td><p>string</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">warning</span></code></p></td>
-<td><p>Behavior when artefact kind/type/access is unsupported. Options: <code class="docutils literal notranslate"><span class="pre">fail</span></code>, <code class="docutils literal notranslate"><span class="pre">ignore</span></code>, <code class="docutils literal notranslate"><span class="pre">warning</span></code>.</p></td>
+<td><p>Behaviour when artefact kind/type/access is unsupported. Options: <code class="docutils literal notranslate"><span class="pre">fail</span></code>, <code class="docutils literal notranslate"><span class="pre">ignore</span></code>, <code class="docutils literal notranslate"><span class="pre">warning</span></code>.</p></td>
 </tr>
 </tbody>
 </table>
@@ -333,7 +332,7 @@ scan execution. Default is 86400 seconds (24 hours).</p>
 </section>
 <section id="on-unsupported">
 <h3><code class="docutils literal notranslate"><span class="pre">on_unsupported</span></code><a class="headerlink" href="#on-unsupported" title="Link to this heading">¶</a></h3>
-<p>Defines the behavior when an artefact kind, type, or access method is not supported:</p>
+<p>Defines the behaviour when an artefact kind, type, or access method is not supported:</p>
 <ul class="simple">
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">fail</span></code></strong>: Raise an exception and stop processing</p></li>
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">ignore</span></code></strong>: Silently skip the unsupported artefact</p></li>

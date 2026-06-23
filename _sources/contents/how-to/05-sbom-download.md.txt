@@ -17,12 +17,12 @@ be downloaded from the ODG Dashboard or via API.
 
 2. Click the **DOWNLOAD SBOM** button.
 
-   ![Download SBOM button](/res/download-sbom-button.svg)
+   ![Download SBOM button](/_static/download-sbom-button.svg)
 
    This opens the SBOM popover, where all sub-components are grouped into two
    sections: **Ready** and **Not ready**.
 
-   ![Download SBOM Popover](/res/download-sbom-popover.svg)
+   ![Download SBOM Popover](/_static/download-sbom-popover.svg)
 
    The popover also shows the configured output format, and displays the access
    type and artefact type for each sub-component.

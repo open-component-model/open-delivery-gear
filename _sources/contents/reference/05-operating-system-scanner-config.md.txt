@@ -15,23 +15,23 @@ osid:
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `interval` | int (seconds) | `86400` | Maximum time before a component is re-scanned. |
-| `on_unsupported` | string | `warning` | Behavior when artefact kind/type/access is unsupported. Options: `fail`, `ignore`, `warning`. |
+| `on_unsupported` | string | `warning` | Behaviour when artefact kind/type/access is unsupported. Options: `fail`, `ignore`, `warning`. |
 
 ## Configuration Details
 
 ### `interval`
 
-The maximum time (in seconds) before a component's artefacts are re-analyzed for
+The maximum time (in seconds) before a component's artefacts are re-analysed for
 operating system version information. Default is 86400 seconds (24 hours).
 
 This interval ensures that:
 - New EOL data is regularly checked against existing components
 - Components are re-evaluated as operating systems reach end-of-life
-- Base image changes are detected and analyzed
+- Base image changes are detected and analysed
 
 ### `on_unsupported`
 
-Defines the behavior when an artefact kind, type, or access method is not supported
+Defines the behaviour when an artefact kind, type, or access method is not supported
 by the OSID scanner:
 
 - **`fail`**: Raise an exception and stop processing

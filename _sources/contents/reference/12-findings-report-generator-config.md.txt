@@ -77,7 +77,7 @@ The `component` object contains:
 
 ## Configuration Details
 
-#### GitHub Repository
+### GitHub Repository
 
 The target GitHub repository where reports are published. The extension creates
 a pull request with the updated report files.
@@ -85,7 +85,7 @@ a pull request with the updated report files.
 **Required permissions:** The configured GitHub credentials (via `secrets.github`)
 must have write access to the target repository.
 
-#### Branch Strategy
+### Branch Strategy
 
 The `branch` field determines where reports are committed:
 
@@ -104,7 +104,7 @@ branch: main
 branch: reports/automated
 ```
 
-#### Report Structure
+### Report Structure
 
 The extension generates two types of files:
 
@@ -121,7 +121,7 @@ reports/
     └── 1.2.0.md
 ```
 
-#### Auto Merge
+### Auto Merge
 
 When `auto_merge: true`, the extension automatically merges the pull request
 that updates the report. This is useful for:
@@ -132,7 +132,7 @@ that updates the report. This is useful for:
 **Recommendation:** Only enable for repositories dedicated to reports, not
 repositories with manual review processes.
 
-#### Trigger Absent Scans
+### Trigger Absent Scans
 
 When `trigger_absent_scans: true`, the extension creates backlog items for
 artefacts identified as missing scans during report generation. This ensures
