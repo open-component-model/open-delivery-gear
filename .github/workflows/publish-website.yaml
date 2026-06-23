@@ -39,46 +39,46 @@ jobs:
       contents: write
       id-token: write
     needs:
-      - website
+    - website
     steps:
-      - uses: gardener/cc-utils/.github/actions/github-auth@v1
-        if: ${{ vars.FEDERATED_GITHUB_ACCESS_TOKEN_SERVER != '' }}
-        id: fed-token
-        with:
-          token-server: ${{ vars.FEDERATED_GITHUB_ACCESS_TOKEN_SERVER }}
-          repositories: |
-            open-delivery-gear
+    - uses: gardener/cc-utils/.github/actions/github-auth@v1
+      if: ${{ vars.FEDERATED_GITHUB_ACCESS_TOKEN_SERVER != '' }}
+      id: fed-token
+      with:
+        token-server: ${{ vars.FEDERATED_GITHUB_ACCESS_TOKEN_SERVER }}
+        repositories: |
+          open-delivery-gear
 
-      - uses: actions/checkout@v6
-        with:
-          ref: refs/heads/website
-          token: ${{ steps.fed-token.outputs.token }}
+    - uses: actions/checkout@v6
+      with:
+        ref: refs/heads/website
+        token: ${{ steps.fed-token.outputs.token }}
 
-      - name: Retrieve Website
-        uses: gardener/cc-utils/.github/actions/download-artifact@v1
-        with:
-          name: website
-          path: /tmp/website-out
+    - name: Retrieve Website
+      uses: gardener/cc-utils/.github/actions/download-artifact@v1
+      with:
+        name: website
+        path: /tmp/website-out
 
-      - name: Setup Git Identity
-        uses: gardener/cc-utils/.github/actions/setup-git-identity@v1
+    - name: Setup Git Identity
+      uses: gardener/cc-utils/.github/actions/setup-git-identity@v1
 
-      - name: Publish Website
-        run: |
-          # Remove all existing files except .git and .nojekyll
-          find . -maxdepth 1 ! -name '.git' ! -name '.nojekyll' ! -name '.' ! -name '..' -exec rm -rf {} +
+    - name: Publish Website
+      run: |
+        # Remove all existing files except .git and .nojekyll
+        find . -maxdepth 1 ! -name '.git' ! -name '.nojekyll' ! -name '.' ! -name '..' -exec rm -rf {} +
 
-          # Extract website content
-          tar c -C /tmp/website-out . | tar x -C.
+        # Extract website content
+        tar c -C /tmp/website-out . | tar x -C.
 
-          # Ensure .nojekyll exists
-          touch .nojekyll
+        # Ensure .nojekyll exists
+        touch .nojekyll
 
-          git status
-          if [ -z "$(git status --porcelain)" ]; then
-            echo "no changes in website - no need to update"
-            exit 0
-          fi
-          git add -A
-          git commit -m "Update website"
-          git push origin refs/heads/website
+        git status
+        if [ -z "$(git status --porcelain)" ]; then
+          echo "no changes in website - no need to update"
+          exit 0
+        fi
+        git add -A
+        git commit -m "Update website"
+        git push origin refs/heads/website
