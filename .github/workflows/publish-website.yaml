@@ -33,6 +33,7 @@ jobs:
     # do not publish on forks
     if: ${{ github.repository == 'open-component-model/open-delivery-gear' }}
 
+    name: Publish Website
     runs-on: ubuntu-latest
     permissions:
       contents: write
