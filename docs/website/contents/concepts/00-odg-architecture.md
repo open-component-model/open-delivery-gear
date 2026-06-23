@@ -116,17 +116,21 @@ Compliance snapshots persist state across enumerator runs, ensuring stable track
 
 ### Backlog Items
 
-Backlog Items are **Kubernetes Custom Resources** (CRDs) that represent queued work for extensions.
+Backlog Items are **Kubernetes Custom Resources** (CRs) that represent queued work for extensions.
 
 **Structure:**
 ```yaml
 apiVersion: delivery-gear.gardener.cloud/v1
 kind: BacklogItem
 metadata:
-  name: <extension>-<priority>-<hash>
-  namespace: delivery
+  name: <extension>-<hash>
+  namespace: <my-namespace>
   labels:
     delivery-gear.gardener.cloud/service: <extensionName>
+    delivery-gear.gardener.cloud/claimed: "<Boolean>"
+  annotations:
+    delivery-gear.gardener.cloud/claimed-at: <timestamp>
+    delivery-gear.gardener.cloud/claimed-by: <extensionName>-<suffix>
 spec:
   artefact:
     component_name: example.org/component
@@ -143,7 +147,7 @@ spec:
 
 **Properties:**
 
-- **Priority**: Determines processing order (lower number = higher priority)
+- **Priority**: Determines processing order (higher number = higher priority)
 - **Service Label**: Associates the item with a specific extension
 - **Artefact Identity**: Fully qualified OCM or runtime artefact reference
 - **Timestamp**: Creation time for audit and staleness detection
@@ -294,9 +298,15 @@ Deployed as a **ConfigMap** (`findings-cfg`), this configuration defines:
 ```yaml
 - type: finding/vulnerability
   categorisations:
-    - category: critical
-      allowed_processing_time: 7d
-      severity: CVSS >= 9.0
+    - id: CRITICAL
+      display_name: Critical
+      allowed_processing_time: 30
+      rescoring: manual
+      selector:
+        cve_score_range:
+          max: 10
+          min: 9
+      value: 8
   issues:
     enable_issues: true
     attrs_to_group_by:
@@ -307,45 +317,6 @@ Deployed as a **ConfigMap** (`findings-cfg`), this configuration defines:
 ### Credentials
 
 Sensitive information (API keys, GitHub tokens, registry credentials) is stored as **Kubernetes Secrets** and mounted into relevant pods.
-
-## Scheduling and Work Distribution
-
-ODG uses a **queue-based asynchronous processing model** with dynamic scaling.
-
-### Work Queue Flow
-
-1. **Trigger Creation**
-   - Artefact enumerator creates `BacklogItem` CRDs periodically
-   - Manual triggers via UI or API also create backlog items
-
-2. **Queue Formation**
-   - Kubernetes aggregates backlog items per extension via label selectors
-   - Items are prioritised by the `priority` field
-
-3. **Dynamic Scaling**
-   - Backlog controller monitors pending items per extension
-   - Scales Kubernetes Deployments to maintain target items-per-replica ratio
-
-4. **Work Claiming**
-   - Extension workers query for unclaimed items
-   - Worker adds claim annotation with timestamp
-   - Item is locked to prevent duplicate processing
-
-5. **Processing**
-   - Worker executes extension logic
-   - Uploads results to ODG Core API
-   - Deletes backlog item upon completion
-
-6. **Stale Claim Recovery**
-   - Backlog controller removes claims older than timeout
-   - Item returns to queue for retry
-
-This architecture ensures:
-
-- **Fault Tolerance**: Failed workers don't block the queue
-- **Load Balancing**: Work distributes across available replicas
-- **Resource Efficiency**: Workers scale down during idle periods
-- **Priority Handling**: Critical artefacts process first
 
 ## Persistence Architecture
 
@@ -409,15 +380,8 @@ All persistent state resides in the **ODG Database**, accessed exclusively throu
 
 ### For Extensions
 
-**Processing Workflow**
-
-1. Claim backlog item
-2. Query existing metadata for target artefact
-3. Execute extension logic
-4. Upload new/updated metadata
-5. Delete obsolete metadata not in new results
-6. Upload `meta/artefact_scan_info` to mark completion
-7. Delete backlog item
+- See [Scanner Extensions](#scanner-extensions) for architecture overview
+- See {doc}`/contents/tutorial/00-contributing-extension` for development guide
 
 ### For Operators
 
