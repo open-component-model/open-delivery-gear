@@ -1,0 +1,14 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1348.3
+release_notes:
+- audience: developer
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: bugfix
+  contents: The `odg-core-libs` version is now pinned during the image build
+  mimetype: text/markdown
+  reference: '[#871](https://github.com/open-component-model/odg-core/pull/871)'
+  type: standard
