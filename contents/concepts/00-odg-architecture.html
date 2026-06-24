@@ -207,7 +207,7 @@
 <p class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../how-to/00-hybrid-dev-setup.html">Setting up a hybrid dev setup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../how-to/01-local-setup.html">Setup Local Development Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how-to/01-local-setup.html">Deploying the Open Delivery Gear Locally</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../how-to/02-use-odg-api.html">Use the ODG Python Package to resolve an OCM component</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../how-to/03-vulnerabilities-for-component.html">Get all vulnerabilities for a Component</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../how-to/04-diki.html">Send Diki findings to ODG-API</a></li>
@@ -397,15 +397,19 @@ The database uses a correlation model where all data is linked to an <code class
 </section>
 <section id="backlog-items">
 <h3>Backlog Items<a class="headerlink" href="#backlog-items" title="Link to this heading">¶</a></h3>
-<p>Backlog Items are <strong>Kubernetes Custom Resources</strong> (CRDs) that represent queued work for extensions.</p>
+<p>Backlog Items are <strong>Kubernetes Custom Resources</strong> (CRs) that represent queued work for extensions.</p>
 <p><strong>Structure:</strong></p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">delivery-gear.gardener.cloud/v1</span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">BacklogItem</span>
 <span class="nt">metadata</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;extension&gt;-&lt;priority&gt;-&lt;hash&gt;</span>
-<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">delivery</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;extension&gt;-&lt;hash&gt;</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;my-namespace&gt;</span>
 <span class="w">  </span><span class="nt">labels</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">delivery-gear.gardener.cloud/service</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;extensionName&gt;</span>
+<span class="w">    </span><span class="nt">delivery-gear.gardener.cloud/claimed</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&lt;Boolean&gt;&quot;</span>
+<span class="w">  </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">delivery-gear.gardener.cloud/claimed-at</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;timestamp&gt;</span>
+<span class="w">    </span><span class="nt">delivery-gear.gardener.cloud/claimed-by</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;extensionName&gt;-&lt;suffix&gt;</span>
 <span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">artefact</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">component_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example.org/component</span>
@@ -422,7 +426,7 @@ The database uses a correlation model where all data is linked to an <code class
 </div>
 <p><strong>Properties:</strong></p>
 <ul class="simple">
-<li><p><strong>Priority</strong>: Determines processing order (lower number = higher priority)</p></li>
+<li><p><strong>Priority</strong>: Determines processing order (higher number = higher priority)</p></li>
 <li><p><strong>Service Label</strong>: Associates the item with a specific extension</p></li>
 <li><p><strong>Artefact Identity</strong>: Fully qualified OCM or runtime artefact reference</p></li>
 <li><p><strong>Timestamp</strong>: Creation time for audit and staleness detection</p></li>
@@ -468,7 +472,7 @@ The database uses a correlation model where all data is linked to an <code class
 </ol>
 </section>
 <section id="scanner-extensions">
-<h3>Scanner Extensions<a class="headerlink" href="#scanner-extensions" title="Link to this heading">¶</a></h3>
+<span id="id1"></span><h3>Scanner Extensions<a class="headerlink" href="#scanner-extensions" title="Link to this heading">¶</a></h3>
 <p>Scanners are the most common extension type, performing security or compliance analysis on artefacts.</p>
 <p><strong>Lifecycle:</strong></p>
 <ol class="arabic simple">
@@ -580,9 +584,15 @@ The database uses a correlation model where all data is linked to an <code class
 <p><strong>Example:</strong></p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">finding/vulnerability</span>
 <span class="w">  </span><span class="nt">categorisations</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">critical</span>
-<span class="w">      </span><span class="nt">allowed_processing_time</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7d</span>
-<span class="w">      </span><span class="nt">severity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CVSS &gt;= 9.0</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CRITICAL</span>
+<span class="w">      </span><span class="nt">display_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Critical</span>
+<span class="w">      </span><span class="nt">allowed_processing_time</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span>
+<span class="w">      </span><span class="nt">rescoring</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">manual</span>
+<span class="w">      </span><span class="nt">selector</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">cve_score_range</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">          </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9</span>
+<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
 <span class="w">  </span><span class="nt">issues</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">enable_issues</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">    </span><span class="nt">attrs_to_group_by</span><span class="p">:</span>
@@ -594,60 +604,6 @@ The database uses a correlation model where all data is linked to an <code class
 <section id="credentials">
 <h3>Credentials<a class="headerlink" href="#credentials" title="Link to this heading">¶</a></h3>
 <p>Sensitive information (API keys, GitHub tokens, registry credentials) is stored as <strong>Kubernetes Secrets</strong> and mounted into relevant pods.</p>
-</section>
-</section>
-<section id="scheduling-and-work-distribution">
-<h2>Scheduling and Work Distribution<a class="headerlink" href="#scheduling-and-work-distribution" title="Link to this heading">¶</a></h2>
-<p>ODG uses a <strong>queue-based asynchronous processing model</strong> with dynamic scaling.</p>
-<section id="work-queue-flow">
-<h3>Work Queue Flow<a class="headerlink" href="#work-queue-flow" title="Link to this heading">¶</a></h3>
-<ol class="arabic simple">
-<li><p><strong>Trigger Creation</strong></p>
-<ul class="simple">
-<li><p>Artefact enumerator creates <code class="docutils literal notranslate"><span class="pre">BacklogItem</span></code> CRDs periodically</p></li>
-<li><p>Manual triggers via UI or API also create backlog items</p></li>
-</ul>
-</li>
-<li><p><strong>Queue Formation</strong></p>
-<ul class="simple">
-<li><p>Kubernetes aggregates backlog items per extension via label selectors</p></li>
-<li><p>Items are prioritised by the <code class="docutils literal notranslate"><span class="pre">priority</span></code> field</p></li>
-</ul>
-</li>
-<li><p><strong>Dynamic Scaling</strong></p>
-<ul class="simple">
-<li><p>Backlog controller monitors pending items per extension</p></li>
-<li><p>Scales Kubernetes Deployments to maintain target items-per-replica ratio</p></li>
-</ul>
-</li>
-<li><p><strong>Work Claiming</strong></p>
-<ul class="simple">
-<li><p>Extension workers query for unclaimed items</p></li>
-<li><p>Worker adds claim annotation with timestamp</p></li>
-<li><p>Item is locked to prevent duplicate processing</p></li>
-</ul>
-</li>
-<li><p><strong>Processing</strong></p>
-<ul class="simple">
-<li><p>Worker executes extension logic</p></li>
-<li><p>Uploads results to ODG Core API</p></li>
-<li><p>Deletes backlog item upon completion</p></li>
-</ul>
-</li>
-<li><p><strong>Stale Claim Recovery</strong></p>
-<ul class="simple">
-<li><p>Backlog controller removes claims older than timeout</p></li>
-<li><p>Item returns to queue for retry</p></li>
-</ul>
-</li>
-</ol>
-<p>This architecture ensures:</p>
-<ul class="simple">
-<li><p><strong>Fault Tolerance</strong>: Failed workers don’t block the queue</p></li>
-<li><p><strong>Load Balancing</strong>: Work distributes across available replicas</p></li>
-<li><p><strong>Resource Efficiency</strong>: Workers scale down during idle periods</p></li>
-<li><p><strong>Priority Handling</strong>: Critical artefacts process first</p></li>
-</ul>
 </section>
 </section>
 <section id="persistence-architecture">
@@ -716,16 +672,10 @@ The database uses a correlation model where all data is linked to an <code class
 </section>
 <section id="for-extensions">
 <h3>For Extensions<a class="headerlink" href="#for-extensions" title="Link to this heading">¶</a></h3>
-<p><strong>Processing Workflow</strong></p>
-<ol class="arabic simple">
-<li><p>Claim backlog item</p></li>
-<li><p>Query existing metadata for target artefact</p></li>
-<li><p>Execute extension logic</p></li>
-<li><p>Upload new/updated metadata</p></li>
-<li><p>Delete obsolete metadata not in new results</p></li>
-<li><p>Upload <code class="docutils literal notranslate"><span class="pre">meta/artefact_scan_info</span></code> to mark completion</p></li>
-<li><p>Delete backlog item</p></li>
-</ol>
+<ul class="simple">
+<li><p>See <a class="reference internal" href="#scanner-extensions"><span class="std std-ref">Scanner Extensions</span></a> for architecture overview</p></li>
+<li><p>See <a class="reference internal" href="../tutorial/00-contributing-extension.html"><span class="doc">Contribute a new Extension</span></a> for development guide</p></li>
+</ul>
 </section>
 <section id="for-operators">
 <h3>For Operators<a class="headerlink" href="#for-operators" title="Link to this heading">¶</a></h3>
@@ -837,10 +787,6 @@ The database uses a correlation model where all data is linked to an <code class
 <li><a class="reference internal" href="#extension-configuration">Extension Configuration</a></li>
 <li><a class="reference internal" href="#finding-configuration">Finding Configuration</a></li>
 <li><a class="reference internal" href="#credentials">Credentials</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#scheduling-and-work-distribution">Scheduling and Work Distribution</a><ul>
-<li><a class="reference internal" href="#work-queue-flow">Work Queue Flow</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#persistence-architecture">Persistence Architecture</a><ul>

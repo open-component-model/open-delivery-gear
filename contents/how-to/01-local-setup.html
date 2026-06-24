@@ -7,7 +7,7 @@
         <link rel="prefetch" href="../../_static/odg.svg" as="image">
 
     <link rel="shortcut icon" href="../../_static/odg.svg"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Setup Local Development Environment - Open Delivery Gear documentation</title>
+        <title>Deploying the Open Delivery Gear Locally - Open Delivery Gear documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
@@ -207,7 +207,7 @@
 <p class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="00-hybrid-dev-setup.html">Setting up a hybrid dev setup</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Setup Local Development Environment</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Deploying the Open Delivery Gear Locally</a></li>
 <li class="toctree-l1"><a class="reference internal" href="02-use-odg-api.html">Use the ODG Python Package to resolve an OCM component</a></li>
 <li class="toctree-l1"><a class="reference internal" href="03-vulnerabilities-for-component.html">Get all vulnerabilities for a Component</a></li>
 <li class="toctree-l1"><a class="reference internal" href="04-diki.html">Send Diki findings to ODG-API</a></li>
@@ -280,150 +280,78 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="setup-local-development-environment">
-<h1>Setup Local Development Environment<a class="headerlink" href="#setup-local-development-environment" title="Link to this heading">¶</a></h1>
-<p>In order to start with the set-up first clone the <a class="reference external" href="https://github.com/open-component-model/odg-core">odg-core repository</a>.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This guide focuses on running the ODG core (+ database) and one
-extension locally, possibly with interacting with a remote Kubernetes
-cluster. This might be used during the process of developing a new or
-updating an existing extension. To run a full Open Delivery Gear locally,
-i.e. containing multiple extensions and a local Kubernetes cluster, please
-refer to the <a class="reference external" href="https://github.com/open-component-model/odg-core/blob/master/local-setup/local-setup.md">Local Setup</a>
-guide instead.</p>
-</div>
+          <section id="deploying-the-open-delivery-gear-locally">
+<h1>Deploying the Open Delivery Gear Locally<a class="headerlink" href="#deploying-the-open-delivery-gear-locally" title="Link to this heading">¶</a></h1>
+<p>This guide will help you deploy a custom Open Delivery Gear (ODG) on your local
+machine using <a class="reference external" href="https://kind.sigs.k8s.io/">KinD</a>. If you encounter any problems,
+please feel free to <a class="reference external" href="https://github.com/open-component-model/open-delivery-gear/issues/new?template=bug.md">open an issue</a>
+so that we can improve this process or documentation.</p>
 <section id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">¶</a></h2>
-<p>The following software should be installed on your local machine:</p>
+<p>To get started, you first of all need to install the required toolchain:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">3.12</span></code> or greater (qualification is always done using the Python3
-version from <code class="docutils literal notranslate"><span class="pre">alpine:edge</span></code>)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Docker</span></code> (only if running a local PostgreSQL container)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">SQLite3</span></code> (only if running a local SQLite3 database)</p></li>
+<li><p><a class="reference external" href="https://kubernetes.io/docs/tasks/tools">Kubectl</a></p></li>
+<li><p><a class="reference external" href="https://kind.sigs.k8s.io/docs/user/quick-start/#installation">KinD</a></p></li>
+<li><p><a class="reference external" href="https://helm.sh/docs/intro/install">Helm</a></p></li>
+<li><p><a class="reference external" href="https://github.com/open-component-model/open-component-model#ocm-cli">OCM CLI</a></p></li>
 </ul>
 </section>
-<section id="running-the-delivery-database">
-<h2>Running the Delivery-Database<a class="headerlink" href="#running-the-delivery-database" title="Link to this heading">¶</a></h2>
-<p>For the local development, currently, <strong>SQLite3</strong> and <strong>PostgreSQL 16</strong> are
-supported, so either of them can be chosen. For production environments, the
-usage of PostgreSQL is recommended (the Helm charts do not support SQLite3).</p>
-<section id="sqlite3">
-<h3>SQLite3<a class="headerlink" href="#sqlite3" title="Link to this heading">¶</a></h3>
-<p>Valid SQLite3 URL forms are:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sqlite</span><span class="o">+</span><span class="n">aiosqlite</span><span class="p">:</span><span class="o">///</span><span class="p">:</span><span class="n">memory</span><span class="p">:</span>
-<span class="n">sqlite</span><span class="o">+</span><span class="n">aiosqlite</span><span class="p">:</span><span class="o">///</span><span class="n">relative</span><span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">file</span><span class="o">.</span><span class="n">db</span>
-<span class="n">sqlite</span><span class="o">+</span><span class="n">aiosqlite</span><span class="p">:</span><span class="o">////</span><span class="n">absolute</span><span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">file</span><span class="o">.</span><span class="n">db</span>
-</pre></div>
-</div>
-</section>
-<section id="postgresql">
-<h3>PostgreSQL<a class="headerlink" href="#postgresql" title="Link to this heading">¶</a></h3>
-<p>Instantiate a local PostgreSQL 16 database, e.g. as OCI container:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>-dit<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--name<span class="w"> </span>postgres<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-e<span class="w"> </span><span class="nv">POSTGRES_USER</span><span class="o">=</span>postgres<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-e<span class="w"> </span><span class="nv">POSTGRES_PASSWORD</span><span class="o">=</span>MyPassword<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-p<span class="w"> </span><span class="m">5432</span>:5432<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>postgres:16
-</pre></div>
-</div>
-</section>
-</section>
-<section id="running-the-odg-core-service">
-<h2>Running the ODG Core Service<a class="headerlink" href="#running-the-odg-core-service" title="Link to this heading">¶</a></h2>
-<section id="requirements">
-<h3>Requirements<a class="headerlink" href="#requirements" title="Link to this heading">¶</a></h3>
-<ol class="arabic">
-<li><p>(Optional) Create a new <a class="reference external" href="https://docs.python.org/3/library/venv.html">virtual env</a> in your local odg-core repository and activate it:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>venv
-<span class="nb">source</span><span class="w"> </span>venv/bin/activate
-</pre></div>
-</div>
-</li>
-<li><p>Install development dependencies</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip3<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>-r<span class="w"> </span>&lt;path-to-local-odg-core-repo&gt;/requirements-dev.txt
-</pre></div>
-</div>
-</li>
-</ol>
-</section>
-<section id="secrets">
-<h3>Secrets<a class="headerlink" href="#secrets" title="Link to this heading">¶</a></h3>
-<p>In case any credentials are required as part of the local setup, they may be
-added to the respective files in the <code class="docutils literal notranslate"><span class="pre">secrets</span></code> directory. Each sub-directory
-reflects a certain secret <em>type</em>, whereas each file within a sub-directory
-corresponds to a secret <em>element</em> of that type. If using one of the provided
-template files as a starting point, make sure to rename them as all templates
-ending on <code class="docutils literal notranslate"><span class="pre">.template.yaml</span></code> will be filtered-out automatically.</p>
-</section>
-<section id="certificates">
-<h3>Certificates<a class="headerlink" href="#certificates" title="Link to this heading">¶</a></h3>
-<p>In the context of local development, interaction with endpoints with either
-self-signed certificates, or certificates signed by CAs not included in the
-default trust-bundles might be required. Therefore, it is necessary to include
-them into Python’s trust store (Python does by default not honour system’s
-CA-bundle).</p>
-<p>As an example, the following script can be used to add SAP’s CAs to Python’s
-trust store.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
-
-<span class="nb">set</span><span class="w"> </span>-eu
-
-<span class="nv">ca_bundle_path</span><span class="o">=</span><span class="k">$(</span>python3<span class="w"> </span>-m<span class="w"> </span>certifi<span class="k">)</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;appending certs to </span><span class="si">${</span><span class="nv">ca_bundle_path</span><span class="si">}</span><span class="s2">&quot;</span>
-
-<span class="nv">urls</span><span class="o">=(</span>
-<span class="w">    </span><span class="s2">&quot;https://aia.pki.co.sap.com/aia/SAP%20Global%20Root%20CA.crt&quot;</span>
-<span class="w">    </span><span class="s2">&quot;https://aia.pki.co.sap.com/aia/SAPNetCA_G2_2.crt&quot;</span>
-<span class="o">)</span>
-
-<span class="k">for</span><span class="w"> </span>url<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="si">${</span><span class="nv">urls</span><span class="p">[@]</span><span class="si">}</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">  </span>curl<span class="w"> </span><span class="nv">$url</span><span class="w"> </span>&gt;&gt;<span class="w"> </span><span class="nv">$ca_bundle_path</span>
-<span class="k">done</span>
-</pre></div>
-</div>
+<section id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h2>
+<p>To customise ODG according to your needs, you have to adjust the <a class="reference external" href="https://github.com/open-component-model/open-delivery-gear/blob/main/local-setup/kind/values.yaml">values file</a>.
+There are already reasonable defaults available for most entries, however,
+following entries must still be provided:</p>
+<ul class="simple">
+<li><p>OCI registry credentials to access desired component descriptors and
+resources via <code class="docutils literal notranslate"><span class="pre">secrets.oci-registry</span></code> (in case they are not publicly available)</p></li>
+<li><p>GitHub credentials via <code class="docutils literal notranslate"><span class="pre">.secrets.github</span></code> or <code class="docutils literal notranslate"><span class="pre">.secrets.github-app</span></code> (both to
+allow authentication within ODG itself as well to access necessary
+repositories)</p></li>
+<li><p>GitHub App credentials to allow OAuth<br />
+(1) Go to your GitHub organisation’s settings<br />
+(2) Developer settings -&gt; GitHub Apps -&gt; New GitHub App<br />
+(3) Fill in the form (“Callback URL” -&gt; <code class="docutils literal notranslate"><span class="pre">http://localhost:3000</span></code>, “Request
+user authorisation (OAuth) during installation” -&gt; <code class="docutils literal notranslate"><span class="pre">True</span></code>, other checkboxes
+-&gt; <code class="docutils literal notranslate"><span class="pre">False</span></code>)<br />
+(4) Fill in <code class="docutils literal notranslate"><span class="pre">client_id</span></code>, <code class="docutils literal notranslate"><span class="pre">client_secret</span></code> and desired <code class="docutils literal notranslate"><span class="pre">role_bindings</span></code> via
+<code class="docutils literal notranslate"><span class="pre">secrets.oauth-cfg</span></code></p></li>
+</ul>
 </section>
 <section id="start-up">
-<h3>Start-Up<a class="headerlink" href="#start-up" title="Link to this heading">¶</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Running with PostgreSQL</span>
-python3<span class="w"> </span>&lt;path-to-local-odg-core-repo&gt;/src/app.py<span class="w"> </span>--delivery-db-url<span class="w"> </span>postgresql+psycopg://postgres:MyPassword@127.0.0.1:5432
-
-<span class="c1"># Running with SQLite3</span>
-python3<span class="w"> </span>&lt;path-to-local-odg-core-repo&gt;/src/app.py<span class="w"> </span>--delivery-db-url<span class="w"> </span>sqlite+aiosqlite:///filename.db
-</pre></div>
-</div>
-<p>Start-up with useful development tooling (e.g. hot-reloading or enhanced
-request information upon errors):</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Running with PostgreSQL</span>
-adev<span class="w"> </span>runserver<span class="w"> </span>--port<span class="w"> </span><span class="m">5000</span><span class="w"> </span>&lt;path-to-local-odg-core-repo&gt;/src<span class="w"> </span>--<span class="w"> </span>--delivery-db-url<span class="w"> </span>postgresql+psycopg://postgres:MyPassword@127.0.0.1:5432
-
-<span class="c1"># Running with SQLite3</span>
-adev<span class="w"> </span>runserver<span class="w"> </span>--port<span class="w"> </span><span class="m">5000</span><span class="w"> </span>&lt;path-to-local-odg-core-repo&gt;/src<span class="w"> </span>--<span class="w"> </span>--delivery-db-url<span class="w"> </span>sqlite+aiosqlite:///filename.db
-</pre></div>
-</div>
+<h2>Start-Up<a class="headerlink" href="#start-up" title="Link to this heading">¶</a></h2>
+<p>To create a local Kubernetes cluster and deploy ODG, you have to run
+<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">kind-up</span></code>. If you want to deploy a specific version of ODG, you have to
+set the environment variable <code class="docutils literal notranslate"><span class="pre">ODG_VERSION</span></code>. Otherwise, the OCM CLI is used to
+retrieve the greatest version. Upon execution, this command will create
+<code class="docutils literal notranslate"><span class="pre">&lt;REPO_ROOT&gt;/local-setup/kind/kubeconfig</span></code> which can be used to interact with
+the ODG cluster. Also, it will forward the delivery-service to
+<code class="docutils literal notranslate"><span class="pre">http://localhost:5000</span></code> and the delivery-dashboard to <code class="docutils literal notranslate"><span class="pre">http://localhost:3000</span></code>.</p>
+<blockquote>
+<div><p>[!NOTE]<br />
+Currently, the listing of available versions via OCM CLI is not working for
+the OCM component descriptor of ODG. Therefore, an explicit version MUST be
+set via the <code class="docutils literal notranslate"><span class="pre">ODG_VERSION</span></code> environment variable.</p>
+</div></blockquote>
 </section>
+<section id="configuration-update">
+<h2>Configuration Update<a class="headerlink" href="#configuration-update" title="Link to this heading">¶</a></h2>
+<p>To update the ODG deployment in case your local configuration has changed, just
+run the <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">kind-update</span></code> command. This will upgrade the existing Helm charts
+and re-apply your configuration settings without the need to re-create your
+KinD cluster.</p>
 </section>
-<section id="running-the-extension">
-<h2>Running the Extension<a class="headerlink" href="#running-the-extension" title="Link to this heading">¶</a></h2>
-<section id="configuration">
-<h3>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h3>
-<p>The configuration required for the extension can be added locally to the
-<code class="docutils literal notranslate"><span class="pre">odg/extensions_cfg.yaml</span></code> file as well as to the <code class="docutils literal notranslate"><span class="pre">odg/findings_cfg.yaml</span></code> file
-respectively. Those will be picked-up automatically if using the
-<code class="docutils literal notranslate"><span class="pre">paths.extensions_cfg_path()</span></code> and <code class="docutils literal notranslate"><span class="pre">paths.findings_cfg_path</span></code> utility functions.</p>
+<section id="termination">
+<h2>Termination<a class="headerlink" href="#termination" title="Link to this heading">¶</a></h2>
+<p>If you wish to stop ODG and delete the KinD cluster, you have to run
+<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">kind-down</span></code>. However, this will <em>not</em> delete the database storage since it
+is permanently stored on the host machine. To also clear the database storage,
+you have to delete the <code class="docutils literal notranslate"><span class="pre">/var/delivery-db</span></code> directory.</p>
 </section>
-<section id="id1">
-<h3>Start-Up<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
-<p>To run the extension locally, the Kubernetes cluster and the ODG core service
-to interact with have to be specified via additional argument:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>-m<span class="w"> </span>&lt;path-to-extension&gt;<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--k8s-cfg-name<span class="w"> </span>ocm_gear_dev<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--k8s-namespace<span class="w"> </span>delivery<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--delivery-service-url<span class="w"> </span>http://localhost:5000
-</pre></div>
-</div>
-</section>
+<section id="extensions">
+<h2>Extensions<a class="headerlink" href="#extensions" title="Link to this heading">¶</a></h2>
+<p>ODG extensions can be dynamically added to your installation. Therefore, the
+configuration of the extensions must be done via <code class="docutils literal notranslate"><span class="pre">extensions_cfg</span></code> in the
+<a class="reference external" href="https://github.com/open-component-model/open-delivery-gear/blob/main/local-setup/kind/values.yaml">values file</a>.</p>
 </section>
 </section>
 
@@ -482,25 +410,13 @@ to interact with have to be specified via additional argument:</p>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Setup Local Development Environment</a><ul>
+<li><a class="reference internal" href="#">Deploying the Open Delivery Gear Locally</a><ul>
 <li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
-<li><a class="reference internal" href="#running-the-delivery-database">Running the Delivery-Database</a><ul>
-<li><a class="reference internal" href="#sqlite3">SQLite3</a></li>
-<li><a class="reference internal" href="#postgresql">PostgreSQL</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#running-the-odg-core-service">Running the ODG Core Service</a><ul>
-<li><a class="reference internal" href="#requirements">Requirements</a></li>
-<li><a class="reference internal" href="#secrets">Secrets</a></li>
-<li><a class="reference internal" href="#certificates">Certificates</a></li>
-<li><a class="reference internal" href="#start-up">Start-Up</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#running-the-extension">Running the Extension</a><ul>
 <li><a class="reference internal" href="#configuration">Configuration</a></li>
-<li><a class="reference internal" href="#id1">Start-Up</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#start-up">Start-Up</a></li>
+<li><a class="reference internal" href="#configuration-update">Configuration Update</a></li>
+<li><a class="reference internal" href="#termination">Termination</a></li>
+<li><a class="reference internal" href="#extensions">Extensions</a></li>
 </ul>
 </li>
 </ul>

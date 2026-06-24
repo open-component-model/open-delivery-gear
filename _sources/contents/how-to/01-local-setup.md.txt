@@ -1,148 +1,62 @@
-# Setup Local Development Environment
+# Deploying the Open Delivery Gear Locally
 
-In order to start with the set-up first clone the [odg-core repository](https://github.com/open-component-model/odg-core).
-
-```{note}
-This guide focuses on running the ODG core (+ database) and one
-extension locally, possibly with interacting with a remote Kubernetes
-cluster. This might be used during the process of developing a new or
-updating an existing extension. To run a full Open Delivery Gear locally,
-i.e. containing multiple extensions and a local Kubernetes cluster, please
-refer to the [Local Setup](https://github.com/open-component-model/odg-core/blob/master/local-setup/local-setup.md)
-guide instead.
-```
+This guide will help you deploy a custom Open Delivery Gear (ODG) on your local
+machine using [KinD](https://kind.sigs.k8s.io/). If you encounter any problems,
+please feel free to [open an issue](https://github.com/open-component-model/open-delivery-gear/issues/new?template=bug.md)
+so that we can improve this process or documentation.
 
 ## Prerequisites
+To get started, you first of all need to install the required toolchain:
+- [Kubectl](https://kubernetes.io/docs/tasks/tools)
+- [KinD](https://kind.sigs.k8s.io/docs/user/quick-start/#installation)
+- [Helm](https://helm.sh/docs/intro/install)
+- [OCM CLI](https://github.com/open-component-model/open-component-model#ocm-cli)
 
-The following software should be installed on your local machine:
+## Configuration
+To customise ODG according to your needs, you have to adjust the [values file](https://github.com/open-component-model/open-delivery-gear/blob/main/local-setup/kind/values.yaml).
+There are already reasonable defaults available for most entries, however,
+following entries must still be provided:
+- OCI registry credentials to access desired component descriptors and
+resources via `secrets.oci-registry` (in case they are not publicly available)
+- GitHub credentials via `.secrets.github` or `.secrets.github-app` (both to
+allow authentication within ODG itself as well to access necessary
+repositories)
+- GitHub App credentials to allow OAuth  
+    (1) Go to your GitHub organisation's settings  
+    (2) Developer settings -> GitHub Apps -> New GitHub App  
+    (3) Fill in the form ("Callback URL" -> `http://localhost:3000`, "Request
+    user authorisation (OAuth) during installation" -> `True`, other checkboxes
+    -> `False`)  
+    (4) Fill in `client_id`, `client_secret` and desired `role_bindings` via
+    `secrets.oauth-cfg`  
 
-- `Python 3.12` or greater (qualification is always done using the Python3
-  version from `alpine:edge`)
-- `Docker` (only if running a local PostgreSQL container)
-- `SQLite3` (only if running a local SQLite3 database)
+## Start-Up
+To create a local Kubernetes cluster and deploy ODG, you have to run
+`make kind-up`. If you want to deploy a specific version of ODG, you have to
+set the environment variable `ODG_VERSION`. Otherwise, the OCM CLI is used to
+retrieve the greatest version. Upon execution, this command will create
+`<REPO_ROOT>/local-setup/kind/kubeconfig` which can be used to interact with
+the ODG cluster. Also, it will forward the delivery-service to
+`http://localhost:5000` and the delivery-dashboard to `http://localhost:3000`.
 
-## Running the Delivery-Database
+> [!NOTE]  
+> Currently, the listing of available versions via OCM CLI is not working for
+> the OCM component descriptor of ODG. Therefore, an explicit version MUST be
+> set via the `ODG_VERSION` environment variable.
 
-For the local development, currently, **SQLite3** and **PostgreSQL 16** are
-supported, so either of them can be chosen. For production environments, the
-usage of PostgreSQL is recommended (the Helm charts do not support SQLite3).
+## Configuration Update
+To update the ODG deployment in case your local configuration has changed, just
+run the `make kind-update` command. This will upgrade the existing Helm charts
+and re-apply your configuration settings without the need to re-create your
+KinD cluster.
 
-### SQLite3
+## Termination
+If you wish to stop ODG and delete the KinD cluster, you have to run
+`make kind-down`. However, this will _not_ delete the database storage since it
+is permanently stored on the host machine. To also clear the database storage,
+you have to delete the `/var/delivery-db` directory.
 
-Valid SQLite3 URL forms are:
-
-```
-sqlite+aiosqlite:///:memory:
-sqlite+aiosqlite:///relative/path/to/file.db
-sqlite+aiosqlite:////absolute/path/to/file.db
-```
-
-### PostgreSQL
-
-Instantiate a local PostgreSQL 16 database, e.g. as OCI container:
-
-```bash
-docker run -dit \
-  --name postgres \
-  -e POSTGRES_USER=postgres \
-  -e POSTGRES_PASSWORD=MyPassword \
-  -p 5432:5432 \
-  postgres:16
-```
-
-## Running the ODG Core Service
-
-### Requirements
-
-1. (Optional) Create a new [virtual env](https://docs.python.org/3/library/venv.html) in your local odg-core repository and activate it:
-
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate
-   ```
-
-2. Install development dependencies
-
-   ```bash
-   pip3 install --upgrade -r <path-to-local-odg-core-repo>/requirements-dev.txt
-   ```
-
-### Secrets
-
-In case any credentials are required as part of the local setup, they may be
-added to the respective files in the `secrets` directory. Each sub-directory
-reflects a certain secret _type_, whereas each file within a sub-directory
-corresponds to a secret _element_ of that type. If using one of the provided
-template files as a starting point, make sure to rename them as all templates
-ending on `.template.yaml` will be filtered-out automatically.
-
-### Certificates
-
-In the context of local development, interaction with endpoints with either
-self-signed certificates, or certificates signed by CAs not included in the
-default trust-bundles might be required. Therefore, it is necessary to include
-them into Python's trust store (Python does by default not honour system's
-CA-bundle).
-
-As an example, the following script can be used to add SAP's CAs to Python's
-trust store.
-
-```bash
-#!/usr/bin/env bash
-
-set -eu
-
-ca_bundle_path=$(python3 -m certifi)
-echo "appending certs to ${ca_bundle_path}"
-
-urls=(
-    "https://aia.pki.co.sap.com/aia/SAP%20Global%20Root%20CA.crt"
-    "https://aia.pki.co.sap.com/aia/SAPNetCA_G2_2.crt"
-)
-
-for url in ${urls[@]}; do
-  curl $url >> $ca_bundle_path
-done
-```
-
-### Start-Up
-
-```bash
-# Running with PostgreSQL
-python3 <path-to-local-odg-core-repo>/src/app.py --delivery-db-url postgresql+psycopg://postgres:MyPassword@127.0.0.1:5432
-
-# Running with SQLite3
-python3 <path-to-local-odg-core-repo>/src/app.py --delivery-db-url sqlite+aiosqlite:///filename.db
-```
-
-Start-up with useful development tooling (e.g. hot-reloading or enhanced
-request information upon errors):
-
-```bash
-# Running with PostgreSQL
-adev runserver --port 5000 <path-to-local-odg-core-repo>/src -- --delivery-db-url postgresql+psycopg://postgres:MyPassword@127.0.0.1:5432
-
-# Running with SQLite3
-adev runserver --port 5000 <path-to-local-odg-core-repo>/src -- --delivery-db-url sqlite+aiosqlite:///filename.db
-```
-
-## Running the Extension
-
-### Configuration
-
-The configuration required for the extension can be added locally to the
-`odg/extensions_cfg.yaml` file as well as to the `odg/findings_cfg.yaml` file
-respectively. Those will be picked-up automatically if using the
-`paths.extensions_cfg_path()` and `paths.findings_cfg_path` utility functions.
-
-### Start-Up
-
-To run the extension locally, the Kubernetes cluster and the ODG core service
-to interact with have to be specified via additional argument:
-
-```bash
-python3 -m <path-to-extension> \
-  --k8s-cfg-name ocm_gear_dev \
-  --k8s-namespace delivery \
-  --delivery-service-url http://localhost:5000
-```
+## Extensions
+ODG extensions can be dynamically added to your installation. Therefore, the
+configuration of the extensions must be done via `extensions_cfg` in the
+[values file](https://github.com/open-component-model/open-delivery-gear/blob/main/local-setup/kind/values.yaml).
