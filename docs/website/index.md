@@ -62,6 +62,17 @@ Set up your environment with {doc}`contents/how-to/01-local-setup` and learn to 
 
 ---
 
+## Getting Started
+
+*New to ODG? Start here to understand what it is and how to use it*
+
+```{toctree}
+:maxdepth: 1
+:caption: Getting Started
+
+contents/getting-started/00-introduction.md
+```
+
 ## Concepts
 
 *Deep-dive into ODG architecture, data models, and how extensions work*
@@ -153,6 +164,7 @@ Learn about OCM
 .. note::
    This documentation is organised using the `Diataxis framework <https://diataxis.fr/>`_:
    
+   - **Getting Started**: Introduction and orientation for new users
    - **Tutorials**: Learning-oriented lessons
    - **How-to Guides**: Problem-oriented, goal-focused instructions
    - **Concepts**: Understanding-oriented explanations

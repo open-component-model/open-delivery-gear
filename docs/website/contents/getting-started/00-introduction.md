@@ -1,0 +1,77 @@
+# Introduction to Open Delivery Gear
+
+Welcome to Open Delivery Gear (ODG). This guide introduces you to ODG and helps you get started.
+
+---
+
+## Modelling Software in OCM
+
+ODG is built upon the semantic model of the Open Component Model (OCM). To work effectively with ODG, you'll need a solid understanding of OCM's core concepts.
+
+### OCM Core Concepts
+
+The following sections elaborate on the semantic model of OCM, as well as provide motivation and explanation for the rationales behind it.
+
+#### OCM Benefits
+
+Start with the [Benefits of OCM](https://ocm.software/docs/overview/benefits-of-ocm/) to understand the rationale behind OCM and the problems it addresses. You'll discover the motivation for OCM's creation, its scope within the software delivery landscape, and how it enables better governance of software components across organisational boundaries.
+
+#### Core Model
+
+Explore the [OCM Core Model](https://ocm.software/docs/overview/the-ocm-core-model/) to grasp the fundamental concepts. This section covers the problem statement OCM addresses, defines software identity in the context of component management, and explains why decoupling software artefacts from their storage locations is essential for flexible and secure software delivery.
+
+#### How It Works
+
+Review [How OCM Works](https://ocm.software/docs/overview/how-ocm-works/) to understand the mechanics. You'll learn how OCM packages and transports software components, and discover the mechanisms that ensure supply chain security throughout the delivery process.
+
+### Working with OCM
+
+The following sections provide guidance on how to install OCM in a local environment and how to create your first OCM component version.
+
+#### Installing the CLI
+
+Follow the [OCM CLI Installation Guide](https://ocm.software/docs/getting-started/install-the-ocm-cli/) to set up the OCM command-line interface on your system. This practical guide walks you through the installation process and verifies your environment is ready to work with OCM components.
+
+#### Creating Component Versions
+
+Work through the [Creating Component Versions Guide](https://ocm.software/docs/getting-started/create-component-versions/) to gain hands-on experience with the OCM CLI. You'll learn how to create your first component version, add resources and sources, and understand the practical workflow for managing components with OCM.
+
+---
+
+## Security and Compliance Automation with ODG
+
+ODG allows subscription to OCM components, which upon new version release trigger ODG scans (e.g., vulnerability scans). ODG tracks the findings according to given SLAs, and provides a processing interface with assisted rescorings.
+As the assessment information is correlated using OCM coordinates, the same benefits (especially transportability) are inherited.
+Thus ODG implements an end-to-end trust-but-verify scenario.
+
+### Why ODG?
+
+Security and compliance are fundamental aspects of modern software development. Cloud-native methodology emphasises a shift-left approach for the entire software lifecycle, bringing security and compliance considerations earlier into the development process. With OCM serving as the foundation of the software lifecycle, there exists a robust technical platform upon which to build powerful automations.
+
+ODG builds upon this foundation by integrating security and compliance automations directly into the software lifecycle. This approach enables software teams to remain agile in an environment of constantly evolving requirements whilst maintaining a strong security posture and providing traceable, auditable assessment information to auditors and customers.
+
+### Architecture
+
+ODG employs an asynchronous architecture with eventual consistency, implemented as Kubernetes-native deployments. It leverages core Kubernetes concepts such as desired state, reconciliation loops, and custom resources, whilst providing multiple interaction points including custom HTTP APIs, a web UI, and native Kubernetes operations.
+
+Read more: {doc}`/contents/concepts/00-odg-architecture`
+
+### Extending ODG
+
+ODG offers multiple extension points. As ODG provides an automation scheduling framework with correlated persistence layers, you can either integrate new data sources (such as additional security scanners) or process data extracted from ODG to implement custom audit automations.
+
+For now, we'll focus on integrating a new data source.
+Follow the guide linked below to learn how to set up a local development environment, so you can start working on your first ODG extension.
+
+Read more: {doc}`/contents/tutorial/00-contributing-extension`
+
+---
+
+## Final Words
+
+Congratulations, you've successfully finished the ODG learning journey.
+To jump directly into ODG development, we recommend looking at our [GitHub Issues](https://github.com/open-component-model/open-delivery-gear/issues?q=is%3Aissue%20state%3Aopen%20label%3Akind%2Fgood-first-issue).
+We explicitly track beginner-friendly topics.
+To get involved in the [Community](https://ocm.software/community/), feel free to reach out via open source or join our regular open community calls.
+
+Is there something you didn't enjoy during your journey? We highly appreciate feedback, whether via [GitHub Issue](https://github.com/open-component-model/open-delivery-gear/issues) or directly via [Pull Request](https://github.com/open-component-model/open-delivery-gear/tree/main/docs/website/contents).
