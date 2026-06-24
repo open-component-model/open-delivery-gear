@@ -69,7 +69,7 @@ To get a feel for ODG before setting it up yourself, visit the [Demo Playground]
 It provides a live instance of ODG connected to real data, so you can explore OCM components, findings, and the overall user experience without any installation required.
 
 - [Demo Playground](https://delivery-dashboard.demo.ci.gardener.cloud)
-- [Local Setup using Kind](https://github.com/open-component-model/open-delivery-gear/blob/main/local-setup)
+- [Local Setup using Kind](https://open-component-model.github.io/open-delivery-gear/contents/how-to/01-local-setup.html)
 - [Standalone installation using Helm](https://github.com/open-component-model/odg-core/tree/master/charts)
 - [K8s ODG Operator](https://github.com/open-component-model/odg-core/tree/master/odg_operator)
 - [🚧 openMCP Provider](https://github.com/openmcp-project)
@@ -129,8 +129,9 @@ Open Delivery Gear is part of the [OCM community](https://ocm.software/community
 
 ## Documentation
 
-- [Technical Documentation](https://open-component-model.github.io/odg-core/)
+- [Documentation](https://open-component-model.github.io/open-delivery-gear/)
 - [ODG Project Board](https://github.com/orgs/open-component-model/projects/17)
+- [Roadmap](https://github.com/orgs/open-component-model/projects/17/views/10)
 
 ## Contributing
 
