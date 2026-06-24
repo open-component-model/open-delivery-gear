@@ -1,4 +1,4 @@
-name: Publish Website
+name: Build and Publish Website
 on:
   workflow_dispatch:
   push:
@@ -10,24 +10,9 @@ on:
 jobs:
   website:
     name: Build Website
+    uses: ./.github/workflows/build-website.yaml
     permissions:
       contents: read
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v6
-    - name: Setup Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.12'
-    - name: Install Dependencies
-      run: make website-setup
-    - name: Build Website
-      run: make website-build
-    - uses: gardener/cc-utils/.github/actions/upload-artifact@v1
-      with:
-        name: website
-        path: website-out
 
   publish-website:
     # do not publish on forks
