@@ -37,30 +37,23 @@ Intelligent assignment of findings to component owners and teams based on config
 
 ::::
 
+---
+
 ## Getting Started
 
-::::{grid} 1 1 2 2
-:gutter: 2
+```{note}
+New to ODG?
+Start here to understand the fundamentals and how to run and extend it.
+```
 
-:::{grid-item-card}
-:class-header: sd-bg-success sd-text-white
+*Guided learning journey starting with OCM fundamentals all the way to running and extending ODG*
 
-**Operators**
-^^^
-Start with {doc}`contents/concepts/00-odg-architecture` to understand how ODG works.
-:::
+```{toctree}
+:maxdepth: 1
+:caption: Getting Started
 
-:::{grid-item-card}
-:class-header: sd-bg-info sd-text-white
-
-**Developers**
-^^^
-Set up your environment with {doc}`contents/how-to/01-local-setup` and learn to extend ODG with {doc}`contents/tutorial/00-contributing-extension`.
-:::
-
-::::
-
----
+contents/getting-started/00-introduction.md
+```
 
 ## Concepts
 
@@ -153,6 +146,7 @@ Learn about OCM
 .. note::
    This documentation is organised using the `Diataxis framework <https://diataxis.fr/>`_:
    
+   - **Getting Started**: Introduction and orientation for new users
    - **Tutorials**: Learning-oriented lessons
    - **How-to Guides**: Problem-oriented, goal-focused instructions
    - **Concepts**: Understanding-oriented explanations

@@ -3,11 +3,11 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Send Diki findings to ODG-API" href="04-diki.html"><link rel="prev" title="Use the ODG Python Package to resolve an OCM component" href="02-use-odg-api.html">
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="ODG’s System Architecture" href="../concepts/00-odg-architecture.html"><link rel="prev" title="Open Delivery Gear" href="../../index.html">
         <link rel="prefetch" href="../../_static/odg.svg" as="image">
 
     <link rel="shortcut icon" href="../../_static/odg.svg"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Get all vulnerabilities for a Component - Open Delivery Gear documentation</title>
+        <title>🚀 From Zero to Hero - Open Delivery Gear documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
@@ -196,8 +196,8 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../getting-started/00-introduction.html">🚀 From Zero to Hero</a></li>
+<ul class="current">
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">🚀 From Zero to Hero</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Concepts</span></p>
 <ul>
@@ -209,14 +209,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../concepts/05-sbom-generator.html">Generating Software Bill of Materials</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="00-hybrid-dev-setup.html">Setting up a hybrid dev setup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="01-local-setup.html">Deploying the Open Delivery Gear Locally</a></li>
-<li class="toctree-l1"><a class="reference internal" href="02-use-odg-api.html">Use the ODG Python Package to resolve an OCM component</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Get all vulnerabilities for a Component</a></li>
-<li class="toctree-l1"><a class="reference internal" href="04-diki.html">Send Diki findings to ODG-API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="05-sbom-download.html">Download SBOM Documents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="06-sbom-diagnose-failures.html">Diagnose Failed SBOM Generation</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../how-to/00-hybrid-dev-setup.html">Setting up a hybrid dev setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how-to/01-local-setup.html">Deploying the Open Delivery Gear Locally</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how-to/02-use-odg-api.html">Use the ODG Python Package to resolve an OCM component</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how-to/03-vulnerabilities-for-component.html">Get all vulnerabilities for a Component</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how-to/04-diki.html">Send Diki findings to ODG-API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how-to/05-sbom-download.html">Download SBOM Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how-to/06-sbom-diagnose-failures.html">Diagnose Failed SBOM Generation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul>
@@ -266,7 +266,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="../../_sources/contents/how-to/03-vulnerabilities-for-component.md.txt" title="View this page">
+  <a class="muted-link" href="../../_sources/contents/getting-started/00-introduction.md.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -284,51 +284,89 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="get-all-vulnerabilities-for-a-component">
-<h1>Get all vulnerabilities for a Component<a class="headerlink" href="#get-all-vulnerabilities-for-a-component" title="Link to this heading">¶</a></h1>
-<section id="goal">
-<h2>Goal<a class="headerlink" href="#goal" title="Link to this heading">¶</a></h2>
-<p>Query all identified vulnerabilities within a Component using ODG API.</p>
-</section>
-<section id="you-will-end-up-with">
-<h2>You will end up with<a class="headerlink" href="#you-will-end-up-with" title="Link to this heading">¶</a></h2>
+          <section id="from-zero-to-hero">
+<h1>🚀 From Zero to Hero<a class="headerlink" href="#from-zero-to-hero" title="Link to this heading">¶</a></h1>
+<p>Welcome to your onboarding journey for Open Delivery Gear (ODG) 👋!
+This page contains a curated reading list that presents several sources in a meaningful order.
+Feel free to skip sections you are already confident with!</p>
+<p>At the end of this guide you will understand:</p>
 <ul class="simple">
-<li><p>a list of CVEs</p></li>
-<li><p>metadata like initial discovery date and datasources</p></li>
-<li><p>package information where the CVEs have been detected in</p></li>
+<li><p>How ODG uses the semantic model of Open Component Model (OCM) to correlate metadata with artefacts</p></li>
+<li><p>How ODG implements a Kubernetes-native architecture to enable an extension-based approach</p></li>
+<li><p>How to run ODG locally and start building your own extensions!</p></li>
 </ul>
-</section>
-<section id="prerequisites">
-<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">¶</a></h2>
-<ul class="simple">
-<li><p>An ODG instance</p></li>
-<li><p>a shell (like <code class="docutils literal notranslate"><span class="pre">bash</span></code> or <code class="docutils literal notranslate"><span class="pre">zsh</span></code>)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">cURL</span></code>, <code class="docutils literal notranslate"><span class="pre">awk</span></code>, <code class="docutils literal notranslate"><span class="pre">jq</span></code></p></li>
-<li><p>A GitHub token privileged to read-access the ODG instance</p></li>
-</ul>
-</section>
-<section id="actions">
-<h2>Actions<a class="headerlink" href="#actions" title="Link to this heading">¶</a></h2>
-<section id="preparing-environment">
-<h3>Preparing Environment<a class="headerlink" href="#preparing-environment" title="Link to this heading">¶</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">ODG_API</span><span class="o">=</span><span class="s1">&#39;https://delivery-service.demo.ci.gardener.cloud&#39;</span>
-<span class="nb">export</span><span class="w"> </span><span class="nv">GH_TOKEN</span><span class="o">=</span><span class="s1">&#39;github_pat_xxx&#39;</span>
-<span class="nb">export</span><span class="w"> </span><span class="nv">GH_API</span><span class="o">=</span><span class="s1">&#39;https://api.github.com&#39;</span>
-</pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Is there something you wish to improve during your journey? We highly appreciate feedback, whether via <a class="reference external" href="https://github.com/open-component-model/open-delivery-gear/issues">GitHub Issue</a> or directly via <a class="reference external" href="https://github.com/open-component-model/open-delivery-gear/tree/main/docs/website/contents">Pull Request</a>.</p>
 </div>
+<hr class="docutils" />
+<section id="motivation">
+<h2>Motivation<a class="headerlink" href="#motivation" title="Link to this heading">¶</a></h2>
+<p>Security and compliance are fundamental aspects of modern software development. Cloud-native methodology emphasises a shift-left approach for the entire software lifecycle, bringing security and compliance considerations earlier into the development process. With OCM serving as the foundation of the software lifecycle, a robust technical platform exists upon which to build powerful automations.</p>
+<p>ODG builds upon this foundation by integrating security and compliance automations directly into the software lifecycle. This approach enables software teams to remain agile in an environment of constantly evolving requirements whilst maintaining a strong security posture and providing traceable, auditable assessment information to auditors and customers.</p>
+<p>Let’s start by elaborating on the fundamentals and core principles of OCM.</p>
 </section>
-<section id="authenticate-against-odg-instance">
-<h3>Authenticate against ODG instance<a class="headerlink" href="#authenticate-against-odg-instance" title="Link to this heading">¶</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">ODG_TOKEN</span><span class="o">=</span><span class="k">$(</span>curl<span class="w"> </span>-c<span class="w"> </span>-<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">ODG_API</span><span class="si">}</span><span class="s2">/auth?api_url=</span><span class="si">${</span><span class="nv">GH_API</span><span class="si">}</span><span class="s2">&amp;access_token=</span><span class="si">${</span><span class="nv">GH_TOKEN</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;/bearer_token/ {print $NF}&#39;</span><span class="k">)</span>
-</pre></div>
+<hr class="docutils" />
+<section id="about-modelling-software">
+<h2>About modelling software<a class="headerlink" href="#about-modelling-software" title="Link to this heading">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Already familiar with OCM?
+Please skip to <a class="reference internal" href="#security-and-compliance-automation-with-odg"><span class="xref myst">Security and Compliance Automation with ODG</span></a></p>
 </div>
+<p>ODG is built upon the semantic model of OCM.
+The following sections elaborate on the semantic model of OCM, and provide motivation and explanation for the rationale behind it.</p>
+<section id="why-it-matters">
+<h3>Why it matters<a class="headerlink" href="#why-it-matters" title="Link to this heading">¶</a></h3>
+<p>Start with the <a class="reference external" href="https://ocm.software/docs/overview/benefits-of-ocm/">Benefits of OCM</a> to understand the rationale behind OCM and the problems it addresses. You’ll discover the motivation for OCM’s creation, its scope within the software delivery landscape, and how it enables better governance of software components across organisational boundaries.</p>
 </section>
-<section id="fetch-vulnerabilities-from-api">
-<h3>Fetch Vulnerabilities from API<a class="headerlink" href="#fetch-vulnerabilities-from-api" title="Link to this heading">¶</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;entries&quot;: [{&quot;component_name&quot;: &quot;acme.org/sovereign/postgres&quot;, &quot;component_version&quot;: &quot;1.0.0&quot;}]}&#39;</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="si">${</span><span class="nv">ODG_TOKEN</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">ODG_API</span><span class="si">}</span><span class="s2">/artefacts/metadata/query?type=finding/vulnerability&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
-</pre></div>
-</div>
+<section id="understanding-the-open-component-model">
+<h3>Understanding the Open Component Model<a class="headerlink" href="#understanding-the-open-component-model" title="Link to this heading">¶</a></h3>
+<p>Explore the <a class="reference external" href="https://ocm.software/docs/overview/the-ocm-core-model/">OCM Core Model</a> to grasp the fundamental concepts. This section covers the problem statement OCM addresses, defines software identity in the context of component management, and explains why decoupling software artefacts from their storage locations is essential for flexible and secure software delivery.</p>
 </section>
+<section id="how-it-works">
+<h3>How it works<a class="headerlink" href="#how-it-works" title="Link to this heading">¶</a></h3>
+<p>Review <a class="reference external" href="https://ocm.software/docs/overview/how-ocm-works/">How OCM Works</a> to understand the mechanics. You’ll learn how OCM packages and transports software components, and discover the mechanisms that ensure supply-chain security throughout the delivery process.</p>
+</section>
+<section id="working-with-ocm">
+<h3>Working with OCM<a class="headerlink" href="#working-with-ocm" title="Link to this heading">¶</a></h3>
+<p>The following sections provide guidance on how to install OCM in a local environment and how to create your first OCM component version.</p>
+<section id="installing-the-cli">
+<h4>Installing the CLI<a class="headerlink" href="#installing-the-cli" title="Link to this heading">¶</a></h4>
+<p>Follow the <a class="reference external" href="https://ocm.software/docs/getting-started/install-the-ocm-cli/">OCM CLI Installation Guide</a> to set up the OCM command-line interface on your system. This practical guide walks you through the installation process and verifies your environment is ready to work with OCM components.</p>
+</section>
+<section id="creating-component-versions">
+<h4>Creating Component Versions<a class="headerlink" href="#creating-component-versions" title="Link to this heading">¶</a></h4>
+<p>Work through the <a class="reference external" href="https://ocm.software/docs/getting-started/create-component-versions/">Creating Component Versions Guide</a> to gain hands-on experience with the OCM CLI. You’ll learn how to create your first component version, add resources and sources, and understand the practical workflow for managing components with OCM.</p>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="security-and-compliance-automation-with-odg">
+<h2>Security and Compliance Automation with ODG<a class="headerlink" href="#security-and-compliance-automation-with-odg" title="Link to this heading">¶</a></h2>
+<p>ODG allows subscription to OCM components, which upon new version release trigger ODG scans (e.g., vulnerability scans). ODG tracks the findings according to specified SLAs and provides a processing interface with assisted rescorings.
+As the assessment information is correlated using OCM coordinates, the same benefits (especially transportability) are inherited.
+Thus, ODG implements an end-to-end trust-but-verify scenario.</p>
+<section id="architecture">
+<h3>Architecture<a class="headerlink" href="#architecture" title="Link to this heading">¶</a></h3>
+<p>ODG employs an asynchronous architecture with eventual consistency, implemented as Kubernetes-native deployments. It leverages core Kubernetes concepts such as desired state, reconciliation loops, and custom resources, whilst providing multiple interaction points including custom HTTP APIs, a web UI, and native Kubernetes operations.</p>
+<p>Read more: <a class="reference internal" href="../concepts/00-odg-architecture.html"><span class="doc">ODG’s System Architecture</span></a></p>
+</section>
+<section id="extending-odg">
+<h3>Extending ODG<a class="headerlink" href="#extending-odg" title="Link to this heading">¶</a></h3>
+<p>ODG offers multiple extension points. As ODG provides an automation scheduling framework with correlated persistence layers, you can either integrate new data sources (such as additional security scanners) or process data extracted from ODG to implement custom audit automations.</p>
+<p>For now, we’ll focus on integrating a new data source.
+Follow the guide linked below to learn how to set up a local development environment so you can start working on your first ODG extension.</p>
+<p>Read more: <a class="reference internal" href="../tutorial/00-contributing-extension.html"><span class="doc">Contribute a new Extension</span></a></p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="final-words">
+<h2>Final Words<a class="headerlink" href="#final-words" title="Link to this heading">¶</a></h2>
+<p>Congratulations, you’ve successfully finished the ODG learning journey, you rock 👏!
+To jump directly into ODG development, we recommend looking at our <a class="reference external" href="https://github.com/open-component-model/open-delivery-gear/issues?q=is%3Aissue%20state%3Aopen%20label%3Akind%2Fgood-first-issue">GitHub Issues</a>.
+We explicitly track beginner-friendly topics.
+To get involved with the <a class="reference external" href="https://ocm.software/community/">Community</a>, feel free to reach out via our open-source channels or join our regular open community calls.</p>
 </section>
 </section>
 
@@ -337,23 +375,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="04-diki.html">
+          <a class="next-page" href="../concepts/00-odg-architecture.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Send Diki findings to ODG-API</div>
+                <div class="title">ODG’s System Architecture</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="02-use-odg-api.html">
+          <a class="prev-page" href="../../index.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Use the ODG Python Package to resolve an OCM component</div>
+                <div class="title">Home</div>
                 
               </div>
             </a>
@@ -387,16 +425,25 @@
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Get all vulnerabilities for a Component</a><ul>
-<li><a class="reference internal" href="#goal">Goal</a></li>
-<li><a class="reference internal" href="#you-will-end-up-with">You will end up with</a></li>
-<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
-<li><a class="reference internal" href="#actions">Actions</a><ul>
-<li><a class="reference internal" href="#preparing-environment">Preparing Environment</a></li>
-<li><a class="reference internal" href="#authenticate-against-odg-instance">Authenticate against ODG instance</a></li>
-<li><a class="reference internal" href="#fetch-vulnerabilities-from-api">Fetch Vulnerabilities from API</a></li>
+<li><a class="reference internal" href="#">🚀 From Zero to Hero</a><ul>
+<li><a class="reference internal" href="#motivation">Motivation</a></li>
+<li><a class="reference internal" href="#about-modelling-software">About modelling software</a><ul>
+<li><a class="reference internal" href="#why-it-matters">Why it matters</a></li>
+<li><a class="reference internal" href="#understanding-the-open-component-model">Understanding the Open Component Model</a></li>
+<li><a class="reference internal" href="#how-it-works">How it works</a></li>
+<li><a class="reference internal" href="#working-with-ocm">Working with OCM</a><ul>
+<li><a class="reference internal" href="#installing-the-cli">Installing the CLI</a></li>
+<li><a class="reference internal" href="#creating-component-versions">Creating Component Versions</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li><a class="reference internal" href="#security-and-compliance-automation-with-odg">Security and Compliance Automation with ODG</a><ul>
+<li><a class="reference internal" href="#architecture">Architecture</a></li>
+<li><a class="reference internal" href="#extending-odg">Extending ODG</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#final-words">Final Words</a></li>
 </ul>
 </li>
 </ul>
