@@ -44,7 +44,7 @@ Start with the [Benefits of OCM](https://ocm.software/docs/overview/benefits-of-
 
 Explore the [OCM Core Model](https://ocm.software/docs/overview/the-ocm-core-model/) to grasp the fundamental concepts. This section covers the problem statement OCM addresses, defines software identity in the context of component management, and explains why decoupling software artefacts from their storage locations is essential for flexible and secure software delivery.
 
-### How It Works
+### How it works
 
 Review [How OCM Works](https://ocm.software/docs/overview/how-ocm-works/) to understand the mechanics. You'll learn how OCM packages and transports software components, and discover the mechanisms that ensure supply-chain security throughout the delivery process.
 
