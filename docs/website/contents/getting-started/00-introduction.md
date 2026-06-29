@@ -1,7 +1,7 @@
 # 🚀 From Zero to Hero
 
 Welcome to your onboarding journey for Open Delivery Gear (ODG) 👋!
-This page contains a curated reading list that presents several internal and external sources in a meaningful order.
+This page contains a curated reading list that presents several sources in a meaningful order.
 Feel free to skip sections you are already confident with!
 
 At the end of this guide you will understand:
