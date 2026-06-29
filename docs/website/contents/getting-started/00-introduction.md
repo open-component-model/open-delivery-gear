@@ -1,13 +1,13 @@
 # 🚀 From Zero to Hero
 
 Welcome to your onboarding journey for Open Delivery Gear (ODG) 👋!
-This page contains a curated reading list putting several internal and external sources in a meaningful order.
-Feel free to skip parts you are confident with already!
+This page contains a curated reading list that presents several internal and external sources in a meaningful order.
+Feel free to skip sections you are already confident with!
 
 At the end of this guide you will understand:
 
-- How ODG uses the semantical model of Open Component Model (OCM) to correlate metadata to artefacts
-- How ODG implements a Kubernetes-native architecture to enable an extension-based architecture
+- How ODG uses the semantic model of Open Component Model (OCM) to correlate metadata with artefacts
+- How ODG implements a Kubernetes-native architecture to enable an extension-based approach
 - How to run ODG locally and start building your own extensions!
 
 ```{note}
@@ -18,11 +18,11 @@ Is there something you wish to improve during your journey? We highly appreciate
 
 ## Motivation
 
-Security and compliance are fundamental aspects of modern software development. Cloud-native methodology emphasises a shift-left approach for the entire software lifecycle, bringing security and compliance considerations earlier into the development process. With OCM serving as the foundation of the software lifecycle, there exists a robust technical platform upon which to build powerful automations.
+Security and compliance are fundamental aspects of modern software development. Cloud-native methodology emphasises a shift-left approach for the entire software lifecycle, bringing security and compliance considerations earlier into the development process. With OCM serving as the foundation of the software lifecycle, a robust technical platform exists upon which to build powerful automations.
 
 ODG builds upon this foundation by integrating security and compliance automations directly into the software lifecycle. This approach enables software teams to remain agile in an environment of constantly evolving requirements whilst maintaining a strong security posture and providing traceable, auditable assessment information to auditors and customers.
 
-Let's start with elaborating on the fundamentals and core principles of OCM.
+Let's start by elaborating on the fundamentals and core principles of OCM.
 
 ---
 
@@ -33,8 +33,8 @@ Already familiar with OCM?
 Please skip to "Security and Compliance Automation with ODG"
 ```
 
-ODG is built upon the semantic model of the OCM.
-The following sections elaborate on the semantic model of OCM, as well as provide motivation and explanation for the rationales behind it.
+ODG is built upon the semantic model of OCM.
+The following sections elaborate on the semantic model of OCM, and provide motivation and explanation for the rationales behind it.
 
 ### Why it matters
 
@@ -46,7 +46,7 @@ Explore the [OCM Core Model](https://ocm.software/docs/overview/the-ocm-core-mod
 
 ### How It Works
 
-Review [How OCM Works](https://ocm.software/docs/overview/how-ocm-works/) to understand the mechanics. You'll learn how OCM packages and transports software components, and discover the mechanisms that ensure supply chain security throughout the delivery process.
+Review [How OCM Works](https://ocm.software/docs/overview/how-ocm-works/) to understand the mechanics. You'll learn how OCM packages and transports software components, and discover the mechanisms that ensure supply-chain security throughout the delivery process.
 
 ### Working with OCM
 
@@ -64,9 +64,9 @@ Work through the [Creating Component Versions Guide](https://ocm.software/docs/g
 
 ## Security and Compliance Automation with ODG
 
-ODG allows subscription to OCM components, which upon new version release trigger ODG scans (e.g., vulnerability scans). ODG tracks the findings according to given SLAs, and provides a processing interface with assisted rescorings.
+ODG allows subscription to OCM components, which upon new version release trigger ODG scans (e.g., vulnerability scans). ODG tracks the findings according to specified SLAs and provides a processing interface with assisted rescorings.
 As the assessment information is correlated using OCM coordinates, the same benefits (especially transportability) are inherited.
-Thus ODG implements an end-to-end trust-but-verify scenario.
+Thus, ODG implements an end-to-end trust-but-verify scenario.
 
 
 ### Architecture
@@ -80,7 +80,7 @@ Read more: {doc}`/contents/concepts/00-odg-architecture`
 ODG offers multiple extension points. As ODG provides an automation scheduling framework with correlated persistence layers, you can either integrate new data sources (such as additional security scanners) or process data extracted from ODG to implement custom audit automations.
 
 For now, we'll focus on integrating a new data source.
-Follow the guide linked below to learn how to set up a local development environment, so you can start working on your first ODG extension.
+Follow the guide linked below to learn how to set up a local development environment so you can start working on your first ODG extension.
 
 Read more: {doc}`/contents/tutorial/00-contributing-extension`
 
@@ -88,7 +88,7 @@ Read more: {doc}`/contents/tutorial/00-contributing-extension`
 
 ## Final Words
 
-Congratulations, you've successfully finished the ODG learning journey, you rock 👏!.
+Congratulations, you've successfully finished the ODG learning journey, you rock 👏!
 To jump directly into ODG development, we recommend looking at our [GitHub Issues](https://github.com/open-component-model/open-delivery-gear/issues?q=is%3Aissue%20state%3Aopen%20label%3Akind%2Fgood-first-issue).
 We explicitly track beginner-friendly topics.
-To get involved with the [Community](https://ocm.software/community/), feel free to reach out via our open source channels, or join our regular open community calls.
+To get involved with the [Community](https://ocm.software/community/), feel free to reach out via our open-source channels or join our regular open community calls.
