@@ -43,7 +43,7 @@ B. **Typed reference object** — A structured object that identifies the target
 
 Pros:
 
-* Direct lookup: given a subject artefact, the related resources are immediately enumerable from its own labels without scanning siblings.
+* Companion identity is immediately enumerable from the subject's own label without scanning siblings. No iteration is needed to discover which companions exist.
 * Natural from an ownership perspective, the primary artefact declares its companions.
 
 Cons:
@@ -73,7 +73,7 @@ Pros:
 
 * The derived resource is the natural owner of the relationship declaration, an SBoM knows what it describes; the OCI image does not need to know it has an SBoM.
 * The subject artefact descriptor does not need to change when a companion is added; the companion resource is produced independently.
-* Consistent with observable practice: the `gardener.cloud/sbom/syft` label is already placed on SBoM resources in component descriptors, not on the images they describe.
+* Consistent with observable practice: existing SBoM-related labels in the ecosystem are already placed on SBoM resources in component descriptors, not on the images they describe.
 * Aligns with the principle of least surprise for artefact producers: the relationship travels with the derived resource.
 
 Cons:
@@ -150,18 +150,132 @@ labels:
         relation: describes
 ```
 
-## Decision Outcome
-
 ## More Information
 
 ### High-level Architecture
 
-### Contract
+Both options use the same label name (`odg.ocm.software/labels/artefact-ref/v1`) and value structure. The only difference is which resource carries the label.
 
-#### Label Name
+**Option 1 — Forward reference:** the subject artefact lists its companions.
 
-#### Full Example
+```
+Component Descriptor
+└── Resource: my-image   ← carries the label, points to my-image-sbom
+└── Resource: my-image-sbom
+```
 
-#### Lookup Algorithm for ODG Extensions
+**Option 2 — Back reference:** each derived resource points back to its subject.
+
+```
+Component Descriptor
+└── Resource: my-image
+└── Resource: my-image-sbom   ← carries the label, points to my-image
+```
+
+### Full Examples
+
+#### Option 1: Forward reference
+
+A multi-arch image declares two companions (an SBoM and an attestation). The label lists them under `companions`:
+
+```yaml
+resources:
+  - name: my-image
+    version: 1.2.3
+    type: ociImage
+    extraIdentity:
+      arch: amd64
+    labels:
+      - name: odg.ocm.software/labels/artefact-ref/v1
+        value:
+          companions:
+            - artefactReference:
+                name: my-image-sbom
+              metadata:
+                relation: describes
+            - artefactReference:
+                name: my-image-attestation
+              metadata:
+                relation: attests
+
+  - name: my-image-sbom
+    version: 1.2.3
+    type: application/spdx+json
+
+  - name: my-image-attestation
+    version: 1.2.3
+    type: application/vnd.in-toto+json
+```
+
+#### Option 2: Back reference
+
+Each derived resource carries its own label pointing to the subject. The subject itself is not touched:
+
+```yaml
+resources:
+  - name: my-image
+    version: 1.2.3
+    type: ociImage
+    extraIdentity:
+      arch: amd64
+    # no label change required on the subject
+
+  - name: my-image-sbom
+    version: 1.2.3
+    type: application/spdx+json
+    labels:
+      - name: odg.ocm.software/labels/artefact-ref/v1
+        value:
+          artefactReference:
+            name: my-image
+            version: 1.2.3
+            extraIdentity:
+              arch: amd64
+          metadata:
+            relation: describes
+
+  - name: my-image-attestation
+    version: 1.2.3
+    type: application/vnd.in-toto+json
+    labels:
+      - name: odg.ocm.software/labels/artefact-ref/v1
+        value:
+          artefactReference:
+            name: my-image
+            version: 1.2.3
+            extraIdentity:
+              arch: amd64
+          metadata:
+            relation: attests
+```
+
+### Lookup Algorithm for ODG Extensions
+
+#### Option 1: Forward reference
+
+An extension looking for companions of a subject resource reads the label directly from the subject:
+
+1. Find the subject resource in the component descriptor.
+2. Check whether it carries a label named `odg.ocm.software/labels/artefact-ref/v1`.
+3. If present, read the `companions` list from the label value.
+4. For each entry, resolve the companion resource by matching `artefactReference.name` (and `version` / `extraIdentity` if set) against the component's resource list.
+5. Optionally filter by `metadata.relation` if only a specific relationship type is needed.
+
+Companion identities are read directly from the subject's label, so no scan is needed to discover them. Resolving each identity to a resource object still requires a lookup against the component's resource list.
+
+#### Option 2: Back reference
+
+An extension looking for companions of a subject resource scans the full resource list:
+
+1. Determine the identity of the subject resource: its `name`, `version`, and `extraIdentity`.
+2. Iterate over all resources in the component descriptor.
+3. For each resource, check whether it carries a label named `odg.ocm.software/labels/artefact-ref/v1`.
+4. If present, compare `artefactReference.name` to the subject's `name` — they must match.
+5. If `artefactReference.version` is set, it must match the subject's `version`. If omitted, any version matches.
+6. If `artefactReference.extraIdentity` is set, every key-value pair it contains must be present and equal in the subject's `extraIdentity`. If omitted, no extra identity check is applied.
+7. Optionally filter by `metadata.relation` if only a specific relationship type is needed.
+8. Collect all resources that pass the checks — these are the companions of the subject.
+
+## Decision Outcome
 
 ## Conclusion
