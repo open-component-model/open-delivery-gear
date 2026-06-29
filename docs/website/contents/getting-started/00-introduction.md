@@ -91,4 +91,4 @@ Read more: {doc}`/contents/tutorial/00-contributing-extension`
 Congratulations, you've successfully finished the ODG learning journey, you rock 👏!.
 To jump directly into ODG development, we recommend looking at our [GitHub Issues](https://github.com/open-component-model/open-delivery-gear/issues?q=is%3Aissue%20state%3Aopen%20label%3Akind%2Fgood-first-issue).
 We explicitly track beginner-friendly topics.
-To get involved in the [Community](https://ocm.software/community/), feel free to reach out via open source or join our regular open community calls.
+To get involved with the [Community](https://ocm.software/community/), feel free to reach out via our open source channels, or join our regular open community calls.
