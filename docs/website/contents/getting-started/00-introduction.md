@@ -1,26 +1,50 @@
-# Introduction to Open Delivery Gear
+# 🚀 From Zero to Hero
 
-Welcome to Open Delivery Gear (ODG). This guide introduces you to ODG and helps you get started.
+Welcome to your onboarding journey for Open Delivery Gear (ODG) 👋!
+This page contains a curated reading list putting several internal and external sources in a meaningful order.
+Feel free to skip parts you are confident with already!
+
+At the end of this guide you will understand:
+
+- How ODG uses the semantical model of Open Component Model (OCM) to correlate metadata to artefacts
+- How ODG implements a Kubernetes-native architecture to enable an extension-based architecture
+- How to run ODG locally and start building your own extensions!
+
+```{note}
+Is there something you wish to improve during your journey? We highly appreciate feedback, whether via [GitHub Issue](https://github.com/open-component-model/open-delivery-gear/issues) or directly via [Pull Request](https://github.com/open-component-model/open-delivery-gear/tree/main/docs/website/contents).
+```
 
 ---
 
-## Modelling Software in OCM
+## Motivation
 
-ODG is built upon the semantic model of the Open Component Model (OCM). To work effectively with ODG, you'll need a solid understanding of OCM's core concepts.
+Security and compliance are fundamental aspects of modern software development. Cloud-native methodology emphasises a shift-left approach for the entire software lifecycle, bringing security and compliance considerations earlier into the development process. With OCM serving as the foundation of the software lifecycle, there exists a robust technical platform upon which to build powerful automations.
 
-### OCM Core Concepts
+ODG builds upon this foundation by integrating security and compliance automations directly into the software lifecycle. This approach enables software teams to remain agile in an environment of constantly evolving requirements whilst maintaining a strong security posture and providing traceable, auditable assessment information to auditors and customers.
 
+Let's start with elaborating on the fundamentals and core principles of OCM.
+
+---
+
+## About modelling software
+
+```{note}
+Already familiar with OCM?
+Please skip to "Security and Compliance Automation with ODG"
+```
+
+ODG is built upon the semantic model of the OCM.
 The following sections elaborate on the semantic model of OCM, as well as provide motivation and explanation for the rationales behind it.
 
-#### OCM Benefits
+### Why it matters
 
 Start with the [Benefits of OCM](https://ocm.software/docs/overview/benefits-of-ocm/) to understand the rationale behind OCM and the problems it addresses. You'll discover the motivation for OCM's creation, its scope within the software delivery landscape, and how it enables better governance of software components across organisational boundaries.
 
-#### Core Model
+### Understanding the Open Component Model
 
 Explore the [OCM Core Model](https://ocm.software/docs/overview/the-ocm-core-model/) to grasp the fundamental concepts. This section covers the problem statement OCM addresses, defines software identity in the context of component management, and explains why decoupling software artefacts from their storage locations is essential for flexible and secure software delivery.
 
-#### How It Works
+### How It Works
 
 Review [How OCM Works](https://ocm.software/docs/overview/how-ocm-works/) to understand the mechanics. You'll learn how OCM packages and transports software components, and discover the mechanisms that ensure supply chain security throughout the delivery process.
 
@@ -44,11 +68,6 @@ ODG allows subscription to OCM components, which upon new version release trigge
 As the assessment information is correlated using OCM coordinates, the same benefits (especially transportability) are inherited.
 Thus ODG implements an end-to-end trust-but-verify scenario.
 
-### Why ODG?
-
-Security and compliance are fundamental aspects of modern software development. Cloud-native methodology emphasises a shift-left approach for the entire software lifecycle, bringing security and compliance considerations earlier into the development process. With OCM serving as the foundation of the software lifecycle, there exists a robust technical platform upon which to build powerful automations.
-
-ODG builds upon this foundation by integrating security and compliance automations directly into the software lifecycle. This approach enables software teams to remain agile in an environment of constantly evolving requirements whilst maintaining a strong security posture and providing traceable, auditable assessment information to auditors and customers.
 
 ### Architecture
 
@@ -69,9 +88,7 @@ Read more: {doc}`/contents/tutorial/00-contributing-extension`
 
 ## Final Words
 
-Congratulations, you've successfully finished the ODG learning journey.
+Congratulations, you've successfully finished the ODG learning journey, you rock 👏!.
 To jump directly into ODG development, we recommend looking at our [GitHub Issues](https://github.com/open-component-model/open-delivery-gear/issues?q=is%3Aissue%20state%3Aopen%20label%3Akind%2Fgood-first-issue).
 We explicitly track beginner-friendly topics.
 To get involved in the [Community](https://ocm.software/community/), feel free to reach out via open source or join our regular open community calls.
-
-Is there something you didn't enjoy during your journey? We highly appreciate feedback, whether via [GitHub Issue](https://github.com/open-component-model/open-delivery-gear/issues) or directly via [Pull Request](https://github.com/open-component-model/open-delivery-gear/tree/main/docs/website/contents).
