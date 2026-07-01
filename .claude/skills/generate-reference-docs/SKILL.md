@@ -127,8 +127,8 @@ The documentation is generated from TWO authoritative sources that complement ea
 
 **Contains:**
 - Field types: `str`, `int`, `bool`, `list[str]`, `Optional[str]`, etc.
-- Required vs optional fields: `Optional[X]` = optional, `X` = required
-- Default values: `field(default=...)` or `field(default_factory=...)`
+- Required vs optional fields: `X | None` = optional, `X` = required
+- Default values: `field(default=...)`, `field(default_factory=...)`, or `= X` (for static values),
 - Type unions: `str | int` means the field accepts either type
 - Nested dataclass structures for complex objects
 - Field metadata and validation constraints
