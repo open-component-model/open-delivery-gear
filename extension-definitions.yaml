@@ -3,7 +3,7 @@ installation:
   ocm_references:
   - artefact:
       name: envoy-gateway
-      version: v1.8.0
+      version: v1.8.2
     helm_chart_name: gateway-helm
     mappings:
     - artefact_type: helmchart-imagemap
