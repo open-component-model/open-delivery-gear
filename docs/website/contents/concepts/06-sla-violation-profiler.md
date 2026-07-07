@@ -5,7 +5,7 @@
 The SLA-Violation-Profiler extension derives auditable evidence of Service
 Level Agreement (SLA) compliance from findings that already exist in the ODG
 delivery database. For a configured OCM root component, it evaluates whether
-vulnerability findings were resolved or rescored within the processing time
+findings were resolved or rescored within the processing time
 that the SLA permits, and persists the outcome as `sla_violation` records
 that can be queried for reporting and audits.
 
@@ -20,14 +20,14 @@ that can be replayed later without recomputing the underlying history.
 
 ## Scope
 
-- **Input**: an OCM root component (name, OCM repository, and either a
-  specific version or a time range of versions to evaluate).
-- **Finding type evaluated**: currently `finding/vulnerability`.
-- **Output**: one `sla_violation` `ArtefactMetadata` record per evaluated
+- **Input**: an OCM root component and either a specific version or a time
+  range of versions to evaluate.
+- **Finding types evaluated**: all finding types available in the ODG data model.
+- **Output**: one `sla_violation` `ArtefactMetadata` record per evaluated root
   component version, containing the list of individual policy violations that
   remained open at that version's release date.
-- **Persistence**: results are written back to the delivery database through
-  the delivery service.
+- **Persistence**: results are written back to the database through
+  the ODG Core API.
 
 ## How It Works
 
@@ -41,7 +41,7 @@ For each configured component, the profiler determines the set of versions to
 scan:
 
 - If a fixed `version` is configured, that version is used directly.
-- Otherwise, the delivery service is queried for the most recent component
+- Otherwise, the ODG Core API is queried for the most recent component
   versions within the configured `time_range`, bounded by
   `max_versions_limit`.
 
@@ -53,13 +53,13 @@ remain stable, and only new releases trigger fresh work.
 
 For each version, the profiler resolves the OCM root descriptor and traverses
 the component graph via `ocm.iter` to collect the identities of all
-transitively referenced components. It then queries the delivery service for:
+transitively referenced components. It then queries the ODG Core API for:
 
-- all `finding/vulnerability` records attached to any of these components; and
-- all `rescoring` records that reference those vulnerability findings.
+- all finding records attached to any of these components; and
+- all `rescoring` records that reference those findings.
 
 The version's **release date** is taken from the root component's creation
-date. All timestamps are normalised before comparison.
+date.
 
 ### 3. Determine the effective deadline per finding
 
@@ -82,8 +82,8 @@ deadline in one of three ways:
 - an explicit `due_date` on the rescoring becomes the new deadline;
 - an updated `allowed_processing_time` is added to the original discovery
   date to produce a new deadline; or
-- if neither is set, the deadline is cleared and no SLA applies from that
-  point on.
+- if neither is set, the deadline is cleared; a subsequent rescoring may
+  reinstate it.
 
 ### 4. Detect policy violations
 
@@ -95,9 +95,9 @@ Two conditions produce a `SlaViolation` for a finding:
    **before** the release date — the finding shipped in the release with an
    overdue SLA.
 
-Each violation captures the identifying attributes of the underlying finding
-(for vulnerabilities, `package_name` and `cve`), the `referenced_type`, and
-the `ComponentArtefactId` the finding was attached to.
+Each violation captures the type-specific identifying attributes of the
+underlying finding, the `referenced_type`, and the `ComponentArtefactId` the
+finding was attached to.
 
 ### 5. Persist one SLA record per release
 
@@ -110,7 +110,7 @@ All violations detected for a given root version are aggregated into a single
 - `data`: an `SlaViolations` object containing the list of `SlaViolation`
   entries; an empty list indicates a compliant release.
 
-The records are pushed to the delivery service in a single `update_metadata`
+The records are pushed to the ODG Core API in a single `update_metadata`
 call at the end of the run.
 
 ### Evaluation flow
@@ -121,7 +121,7 @@ flowchart TD
     B --> C{SLA record already exists?}
     C -- Yes --> S[Skip version]
     C -- No --> D[Resolve root descriptor and iterate component graph]
-    D --> E[Query vulnerability findings and rescorings]
+    D --> E[Query findings and rescorings]
     E --> F[For each finding: compute initial deadline]
     F --> G[Apply rescorings in chronological order]
     G --> H{Rescoring after deadline<br/>or final deadline < release date?}
@@ -139,10 +139,9 @@ The extension produces records of type `sla_violation` and datasource
 - `SlaViolations`
   - `sla_violations`: list of
     - `SlaViolation`
-      - `finding`: the identifying fields of the underlying finding (for
-        vulnerabilities, `package_name` and `cve`)
-      - `referenced_type`: the datatype of the underlying finding, for
-        example `finding/vulnerability`
+      - `finding`: the type-specific identifying fields of the underlying finding
+      - `referenced_type`: the datatype of the underlying finding
+        (e.g. any `finding/*` datatype supported by the ODG data model)
       - `artefact`: the `ComponentArtefactId` the finding was attached to
 
 See {doc}`/contents/concepts/01-data-model` for the surrounding
