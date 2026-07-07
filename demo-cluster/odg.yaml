@@ -19,3 +19,4 @@ spec:
     - prometheus-operator
     - responsibles
     - sast
+    - sbom-generator

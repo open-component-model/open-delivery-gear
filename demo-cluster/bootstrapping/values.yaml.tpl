@@ -67,6 +67,9 @@ extensions_cfg:
   sast:
     enabled: True
 
+  sbom_generator:
+    enabled: true
+
 findings:
   - type: finding/crypto
     categorisations:
