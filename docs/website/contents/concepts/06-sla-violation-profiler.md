@@ -47,19 +47,19 @@ scan:
 
 Versions for which an `sla_violation` record already exists in the delivery
 database are skipped. This makes the extension safe to re-run: prior audits
-remain stable, and only new releases trigger fresh work.
+remain stable, and only new releases will be evaluated.
 
 ### 2. Collect findings and rescorings for the release
 
 For each version, the profiler resolves the OCM root descriptor and traverses
-the component graph via `ocm.iter` to collect the identities of all
+the component graph to collect the identities of all
 transitively referenced components. It then queries the ODG Core API for:
 
 - all finding records attached to any of these components; and
 - all `rescoring` records that reference those findings.
 
 The version's **release date** is taken from the root component's creation
-date.
+date. All timestamps are normalised before comparison.
 
 ### 3. Determine the effective deadline per finding
 
@@ -82,8 +82,8 @@ deadline in one of three ways:
 - an explicit `due_date` on the rescoring becomes the new deadline;
 - an updated `allowed_processing_time` is added to the original discovery
   date to produce a new deadline; or
-- if neither is set, the deadline is cleared; a subsequent rescoring may
-  reinstate it.
+- if neither is set, the deadline is cleared and no SLA applies from that
+  point on.
 
 ### 4. Detect policy violations
 
