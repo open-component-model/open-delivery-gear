@@ -207,8 +207,6 @@ as reference and adjust them accordingly.
 In case the extension does not require any additional installations, the
 general purpose core OCI image can be re-used ([ref](https://github.com/open-component-model/odg-core/blob/master/Dockerfile)).
 The core image contains all the necessary components and extensions.
-A Helm chart mapping must be added to the [build](https://github.com/open-component-model/odg-core/blob/master/.github/workflows/build.yaml)
-as well.
 
 (python-package)=
 ## Python Package
