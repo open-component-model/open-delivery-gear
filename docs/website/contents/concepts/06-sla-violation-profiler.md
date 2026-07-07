@@ -2,9 +2,9 @@
 
 ## Overview
 
-The SLA-Violation-Profiler extension derives auditable evidence of Service
+The SLA-Violation-Profiler derives auditable evidence of Service
 Level Agreement (SLA) compliance from findings that already exist in the ODG
-delivery database. For a configured OCM root component, it evaluates whether
+database. For a configured OCM root component, it recursively evaluates whether
 findings were resolved or rescored within the processing time
 that the SLA permits, and persists the outcome as `sla_violation` records
 that can be queried for reporting and audits.
@@ -22,7 +22,6 @@ that can be replayed later without recomputing the underlying history.
 
 - **Input**: an OCM root component and either a specific version or a time
   range of versions to evaluate.
-- **Finding types evaluated**: all finding types available in the ODG data model.
 - **Output**: one `sla_violation` `ArtefactMetadata` record per evaluated root
   component version, containing the list of individual policy violations that
   remained open at that version's release date.
@@ -46,13 +45,13 @@ scan:
   `max_versions_limit`.
 
 Versions for which an `sla_violation` record already exists in the delivery
-database are skipped. This makes the extension safe to re-run: prior audits
+database are skipped. This makes the extension safe to re-run (idempotent): prior audits
 remain stable, and only new releases will be evaluated.
 
 ### 2. Collect findings and rescorings for the release
 
 For each version, the profiler resolves the OCM root descriptor and traverses
-the component graph to collect the identities of all
+the component graph to collect the artefact identities of all
 transitively referenced components. It then queries the ODG Core API for:
 
 - all finding records attached to any of these components; and
@@ -154,4 +153,5 @@ The extension is designed to run as a scheduled job. Because existing
 suppress re-evaluation, re-runs process only those versions that have not yet
 been profiled. To re-evaluate a version after its underlying data has changed,
 the existing `sla_violation` record must first be removed from the delivery
-database.
+database. See {doc}`/contents/how-to/08-run-sql-statements` for instructions
+on how to connect to the ODG database and execute SQL commands directly.
