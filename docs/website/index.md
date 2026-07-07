@@ -69,6 +69,7 @@ contents/concepts/02-artefact-enumerator.md
 contents/concepts/03-issue-replicator.md
 contents/concepts/04-responsibles.md
 contents/concepts/05-sbom-generator.md
+contents/concepts/06-sla-violation-profiler.md
 ```
 
 ## How-to Guides
