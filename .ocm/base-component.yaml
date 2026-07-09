@@ -4,7 +4,7 @@ componentReferences:
   version: 0.1350.0
 - componentName: ocm.software/open-delivery-gear/observability
   name: odg-observability
-  version: 0.29.0
+  version: 0.31.0
 - componentName: ocm.software/open-delivery-gear/ui
   name: odg-ui
   version: 0.433.0
@@ -27,25 +27,25 @@ main-source:
 name: ocm.software/open-delivery-gear
 resources:
 - access:
-    imageReference: docker.io/envoyproxy/gateway-helm:v1.8.0
+    imageReference: docker.io/envoyproxy/gateway-helm:v1.8.2
     type: ociRegistry
   extraIdentity:
     type: helmChart/v1
   name: envoy-gateway
   relation: external
   type: helmChart/v1
-  version: v1.8.0
+  version: v1.8.2
 - access:
-    imageReference: docker.io/envoyproxy/gateway:v1.8.0
+    imageReference: docker.io/envoyproxy/gateway:v1.8.2
     type: ociRegistry
   name: envoy-gateway
   relation: external
   type: ociImage
-  version: v1.8.0
+  version: v1.8.2
 - access:
-    imageReference: docker.io/envoyproxy/envoy:distroless-v1.38.0
+    imageReference: docker.io/envoyproxy/envoy:distroless-v1.38.3
     type: ociRegistry
   name: envoy-proxy
   relation: external
   type: ociImage
-  version: v1.38.0
+  version: v1.38.3
