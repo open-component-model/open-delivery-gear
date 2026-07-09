@@ -86,6 +86,8 @@ contents/how-to/03-vulnerabilities-for-component.md
 contents/how-to/04-diki.md
 contents/how-to/05-sbom-download.md
 contents/how-to/06-sbom-diagnose-failures.md
+contents/how-to/07-change-vulnerability-sla.md
+contents/how-to/08-run-sql-statements.md
 ```
 
 ## Tutorials

@@ -3,11 +3,11 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Use the ODG Python Package to resolve an OCM component" href="02-use-odg-api.html"><link rel="prev" title="Setting up a hybrid dev setup" href="00-hybrid-dev-setup.html">
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Contribute a new Extension" href="../tutorial/00-contributing-extension.html"><link rel="prev" title="Change the SLAs for Vulnerability Findings" href="07-change-vulnerability-sla.html">
         <link rel="prefetch" href="../../_static/odg.svg" as="image">
 
     <link rel="shortcut icon" href="../../_static/odg.svg"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Deploying the Open Delivery Gear Locally - Open Delivery Gear documentation</title>
+        <title>Run custom SQL commands in ODG - Open Delivery Gear documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
@@ -211,14 +211,14 @@
 <p class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="00-hybrid-dev-setup.html">Setting up a hybrid dev setup</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Deploying the Open Delivery Gear Locally</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01-local-setup.html">Deploying the Open Delivery Gear Locally</a></li>
 <li class="toctree-l1"><a class="reference internal" href="02-use-odg-api.html">Use the ODG Python Package to resolve an OCM component</a></li>
 <li class="toctree-l1"><a class="reference internal" href="03-vulnerabilities-for-component.html">Get all vulnerabilities for a Component</a></li>
 <li class="toctree-l1"><a class="reference internal" href="04-diki.html">Send Diki findings to ODG-API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="05-sbom-download.html">Download SBOM Documents</a></li>
 <li class="toctree-l1"><a class="reference internal" href="06-sbom-diagnose-failures.html">Diagnose Failed SBOM Generation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="07-change-vulnerability-sla.html">Change the SLAs for Vulnerability Findings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="08-run-sql-statements.html">Run custom SQL commands in ODG</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Run custom SQL commands in ODG</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul>
@@ -268,7 +268,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="../../_sources/contents/how-to/01-local-setup.md.txt" title="View this page">
+  <a class="muted-link" href="../../_sources/contents/how-to/08-run-sql-statements.md.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -286,78 +286,116 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="deploying-the-open-delivery-gear-locally">
-<h1>Deploying the Open Delivery Gear Locally<a class="headerlink" href="#deploying-the-open-delivery-gear-locally" title="Link to this heading">¶</a></h1>
-<p>This guide will help you deploy a custom Open Delivery Gear (ODG) on your local
-machine using <a class="reference external" href="https://kind.sigs.k8s.io/">KinD</a>. If you encounter any problems,
-please feel free to <a class="reference external" href="https://github.com/open-component-model/open-delivery-gear/issues/new?template=bug.md">open an issue</a>
-so that we can improve this process or documentation.</p>
+          <section id="run-custom-sql-commands-in-odg">
+<h1>Run custom SQL commands in ODG<a class="headerlink" href="#run-custom-sql-commands-in-odg" title="Link to this heading">¶</a></h1>
+<section id="goal">
+<h2>Goal<a class="headerlink" href="#goal" title="Link to this heading">¶</a></h2>
+<p>Establish a <code class="docutils literal notranslate"><span class="pre">psql</span></code> connection to the ODG database for executing custom SQL queries.</p>
+</section>
+<section id="outcome">
+<h2>Outcome<a class="headerlink" href="#outcome" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>An interactive <code class="docutils literal notranslate"><span class="pre">psql</span></code> shell connected to the ODG database</p></li>
+<li><p>The ability to execute arbitrary SQL commands against ODG</p></li>
+</ul>
+</section>
 <section id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">¶</a></h2>
-<p>To get started, you first of all need to install the required toolchain:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://kubernetes.io/docs/tasks/tools">Kubectl</a></p></li>
-<li><p><a class="reference external" href="https://kind.sigs.k8s.io/docs/user/quick-start/#installation">KinD</a></p></li>
-<li><p><a class="reference external" href="https://helm.sh/docs/intro/install">Helm</a></p></li>
-<li><p><a class="reference external" href="https://github.com/open-component-model/open-component-model#ocm-cli">OCM CLI</a></p></li>
+<li><p>A running ODG instance</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kubectl</span></code> CLI tool</p></li>
+<li><p>A kubeconfig privileged to exec into the ODG database pod (<code class="docutils literal notranslate"><span class="pre">create</span></code> on <code class="docutils literal notranslate"><span class="pre">pods/exec</span></code> subresource)</p></li>
 </ul>
 </section>
-<section id="configuration">
-<h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h2>
-<p>To customise ODG according to your needs, you have to adjust the <a class="reference external" href="https://github.com/open-component-model/open-delivery-gear/blob/main/local-setup/kind/values.yaml">values file</a>.
-There are already reasonable defaults available for most entries, however,
-following entries must still be provided:</p>
+<section id="steps">
+<h2>Steps<a class="headerlink" href="#steps" title="Link to this heading">¶</a></h2>
+<section id="spawn-a-shell-in-the-database-pod">
+<h3>Spawn a shell in the database pod<a class="headerlink" href="#spawn-a-shell-in-the-database-pod" title="Link to this heading">¶</a></h3>
+<p>First, connect to the pod running the PostgreSQL database:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>--namespace<span class="w"> </span>&lt;odg-namespace&gt;<span class="w"> </span>-it<span class="w"> </span>delivery-db-0<span class="w"> </span>--<span class="w"> </span>sh
+</pre></div>
+</div>
+<p>This spawns a shell in the pod using the Kubernetes API and container runtime, creating an interactive session that streams:</p>
 <ul class="simple">
-<li><p>OCI registry credentials to access desired component descriptors and
-resources via <code class="docutils literal notranslate"><span class="pre">secrets.oci-registry</span></code> (in case they are not publicly available)</p></li>
-<li><p>GitHub credentials via <code class="docutils literal notranslate"><span class="pre">.secrets.github</span></code> or <code class="docutils literal notranslate"><span class="pre">.secrets.github-app</span></code> (both to
-allow authentication within ODG itself as well to access necessary
-repositories)</p></li>
-<li><p>GitHub App credentials to allow OAuth<br />
-(1) Go to your GitHub organisation’s settings<br />
-(2) Developer settings -&gt; GitHub Apps -&gt; New GitHub App<br />
-(3) Fill in the form (“Callback URL” -&gt; <code class="docutils literal notranslate"><span class="pre">http://localhost:3000</span></code>, “Request
-user authorisation (OAuth) during installation” -&gt; <code class="docutils literal notranslate"><span class="pre">True</span></code>, other checkboxes
--&gt; <code class="docutils literal notranslate"><span class="pre">False</span></code>)<br />
-(4) Fill in <code class="docutils literal notranslate"><span class="pre">client_id</span></code>, <code class="docutils literal notranslate"><span class="pre">client_secret</span></code> and desired <code class="docutils literal notranslate"><span class="pre">role_bindings</span></code> via
-<code class="docutils literal notranslate"><span class="pre">secrets.oauth-cfg</span></code></p></li>
+<li><p>Your terminal’s STDIN to the container’s process</p></li>
+<li><p>The container’s STDOUT/STDERR to your terminal</p></li>
 </ul>
 </section>
-<section id="start-up">
-<h2>Start-Up<a class="headerlink" href="#start-up" title="Link to this heading">¶</a></h2>
-<p>To create a local Kubernetes cluster and deploy ODG, you have to run
-<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">kind-up</span></code>. If you want to deploy a specific version of ODG, you have to
-set the environment variable <code class="docutils literal notranslate"><span class="pre">ODG_VERSION</span></code>. Otherwise, the OCM CLI is used to
-retrieve the greatest version. Upon execution, this command will create
-<code class="docutils literal notranslate"><span class="pre">&lt;REPO_ROOT&gt;/local-setup/kind/kubeconfig</span></code> which can be used to interact with
-the ODG cluster. Also, it will forward the delivery-service to
-<code class="docutils literal notranslate"><span class="pre">http://localhost:5000</span></code> and the delivery-dashboard to <code class="docutils literal notranslate"><span class="pre">http://localhost:3000</span></code>.</p>
-<blockquote>
-<div><p>[!NOTE]<br />
-Currently, the listing of available versions via OCM CLI is not working for
-the OCM component descriptor of ODG. Therefore, an explicit version MUST be
-set via the <code class="docutils literal notranslate"><span class="pre">ODG_VERSION</span></code> environment variable.</p>
-</div></blockquote>
+<section id="connect-to-the-database-using-psql">
+<h3>Connect to the database using <code class="docutils literal notranslate"><span class="pre">psql</span></code><a class="headerlink" href="#connect-to-the-database-using-psql" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">psql</span></code> client is installed in the container and available on the PATH. Establish a connection with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>psql<span class="w"> </span>-U<span class="w"> </span>postgres
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The password is already configured via environment variables in the container, so you do <strong>not</strong> need to specify it.</p>
+</div>
+<p>You now have an active <code class="docutils literal notranslate"><span class="pre">psql</span></code> session. Explore the database schema using commands such as <code class="docutils literal notranslate"><span class="pre">\dt</span></code>:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="w">               </span><span class="n">List</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="n">relations</span>
+<span class="w"> </span><span class="k">Schema</span><span class="w"> </span><span class="o">|</span><span class="w">       </span><span class="n">Name</span><span class="w">        </span><span class="o">|</span><span class="w"> </span><span class="k">Type</span><span class="w">  </span><span class="o">|</span><span class="w">  </span><span class="k">Owner</span>
+<span class="c1">--------+-------------------+-------+----------</span>
+<span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">artefact_metadata</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">postgres</span>
+<span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">blob_store</span><span class="w">        </span><span class="o">|</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">postgres</span>
+<span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">cache</span><span class="w">             </span><span class="o">|</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">postgres</span>
+<span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">user_identifiers</span><span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">postgres</span>
+<span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">users</span><span class="w">             </span><span class="o">|</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">postgres</span>
+<span class="p">(</span><span class="mi">5</span><span class="w"> </span><span class="k">rows</span><span class="p">)</span>
+</pre></div>
+</div>
 </section>
-<section id="configuration-update">
-<h2>Configuration Update<a class="headerlink" href="#configuration-update" title="Link to this heading">¶</a></h2>
-<p>To update the ODG deployment in case your local configuration has changed, just
-run the <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">kind-update</span></code> command. This will upgrade the existing Helm charts
-and re-apply your configuration settings without the need to re-create your
-KinD cluster.</p>
+<section id="querying-vulnerabilities-for-a-component">
+<h3>Querying vulnerabilities for a component<a class="headerlink" href="#querying-vulnerabilities-for-a-component" title="Link to this heading">¶</a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Use the “\x” command to enable extended <cite>psql</cite> display mode for improved readability of query results in the terminal.</p>
+</div>
+<p>Query the most recent vulnerability entry for a component:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">artefact_metadata</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="k">TYPE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;finding/vulnerability&#39;</span>
+<span class="k">AND</span><span class="w"> </span><span class="n">component_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;acme.org/sovereign/postgres&#39;</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">creation_date</span><span class="w"> </span><span class="k">DESC</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>This returns the raw low-level database entry. To extract the CVE identifier specifically, query the <code class="docutils literal notranslate"><span class="pre">data</span></code> field:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="k">data</span><span class="o">-&gt;&gt;</span><span class="s1">&#39;cve&#39;</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">CVE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">artefact_metadata</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="k">TYPE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;finding/vulnerability&#39;</span>
+<span class="k">AND</span><span class="w"> </span><span class="n">component_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;acme.org/sovereign/postgres&#39;</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">creation_date</span><span class="w"> </span><span class="k">DESC</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>This produces a more focused output, for example:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="p">[</span><span class="w"> </span><span class="n">RECORD</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">]</span><span class="c1">-------</span>
+<span class="n">cve</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">CVE</span><span class="o">-</span><span class="mi">2026</span><span class="o">-</span><span class="mi">42504</span>
+</pre></div>
+</div>
 </section>
-<section id="termination">
-<h2>Termination<a class="headerlink" href="#termination" title="Link to this heading">¶</a></h2>
-<p>If you wish to stop ODG and delete the KinD cluster, you have to run
-<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">kind-down</span></code>. However, this will <em>not</em> delete the database storage since it
-is permanently stored on the host machine. To also clear the database storage,
-you have to delete the <code class="docutils literal notranslate"><span class="pre">/var/delivery-db</span></code> directory.</p>
+<section id="search-for-a-cve-across-multiple-components">
+<h3>Search for a CVE across multiple components<a class="headerlink" href="#search-for-a-cve-across-multiple-components" title="Link to this heading">¶</a></h3>
+<p>To reverse the previous query and find all components affected by a specific CVE:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">component_name</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">artefact_metadata</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="k">TYPE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;finding/vulnerability&#39;</span>
+<span class="k">AND</span><span class="w"> </span><span class="k">data</span><span class="o">-&gt;&gt;</span><span class="s1">&#39;cve&#39;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;CVE-2026-42504&#39;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>This produces output such as:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="p">[</span><span class="w"> </span><span class="n">RECORD</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">]</span><span class="c1">--+---------------------------------------</span>
+<span class="n">component_name</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">opendesk</span><span class="p">.</span><span class="n">poc</span><span class="p">.</span><span class="n">sap</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">jitsi</span>
+<span class="o">-</span><span class="p">[</span><span class="w"> </span><span class="n">RECORD</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">]</span><span class="c1">--+---------------------------------------</span>
+<span class="n">component_name</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">acme</span><span class="p">.</span><span class="n">org</span><span class="o">/</span><span class="n">sovereign</span><span class="o">/</span><span class="n">postgres</span>
+<span class="o">-</span><span class="p">[</span><span class="w"> </span><span class="n">RECORD</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="p">]</span><span class="c1">--+---------------------------------------</span>
+<span class="n">component_name</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">opendesk</span><span class="p">.</span><span class="n">poc</span><span class="p">.</span><span class="n">sap</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">services</span><span class="o">-</span><span class="k">external</span>
+<span class="o">-</span><span class="p">[</span><span class="w"> </span><span class="n">RECORD</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="p">]</span><span class="c1">--+---------------------------------------</span>
+<span class="n">component_name</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">opendesk</span><span class="p">.</span><span class="n">poc</span><span class="p">.</span><span class="n">sap</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">jitsi</span>
+<span class="o">-</span><span class="p">[</span><span class="w"> </span><span class="n">RECORD</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="p">]</span><span class="c1">--+---------------------------------------</span>
+<span class="n">component_name</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">ocm</span><span class="p">.</span><span class="n">software</span><span class="o">/</span><span class="n">ocmcli</span>
+</pre></div>
+</div>
 </section>
-<section id="extensions">
-<h2>Extensions<a class="headerlink" href="#extensions" title="Link to this heading">¶</a></h2>
-<p>ODG extensions can be dynamically added to your installation. Therefore, the
-configuration of the extensions must be done via <code class="docutils literal notranslate"><span class="pre">extensions_cfg</span></code> in the
-<a class="reference external" href="https://github.com/open-component-model/open-delivery-gear/blob/main/local-setup/kind/values.yaml">values file</a>.</p>
+<section id="more-advanced-queries">
+<h3>More advanced queries<a class="headerlink" href="#more-advanced-queries" title="Link to this heading">¶</a></h3>
+<p>To effectively query ODG at the SQL level, you need to understand the underlying data model. See <a class="reference internal" href="../concepts/01-data-model.html"><span class="doc">Correlating metadata to OCM</span></a> for details.</p>
+</section>
 </section>
 </section>
 
@@ -366,23 +404,23 @@ configuration of the extensions must be done via <code class="docutils literal n
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="02-use-odg-api.html">
+          <a class="next-page" href="../tutorial/00-contributing-extension.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Use the ODG Python Package to resolve an OCM component</div>
+                <div class="title">Contribute a new Extension</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="00-hybrid-dev-setup.html">
+          <a class="prev-page" href="07-change-vulnerability-sla.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Setting up a hybrid dev setup</div>
+                <div class="title">Change the SLAs for Vulnerability Findings</div>
                 
               </div>
             </a>
@@ -416,13 +454,18 @@ configuration of the extensions must be done via <code class="docutils literal n
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Deploying the Open Delivery Gear Locally</a><ul>
+<li><a class="reference internal" href="#">Run custom SQL commands in ODG</a><ul>
+<li><a class="reference internal" href="#goal">Goal</a></li>
+<li><a class="reference internal" href="#outcome">Outcome</a></li>
 <li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
-<li><a class="reference internal" href="#configuration">Configuration</a></li>
-<li><a class="reference internal" href="#start-up">Start-Up</a></li>
-<li><a class="reference internal" href="#configuration-update">Configuration Update</a></li>
-<li><a class="reference internal" href="#termination">Termination</a></li>
-<li><a class="reference internal" href="#extensions">Extensions</a></li>
+<li><a class="reference internal" href="#steps">Steps</a><ul>
+<li><a class="reference internal" href="#spawn-a-shell-in-the-database-pod">Spawn a shell in the database pod</a></li>
+<li><a class="reference internal" href="#connect-to-the-database-using-psql">Connect to the database using <code class="docutils literal notranslate"><span class="pre">psql</span></code></a></li>
+<li><a class="reference internal" href="#querying-vulnerabilities-for-a-component">Querying vulnerabilities for a component</a></li>
+<li><a class="reference internal" href="#search-for-a-cve-across-multiple-components">Search for a CVE across multiple components</a></li>
+<li><a class="reference internal" href="#more-advanced-queries">More advanced queries</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
