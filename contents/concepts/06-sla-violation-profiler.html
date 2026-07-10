@@ -3,11 +3,11 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Correlating metadata to OCM" href="01-data-model.html"><link rel="prev" title="🚀 From Zero to Hero" href="../getting-started/00-introduction.html">
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Setting up a hybrid dev setup" href="../how-to/00-hybrid-dev-setup.html"><link rel="prev" title="Generating Software Bill of Materials" href="05-sbom-generator.html">
         <link rel="prefetch" href="../../_static/odg.svg" as="image">
 
     <link rel="shortcut icon" href="../../_static/odg.svg"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>ODG’s System Architecture - Open Delivery Gear documentation</title>
+        <title>SLA Violation Profiler - Open Delivery Gear documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
@@ -201,13 +201,13 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Concepts</span></p>
 <ul class="current">
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">ODG’s System Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-odg-architecture.html">ODG’s System Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="01-data-model.html">Correlating metadata to OCM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="02-artefact-enumerator.html">Reacting upon OCM events</a></li>
 <li class="toctree-l1"><a class="reference internal" href="03-issue-replicator.html">Lifecycling GitHub Issues</a></li>
 <li class="toctree-l1"><a class="reference internal" href="04-responsibles.html">Overwriting OCM component responsibles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="05-sbom-generator.html">Generating Software Bill of Materials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="06-sla-violation-profiler.html">SLA Violation Profiler</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">SLA Violation Profiler</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
 <ul>
@@ -270,7 +270,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="../../_sources/contents/concepts/00-odg-architecture.md.txt" title="View this page">
+  <a class="muted-link" href="../../_sources/contents/concepts/06-sla-violation-profiler.md.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -288,431 +288,171 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="odg-s-system-architecture">
-<h1>ODG’s System Architecture<a class="headerlink" href="#odg-s-system-architecture" title="Link to this heading">¶</a></h1>
-<p>Open Delivery Gear (ODG) is a Kubernetes-native compliance automation engine designed for continuous security and compliance scanning of software components modelled with the Open Component Model (OCM). This document provides an architectural overview of ODG’s core components, extension mechanisms, scheduling and persistence architecture, and common entry points into the system.</p>
+          <section id="sla-violation-profiler">
+<h1>SLA Violation Profiler<a class="headerlink" href="#sla-violation-profiler" title="Link to this heading">¶</a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>The SLA-Violation-Profiler derives auditable evidence of Service
+Level Agreement (SLA) compliance from findings that already exist in the ODG
+database. For a configured OCM root component, it recursively evaluates whether
+findings were resolved or rescored within the processing time
+that the SLA permits, and persists the outcome as <code class="docutils literal notranslate"><span class="pre">sla_violation</span></code> records
+that can be queried for reporting and audits.</p>
+</section>
+<section id="motivation">
+<h2>Motivation<a class="headerlink" href="#motivation" title="Link to this heading">¶</a></h2>
+<p>Compliance obligations require software teams to demonstrate that findings
+were handled within agreed timeframes. Reconstructing this evidence manually
+for a past audit period is expensive: findings, rescorings and release dates
+must be correlated across many component versions. The SLA-Violation-Profiler
+automates this correlation and produces a persistent, per-release verdict
+that can be replayed later without recomputing the underlying history.</p>
+</section>
+<section id="scope">
+<h2>Scope<a class="headerlink" href="#scope" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Input</strong>: an OCM root component and either a specific version or a time
+range of versions to evaluate.</p></li>
+<li><p><strong>Output</strong>: one <code class="docutils literal notranslate"><span class="pre">sla_violation</span></code> <code class="docutils literal notranslate"><span class="pre">ArtefactMetadata</span></code> record per evaluated root
+component version, containing the list of individual policy violations that
+remained open at that version’s release date.</p></li>
+<li><p><strong>Persistence</strong>: results are written back to the database through
+the ODG Core API.</p></li>
+</ul>
+</section>
+<section id="how-it-works">
+<h2>How It Works<a class="headerlink" href="#how-it-works" title="Link to this heading">¶</a></h2>
+<p>The profiler follows a two-step approach: recognise policy violations per
+component version, then materialise them as a single SLA record for the
+release.</p>
+<section id="resolve-versions-to-evaluate">
+<h3>1. Resolve versions to evaluate<a class="headerlink" href="#resolve-versions-to-evaluate" title="Link to this heading">¶</a></h3>
+<p>For each configured component, the profiler determines the set of versions to
+scan:</p>
+<ul class="simple">
+<li><p>If a fixed <code class="docutils literal notranslate"><span class="pre">version</span></code> is configured, that version is used directly.</p></li>
+<li><p>Otherwise, the ODG Core API is queried for the most recent component
+versions within the configured <code class="docutils literal notranslate"><span class="pre">time_range</span></code>, bounded by
+<code class="docutils literal notranslate"><span class="pre">max_versions_limit</span></code>.</p></li>
+</ul>
+<p>Versions for which an <code class="docutils literal notranslate"><span class="pre">sla_violation</span></code> record already exists in the delivery
+database are skipped. This makes the extension safe to re-run (idempotent): prior audits
+remain stable, and only new releases will be evaluated.</p>
+</section>
+<section id="collect-findings-and-rescorings-for-the-release">
+<h3>2. Collect findings and rescorings for the release<a class="headerlink" href="#collect-findings-and-rescorings-for-the-release" title="Link to this heading">¶</a></h3>
+<p>For each version, the profiler resolves the OCM root descriptor and traverses
+the component graph to collect the artefact identities of all
+transitively referenced components. It then queries the ODG Core API for:</p>
+<ul class="simple">
+<li><p>all finding records attached to any of these components; and</p></li>
+<li><p>all <code class="docutils literal notranslate"><span class="pre">rescoring</span></code> records that reference those findings.</p></li>
+</ul>
+<p>The version’s <strong>release date</strong> is taken from the root component’s creation
+date.</p>
+</section>
+<section id="determine-the-effective-deadline-per-finding">
+<h3>3. Determine the effective deadline per finding<a class="headerlink" href="#determine-the-effective-deadline-per-finding" title="Link to this heading">¶</a></h3>
+<p>For each finding, an initial deadline is computed from its discovery date and
+its <code class="docutils literal notranslate"><span class="pre">allowed_processing_time</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">deadline</span> <span class="o">=</span> <span class="n">discovery_date</span> <span class="o">+</span> <span class="n">allowed_processing_time</span>
+</pre></div>
+</div>
+<p>Findings without an <code class="docutils literal notranslate"><span class="pre">allowed_processing_time</span></code> are ignored, since no SLA
+applies. Findings whose <code class="docutils literal notranslate"><span class="pre">meta.creation_date</span></code> is later than the release date
+are also ignored, because they did not yet exist at the moment of release.</p>
+<p>Rescorings created after the release date are discarded, as they represent
+knowledge the release could not have had. The remaining rescorings are sorted
+by creation date and applied in order. Each rescoring can shift the effective
+deadline in one of three ways:</p>
+<ul class="simple">
+<li><p>an explicit <code class="docutils literal notranslate"><span class="pre">due_date</span></code> on the rescoring becomes the new deadline;</p></li>
+<li><p>an updated <code class="docutils literal notranslate"><span class="pre">allowed_processing_time</span></code> is added to the original discovery
+date to produce a new deadline; or</p></li>
+<li><p>if neither is set, the deadline is cleared; a subsequent rescoring may
+reinstate it.</p></li>
+</ul>
+</section>
+<section id="detect-policy-violations">
+<h3>4. Detect policy violations<a class="headerlink" href="#detect-policy-violations" title="Link to this heading">¶</a></h3>
+<p>Two conditions produce a <code class="docutils literal notranslate"><span class="pre">SlaViolation</span></code> for a finding:</p>
+<ol class="arabic simple">
+<li><p>A rescoring was created <strong>after</strong> the current deadline had already
+passed — the SLA was breached before the finding was reassessed.</p></li>
+<li><p>Once all rescorings have been applied, the final deadline still lies
+<strong>before</strong> the release date — the finding shipped in the release with an
+overdue SLA.</p></li>
+</ol>
+<p>Each violation captures the type-specific identifying attributes of the
+underlying finding, the <code class="docutils literal notranslate"><span class="pre">referenced_type</span></code>, and the <code class="docutils literal notranslate"><span class="pre">ComponentArtefactId</span></code> the
+finding was attached to.</p>
+</section>
+<section id="persist-one-sla-record-per-release">
+<h3>5. Persist one SLA record per release<a class="headerlink" href="#persist-one-sla-record-per-release" title="Link to this heading">¶</a></h3>
+<p>All violations detected for a given root version are aggregated into a single
+<code class="docutils literal notranslate"><span class="pre">ArtefactMetadata</span></code> entry:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">meta.datasource</span></code>: <code class="docutils literal notranslate"><span class="pre">sla-violation-profiler</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">meta.type</span></code>: <code class="docutils literal notranslate"><span class="pre">sla_violation</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">artefact</span></code>: the root component’s <code class="docutils literal notranslate"><span class="pre">ComponentArtefactId</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data</span></code>: an <code class="docutils literal notranslate"><span class="pre">SlaViolations</span></code> object containing the list of <code class="docutils literal notranslate"><span class="pre">SlaViolation</span></code>
+entries; an empty list indicates a compliant release.</p></li>
+</ul>
+<p>The records are pushed to the ODG Core API in a single <code class="docutils literal notranslate"><span class="pre">update_metadata</span></code>
+call at the end of the run.</p>
+</section>
+<section id="evaluation-flow">
+<h3>Evaluation flow<a class="headerlink" href="#evaluation-flow" title="Link to this heading">¶</a></h3>
 <pre  class="mermaid">
         flowchart TD
-    core[ODG Core] --&gt; db(ODG-DB)
-    db --&gt; core
-    extensions_cfg(Extension Configuration) --&gt; artefact_enumerator[Artefact Enumerator]
-    secrets(Credentials) --&gt; artefact_enumerator
-    artefact_enumerator --&gt;|Create| backlog_items(Backlog Items)
-    cronjob[Cronjob] --&gt;|trigger| artefact_enumerator
-    backlog_items --&gt; backlog_controller[Backlog Controller]
-    backlog_controller --&gt;|scale| scanner[Scanner]
-    extensions_cfg --&gt; scanner
-    findings_cfg(Finding Configuration) --&gt; scanner
-    secrets --&gt; scanner
-    scanner --&gt;|Claim| backlog_items
-    scanner --&gt;|Upload Result| core
-    scanner --&gt;|Delete| backlog_items
-    core --&gt; ui[ODG UI]
+    A[Select OCM root component and time range] --&gt; B[Determine component versions to evaluate]
+    B --&gt; C{SLA record already exists?}
+    C -- Yes --&gt; S[Skip version]
+    C -- No --&gt; D[Resolve root descriptor and iterate component graph]
+    D --&gt; E[Query findings and rescorings]
+    E --&gt; F[For each finding: compute initial deadline]
+    F --&gt; G[Apply rescorings in chronological order]
+    G --&gt; H{Rescoring after deadline&lt;br/&gt;or final deadline &lt; release date?}
+    H -- Yes --&gt; V[Emit SlaViolation]
+    H -- No --&gt; N[noop]
+    V --&gt; P[Persist one sla_violation record per version]
+    N --&gt; P
     </pre></section>
-<section id="design-principles">
-<h2>Design Principles<a class="headerlink" href="#design-principles" title="Link to this heading">¶</a></h2>
-<p>ODG is built upon several key architectural principles:</p>
-<ul class="simple">
-<li><p><strong>Kubernetes-Native Deployment</strong>: All components are designed as Kubernetes workloads with native resource management</p></li>
-<li><p><strong>Modular and Extensible</strong>: Core functionality is minimal; features are added through extensions</p></li>
-<li><p><strong>Loose Coupling</strong>: Components communicate through well-defined APIs and can be scaled or replaced independently</p></li>
-<li><p><strong>Asynchronous Processing</strong>: Work is distributed through a queue-based system enabling autonomous operation</p></li>
-<li><p><strong>Single Source of Truth</strong>: All persistent state resides in the ODG database, ensuring consistency</p></li>
-</ul>
 </section>
-<section id="core-components">
-<h2>Core Components<a class="headerlink" href="#core-components" title="Link to this heading">¶</a></h2>
-<p>The ODG system comprises several core components that provide the foundation for all operations.</p>
-<section id="odg-database-odg-db">
-<h3>ODG Database (odg-db)<a class="headerlink" href="#odg-database-odg-db" title="Link to this heading">¶</a></h3>
-<p>The ODG Database serves as the <strong>sole persistency layer</strong> for the entire system. All findings, metadata, compliance snapshots, and configuration state flow through this component.</p>
-<p><strong>Responsibilities:</strong></p>
+<section id="data-model">
+<h2>Data Model<a class="headerlink" href="#data-model" title="Link to this heading">¶</a></h2>
+<p>The extension produces records of type <code class="docutils literal notranslate"><span class="pre">sla_violation</span></code> and datasource
+<code class="docutils literal notranslate"><span class="pre">sla-violation-profiler</span></code>. The <code class="docutils literal notranslate"><span class="pre">data</span></code> payload has the following shape:</p>
 <ul class="simple">
-<li><p>Store findings and metadata as <code class="docutils literal notranslate"><span class="pre">ArtefactMetadata</span></code> entries</p></li>
-<li><p>Correlate metadata with OCM coordinates (component name, version, artefact identity)</p></li>
-<li><p>Maintain compliance snapshots tracking artefact processing state</p></li>
-<li><p>Store scanner metadata writebacks and rescoring decisions</p></li>
-<li><p>Track discovery dates for SLA enforcement</p></li>
-<li><p>Cache OCM component information</p></li>
-</ul>
-<p><strong>Architecture:</strong>
-The database uses a correlation model where all data is linked to an <code class="docutils literal notranslate"><span class="pre">artefact</span></code> identifier. This allows grouping findings and metadata across different scans, versions, and extensions whilst maintaining traceability to specific OCM components or runtime artefacts.</p>
-</section>
-<section id="odg-core-odg-core">
-<h3>ODG Core (odg-core)<a class="headerlink" href="#odg-core-odg-core" title="Link to this heading">¶</a></h3>
-<p>ODG Core provides the <strong>central API</strong> layer and serves as the primary entry point for both human users and automated systems.</p>
-<p><strong>Responsibilities:</strong></p>
-<ul class="simple">
-<li><p>Expose API endpoints for CRUD operations on artefact metadata</p></li>
-<li><p>Proxy database operations with business logic enforcement</p></li>
-<li><p>Handle authentication and authorisation (implemented via OAuth)</p></li>
-<li><p>Serve data payloads for the ODG UI application</p></li>
-<li><p>Provide high-level OCM functions, e.g.:</p>
+<li><p><code class="docutils literal notranslate"><span class="pre">SlaViolations</span></code></p>
 <ul>
-<li><p>List component versions</p></li>
-<li><p>Calculate differences between OCM component versions</p></li>
-<li><p>Resolve component dependencies recursively</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sla_violations</span></code>: list of</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">SlaViolation</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">finding</span></code>: the type-specific identifying fields of the underlying finding</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">referenced_type</span></code>: the datatype of the underlying finding
+(e.g. any <code class="docutils literal notranslate"><span class="pre">finding/*</span></code> datatype supported by the ODG data model)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">artefact</span></code>: the <code class="docutils literal notranslate"><span class="pre">ComponentArtefactId</span></code> the finding was attached to</p></li>
 </ul>
 </li>
-<li><p>Maintain artefact scan information</p></li>
-<li><p>Coordinate metadata queries with complex filtering</p></li>
-</ul>
-<p>The core API is the single gateway through which extensions upload findings, the UI retrieves data, and external systems integrate with ODG.</p>
-</section>
-<section id="odg-ui-odg-ui">
-<h3>ODG UI (odg-ui)<a class="headerlink" href="#odg-ui-odg-ui" title="Link to this heading">¶</a></h3>
-<p>The Delivery Dashboard provides the <strong>primary user interface</strong> for interacting with ODG.</p>
-<p><strong>Capabilities:</strong></p>
-<ul class="simple">
-<li><p>Browse OCM components and their artefacts</p></li>
-<li><p>View compliance status and findings with SLA tracking</p></li>
-<li><p>Create and manage finding assessments and rescorings</p></li>
-<li><p>Submit scanner metadata writebacks</p></li>
-<li><p>Monitor ODG system health (pod status, backlog queue depth)</p></li>
-</ul>
-<p>The UI is a static web application served by a dedicated webserver, consuming data exclusively through the ODG Core API.</p>
-</section>
-<section id="artefact-enumerator">
-<h3>Artefact Enumerator<a class="headerlink" href="#artefact-enumerator" title="Link to this heading">¶</a></h3>
-<p>The Artefact Enumerator acts as the <strong>orchestration engine</strong> for automated scanning workflows.</p>
-<p><strong>Responsibilities:</strong></p>
-<ul class="simple">
-<li><p>Periodically check configured OCM components for new versions</p></li>
-<li><p>Resolve OCM component dependencies recursively</p></li>
-<li><p>Manage compliance snapshot lifecycle (create, update, delete)</p></li>
-<li><p>Evaluate which extensions need to process which artefacts</p></li>
-<li><p>Create <code class="docutils literal notranslate"><span class="pre">BacklogItem</span></code> custom resources to trigger extension processing</p></li>
-<li><p>Track grace periods for artefacts no longer of interest</p></li>
-</ul>
-<p><strong>How It Works:</strong></p>
-<p>The artefact enumerator runs as a Kubernetes CronJob on a configurable schedule. For each configured OCM component:</p>
-<ol class="arabic simple">
-<li><p><strong>Discovery</strong>: Fetch the component descriptor and recursively resolve all dependencies</p></li>
-<li><p><strong>Tracking</strong>: Create or update compliance snapshots for each artefact (resource or source)</p></li>
-<li><p><strong>Change Detection</strong>: Compare current state against previous scan information</p></li>
-<li><p><strong>Triggering</strong>: For each extension, evaluate if scanning is needed based on:</p>
-<ul class="simple">
-<li><p>New artefact versions</p></li>
-<li><p>Configured scan interval elapsed</p></li>
-<li><p>Explicit manual trigger</p></li>
 </ul>
 </li>
-<li><p><strong>Backlog Creation</strong>: Generate <code class="docutils literal notranslate"><span class="pre">BacklogItem</span></code> custom resources for required scans</p></li>
-</ol>
-<p>Compliance snapshots persist state across enumerator runs, ensuring stable tracking of what needs processing and enabling graceful cleanup when artefacts are removed from the configuration.</p>
-</section>
-<section id="backlog-items">
-<h3>Backlog Items<a class="headerlink" href="#backlog-items" title="Link to this heading">¶</a></h3>
-<p>Backlog Items are <strong>Kubernetes Custom Resources</strong> (CRs) that represent queued work for extensions.</p>
-<p><strong>Structure:</strong></p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">delivery-gear.gardener.cloud/v1</span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">BacklogItem</span>
-<span class="nt">metadata</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;extension&gt;-&lt;hash&gt;</span>
-<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;my-namespace&gt;</span>
-<span class="w">  </span><span class="nt">labels</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">delivery-gear.gardener.cloud/service</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;extensionName&gt;</span>
-<span class="w">    </span><span class="nt">delivery-gear.gardener.cloud/claimed</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&lt;Boolean&gt;&quot;</span>
-<span class="w">  </span><span class="nt">annotations</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">delivery-gear.gardener.cloud/claimed-at</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;timestamp&gt;</span>
-<span class="w">    </span><span class="nt">delivery-gear.gardener.cloud/claimed-by</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;extensionName&gt;-&lt;suffix&gt;</span>
-<span class="nt">spec</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">artefact</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">component_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example.org/component</span>
-<span class="w">    </span><span class="nt">component_version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0.0</span>
-<span class="w">    </span><span class="nt">artefact_kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">resource</span>
-<span class="w">    </span><span class="nt">artefact</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">artefact_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-image</span>
-<span class="w">      </span><span class="nt">artefact_version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0.0</span>
-<span class="w">      </span><span class="nt">artefact_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ociImage</span>
-<span class="w">      </span><span class="nt">artefact_extra_id</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
-<span class="w">  </span><span class="nt">priority</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
-<span class="w">  </span><span class="nt">timestamp</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;2025-01-01T12:00:00.000000+00:00&#39;</span>
-</pre></div>
-</div>
-<p><strong>Properties:</strong></p>
-<ul class="simple">
-<li><p><strong>Priority</strong>: Determines processing order (higher number = higher priority)</p></li>
-<li><p><strong>Service Label</strong>: Associates the item with a specific extension</p></li>
-<li><p><strong>Artefact Identity</strong>: Fully qualified OCM or runtime artefact reference</p></li>
-<li><p><strong>Timestamp</strong>: Creation time for audit and staleness detection</p></li>
-</ul>
-<p>Backlog Items implement a <strong>priority queue</strong> pattern. Extensions claim items by adding a claim annotation, process the artefact, then delete the item upon completion.</p>
-</section>
-<section id="backlog-controller">
-<h3>Backlog Controller<a class="headerlink" href="#backlog-controller" title="Link to this heading">¶</a></h3>
-<p>The Backlog Controller provides <strong>dynamic scaling</strong> of extension workers based on queue depth.</p>
-<p><strong>Responsibilities:</strong></p>
-<ul class="simple">
-<li><p>Watch <code class="docutils literal notranslate"><span class="pre">BacklogItem</span></code> custom resources across all extensions</p></li>
-<li><p>Calculate required replica count per extension based on pending items</p></li>
-<li><p>Scale Kubernetes Deployments up or down to match workload</p></li>
-<li><p>Detect and release stale claims (items claimed but not processed within timeout)</p></li>
-</ul>
-<p>The controller ensures efficient resource utilisation by scaling workers up during high load and down during idle periods, whilst preventing runaway scaling and resource exhaustion.</p>
-</section>
-</section>
-<section id="extensions">
-<h2>Extensions<a class="headerlink" href="#extensions" title="Link to this heading">¶</a></h2>
-<p>Extensions are <strong>modular components</strong> that implement specific scanning, analysis, or reporting capabilities. They operate independently and communicate only through the ODG Core API.</p>
-<section id="extension-types">
-<h3>Extension Types<a class="headerlink" href="#extension-types" title="Link to this heading">¶</a></h3>
-<p>ODG supports two integration models:</p>
-<ol class="arabic simple">
-<li><p><strong>Fully Integrated (In-Cluster)</strong></p>
-<ul class="simple">
-<li><p>Deployed as part of the ODG Helm chart</p></li>
-<li><p>Scaled automatically by the backlog controller</p></li>
-<li><p>Consume configuration from ConfigMaps</p></li>
-<li><p>Trigger via backlog items or CronJob schedule</p></li>
 </ul>
 </li>
-<li><p><strong>Lightly Integrated (Out-of-Cluster)</strong></p>
-<ul class="simple">
-<li><p>Run externally (CI pipeline, separate cluster, local machine)</p></li>
-<li><p>Upload findings via ODG Core API</p></li>
-<li><p>Manage their own deployment and triggering</p></li>
-<li><p>Benefit from ODG’s reporting and SLA tracking</p></li>
 </ul>
-</li>
-</ol>
+<p>See <a class="reference internal" href="01-data-model.html"><span class="doc">Correlating metadata to OCM</span></a> for the surrounding
+<code class="docutils literal notranslate"><span class="pre">ArtefactMetadata</span></code> model.</p>
 </section>
-<section id="scanner-extensions">
-<span id="id1"></span><h3>Scanner Extensions<a class="headerlink" href="#scanner-extensions" title="Link to this heading">¶</a></h3>
-<p>Scanners are the most common extension type, performing security or compliance analysis on artefacts.</p>
-<p><strong>Lifecycle:</strong></p>
-<ol class="arabic simple">
-<li><p><strong>Claim</strong>: Worker queries for pending backlog items and claims one</p></li>
-<li><p><strong>Fetch</strong>: Retrieve artefact content (OCI image, source code, etc.)</p></li>
-<li><p><strong>Scan</strong>: Execute analysis (vulnerability detection, malware scanning, licence checks)</p></li>
-<li><p><strong>Upload</strong>: Submit findings as <code class="docutils literal notranslate"><span class="pre">ArtefactMetadata</span></code> to ODG Core API</p></li>
-<li><p><strong>Cleanup</strong>: Delete obsolete findings and mark scan complete</p></li>
-<li><p><strong>Delete</strong>: Remove the backlog item to signal completion</p></li>
-</ol>
-<p><strong>Examples:</strong></p>
-<ul class="simple">
-<li><p><strong>Vulnerability Scanner (BDBA)</strong>: Detects known vulnerabilities in software packages</p></li>
-<li><p><strong>Malware Scanner (ClamAV)</strong>: Scans artefacts for malicious content</p></li>
-<li><p><strong>Cryptographic Asset Inventory</strong>: Catalogues cryptographic material</p></li>
-<li><p><strong>OS End-of-Life Detection</strong>: Identifies unsupported operating system versions</p></li>
-<li><p><strong>SBoM Generator</strong>: Creates Software Bill of Materials</p></li>
-</ul>
-</section>
-<section id="extension-triggers">
-<h3>Extension Triggers<a class="headerlink" href="#extension-triggers" title="Link to this heading">¶</a></h3>
-<p>Extensions can be triggered in two ways:</p>
-<ol class="arabic simple">
-<li><p><strong>Backlog-Driven</strong> (Recommended)</p>
-<ul class="simple">
-<li><p>Extension deployed as Kubernetes Deployment</p></li>
-<li><p>Scaled automatically by backlog controller</p></li>
-<li><p>Workers run a continuous loop claiming and processing items</p></li>
-<li><p>Triggered by artefact enumerator or manual backlog item creation</p></li>
-</ul>
-</li>
-<li><p><strong>Schedule-Driven</strong></p>
-<ul class="simple">
-<li><p>Extension deployed as Kubernetes CronJob</p></li>
-<li><p>Runs at fixed intervals regardless of artefact changes</p></li>
-<li><p>Must determine target artefacts from configuration</p></li>
-<li><p>Suitable for periodic reporting or aggregation tasks</p></li>
-</ul>
-</li>
-</ol>
-</section>
-<section id="extension-data-model">
-<h3>Extension Data Model<a class="headerlink" href="#extension-data-model" title="Link to this heading">¶</a></h3>
-<p>Extensions communicate through the <code class="docutils literal notranslate"><span class="pre">ArtefactMetadata</span></code> model:</p>
-<p><strong>Structure:</strong></p>
-<ul class="simple">
-<li><p><strong>artefact</strong>: OCM or runtime artefact identity (correlation ID)</p></li>
-<li><p><strong>meta</strong>: Datasource, type, discovery date, processing time allowance</p></li>
-<li><p><strong>data</strong>: Extension-specific payload (findings, informational data)</p></li>
-</ul>
-<p><strong>Metadata Types:</strong></p>
-<ol class="arabic simple">
-<li><p><strong>Meta Types</strong>: System-level tracking (e.g., <code class="docutils literal notranslate"><span class="pre">meta/artefact_scan_info</span></code>)</p></li>
-<li><p><strong>Finding Types</strong>: Deviations requiring remediation (e.g., <code class="docutils literal notranslate"><span class="pre">finding/vulnerability</span></code>)</p></li>
-<li><p><strong>Informational Types</strong>: Enrichment data (e.g., file paths, package inventories)</p></li>
-</ol>
-<p>Each metadata entry has a unique <strong>key</strong> derived from artefact identity, datasource, type, and payload key, enabling idempotent updates and discovery date retention.</p>
-</section>
-<section id="common-extensions">
-<h3>Common Extensions<a class="headerlink" href="#common-extensions" title="Link to this heading">¶</a></h3>
-<p>Beyond scanners, ODG includes several specialised extensions:</p>
-<p><strong>Issue Replicator</strong></p>
-<ul class="simple">
-<li><p>Creates and manages GitHub issues for findings</p></li>
-<li><p>Groups findings by artefact, type, and due date</p></li>
-<li><p>Assigns issues to responsible teams</p></li>
-<li><p>Closes issues when findings are remediated or artefacts removed</p></li>
-</ul>
-<p><strong>Responsibles Extension</strong></p>
-<ul class="simple">
-<li><p>Determines ownership for artefacts based on configurable rules</p></li>
-<li><p>Uploads responsible information for use by issue replicator</p></li>
-<li><p>Supports multiple strategies (static, component-based, CODEOWNERS)</p></li>
-</ul>
-</section>
-</section>
-<section id="instance-specific-configuration">
-<h2>Instance-Specific Configuration<a class="headerlink" href="#instance-specific-configuration" title="Link to this heading">¶</a></h2>
-<p>ODG instances are customised through Kubernetes-native configuration resources.</p>
-<section id="extension-configuration">
-<h3>Extension Configuration<a class="headerlink" href="#extension-configuration" title="Link to this heading">¶</a></h3>
-<p>Deployed as a <strong>ConfigMap</strong> (<code class="docutils literal notranslate"><span class="pre">extensions-cfg</span></code>), this configuration defines:</p>
-<ul class="simple">
-<li><p>Which extensions are enabled</p></li>
-<li><p>Extension-specific parameters (API endpoints, intervals, filters)</p></li>
-<li><p>OCM components to track</p></li>
-<li><p>Backlog controller scaling parameters</p></li>
-</ul>
-<p><strong>Example:</strong></p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">artefact_enumerator</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">components</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">component_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example.org/my-component</span>
-<span class="w">      </span><span class="nt">ocm_repo_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">europe-docker.pkg.dev/gardener-project/releases</span>
-<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">greatest</span>
-<span class="w">      </span><span class="nt">max_versions_limit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
-</pre></div>
-</div>
-</section>
-<section id="finding-configuration">
-<h3>Finding Configuration<a class="headerlink" href="#finding-configuration" title="Link to this heading">¶</a></h3>
-<p>Deployed as a <strong>ConfigMap</strong> (<code class="docutils literal notranslate"><span class="pre">findings-cfg</span></code>), this configuration defines:</p>
-<ul class="simple">
-<li><p>Supported finding types</p></li>
-<li><p>Severity categorisations</p></li>
-<li><p>Allowed processing times (SLAs) per severity</p></li>
-<li><p>GitHub issue reporting configuration</p></li>
-<li><p>Artefact grouping rules</p></li>
-</ul>
-<p><strong>Example:</strong></p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">finding/vulnerability</span>
-<span class="w">  </span><span class="nt">categorisations</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CRITICAL</span>
-<span class="w">      </span><span class="nt">display_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Critical</span>
-<span class="w">      </span><span class="nt">allowed_processing_time</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span>
-<span class="w">      </span><span class="nt">rescoring</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">manual</span>
-<span class="w">      </span><span class="nt">selector</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">cve_score_range</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
-<span class="w">          </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9</span>
-<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
-<span class="w">  </span><span class="nt">issues</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">enable_issues</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">    </span><span class="nt">attrs_to_group_by</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">component_name</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">artefact.artefact_name</span>
-</pre></div>
-</div>
-</section>
-<section id="credentials">
-<h3>Credentials<a class="headerlink" href="#credentials" title="Link to this heading">¶</a></h3>
-<p>Sensitive information (API keys, GitHub tokens, registry credentials) is stored as <strong>Kubernetes Secrets</strong> and mounted into relevant pods.</p>
-</section>
-</section>
-<section id="persistence-architecture">
-<h2>Persistence Architecture<a class="headerlink" href="#persistence-architecture" title="Link to this heading">¶</a></h2>
-<p>All persistent state resides in the <strong>ODG Database</strong>, accessed exclusively through the <strong>ODG Core API</strong>.</p>
-<section id="data-organisation">
-<h3>Data Organisation<a class="headerlink" href="#data-organisation" title="Link to this heading">¶</a></h3>
-<p><strong>Artefact Metadata</strong></p>
-<ul class="simple">
-<li><p>Indexed by artefact identity (component, version, artefact name/type)</p></li>
-<li><p>Supports efficient queries by component, type, datasource, or custom attributes</p></li>
-<li><p>Retains discovery dates across updates for consistent SLA tracking</p></li>
-</ul>
-<p><strong>Compliance Snapshots</strong></p>
-<ul class="simple">
-<li><p>Track processing state per artefact</p></li>
-<li><p>Store last scan timestamps per extension</p></li>
-<li><p>Enable graceful cleanup of removed artefacts</p></li>
-</ul>
-<p><strong>Scanner Metadata Writebacks</strong></p>
-<ul class="simple">
-<li><p>Persist corrections to scanner-detected metadata</p></li>
-<li><p>Scoped from single artefact to global across components</p></li>
-<li><p>Applied by extensions before reporting results</p></li>
-</ul>
-<p><strong>Rescorings</strong></p>
-<ul class="simple">
-<li><p>Override finding severity or SLA deadlines</p></li>
-<li><p>Support temporary exceptions with expiration</p></li>
-</ul>
-<p><strong>Caching</strong></p>
-<ul class="simple">
-<li><p>OCM component descriptors cached to reduce network overhead</p></li>
-<li><p>Responsible lookups cached to accelerate issue assignment</p></li>
-</ul>
-</section>
-<section id="consistency-and-durability">
-<h3>Consistency and Durability<a class="headerlink" href="#consistency-and-durability" title="Link to this heading">¶</a></h3>
-<ul class="simple">
-<li><p><strong>Single Writer</strong>: Only ODG Core API writes to the database</p></li>
-<li><p><strong>Idempotent Updates</strong>: Metadata updates use stable keys to prevent duplication</p></li>
-<li><p><strong>Discovery Date Retention</strong>: Custom logic preserves initial discovery dates even when finding keys change</p></li>
-<li><p><strong>Backup</strong>: Database backup extension provides scheduled exports</p></li>
-</ul>
-</section>
-</section>
-<section id="common-entry-points">
-<h2>Common Entry Points<a class="headerlink" href="#common-entry-points" title="Link to this heading">¶</a></h2>
-<section id="for-end-users">
-<h3>For End Users<a class="headerlink" href="#for-end-users" title="Link to this heading">¶</a></h3>
-<p><strong>ODG UI</strong></p>
-<ul class="simple">
-<li><p>Browse components: Navigate OCM component hierarchy</p></li>
-<li><p>View findings: Filter by severity, due date, responsible team</p></li>
-<li><p>Create assessments: Rescorings, false positive markings</p></li>
-<li><p>Submit writebacks: Correct scanner-detected metadata</p></li>
-<li><p>Monitor system: View backlog depth, pod health</p></li>
-</ul>
-<p><strong>ODG Core API</strong></p>
-<ul class="simple">
-<li><p>Programmatic access to all UI capabilities</p></li>
-<li><p>Integration with CI/CD pipelines</p></li>
-<li><p>Custom tooling and automation</p></li>
-<li><p>Available at <code class="docutils literal notranslate"><span class="pre">/api/v1/doc</span></code> for OpenAPI specification</p></li>
-</ul>
-</section>
-<section id="for-extensions">
-<h3>For Extensions<a class="headerlink" href="#for-extensions" title="Link to this heading">¶</a></h3>
-<ul class="simple">
-<li><p>See <a class="reference internal" href="#scanner-extensions"><span class="std std-ref">Scanner Extensions</span></a> for architecture overview</p></li>
-<li><p>See <a class="reference internal" href="../tutorial/00-contributing-extension.html"><span class="doc">Contribute a new Extension</span></a> for development guide</p></li>
-</ul>
-</section>
-<section id="for-operators">
-<h3>For Operators<a class="headerlink" href="#for-operators" title="Link to this heading">¶</a></h3>
-<p><strong>Kubernetes API</strong></p>
-<ul class="simple">
-<li><p>Create/update <code class="docutils literal notranslate"><span class="pre">BacklogItem</span></code> CRDs for manual triggering</p></li>
-<li><p>Create <code class="docutils literal notranslate"><span class="pre">RuntimeArtefact</span></code> CRDs for non-OCM artefacts</p></li>
-<li><p>Monitor pod status and resource utilisation</p></li>
-<li><p>Scale extensions via Deployment replicas (auto-scaled by backlog controller)</p></li>
-</ul>
-<p><strong>Configuration Management</strong></p>
-<ul class="simple">
-<li><p>Update <code class="docutils literal notranslate"><span class="pre">extensions-cfg</span></code> ConfigMap to enable/disable extensions</p></li>
-<li><p>Update <code class="docutils literal notranslate"><span class="pre">findings-cfg</span></code> ConfigMap to adjust SLAs or issue settings</p></li>
-<li><p>Manage Secrets for credentials</p></li>
-</ul>
-</section>
-</section>
-<section id="summary">
-<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">¶</a></h2>
-<p>ODG’s architecture achieves compliance automation through:</p>
-<ul class="simple">
-<li><p><strong>Separation of Concerns</strong>: Core, extensions, UI, and database operate independently</p></li>
-<li><p><strong>Queue-Based Processing</strong>: Asynchronous work distribution with automatic scaling</p></li>
-<li><p><strong>Single Persistence Layer</strong>: All state in ODG Database ensures consistency</p></li>
-<li><p><strong>Extensibility</strong>: New scanners integrate without core changes</p></li>
-<li><p><strong>Kubernetes-Native</strong>: Leverages CRDs, scaling, and native resource management</p></li>
-</ul>
-<p>This design enables ODG to continuously monitor software deliveries, track findings against SLAs, and automate remediation workflows whilst remaining adaptable to diverse security and compliance requirements.</p>
+<section id="idempotency-and-re-runs">
+<h2>Idempotency and Re-runs<a class="headerlink" href="#idempotency-and-re-runs" title="Link to this heading">¶</a></h2>
+<p>The extension is designed to run as a scheduled job. Because existing
+<code class="docutils literal notranslate"><span class="pre">sla_violation</span></code> records for a <code class="docutils literal notranslate"><span class="pre">(component_name,</span> <span class="pre">component_version)</span></code> pair
+suppress re-evaluation, re-runs process only those versions that have not yet
+been profiled. To re-evaluate a version after its underlying data has changed,
+the existing <code class="docutils literal notranslate"><span class="pre">sla_violation</span></code> record must first be removed from the delivery
+database. See <a class="reference internal" href="../how-to/08-run-sql-statements.html"><span class="doc">Run custom SQL commands in ODG</span></a> for instructions
+on how to connect to the ODG database and execute SQL commands directly.</p>
 </section>
 </section>
 
@@ -721,23 +461,23 @@ The database uses a correlation model where all data is linked to an <code class
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="01-data-model.html">
+          <a class="next-page" href="../how-to/00-hybrid-dev-setup.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Correlating metadata to OCM</div>
+                <div class="title">Setting up a hybrid dev setup</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="../getting-started/00-introduction.html">
+          <a class="prev-page" href="05-sbom-generator.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">🚀 From Zero to Hero</div>
+                <div class="title">Generating Software Bill of Materials</div>
                 
               </div>
             </a>
@@ -771,44 +511,21 @@ The database uses a correlation model where all data is linked to an <code class
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">ODG’s System Architecture</a><ul>
+<li><a class="reference internal" href="#">SLA Violation Profiler</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a></li>
-<li><a class="reference internal" href="#design-principles">Design Principles</a></li>
-<li><a class="reference internal" href="#core-components">Core Components</a><ul>
-<li><a class="reference internal" href="#odg-database-odg-db">ODG Database (odg-db)</a></li>
-<li><a class="reference internal" href="#odg-core-odg-core">ODG Core (odg-core)</a></li>
-<li><a class="reference internal" href="#odg-ui-odg-ui">ODG UI (odg-ui)</a></li>
-<li><a class="reference internal" href="#artefact-enumerator">Artefact Enumerator</a></li>
-<li><a class="reference internal" href="#backlog-items">Backlog Items</a></li>
-<li><a class="reference internal" href="#backlog-controller">Backlog Controller</a></li>
+<li><a class="reference internal" href="#motivation">Motivation</a></li>
+<li><a class="reference internal" href="#scope">Scope</a></li>
+<li><a class="reference internal" href="#how-it-works">How It Works</a><ul>
+<li><a class="reference internal" href="#resolve-versions-to-evaluate">1. Resolve versions to evaluate</a></li>
+<li><a class="reference internal" href="#collect-findings-and-rescorings-for-the-release">2. Collect findings and rescorings for the release</a></li>
+<li><a class="reference internal" href="#determine-the-effective-deadline-per-finding">3. Determine the effective deadline per finding</a></li>
+<li><a class="reference internal" href="#detect-policy-violations">4. Detect policy violations</a></li>
+<li><a class="reference internal" href="#persist-one-sla-record-per-release">5. Persist one SLA record per release</a></li>
+<li><a class="reference internal" href="#evaluation-flow">Evaluation flow</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#extensions">Extensions</a><ul>
-<li><a class="reference internal" href="#extension-types">Extension Types</a></li>
-<li><a class="reference internal" href="#scanner-extensions">Scanner Extensions</a></li>
-<li><a class="reference internal" href="#extension-triggers">Extension Triggers</a></li>
-<li><a class="reference internal" href="#extension-data-model">Extension Data Model</a></li>
-<li><a class="reference internal" href="#common-extensions">Common Extensions</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#instance-specific-configuration">Instance-Specific Configuration</a><ul>
-<li><a class="reference internal" href="#extension-configuration">Extension Configuration</a></li>
-<li><a class="reference internal" href="#finding-configuration">Finding Configuration</a></li>
-<li><a class="reference internal" href="#credentials">Credentials</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#persistence-architecture">Persistence Architecture</a><ul>
-<li><a class="reference internal" href="#data-organisation">Data Organisation</a></li>
-<li><a class="reference internal" href="#consistency-and-durability">Consistency and Durability</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#common-entry-points">Common Entry Points</a><ul>
-<li><a class="reference internal" href="#for-end-users">For End Users</a></li>
-<li><a class="reference internal" href="#for-extensions">For Extensions</a></li>
-<li><a class="reference internal" href="#for-operators">For Operators</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#summary">Summary</a></li>
+<li><a class="reference internal" href="#data-model">Data Model</a></li>
+<li><a class="reference internal" href="#idempotency-and-re-runs">Idempotency and Re-runs</a></li>
 </ul>
 </li>
 </ul>

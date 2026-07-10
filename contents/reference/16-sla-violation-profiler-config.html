@@ -3,11 +3,11 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Responsibles" href="15-responsibles-config.html"><link rel="prev" title="Cache Manager" href="09-cache-manager-config.html">
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="prev" title="Static Application Security Testing Attestor" href="14-static-application-security-testing-attestor-config.html">
         <link rel="prefetch" href="../../_static/odg.svg" as="image">
 
     <link rel="shortcut icon" href="../../_static/odg.svg"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Delivery Database Backup - Open Delivery Gear documentation</title>
+        <title>SLA Violation Profiler - Open Delivery Gear documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
@@ -228,15 +228,15 @@
 <p class="caption" role="heading"><span class="caption-text">References</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="00-artefact-metadata-query.html">Artefact Metadata Search</a></li>
-<li class="toctree-l1 current has-children"><a class="reference internal" href="core/index.html">Core Configuration</a><input aria-label="Toggle navigation of Core Configuration" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="core/index.html">Core Configuration</a><input aria-label="Toggle navigation of Core Configuration" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="02-artefact-enumerator-config.html">Artefact Enumerator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="07-backlog-controller-config.html">Backlog Controller</a></li>
 <li class="toctree-l2"><a class="reference internal" href="09-cache-manager-config.html">Cache Manager</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Delivery Database Backup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11-delivery-db-backup-config.html">Delivery Database Backup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="15-responsibles-config.html">Responsibles</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="extensions/index.html">Extension Configuration</a><input aria-label="Toggle navigation of Extension Configuration" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="extensions/index.html">Extension Configuration</a><input aria-label="Toggle navigation of Extension Configuration" checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="01-software-bill-of-material-generator-config.html">Software Bill of Material Generator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="03-vulnerability-scanner-config.html">Vulnerability Scanner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="04-malware-scanner-config.html">Malware Scanner</a></li>
@@ -247,7 +247,7 @@
 <li class="toctree-l2"><a class="reference internal" href="12-findings-report-generator-config.html">Findings Report Generator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="13-github-secret-scanner-config.html">GitHub Secret Scanner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="14-static-application-security-testing-attestor-config.html">Static Application Security Testing Attestor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="16-sla-violation-profiler-config.html">SLA Violation Profiler</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">SLA Violation Profiler</a></li>
 </ul>
 </li>
 </ul>
@@ -270,7 +270,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="../../_sources/contents/reference/11-delivery-db-backup-config.md.txt" title="View this page">
+  <a class="muted-link" href="../../_sources/contents/reference/16-sla-violation-profiler-config.md.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -288,20 +288,20 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="delivery-database-backup">
-<h1>Delivery Database Backup<a class="headerlink" href="#delivery-database-backup" title="Link to this heading">¶</a></h1>
-<p>The Delivery Database Backup extension is a cronjob which regularly creates backups of the PostgreSQL delivery database and stores them as local blobs in an OCM component. This enables disaster recovery and migration scenarios.</p>
+          <section id="sla-violation-profiler">
+<h1>SLA Violation Profiler<a class="headerlink" href="#sla-violation-profiler" title="Link to this heading">¶</a></h1>
+<p>The SLA Violation Profiler evaluates whether findings for configured OCM root components were resolved or rescored within their SLA-mandated processing times, and persists the results as <code class="docutils literal notranslate"><span class="pre">sla_violation</span></code> records in the ODG database for audit reporting.</p>
 <section id="configuration-example">
 <h2>Configuration Example<a class="headerlink" href="#configuration-example" title="Link to this heading">¶</a></h2>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">delivery_db_backup</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;0</span><span class="nv"> </span><span class="s">0</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*&#39;</span><span class="w">              </span><span class="c1"># daily at midnight</span>
-<span class="w">  </span><span class="nt">successful_jobs_history_limit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
-<span class="w">  </span><span class="nt">failed_jobs_history_limit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
-<span class="w">  </span><span class="nt">component_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme.org/odg-backups</span>
-<span class="w">  </span><span class="nt">ocm_repo_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://ocm-registry.example.com</span>
-<span class="w">  </span><span class="nt">backup_retention_count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
-<span class="w">  </span><span class="nt">initial_version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1.0</span>
-<span class="w">  </span><span class="nt">extra_pg_dump_args</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;--verbose&quot;</span><span class="p p-Indicator">]</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">sla_violation_profiler</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">components</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">component_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme.org/my-product</span>
+<span class="w">      </span><span class="nt">ocm_repo_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">europe-docker.pkg.dev/acme/releases</span>
+<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">greatest</span>
+<span class="w">      </span><span class="nt">max_versions_limit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">      </span><span class="nt">time_range</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">days_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-365</span>
+<span class="w">        </span><span class="nt">days_to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
 </pre></div>
 </div>
 </section>
@@ -317,45 +317,79 @@
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">schedule</span></code></p></td>
-<td><p>string</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">0</span> <span class="pre">*</span> <span class="pre">*</span> <span class="pre">*</span></code></p></td>
-<td><p>Cron schedule for running the cronjob (daily at midnight by default).</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">successful_jobs_history_limit</span></code></p></td>
-<td><p>int</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
-<td><p>Number of successful job executions to retain in history.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">failed_jobs_history_limit</span></code></p></td>
-<td><p>int</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
-<td><p>Number of failed job executions to retain in history.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">component_name</span></code></p></td>
-<td><p>string</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">components</span></code></p></td>
+<td><p>list</p></td>
 <td><p>—</p></td>
-<td><p>OCM component name to store backups (e.g., <code class="docutils literal notranslate"><span class="pre">acme.org/odg-backups</span></code>).</p></td>
+<td><p>List of OCM root components to evaluate. See component fields below.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="component-fields">
+<h2>Component Fields<a class="headerlink" href="#component-fields" title="Link to this heading">¶</a></h2>
+<p>Each entry in the <code class="docutils literal notranslate"><span class="pre">components</span></code> list supports the following fields:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">component_name</span></code></p></td>
+<td><p>string</p></td>
+<td><p>yes</p></td>
+<td><p>OCM component name to evaluate (e.g., <code class="docutils literal notranslate"><span class="pre">acme.org/my-product</span></code>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">version</span></code></p></td>
+<td><p>string</p></td>
+<td><p>no</p></td>
+<td><p>Specific version to evaluate, or <code class="docutils literal notranslate"><span class="pre">greatest</span></code> to use the most recent version. If omitted, <code class="docutils literal notranslate"><span class="pre">time_range</span></code> must be specified.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ocm_repo_url</span></code></p></td>
 <td><p>string</p></td>
-<td><p>—</p></td>
-<td><p>OCM repository URL where backups are published.</p></td>
+<td><p>no</p></td>
+<td><p>Override default OCM repository lookup.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">backup_retention_count</span></code></p></td>
-<td><p>int or null</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">null</span></code></p></td>
-<td><p>Number of backups to retain. <code class="docutils literal notranslate"><span class="pre">null</span></code> = keep all backups.</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">max_versions_limit</span></code></p></td>
+<td><p>int</p></td>
+<td><p>no</p></td>
+<td><p>Maximum number of versions to evaluate per run. Only relevant when <code class="docutils literal notranslate"><span class="pre">version</span></code> is <code class="docutils literal notranslate"><span class="pre">greatest</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">initial_version</span></code></p></td>
-<td><p>string</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">0.1.0</span></code></p></td>
-<td><p>Initial SemVer version for the backup component.</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">time_range</span></code></p></td>
+<td><p>object</p></td>
+<td><p>no</p></td>
+<td><p>Restricts version discovery to a date range. See time range fields below.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">extra_pg_dump_args</span></code></p></td>
-<td><p>list</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">[]</span></code></p></td>
-<td><p>Additional arguments passed to <code class="docutils literal notranslate"><span class="pre">pg_dump</span></code>.</p></td>
+</tbody>
+</table>
+</div>
+</section>
+<section id="time-range-fields">
+<h2>Time Range Fields<a class="headerlink" href="#time-range-fields" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">time_range</span></code> object restricts which component versions are considered during version discovery. Dates are computed relative to the current day at runtime.</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">days_from</span></code></p></td>
+<td><p>int</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-365</span></code></p></td>
+<td><p>Start of the time range in days relative to today (negative = past).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">days_to</span></code></p></td>
+<td><p>int</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>End of the time range in days relative to today (<code class="docutils literal notranslate"><span class="pre">0</span></code> = today).</p></td>
 </tr>
 </tbody>
 </table>
@@ -363,82 +397,44 @@
 </section>
 <section id="configuration-details">
 <h2>Configuration Details<a class="headerlink" href="#configuration-details" title="Link to this heading">¶</a></h2>
-<section id="component-name">
-<h3><code class="docutils literal notranslate"><span class="pre">component_name</span></code><a class="headerlink" href="#component-name" title="Link to this heading">¶</a></h3>
-<p>The name of the OCM component used to store database backups as local blobs.
-Each backup becomes a new version of this component.</p>
-<p><strong>Format:</strong> Use standard OCM component naming (e.g., <code class="docutils literal notranslate"><span class="pre">organization.domain/backup-name</span></code>)</p>
-<p><strong>Example:</strong></p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">component_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme.org/odg-production-backups</span>
+<section id="components">
+<h3><code class="docutils literal notranslate"><span class="pre">components</span></code><a class="headerlink" href="#components" title="Link to this heading">¶</a></h3>
+<p>Each entry defines one OCM root component to be profiled. The profiler traverses
+the full component graph of each version to collect findings across all transitively
+referenced components.</p>
+<section id="version">
+<h4><code class="docutils literal notranslate"><span class="pre">version</span></code><a class="headerlink" href="#version" title="Link to this heading">¶</a></h4>
+<p>Controls which component versions are evaluated:</p>
+<ul class="simple">
+<li><p><strong>Fixed version</strong> (e.g., <code class="docutils literal notranslate"><span class="pre">1.2.3</span></code>): Evaluates exactly that version. Any configured <code class="docutils literal notranslate"><span class="pre">time_range</span></code> is ignored.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">greatest</span></code></strong>: Resolves to the most recent version(s) available. Combined with
+<code class="docutils literal notranslate"><span class="pre">max_versions_limit</span></code>, this caps how many versions are processed per run.
+Any configured <code class="docutils literal notranslate"><span class="pre">time_range</span></code> is ignored.</p></li>
+<li><p><strong>Omitted</strong>: Version discovery relies entirely on <code class="docutils literal notranslate"><span class="pre">time_range</span></code> to determine which
+versions to evaluate.</p></li>
+</ul>
+</section>
+<section id="max-versions-limit">
+<h4><code class="docutils literal notranslate"><span class="pre">max_versions_limit</span></code><a class="headerlink" href="#max-versions-limit" title="Link to this heading">¶</a></h4>
+<p>Caps the number of versions resolved when <code class="docutils literal notranslate"><span class="pre">version</span></code> is <code class="docutils literal notranslate"><span class="pre">greatest</span></code>. Increase this
+value to backfill SLA records for a larger history in a single run.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">components</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">component_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme.org/my-product</span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">greatest</span>
+<span class="w">    </span><span class="nt">max_versions_limit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">52</span><span class="w"> </span><span class="c1"># evaluate up to 52 versions per run</span>
 </pre></div>
 </div>
 </section>
-<section id="ocm-repo-url">
-<h3><code class="docutils literal notranslate"><span class="pre">ocm_repo_url</span></code><a class="headerlink" href="#ocm-repo-url" title="Link to this heading">¶</a></h3>
-<p>The OCM repository URL where backup components are published. This must be
-an OCI registry that supports OCM components.</p>
-<p><strong>Required Permissions:</strong></p>
-<ul class="simple">
-<li><p><strong><code class="docutils literal notranslate"><span class="pre">readwrite</span></code></strong>: Required for creating backups</p></li>
-<li><p><strong><code class="docutils literal notranslate"><span class="pre">admin</span></code></strong>: Required if <code class="docutils literal notranslate"><span class="pre">backup_retention_count</span></code> is set (to delete old backups)</p></li>
-</ul>
-<p><strong>Example:</strong></p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">ocm_repo_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://ghcr.io/my-org</span>
+<section id="time-range">
+<h4><code class="docutils literal notranslate"><span class="pre">time_range</span></code><a class="headerlink" href="#time-range" title="Link to this heading">¶</a></h4>
+<p>Restricts version discovery to a rolling date window. Both values are offsets
+in days relative to the current date at the time of the run:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">time_range</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">days_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-90</span><span class="w"> </span><span class="c1"># versions created from 90 days ago</span>
+<span class="w">  </span><span class="nt">days_to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"> </span><span class="c1"># up to today</span>
 </pre></div>
 </div>
-<p><strong>Note:</strong> Configure the corresponding OCI registry credentials via <code class="docutils literal notranslate"><span class="pre">secrets.oci-registry</span></code>
-in your ODG configuration.</p>
 </section>
-<section id="backup-retention-count">
-<h3><code class="docutils literal notranslate"><span class="pre">backup_retention_count</span></code><a class="headerlink" href="#backup-retention-count" title="Link to this heading">¶</a></h3>
-<p>Controls how many backup versions to retain. When set to a value &gt; 0, the extension
-automatically deletes old backups, keeping only the most recent N backups.</p>
-<p><strong>Options:</strong></p>
-<ul class="simple">
-<li><p><strong><code class="docutils literal notranslate"><span class="pre">null</span></code></strong> (default): Keep all backups indefinitely</p></li>
-<li><p><strong>Integer &gt; 0</strong>: Keep only the most recent N backups</p></li>
-</ul>
-<p><strong>Examples:</strong></p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">backup_retention_count:</span> <span class="pre">null</span></code> - Never delete backups</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">backup_retention_count:</span> <span class="pre">7</span></code> - Keep last 7 backups (e.g., one week of daily backups)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">backup_retention_count:</span> <span class="pre">30</span></code> - Keep last 30 backups</p></li>
-</ul>
-<p><strong>Important:</strong> Setting this to a non-null value requires <strong>admin</strong> permissions on the
-OCM repository to delete old component versions.</p>
-</section>
-<section id="initial-version">
-<h3><code class="docutils literal notranslate"><span class="pre">initial_version</span></code><a class="headerlink" href="#initial-version" title="Link to this heading">¶</a></h3>
-<p>The initial SemVer version for the backup OCM component. Upon each new backup,
-the minor version is automatically bumped.</p>
-<p><strong>Example version progression:</strong></p>
-<ul class="simple">
-<li><p>First backup: <code class="docutils literal notranslate"><span class="pre">0.1.0</span></code></p></li>
-<li><p>Second backup: <code class="docutils literal notranslate"><span class="pre">0.2.0</span></code></p></li>
-<li><p>Third backup: <code class="docutils literal notranslate"><span class="pre">0.3.0</span></code></p></li>
-<li><p>And so on…</p></li>
-</ul>
-<p><strong>Recommendation:</strong> Use <code class="docutils literal notranslate"><span class="pre">0.1.0</span></code> for production and <code class="docutils literal notranslate"><span class="pre">0.0.1</span></code> for testing environments.</p>
-</section>
-<section id="extra-pg-dump-args">
-<h3><code class="docutils literal notranslate"><span class="pre">extra_pg_dump_args</span></code><a class="headerlink" href="#extra-pg-dump-args" title="Link to this heading">¶</a></h3>
-<p>Additional command-line arguments passed to the <code class="docutils literal notranslate"><span class="pre">pg_dump</span></code> utility. Use this to
-customize backup behaviour.</p>
-<p><strong>Common examples:</strong></p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Verbose output for debugging</span>
-<span class="nt">extra_pg_dump_args</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;--verbose&quot;</span><span class="p p-Indicator">]</span>
-
-<span class="c1"># Include BLOB data</span>
-<span class="nt">extra_pg_dump_args</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;--blobs&quot;</span><span class="p p-Indicator">]</span>
-
-<span class="c1"># Compress backup</span>
-<span class="nt">extra_pg_dump_args</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;--compress=9&quot;</span><span class="p p-Indicator">]</span>
-
-<span class="c1"># Multiple arguments</span>
-<span class="nt">extra_pg_dump_args</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;--verbose&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;--compress=9&quot;</span><span class="p p-Indicator">]</span>
-</pre></div>
-</div>
-<p><strong>Available options:</strong> See <a class="reference external" href="https://www.postgresql.org/docs/current/app-pgdump.html">pg_dump documentation</a></p>
 </section>
 </section>
 </section>
@@ -448,23 +444,15 @@ customize backup behaviour.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="15-responsibles-config.html">
-              <div class="page-info">
-                <div class="context">
-                  <span>Next</span>
-                </div>
-                <div class="title">Responsibles</div>
-              </div>
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-            </a>
-          <a class="prev-page" href="09-cache-manager-config.html">
+          
+          <a class="prev-page" href="14-static-application-security-testing-attestor-config.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Cache Manager</div>
+                <div class="title">Static Application Security Testing Attestor</div>
                 
               </div>
             </a>
@@ -498,15 +486,18 @@ customize backup behaviour.</p>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Delivery Database Backup</a><ul>
+<li><a class="reference internal" href="#">SLA Violation Profiler</a><ul>
 <li><a class="reference internal" href="#configuration-example">Configuration Example</a></li>
 <li><a class="reference internal" href="#top-level-options">Top-Level Options</a></li>
+<li><a class="reference internal" href="#component-fields">Component Fields</a></li>
+<li><a class="reference internal" href="#time-range-fields">Time Range Fields</a></li>
 <li><a class="reference internal" href="#configuration-details">Configuration Details</a><ul>
-<li><a class="reference internal" href="#component-name"><code class="docutils literal notranslate"><span class="pre">component_name</span></code></a></li>
-<li><a class="reference internal" href="#ocm-repo-url"><code class="docutils literal notranslate"><span class="pre">ocm_repo_url</span></code></a></li>
-<li><a class="reference internal" href="#backup-retention-count"><code class="docutils literal notranslate"><span class="pre">backup_retention_count</span></code></a></li>
-<li><a class="reference internal" href="#initial-version"><code class="docutils literal notranslate"><span class="pre">initial_version</span></code></a></li>
-<li><a class="reference internal" href="#extra-pg-dump-args"><code class="docutils literal notranslate"><span class="pre">extra_pg_dump_args</span></code></a></li>
+<li><a class="reference internal" href="#components"><code class="docutils literal notranslate"><span class="pre">components</span></code></a><ul>
+<li><a class="reference internal" href="#version"><code class="docutils literal notranslate"><span class="pre">version</span></code></a></li>
+<li><a class="reference internal" href="#max-versions-limit"><code class="docutils literal notranslate"><span class="pre">max_versions_limit</span></code></a></li>
+<li><a class="reference internal" href="#time-range"><code class="docutils literal notranslate"><span class="pre">time_range</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
