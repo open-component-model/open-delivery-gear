@@ -18,30 +18,30 @@ sla_violation_profiler:
 
 ## Top-Level Options
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `components` | list | — | List of OCM root components to evaluate. See component fields below. |
+| Option       | Type | Default | Description                                                          |
+| ------------ | ---- | ------- | -------------------------------------------------------------------- |
+| `components` | list | —       | List of OCM root components to evaluate. See component fields below. |
 
 ## Component Fields
 
 Each entry in the `components` list supports the following fields:
 
-| Option | Type | Required | Description |
-|--------|------|----------|-------------|
-| `component_name` | string | yes | OCM component name to evaluate (e.g., `acme.org/my-product`). |
-| `version` | string | no | Specific version to evaluate, or `greatest` to use the most recent version. If omitted, `time_range` must be specified. |
-| `ocm_repo_url` | string | no | Override default OCM repository lookup. |
-| `max_versions_limit` | int | no | Maximum number of versions to evaluate per run. Only relevant when `version` is `greatest`. Defaults to `1`. |
-| `time_range` | object | no | Restricts version discovery to a date range. See time range fields below. |
+| Option               | Type   | Required | Description                                                                                                             |
+| -------------------- | ------ | -------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `component_name`     | string | yes      | OCM component name to evaluate (e.g., `acme.org/my-product`).                                                           |
+| `version`            | string | no       | Specific version to evaluate, or `greatest` to use the most recent version. If omitted, `time_range` must be specified. |
+| `ocm_repo_url`       | string | no       | Override default OCM repository lookup.                                                                                 |
+| `max_versions_limit` | int    | no       | Maximum number of versions to evaluate per run. Only relevant when `version` is `greatest`. Defaults to `1`.            |
+| `time_range`         | object | no       | Restricts version discovery to a date range. See time range fields below.                                               |
 
 ## Time Range Fields
 
 The `time_range` object restricts which component versions are considered during version discovery. Dates are computed relative to the current day at runtime.
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `days_from` | int | `-365` | Start of the time range in days relative to today (negative = past). |
-| `days_to` | int | `0` | End of the time range in days relative to today (`0` = today). |
+| Option      | Type | Default | Description                                                          |
+| ----------- | ---- | ------- | -------------------------------------------------------------------- |
+| `days_from` | int  | `-365`  | Start of the time range in days relative to today (negative = past). |
+| `days_to`   | int  | `0`     | End of the time range in days relative to today (`0` = today).       |
 
 ## Configuration Details
 
@@ -57,8 +57,8 @@ Controls which component versions are evaluated:
 
 - **Fixed version** (e.g., `1.2.3`): Evaluates exactly that version. Any configured `time_range` is ignored.
 - **`greatest`**: Resolves to the most recent version(s) available. Combined with
-  `time_range`, this limits discovery to versions created within the given date window.
-  Combined with `max_versions_limit`, this caps how many versions are processed per run.
+  `max_versions_limit`, this caps how many versions are processed per run.
+  Any configured `time_range` is ignored.
 - **Omitted**: Version discovery relies entirely on `time_range` to determine which
   versions to evaluate.
 
@@ -71,7 +71,7 @@ value to backfill SLA records for a larger history in a single run.
 components:
   - component_name: acme.org/my-product
     version: greatest
-    max_versions_limit: 52   # evaluate up to 52 versions per run
+    max_versions_limit: 52 # evaluate up to 52 versions per run
 ```
 
 #### `time_range`
@@ -81,6 +81,6 @@ in days relative to the current date at the time of the run:
 
 ```yaml
 time_range:
-  days_from: -90   # versions created from 90 days ago
-  days_to: 0       # up to today
+  days_from: -90 # versions created from 90 days ago
+  days_to: 0 # up to today
 ```
