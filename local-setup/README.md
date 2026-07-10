@@ -29,6 +29,7 @@ repositories)
     -> `False`)  
     (4) Fill in `client_id`, `client_secret` and desired `role_bindings` via
     `secrets.oauth-cfg`  
+- `secrets.signing-cfg` to issue and verify the session JWTs that the delivery service gives to clients after successful authentication
 
 ## Start-Up
 To create a local Kubernetes cluster and deploy ODG, you have to run
