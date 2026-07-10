@@ -1,7 +1,9 @@
 # Overwriting OCM component responsibles
 
 The responsibles extension is able to determine responsibles based on
-configured `rules`. The determined responsibles are uploaded as
+configured `rules`, overriding or extending what is declared statically via
+the [`cloud.gardener.cnudie/responsibles` OCM label](../reference/16-ocm-labels.md#cloudgardenercnudieresponsibles).
+The determined responsibles are uploaded as
 `ArtefactMetadata` of type `meta/responsibles`. A rule in this context is made
 up by a list of `filters` and a list of assigned `strategies`. A rule is
 considered to be a match if and only if all of the filters of a rule match the given

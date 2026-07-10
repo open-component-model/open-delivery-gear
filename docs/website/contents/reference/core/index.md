@@ -10,4 +10,5 @@ Core components that handle orchestration, lifecycle management, and infrastruct
 ../09-cache-manager-config.md
 ../11-delivery-db-backup-config.md
 ../15-responsibles-config.md
+../16-ocm-labels.md
 ```
