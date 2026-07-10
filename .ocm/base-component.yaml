@@ -1,7 +1,7 @@
 componentReferences:
 - componentName: ocm.software/open-delivery-gear/core
   name: odg-core
-  version: 0.1350.0
+  version: 0.1351.0
 - componentName: ocm.software/open-delivery-gear/observability
   name: odg-observability
   version: 0.31.0
