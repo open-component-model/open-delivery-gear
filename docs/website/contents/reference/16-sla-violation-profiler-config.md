@@ -29,9 +29,9 @@ Each entry in the `components` list supports the following fields:
 | Option | Type | Required | Description |
 |--------|------|----------|-------------|
 | `component_name` | string | yes | OCM component name to evaluate (e.g., `acme.org/my-product`). |
-| `version` | string | yes | Specific version to evaluate, or `greatest` to use the most recent version. |
+| `version` | string | no | Specific version to evaluate, or `greatest` to use the most recent version. If omitted, `time_range` must be specified. |
 | `ocm_repo_url` | string | no | Override default OCM repository lookup. |
-| `max_versions_limit` | int | `1` | Maximum number of versions to evaluate per run. Only relevant when `version` is `greatest`. |
+| `max_versions_limit` | int | no | Maximum number of versions to evaluate per run. Only relevant when `version` is `greatest`. Defaults to `1`. |
 | `time_range` | object | no | Restricts version discovery to a date range. See time range fields below. |
 
 ## Time Range Fields
@@ -55,10 +55,12 @@ referenced components.
 
 Controls which component versions are evaluated:
 
-- **Fixed version** (e.g., `1.2.3`): Evaluates exactly that version.
+- **Fixed version** (e.g., `1.2.3`): Evaluates exactly that version. Any configured `time_range` is ignored.
 - **`greatest`**: Resolves to the most recent version(s) available. Combined with
   `time_range`, this limits discovery to versions created within the given date window.
   Combined with `max_versions_limit`, this caps how many versions are processed per run.
+- **Omitted**: Version discovery relies entirely on `time_range` to determine which
+  versions to evaluate.
 
 #### `max_versions_limit`
 
@@ -70,9 +72,6 @@ components:
   - component_name: acme.org/my-product
     version: greatest
     max_versions_limit: 52   # evaluate up to 52 versions per run
-    time_range:
-      days_from: -365
-      days_to: 0
 ```
 
 #### `time_range`
@@ -85,6 +84,3 @@ time_range:
   days_from: -90   # versions created from 90 days ago
   days_to: 0       # up to today
 ```
-
-Omitting `time_range` includes all available versions (subject to
-`max_versions_limit`).
