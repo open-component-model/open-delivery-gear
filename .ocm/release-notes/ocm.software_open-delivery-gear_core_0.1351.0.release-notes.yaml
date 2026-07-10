@@ -1,0 +1,135 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1351.0
+release_notes:
+- audience: developer
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: other
+  contents: An empty artefact kind and/or type is now also supported for the `component`
+    and `global` scopes
+  mimetype: text/markdown
+  reference: '[#878](https://github.com/open-component-model/odg-core/pull/878)'
+  type: standard
+- audience: user
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: breaking
+  contents: The latest rescoring is now always also the effective one (the specificity
+    is not considered anymore)
+  mimetype: text/markdown
+  reference: '[#878](https://github.com/open-component-model/odg-core/pull/878)'
+  type: standard
+- audience: developer
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: bugfix
+  contents: The ODG operator now properly handles common Kubernetes API watch related
+    exceptions
+  mimetype: text/markdown
+  reference: '[#881](https://github.com/open-component-model/odg-core/pull/881)'
+  type: standard
+- audience: developer
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: fix
+  contents: Imported BDBA triages are now properly using the `artefact` instead of
+    the `single` scope
+  mimetype: text/markdown
+  reference: '[#878](https://github.com/open-component-model/odg-core/pull/878)'
+  type: standard
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: bugfix
+  contents: The backlog-controller and odg-operator now specify a request timeout
+    > 0s to prevent stale connections from blocking incoming events
+  mimetype: text/markdown
+  reference: '[#881](https://github.com/open-component-model/odg-core/pull/881)'
+  type: standard
+- audience: user
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: breaking
+  contents: The `artefact` scope will now restrict the rescoring to the exact artefact
+    (ignoring its version). Previously, it was applied to all artefacts sharing the
+    same name and type.
+  mimetype: text/markdown
+  reference: '[#878](https://github.com/open-component-model/odg-core/pull/878)'
+  type: standard
+- audience: developer
+  author:
+    hostname: github.com
+    type: githubUser
+    username: zkdev
+  category: bugfix
+  contents: Test suite now supports asynchronous test functions
+  mimetype: text/markdown
+  reference: '[#875](https://github.com/open-component-model/odg-core/pull/875)'
+  type: standard
+- audience: user
+  author:
+    hostname: github.com
+    type: githubUser
+    username: zkdev
+  category: noteworthy
+  contents: If automatic issue assignment fails, there is now a more meaningful and
+    user friendly message added as comment.
+  mimetype: text/markdown
+  reference: '[#872](https://github.com/open-component-model/odg-core/pull/872)'
+  type: standard
+- audience: developer
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: fix
+  contents: The `version` property (if present) is now purged from the extra identity
+    in case the `artefact` scope is used
+  mimetype: text/markdown
+  reference: '[#878](https://github.com/open-component-model/odg-core/pull/878)'
+  type: standard
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: improvement
+  contents: The `CommandReadTimeout` for ClamAV has been increased from 15 to 60 seconds
+    to reduce the number of scanner related "malware" findings
+  mimetype: text/markdown
+  reference: '[#882](https://github.com/open-component-model/odg-core/pull/882)'
+  type: standard
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: zkdev
+  category: bugfix
+  contents: GitHub Secret Scanner Alert Extension will now also properly tracking
+    "Generic" alerts.
+  mimetype: text/markdown
+  reference: '[#873](https://github.com/open-component-model/odg-core/pull/873)'
+  type: standard
+- audience: developer
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: bugfix
+  contents: The `odg-core-libs` version is now pinned during the image build
+  mimetype: text/markdown
+  reference: '[#870](https://github.com/open-component-model/odg-core/pull/870)'
+  type: standard
