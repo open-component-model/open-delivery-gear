@@ -15,4 +15,5 @@ Extension components that provide scanning, analysis, and compliance functionali
 ../12-findings-report-generator-config.md
 ../13-github-secret-scanner-config.md
 ../14-static-application-security-testing-attestor-config.md
+../16-sla-violation-profiler-config.md
 ```
