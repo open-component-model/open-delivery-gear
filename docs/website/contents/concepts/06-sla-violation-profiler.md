@@ -58,7 +58,7 @@ transitively referenced components. It then queries the ODG Core API for:
 - all `rescoring` records that reference those findings.
 
 The version's **release date** is taken from the root component's creation
-date. All timestamps are normalised before comparison.
+date.
 
 ### 3. Determine the effective deadline per finding
 
@@ -81,8 +81,8 @@ deadline in one of three ways:
 - an explicit `due_date` on the rescoring becomes the new deadline;
 - an updated `allowed_processing_time` is added to the original discovery
   date to produce a new deadline; or
-- if neither is set, the deadline is cleared and no SLA applies from that
-  point on.
+- if neither is set, the deadline is cleared; a subsequent rescoring may
+  reinstate it.
 
 ### 4. Detect policy violations
 
