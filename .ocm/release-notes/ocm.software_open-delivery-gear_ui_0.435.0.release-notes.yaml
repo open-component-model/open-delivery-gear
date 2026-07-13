@@ -1,0 +1,26 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/ui
+  component_version: 0.435.0
+release_notes:
+- audience: user
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: noteworthy
+  contents: Removed the confusing "hide findings" filter option from the rescoring
+    UI. Categorisation and due date filter should be used instead.
+  mimetype: text/markdown
+  reference: '[#471](https://github.com/open-component-model/odg-ui/pull/471)'
+  type: standard
+- audience: developer
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: bugfix
+  contents: A bug where the rescoring proposals were fetched twice due to an immediate
+    component re-render has been resolved
+  mimetype: text/markdown
+  reference: '[#470](https://github.com/open-component-model/odg-ui/pull/470)'
+  type: standard
