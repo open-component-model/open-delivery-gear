@@ -1,0 +1,14 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1350.1
+release_notes:
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: bugfix
+  contents: Clear GitHub issue cache in between iterations for the same artefact to force re-authentication
+  mimetype: text/markdown
+  reference: '[#886](https://github.com/open-component-model/odg-core/pull/886)'
+  type: standard
