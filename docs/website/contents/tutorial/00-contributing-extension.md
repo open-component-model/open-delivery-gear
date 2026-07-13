@@ -15,7 +15,7 @@ refer to {doc}`/contents/concepts/01-data-model`.
 
 Configuration for each extension should be provided via the interface defined
 in the `odg.extensions_cfg` module
-([ref](https://github.com/open-component-model/odg-core/blob/master/src/odg/extensions.py)).
+([ref](https://github.com/open-component-model/odg-core/blob/master/src/odg/extensions_cfg.py)).
 A minimal set of configuration parameters is defined by the required base class
 `ExtensionCfgMixins`. In case the extension is expected to be working with
 backlog items (more on that topic in [extension-triggers](#extension-triggers) and
@@ -130,7 +130,7 @@ findings, there is a well-defined overview of the supported states of a finding
 Fig. 1: Finding State Machine
 ```
 
-If the extension is written in Python, the [odg-client](https://github.com/gardener/cc-utils/blob/master/delivery/client.py) should
+If the extension is written in Python, the [odg-client](https://github.com/open-component-model/odg-core/tree/master/src/odg_client) should
 be used which already contains functionality for the below described points:
 
 1. Fetch existing `ArtefactMetadata` entries
