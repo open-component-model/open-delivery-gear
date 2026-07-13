@@ -1,0 +1,15 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1352.0
+release_notes:
+- audience: user
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: noteworthy
+  contents: In case of an upstream CVE re-rating, an automatic rescoring will be created
+    (again) to make this change tracable
+  mimetype: text/markdown
+  reference: '[#884](https://github.com/open-component-model/odg-core/pull/884)'
+  type: standard
