@@ -304,7 +304,7 @@ refer to <a class="reference internal" href="../concepts/01-data-model.html"><sp
 <span id="id1"></span><h2>Extensions Configuration<a class="headerlink" href="#extensions-configuration" title="Link to this heading">¶</a></h2>
 <p>Configuration for each extension should be provided via the interface defined
 in the <code class="docutils literal notranslate"><span class="pre">odg.extensions_cfg</span></code> module
-(<a class="reference external" href="https://github.com/open-component-model/odg-core/blob/master/src/odg/extensions.py">ref</a>).
+(<a class="reference external" href="https://github.com/open-component-model/odg-core/blob/master/src/odg/extensions_cfg.py">ref</a>).
 A minimal set of configuration parameters is defined by the required base class
 <code class="docutils literal notranslate"><span class="pre">ExtensionCfgMixins</span></code>. In case the extension is expected to be working with
 backlog items (more on that topic in <a class="reference internal" href="#extension-triggers">extension-triggers</a> and
@@ -413,7 +413,7 @@ findings, there is a well-defined overview of the supported states of a finding
 <p><span class="caption-text">Fig. 1: Finding State Machine</span><a class="headerlink" href="#id9" title="Link to this image">¶</a></p>
 </figcaption>
 </figure>
-<p>If the extension is written in Python, the <a class="reference external" href="https://github.com/gardener/cc-utils/blob/master/delivery/client.py">odg-client</a> should
+<p>If the extension is written in Python, the <a class="reference external" href="https://github.com/open-component-model/odg-core/tree/master/src/odg_client">odg-client</a> should
 be used which already contains functionality for the below described points:</p>
 <ol class="arabic">
 <li><p>Fetch existing <code class="docutils literal notranslate"><span class="pre">ArtefactMetadata</span></code> entries</p>
