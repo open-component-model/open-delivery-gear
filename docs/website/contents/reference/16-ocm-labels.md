@@ -93,13 +93,13 @@ labels:
 
 | Field | Type | Description |
 |---|---|---|
-| `network_exposure` | string | How reachable the component is from a network perspective. `private`: not reachable from outside a private network. `protected`: reachable from a restricted network or behind authentication. `public`: reachable from the internet. |
-| `authentication_enforced` | boolean | Whether all access to the component requires authentication. |
-| `user_interaction` | string | Who interacts with the component. `gardener-operator`: only operators/administrators. `end-user`: arbitrary end users. |
-| `confidentiality_requirement` | string | How sensitive the data processed by the component is. |
-| `integrity_requirement` | string | How critical correct operation of the component is. |
-| `availability_requirement` | string | How critical continuous availability of the component is. |
-| `comment` | string | Human-readable explanation of the categorisation choices. |
+| `network_exposure` | string | How reachable the component is from a network perspective. `private`: not reachable from outside a private network. `protected`: reachable from a restricted network or behind authentication. `public`: reachable from the internet |
+| `authentication_enforced` | boolean | Whether all access to the component requires authentication |
+| `user_interaction` | string | Who interacts with the component. `gardener-operator`: only operators/administrators. `end-user`: arbitrary end users |
+| `confidentiality_requirement` | string | How sensitive the data processed by the component is (`none`, `low` or `high`) |
+| `integrity_requirement` | string | How critical correct operation of the component is (`none`, `low` or `high`) |
+| `availability_requirement` | string | How critical continuous availability of the component is (`none`, `low` or `high`) |
+| `comment` | string | Human-readable explanation of the categorisation choices |
 
 ---
 
