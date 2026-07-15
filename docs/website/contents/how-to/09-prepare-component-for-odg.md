@@ -77,7 +77,9 @@ labels:
 ```
 
 To skip scanning entirely, set `policy: "skip"` and add a `comment` explaining
-the reason.
+the reason. See the
+[label reference](../reference/16-ocm-labels.md#cloudgardenercnudiedso-scanning-hintsbinary_idv1)
+for all fields and allowed values.
 
 ## Mark the Primary Source Repository
 
@@ -98,3 +100,7 @@ sources:
         value:
           repository-classification: "main"
 ```
+
+See the
+[label reference](../reference/16-ocm-labels.md#cloudgardenercicdsource)
+for all fields and allowed values.
