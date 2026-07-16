@@ -1,0 +1,14 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1353.1
+release_notes:
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: zkdev
+  category: bugfix
+  contents: SBoM generator can no longer create stale SBoM blobs, leading to growing database size
+  mimetype: text/markdown
+  reference: '[#889](https://github.com/open-component-model/odg-core/pull/889)'
+  type: standard
