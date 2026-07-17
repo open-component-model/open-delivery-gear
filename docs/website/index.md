@@ -114,7 +114,7 @@ contents/tutorial/00-contributing-extension.md
 contents/reference/00-artefact-metadata-query.md
 contents/reference/core/index.md
 contents/reference/extensions/index.md
-contents/reference/16-ocm-labels.md
+contents/reference/17-ocm-labels.md
 ```
 
 ---

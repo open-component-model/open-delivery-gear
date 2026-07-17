@@ -6,44 +6,32 @@ ODG uses [OCM labels](https://ocm.software/docs/reference/component-descriptor/#
 
 ## `cloud.gardener.cnudie/dso/scanning-hints/binary_id/v1`
 
-Controls whether a binary vulnerability scan is skipped.
+Controls whether a binary vulnerability scan is skipped in ODG.
 
 ```yaml
 labels:
   - name: cloud.gardener.cnudie/dso/scanning-hints/binary_id/v1
     value:
       policy: "scan" | "skip"
-      path_config:
-      include_paths:
-        - "^usr/lib/.*"
-      exclude_paths:
-        - "^usr/lib/debug/.*"
       comment: "free-text string"
 ```
 
 | Field | Type | Required | Description |
 |---|---|---|---|
 | `policy` | string | yes | `scan` runs the scan (default behaviour); `skip` bypasses the vulnerability scan for this resource. |
-| `path_config.include_paths` | list of regex | no | Only paths matching at least one pattern are included. |
-| `path_config.exclude_paths` | list of regex | no | Paths matching any pattern are excluded. Applied after `include_paths`. |
 | `comment` | string | no | Human-readable explanation for skipping the scan. |
 
 ---
 
 ## `cloud.gardener.cnudie/dso/scanning-hints/source_analysis/v1`
 
-Controls whether SAST (Static Application Security Testing) source analysis is run.
+Controls whether SAST (Static Application Security Testing) source analysis is run in ODG. Usually `skip` is set when the pipeline already ran a SAST scan.
 
 ```yaml
 labels:
   - name: cloud.gardener.cnudie/dso/scanning-hints/source_analysis/v1
     value:
       policy: "scan" | "skip"
-      path_config:
-        include_paths:
-          - "^src/.*"
-        exclude_paths:
-          - "^src/vendor/.*"
       comment: "free-text string"
 ```
 
@@ -113,16 +101,11 @@ labels:
     value:
       - type: "githubUser"
         username: "some-github-handle"
-        github_hostname: "github.com"    # optional, defaults to github.com
+        github_hostname: "github.com"    # optional, defaults to the hostname defined in the source access
       - type: "githubTeam"
         teamname: "my-org/my-team"
-        github_hostname: "github.com"    # optional, defaults to github.com
+        github_hostname: "github.com"    # optional, defaults to the hostname defined in the source access
       - type: "codeowners"
-      - type: "emailAddress"
-        email: "owner@example.com"
-      - type: "personalName"
-        firstName: "Jane"
-        lastName: "Doe"
 ```
 
 | Type | Required fields | Description |
@@ -130,8 +113,6 @@ labels:
 | `githubUser` | `username` | A specific GitHub user. |
 | `githubTeam` | `teamname` | A GitHub team in `org/team` format. |
 | `codeowners` | *(none)* | Resolves responsibles from the CODEOWNERS file in the component's source repository. |
-| `emailAddress` | `email` | An e-mail address. |
-| `personalName` | `firstName`, `lastName` | A person identified by name only. |
 
 ---
 
@@ -152,7 +133,7 @@ Currently the following values are recognised:
 
 | Value | Effect |
 |---|---|
-| `sast` | The scanned report |
+| `sast` | The linting report |
 
 ---
 
@@ -186,16 +167,3 @@ labels:
 | Field | Type | Required | Description |
 |---|---|---|---|
 | `value` | string | yes | ISO 8601 datetime in UTC, e.g. `"2024-06-15T08:30:00.000000+00:00"`. |
-
----
-
-## `gardener.cloud/comment`
-
-Attaches a free-text comment to a component or artefact.
-
-```yaml
-labels:
-  - name: gardener.cloud/comment
-    value: |
-      free-text string
-```

@@ -56,28 +56,19 @@ treated as unknown and do not affect rescoring. See the
 [label reference](../reference/16-ocm-labels.md#gardenercloudcve-categorisation)
 for all fields and allowed values.
 
-## Tune or Skip Binary Scans
+## Skip SAST Scans
 
-If ODG runs binary vulnerability scans (BDBA) against your resources, you can
-use scan hints to restrict which paths are scanned or to skip a resource
-entirely.
+You can configure whether ODG should run a SAST (Static Application Security Testing) source analysis. Usually `skip` is set when the pipeline already ran a SAST scan.
 
 ```yaml
-# on the relevant resource entry
 labels:
   - name: cloud.gardener.cnudie/dso/scanning-hints/binary_id/v1
     value:
-      policy: "scan"
-      path_config:
-        include_paths:
-          - "^usr/lib/.*"
-        exclude_paths:
-          - "^usr/lib/debug/.*"
-      comment: "Only scan shipped libraries, skip debug symbols"
+      policy: "skip"
+      comment: "We use gosec for sast-scanning, see attached log"
 ```
 
-To skip scanning entirely, set `policy: "skip"` and add a `comment` explaining
-the reason. See the
+See the
 [label reference](../reference/16-ocm-labels.md#cloudgardenercnudiedso-scanning-hintsbinary_idv1)
 for all fields and allowed values.
 
