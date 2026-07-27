@@ -1,0 +1,15 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1357.0
+release_notes:
+- audience: developer
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: bugfix
+  contents: The auth request parameters are not logged anymore by the ODG client upon
+    connection failures
+  mimetype: text/markdown
+  reference: '[#897](https://github.com/open-component-model/odg-core/pull/897)'
+  type: standard
