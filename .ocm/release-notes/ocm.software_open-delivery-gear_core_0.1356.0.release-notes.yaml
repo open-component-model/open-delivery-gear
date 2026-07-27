@@ -1,0 +1,14 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1356.0
+release_notes:
+- audience: developer
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: noteworthy
+  contents: Increased the BDBA request timeout from `121s` to `301s`
+  mimetype: text/markdown
+  reference: '[#891](https://github.com/open-component-model/odg-core/pull/891)'
+  type: standard
