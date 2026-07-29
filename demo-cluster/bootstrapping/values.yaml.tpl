@@ -6,7 +6,7 @@ extensions_cfg:
     enabled: True
   artefact_enumerator:
     components:
-      - component_name: ocm.software/cli
+      - component_name: ocm.software/ocm
       - component_name: ocm.software/ocmcli
       - component_name: acme.org/sovereign/product
       - component_name: opendesk.poc.sap.com/base
