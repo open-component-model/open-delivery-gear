@@ -377,9 +377,9 @@ ocm_repo_mappings:
     selectors:
       - version_filter_overwrite: semver_releases
   - repository: europe-docker.pkg.dev/gardener-project/releases
-    - repository: ghcr.io/open-component-model/open-component-model
-      prefixes:
-        - ocm.software/ocm
+  - repository: ghcr.io/open-component-model
+    prefixes:
+      - ocm.software/ocm
   - repository: ghcr.io/open-component-model/ocm
     prefixes:
       - ocm.software/ocmcli
