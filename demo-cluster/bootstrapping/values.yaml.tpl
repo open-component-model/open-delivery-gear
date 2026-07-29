@@ -59,6 +59,8 @@ extensions_cfg:
           - type: component-filter
             include_component_names:
               - ocm.software/ocm
+              - ocm.software/cli
+              - ocm.software/kubernetes/controller
               - ocm.software/ocmcli
         strategies:
           - type: static-responsibles
@@ -327,7 +329,7 @@ features_cfg:
       releasePipelineUrl: https://github.com/open-component-model/open-component-model/actions/workflows/release.yaml
     - id: bd545620-3e40-4c7e-aa39-8ef565047c9f
       name: ocm.software/ocmcli
-      displayName: OCM CLI
+      displayName: OCM CLI v1 (legacy)
       type: OCM
       version: greatest
       icon: home
