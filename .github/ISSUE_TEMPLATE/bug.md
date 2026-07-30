@@ -1,6 +1,6 @@
 ---
 name: Bug
-about: "🪲 Create a bug to help the projects improve"
+about: "🪲 Create a bug to help the project improve"
 title: ''
 type: Bug
 
@@ -13,9 +13,11 @@ Please provide a clear and concise description of the bug.
 
 **Version**
 <!---
-Please provide the version of the project are you using?
-- For ocm-cli, run `ocm --version`.
-- For ocm-controllers, check the image specified in your deployment.
+Please provide the version of Open Delivery Gear you are using.
+- The overall ODG version (see the `./VERSION` file) is usually enough, as it
+  gives us the full version vector.
+- If known, you can also provide the individual `odg-core` and `odg-ui`
+  versions.
 -->
 
 **To Reproduce**
@@ -25,19 +27,13 @@ minimal and precisely as possible!
 The listed information below is intended as guidance, please include only as 
 much as required to reproduce.
 
-- For the ocm-cli, provide information about
-  - the environment you are running on (OS, shell, etc.),
-  - the commands (including flags) you used,
-  - the relevant parts of your configuration file (default location `$HOME/.
-ocmconfig`). Be careful to redact any sensitive information.
-
-- For the ocm-controllers, provide information about
-  - the relevant kubernetes resource manifests
-  - the relevant ocm components and artifacts (an overview can be provided 
-    by `ocm get cv ... -r` and `ocm get resources ... -r`)
-  - the relevant controller logs
-  - the cluster infrastructure you are running on (like kind)
-  - the kubernetes/kro/flux version
+- The environment you are running on (OS, shell, Kubernetes version,
+  cluster infrastructure such as kind, etc.).
+- The relevant parts of your ODG configuration, such as
+  `extensions_cfg.yaml` or `ocm_repo_mappings.yaml`, or the values of your
+  Helm chart. Be careful to redact any sensitive information.
+- The relevant OCM components and artifacts.
+- The relevant logs.
 -->
 
 **Actual behavior**

@@ -11,7 +11,10 @@ assignees: ''
 What is the goal of this epic?
 
 **User Story**
-As a DevOps admin, I want to ...
+
+- As a developer, I want to ... <!-- e.g. building or extending a scanner extension -->
+- As an operator, I want to ... <!-- e.g. deploying/configuring ODG in a cluster -->
+- As an end user, I want to ... <!-- e.g. working with findings in the Dashboard/API -->
 
 **Scope**
 List all deliverables that are part of this epic. The Epic is considered DONE if all of the below mentioned deliverables are available.
@@ -19,7 +22,7 @@ List all deliverables that are part of this epic. The Epic is considered DONE if
 - [ ] Function 1
 - [ ] Function 2
 - [ ] Tests
-- [ ] End user documentation
+- [ ] End-user documentation
 - [ ] Informed Community
 - [ ] ...
 

@@ -13,7 +13,7 @@ assignees: ''
 
 - ...
 - Code has been reviewed by other team members
-- Analysis of existing tests (Unit and Integration)
-- Unit Tests created for new code or existing Unit Tests updated
-- End-user Documentation updated (if applicable)
-- Internal technical Documentation created/updated (if applicable)
+- Analysis of existing tests (unit and integration)
+- Unit tests created for new code or existing unit tests updated
+- End-user documentation updated (if applicable)
+- Internal technical documentation created/updated (if applicable)

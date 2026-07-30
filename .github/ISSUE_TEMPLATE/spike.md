@@ -15,6 +15,6 @@ What is the goal of this spike?
 **Done Criteria**
 
 - [ ] Estimation of impact on existing code incl. tests
-- [ ] Estimation of impact on Enduser Documentation updated (if applicable)
-- [ ] Estimation of impact on Internal technical Documentation created/updated (if applicable)
+- [ ] Estimation of impact on End-user documentation (if applicable)
+- [ ] Estimation of impact on Internal technical documentation (if applicable)
 - [ ] Created refinable tasks for the actual implementation
