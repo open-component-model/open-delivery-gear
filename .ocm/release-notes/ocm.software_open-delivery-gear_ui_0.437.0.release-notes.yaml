@@ -1,0 +1,15 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/ui
+  component_version: 0.437.0
+release_notes:
+- audience: user
+  author:
+    hostname: github.com
+    type: githubUser
+    username: Sawthis
+  category: feature
+  contents: Added support for CodeQL extension and findings in ODG UI (rescoring &
+    monitoring)
+  mimetype: text/markdown
+  reference: '[#473](https://github.com/open-component-model/odg-ui/pull/473)'
+  type: standard
