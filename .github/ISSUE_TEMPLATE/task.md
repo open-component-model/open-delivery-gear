@@ -16,4 +16,4 @@ assignees: ''
 - Analysis of existing tests (unit and integration)
 - Unit tests created for new code or existing unit tests updated
 - End-user documentation updated (if applicable)
-- Internal technical documentation created/updated (if applicable)
+- Technical documentation created/updated (if applicable)
