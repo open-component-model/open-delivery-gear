@@ -1,0 +1,14 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1359.0
+release_notes:
+- audience: developer
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: improvement
+  contents: The Kubernetes `resources` are now configurable via the Helm values
+  mimetype: text/markdown
+  reference: '[#898](https://github.com/open-component-model/odg-core/pull/898)'
+  type: standard
