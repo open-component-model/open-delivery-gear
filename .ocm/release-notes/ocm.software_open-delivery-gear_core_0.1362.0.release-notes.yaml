@@ -1,0 +1,15 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1362.0
+release_notes:
+- audience: developer
+  author:
+    hostname: github.com
+    type: githubUser
+    username: JanAms130
+  category: improvement
+  contents: SlaViolation now carries a structured audit trace describing the timeline
+    from finding discovery through rescorings to the violation cause.
+  mimetype: text/markdown
+  reference: '[#905](https://github.com/open-component-model/odg-core/pull/905)'
+  type: standard
