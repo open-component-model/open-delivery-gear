@@ -46,7 +46,7 @@ The ODG Database serves as the **sole persistency layer** for the entire system.
 - Store findings and metadata as `ArtefactMetadata` entries
 - Correlate metadata with OCM coordinates (component name, version, artefact identity)
 - Maintain compliance snapshots tracking artefact processing state
-- Store scanner metadata writebacks and rescoring decisions
+- Store scanner metadata writebacks and rescoring decisions (informed by [OCM labels](../reference/16-ocm-labels.md) on the component descriptor)
 - Track discovery dates for SLA enforcement
 - Cache OCM component information
 
