@@ -1,0 +1,15 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1363.0
+release_notes:
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: improvement
+  contents: The artefact-enumerator now allows configuration of central filter rules
+    to prevent automatic backlog item creation for specified artefact(group)s
+  mimetype: text/markdown
+  reference: '[#907](https://github.com/open-component-model/odg-core/pull/907)'
+  type: standard
