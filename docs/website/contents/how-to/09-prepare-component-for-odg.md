@@ -1,7 +1,7 @@
 # Prepare Your Component for ODG
 
 This guide is for component authors who want to get the most out of ODG
-scanning. By adding a small set of [OCM labels](../reference/16-ocm-labels.md)
+scanning. By adding a small set of [OCM labels](../reference/17-ocm-labels.md)
 to your component descriptor, you can control scan behaviour, ensure findings
 are routed to the right team, and provide context that helps ODG produce more
 accurate results.
@@ -13,19 +13,20 @@ accurate results.
 
 ## Declare Responsible Owners
 
-Add the `cloud.gardener.cnudie/responsibles` label so that ODG and the issue
+Add the `odg.ocm.software/responsibles` label so that ODG and the issue
 replicator know whom to assign findings to.
 
 ```yaml
 labels:
-  - name: cloud.gardener.cnudie/responsibles
+  - name: odg.ocm.software/responsibles
+    version: v1
     value:
       - type: githubTeam
         teamname: my-org/my-team
 ```
 
-See the [label reference](../reference/16-ocm-labels.md#cloudgardenercnudieresponsibles)
-for all supported types (`githubUser`, `codeowners`, `emailAddress`, etc.).
+See the [label reference](../reference/17-ocm-labels.md#odgocmsoftwareresponsibles-v1)
+for all supported types (`githubUser`, `codeowners`, etc.).
 
 ```{note}
 The responsibles extension can override or extend these assignments at runtime
@@ -33,19 +34,20 @@ via configurable rules. See
 {doc}`/contents/concepts/04-responsibles` for details.
 ```
 
-## Provide CVE Categorisation Context
+## Provide Risk Profile Context
 
-Add the `gardener.cloud/cve-categorisation` label to describe the deployment
+Add the `security.ocm.software/risk-profile` label to describe the deployment
 context of your component. ODG uses this to suggest adjusted CVE severity
 scores that reflect actual exposure rather than the theoretical maximum.
 
 ```yaml
 labels:
-  - name: gardener.cloud/cve-categorisation
+  - name: security.ocm.software/risk-profile
+    version: v1
     value:
       network_exposure: "private"
       authentication_enforced: true
-      user_interaction: "gardener-operator"
+      user_interaction: "end-user"
       confidentiality_requirement: "low"
       integrity_requirement: "high"
       availability_requirement: "high"
@@ -53,45 +55,29 @@ labels:
 
 Only set the fields that are meaningful for your component; omitted fields are
 treated as unknown and do not affect rescoring. See the
-[label reference](../reference/16-ocm-labels.md#gardenercloudcve-categorisation)
+[label reference](../reference/17-ocm-labels.md#securityocmsoftwarerisk-profile-v1)
 for all fields and allowed values.
 
-## Skip SAST Scans
+## Skip Binary or Source Scans
 
-You can configure whether ODG should run a SAST (Static Application Security Testing) source analysis. Usually `skip` is set when the pipeline already ran a SAST scan.
+You can configure whether ODG should run binary vulnerability scans or SAST
+(Static Application Security Testing) source analysis. Usually `skip` is set
+when the pipeline already ran the equivalent scan.
 
 ```yaml
 labels:
-  - name: cloud.gardener.cnudie/dso/scanning-hints/binary_id/v1
+  - name: odg.ocm.software/binary-scan-policy
+    version: v1
     value:
       policy: "skip"
-      comment: "We use gosec for sast-scanning, see attached log"
+      comment: "Scanned upstream, results attached as SBOM"
+  - name: odg.ocm.software/source-scan-policy
+    version: v1
+    value:
+      policy: "skip"
+      comment: "We use gosec for SAST scanning, see attached log"
 ```
 
 See the
-[label reference](../reference/16-ocm-labels.md#cloudgardenercnudiedso-scanning-hintsbinary_idv1)
-for all fields and allowed values.
-
-## Mark the Primary Source Repository
-
-Add the `cloud.gardener/cicd/source` label to the source entry that represents
-the main repository of your component. ODG uses this for DORA metrics and
-GitHub Advanced Security (GHAS) alert ingestion.
-
-```yaml
-sources:
-  - name: my-repo
-    type: github
-    access:
-      type: github
-      repoUrl: github.com/my-org/my-repo
-      ref: refs/heads/main
-    labels:
-      - name: cloud.gardener/cicd/source
-        value:
-          repository-classification: "main"
-```
-
-See the
-[label reference](../reference/16-ocm-labels.md#cloudgardenercicdsource)
+[label reference](../reference/17-ocm-labels.md#odgocmsoftwarebinary-scan-policy-v1)
 for all fields and allowed values.
