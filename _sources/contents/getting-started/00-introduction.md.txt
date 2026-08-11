@@ -30,7 +30,7 @@ Let's start by elaborating on the fundamentals and core principles of OCM.
 
 ```{note}
 Already familiar with OCM?
-Please skip to [Security and Compliance Automation with ODG](#security-and-compliance-automation-with-odg)
+Please skip to {ref}`Security and Compliance Automation with ODG <security-and-compliance-automation-with-odg>`
 ```
 
 ODG is built upon the semantic model of OCM.
@@ -62,6 +62,7 @@ Work through the [Creating Component Versions Guide](https://ocm.software/docs/g
 
 ---
 
+(security-and-compliance-automation-with-odg)=
 ## Security and Compliance Automation with ODG
 
 ODG allows subscription to OCM components, which upon new version release trigger ODG scans (e.g., vulnerability scans). ODG tracks the findings according to specified SLAs and provides a processing interface with assisted rescorings.

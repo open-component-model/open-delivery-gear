@@ -100,6 +100,7 @@ contents/how-to/08-run-sql-statements.md
 :caption: Tutorials
 
 contents/tutorial/00-contributing-extension.md
+contents/tutorial/01-mac-setup-from-scratch.md
 ```
 
 ## References
