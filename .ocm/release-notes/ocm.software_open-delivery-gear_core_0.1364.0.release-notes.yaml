@@ -1,0 +1,26 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1364.0
+release_notes:
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: feature
+  contents: OCM's "OCI-native" local blobs are now supported as well as the `OCIImageLayer`
+    access type
+  mimetype: text/markdown
+  reference: '[#906](https://github.com/open-component-model/odg-core/pull/906)'
+  type: standard
+- audience: developer
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: noteworthy
+  contents: The extensions (except osid) are not limited anymore to certain _artefact
+    types_ but only _access types_
+  mimetype: text/markdown
+  reference: '[#906](https://github.com/open-component-model/odg-core/pull/906)'
+  type: standard
