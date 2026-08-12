@@ -36,5 +36,5 @@ export ODG_TOKEN=$(curl -c - "${ODG_API}/auth?api_url=${GH_API}&access_token=${G
 ### Fetch Vulnerabilities from API
 
 ```bash
-curl -X POST -d '{"entries": [{"component_name": "acme.org/sovereign/postgres", "component_version": "1.0.0"}]}' -H "Authorization: Bearer ${ODG_TOKEN}" "${ODG_API}/artefacts/metadata/query?type=finding/vulnerability" | jq .
+curl -X POST -d '{"entries": [{"component_name": "acme.org/sovereign/postgres", "component_version": "1.0.0"}]}' -H "Accept: application/json" -H "Authorization: Bearer ${ODG_TOKEN}" "${ODG_API}/artefacts/metadata/query?type=finding/vulnerability" | jq .
 ```
