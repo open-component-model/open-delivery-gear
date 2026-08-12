@@ -7,6 +7,8 @@
 
 ## Context and Problem Statement
 
+> **Note:** This ADR was primarily written based on analysis of `odg-core`. The same problems and decisions apply to other ODG repositories; the scope of rollout is an open question below.
+
 ODG-Core consumes open-source packages at multiple levels - Python runtime dependencies, Dockerfile base images, GitHub Actions, and upstream OCM artefacts declared in `.ocm/base-component.yaml`. Currently none of these are pinned to exact versions:
 
 - `requirements.txt` files list bare package names with no version constraints (addressed by ADR: Python Packaging Migration to uv)
@@ -120,3 +122,7 @@ Major version bumps always require manual review. Auto-merge will be enabled con
 2. **Registry credentials** - Both `europe-docker.pkg.dev` registries are publicly readable (verified via `crane ls` and `docker pull`). No host rules or secrets are required in the Renovate workflow.
 
 3. **Auto-merge scope for Docker and GitHub Actions** - Minor base image updates can occasionally be disruptive. Auto-merge for these managers should be reviewed after the initial observation period.
+
+4. **Rollout scope and central preset** - This ADR was developed against `odg-core` but the same policy should apply to all ODG repositories. Open questions before broader rollout:
+   - Which repos are in scope? A list of affected repositories should be agreed.
+   - Should each repo get its own standalone `renovate.json5`, or should we create a shared preset (e.g. `github>open-delivery-gear/renovate-config`) that repos extend with a single line? A central preset makes policy changes easier but adds a dependency. Starting repo-by-repo is lower risk; the preset can be extracted once the config stabilizes.

@@ -7,6 +7,8 @@
 
 ## Context and Problem Statement
 
+> **Note:** This ADR was primarily written based on analysis of `odg-core`.
+
 ODG-Core currently manages Python dependencies via bare `requirements*.txt` files and three `setup.py` build scripts. There is no lockfile, meaning dependency resolution happens at install time and results are not reproducible - two CI runs on different days can install different transitive dependency versions.
 
 The repository publishes three separate PyPI packages from a single source tree: `odg-core-libs` (`setup.py`), `bdba-client` (`setup.bdba-client.py`), and `odg-client` (`setup.odg-client.py`). `odg-core-libs` pins the other two as runtime dependencies. Published library metadata uses bare package names with no version constraints, which is intentional for libraries but means the test/CI/runtime environments are also unpinned.
