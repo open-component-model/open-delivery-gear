@@ -1,7 +1,7 @@
 # Prepare Your Component for ODG
 
 This guide is for component authors who want to get the most out of ODG
-scanning. By adding a small set of [OCM labels](../reference/17-ocm-labels.md)
+scanning. By adding a small set of [OCM labels](../reference/18-ocm-labels.md)
 to your component descriptor, you can control scan behaviour, ensure findings
 are routed to the right team, and provide context that helps ODG produce more
 accurate results.
@@ -25,7 +25,7 @@ labels:
         teamname: my-org/my-team
 ```
 
-See the [label reference](../reference/17-ocm-labels.md#odgocmsoftwareresponsibles-v1)
+See the [label reference](../reference/18-ocm-labels.md#odgocmsoftwareresponsibles-v1)
 for all supported types (`githubUser`, `codeowners`, etc.).
 
 ```{note}
@@ -55,7 +55,7 @@ labels:
 
 Only set the fields that are meaningful for your component; omitted fields are
 treated as unknown and do not affect rescoring. See the
-[label reference](../reference/17-ocm-labels.md#securityocmsoftwarerisk-profile-v1)
+[label reference](../reference/18-ocm-labels.md#securityocmsoftwarerisk-profile-v1)
 for all fields and allowed values.
 
 ## Skip Binary or Source Scans
@@ -79,5 +79,5 @@ labels:
 ```
 
 See the
-[label reference](../reference/17-ocm-labels.md#odgocmsoftwarebinary-scan-policy-v1)
+[label reference](../reference/18-ocm-labels.md#odgocmsoftwarebinary-scan-policy-v1)
 for all fields and allowed values.

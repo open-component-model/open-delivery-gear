@@ -115,7 +115,7 @@ contents/tutorial/01-mac-setup-from-scratch.md
 contents/reference/00-artefact-metadata-query.md
 contents/reference/core/index.md
 contents/reference/extensions/index.md
-contents/reference/17-ocm-labels.md
+contents/reference/18-ocm-labels.md
 ```
 
 ---
