@@ -2,6 +2,10 @@
 
 set -euo pipefail
 
+# --- Source the shared helper file ---
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+. "${SCRIPT_DIR}/helm-helpers.sh"
+
 CLUSTER_NAME=""
 CHART=""
 
@@ -36,9 +40,12 @@ check_required_flags() {
 parse_flags "$@"
 check_required_flags CLUSTER_NAME CHART
 
+echo ">>> 🔍 Checking for local override files in ${SCRIPT_DIR}"
+build_helm_override_args "${SCRIPT_DIR}"
+
 kind create cluster \
   --name "$CLUSTER_NAME" \
-  --config <(helm template "$CHART")
+  --config <(helm template "$CHART" --values "${SCRIPT_DIR}/values.yaml" "${HELM_OVERRIDE_ARGS[@]}")
 
 NAMESPACE="${NAMESPACE:-odg}"
 
@@ -61,32 +68,37 @@ echo ">>> Installing bootstrapping chart from ${BOOTSTRAPPING_CHART}"
 helm upgrade -i bootstrapping oci://${BOOTSTRAPPING_CHART} \
   --namespace ${NAMESPACE} \
   --values ${CHART}/../values.yaml \
+  "${HELM_OVERRIDE_ARGS[@]}" \
   --wait
 
 echo ">>> Installing delivery-database from ${DELIVERY_DATABASE_CHART}"
 # First, install custom pv and pvc to allow re-usage of host's filesystem mount
-kubectl apply -f "${CHART}/delivery-db-pv" --namespace $NAMESPACE
+kubectl apply -f <(helm template delivery-db-pv "${CHART}/delivery-db-pv" --values "${SCRIPT_DIR}/cluster/values-delivery-db.yaml" "${HELM_OVERRIDE_ARGS[@]}") --namespace $NAMESPACE
 helm upgrade -i delivery-db oci://${DELIVERY_DATABASE_CHART} \
   --namespace $NAMESPACE \
   --values ${CHART}/values-delivery-db.yaml \
+  "${HELM_OVERRIDE_ARGS[@]}" \
   --wait
 
 echo ">>> Installing delivery-service from ${DELIVERY_SERVICE_CHART}"
 helm upgrade -i delivery-service oci://${DELIVERY_SERVICE_CHART} \
   --namespace $NAMESPACE \
   --values ${CHART}/values-delivery-service.yaml \
+  "${HELM_OVERRIDE_ARGS[@]}" \
   --wait
 
 echo ">>> Installing delivery-dashboard from ${DELIVERY_DASHBOARD_CHART}"
 helm upgrade -i delivery-dashboard oci://${DELIVERY_DASHBOARD_CHART} \
   --namespace $NAMESPACE \
   --values ${CHART}/values-delivery-dashboard.yaml \
+  "${HELM_OVERRIDE_ARGS[@]}" \
   --wait
 
 echo ">>> Installing extensions from ${EXTENSIONS_CHART}"
 helm upgrade -i extensions oci://${EXTENSIONS_CHART} \
   --namespace $NAMESPACE \
   --values ${CHART}/values-extensions.yaml \
+  "${HELM_OVERRIDE_ARGS[@]}" \
   --wait
 
 kubectl port-forward service/delivery-dashboard 3000:8080 > /dev/null &

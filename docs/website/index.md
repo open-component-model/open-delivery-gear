@@ -101,6 +101,7 @@ contents/how-to/09-prepare-component-for-odg.md
 :caption: Tutorials
 
 contents/tutorial/00-contributing-extension.md
+contents/tutorial/01-mac-setup-from-scratch.md
 ```
 
 ## References

@@ -1,2 +1,8 @@
 .vscode
+.venv
+website-out/
 kubeconfig
+*secrets*
+*local.yaml
+!local-setup/secrets-local.yaml.example
+!local-setup/values-local.yaml.example

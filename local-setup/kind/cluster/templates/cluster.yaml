@@ -10,8 +10,8 @@ nodes:
 - role: worker
   image: {{ $.Values.image }}
   extraMounts:
-  - hostPath: /var/delivery-db
-    containerPath: /var/delivery-db # has to match the spec.hostPath.path in the persistent volume
+  - hostPath: {{ $.Values.persistence.hostPath | quote }}
+    containerPath: {{ $.Values.persistence.containerPath | quote }} # has to match the spec.hostPath.path in the persistent volume
   kubeadmConfigPatches:
-{{ include "kubeadmConfigPatches" . | indent 2 }}
+{{ include "kubeadmConfigPatches" $ | indent 2 }}
 {{- end }}

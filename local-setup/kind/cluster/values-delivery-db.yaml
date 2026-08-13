@@ -37,3 +37,5 @@ primary:
 # cluster re-creations (-> this allows using a stable host file mount on the host)
 persistence:
   existingClaim: pvc-delivery-db-0
+  hostPath: "/var/delivery-db"
+  containerPath: "/var/delivery-db"

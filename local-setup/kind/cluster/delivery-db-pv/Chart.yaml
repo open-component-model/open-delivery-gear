@@ -1,0 +1,4 @@
+apiVersion: v2
+name: delivery-db-pv
+version: 0.1.0
+description: PersistentVolume and PersistentVolumeClaim for the delivery database

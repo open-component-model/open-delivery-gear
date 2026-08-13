@@ -6,6 +6,7 @@ extensions_cfg:
     enabled: True
   artefact_enumerator:
     components:
+      - component_name: ocm.software/ocm
       - component_name: ocm.software/ocmcli
       - component_name: acme.org/sovereign/product
       - component_name: opendesk.poc.sap.com/base
@@ -33,6 +34,7 @@ extensions_cfg:
   cache_manager:
     prefill_function_caches:
       components:
+        - component_name: ocm.software/ocm
         - component_name: ocm.software/ocmcli
   clamav:
     mappings:
@@ -52,10 +54,13 @@ extensions_cfg:
     enabled: True
   responsibles:
     rules:
-      - name: ocmcli
+      - name: ocm
         filters:
           - type: component-filter
             include_component_names:
+              - ocm.software/ocm
+              - ocm.software/cli
+              - ocm.software/kubernetes/controller
               - ocm.software/ocmcli
         strategies:
           - type: static-responsibles
@@ -315,9 +320,16 @@ findings:
 
 features_cfg:
   specialComponents:
+    - id: 13d4496b-2e8e-4634-81e0-4852e09bca3a
+      name: ocm.software/ocm
+      displayName: OCM
+      type: OCM
+      version: greatest
+      icon: home
+      releasePipelineUrl: https://github.com/open-component-model/open-component-model/actions/workflows/release.yaml
     - id: bd545620-3e40-4c7e-aa39-8ef565047c9f
       name: ocm.software/ocmcli
-      displayName: OCM CLI
+      displayName: OCM CLI v1 (legacy)
       type: OCM
       version: greatest
       icon: home
@@ -365,6 +377,9 @@ ocm_repo_mappings:
     selectors:
       - version_filter_overwrite: semver_releases
   - repository: europe-docker.pkg.dev/gardener-project/releases
+  - repository: ghcr.io/open-component-model
+    prefixes:
+      - ocm.software/ocm
   - repository: ghcr.io/open-component-model/ocm
     prefixes:
       - ocm.software/ocmcli
@@ -382,6 +397,7 @@ profiles:
       - finding/sast
       - finding/vulnerability
     special_component_ids:
+      - 13d4496b-2e8e-4634-81e0-4852e09bca3a
       - bd545620-3e40-4c7e-aa39-8ef565047c9f
 
   - name: OpenDesk

@@ -1,0 +1,3 @@
+persistence:
+  hostPath: "/Users/<your-username>/odg-postgres-data"
+  containerPath: "/var/delivery-db"

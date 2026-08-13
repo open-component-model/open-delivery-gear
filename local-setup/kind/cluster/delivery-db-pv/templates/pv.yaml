@@ -8,7 +8,7 @@ spec:
   capacity:
     storage: 8Gi
   hostPath:
-    path: /var/delivery-db
+    path: {{ .Values.persistence.containerPath | quote }}
     type: DirectoryOrCreate
   persistentVolumeReclaimPolicy: Delete
   storageClassName: standard
