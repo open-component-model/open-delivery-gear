@@ -3,11 +3,11 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="SLA Violation Profiler" href="16-sla-violation-profiler-config.html"><link rel="prev" title="GitHub Secret Scanner" href="13-github-secret-scanner-config.html">
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Contribute a new Extension" href="../tutorial/00-contributing-extension.html"><link rel="prev" title="Run custom SQL commands in ODG" href="08-run-sql-statements.html">
         <link rel="prefetch" href="../../_static/odg.svg" as="image">
 
     <link rel="shortcut icon" href="../../_static/odg.svg"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Static Application Security Testing Attestor - Open Delivery Gear documentation</title>
+        <title>Prepare Your Component for ODG - Open Delivery Gear documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
@@ -210,17 +210,17 @@
 <li class="toctree-l1"><a class="reference internal" href="../concepts/06-sla-violation-profiler.html">SLA Violation Profiler</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../how-to/00-hybrid-dev-setup.html">Setting up a hybrid dev setup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../how-to/01-local-setup.html">Deploying the Open Delivery Gear Locally</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../how-to/02-use-odg-api.html">Use the ODG Python Package to resolve an OCM component</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../how-to/03-vulnerabilities-for-component.html">Get all vulnerabilities for a Component</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../how-to/04-diki.html">Send Diki findings to ODG-API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../how-to/05-sbom-download.html">Download SBOM Documents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../how-to/06-sbom-diagnose-failures.html">Diagnose Failed SBOM Generation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../how-to/07-change-vulnerability-sla.html">Change the SLAs for Vulnerability Findings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../how-to/08-run-sql-statements.html">Run custom SQL commands in ODG</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../how-to/09-prepare-component-for-odg.html">Prepare Your Component for ODG</a></li>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="00-hybrid-dev-setup.html">Setting up a hybrid dev setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01-local-setup.html">Deploying the Open Delivery Gear Locally</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02-use-odg-api.html">Use the ODG Python Package to resolve an OCM component</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03-vulnerabilities-for-component.html">Get all vulnerabilities for a Component</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04-diki.html">Send Diki findings to ODG-API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05-sbom-download.html">Download SBOM Documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06-sbom-diagnose-failures.html">Diagnose Failed SBOM Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07-change-vulnerability-sla.html">Change the SLAs for Vulnerability Findings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08-run-sql-statements.html">Run custom SQL commands in ODG</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Prepare Your Component for ODG</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul>
@@ -228,32 +228,32 @@
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/01-mac-setup-from-scratch.html">Setup from Scratch (macOS)</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">References</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="00-artefact-metadata-query.html">Artefact Metadata Search</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="core/index.html">Core Configuration</a><input aria-label="Toggle navigation of Core Configuration" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="02-artefact-enumerator-config.html">Artefact Enumerator</a></li>
-<li class="toctree-l2"><a class="reference internal" href="07-backlog-controller-config.html">Backlog Controller</a></li>
-<li class="toctree-l2"><a class="reference internal" href="09-cache-manager-config.html">Cache Manager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="11-delivery-db-backup-config.html">Delivery Database Backup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="15-responsibles-config.html">Responsibles</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference/00-artefact-metadata-query.html">Artefact Metadata Search</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../reference/core/index.html">Core Configuration</a><input aria-label="Toggle navigation of Core Configuration" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../reference/02-artefact-enumerator-config.html">Artefact Enumerator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/07-backlog-controller-config.html">Backlog Controller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/09-cache-manager-config.html">Cache Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/11-delivery-db-backup-config.html">Delivery Database Backup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/15-responsibles-config.html">Responsibles</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current has-children"><a class="reference internal" href="extensions/index.html">Extension Configuration</a><input aria-label="Toggle navigation of Extension Configuration" checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="01-software-bill-of-material-generator-config.html">Software Bill of Material Generator</a></li>
-<li class="toctree-l2"><a class="reference internal" href="03-vulnerability-scanner-config.html">Vulnerability Scanner</a></li>
-<li class="toctree-l2"><a class="reference internal" href="04-malware-scanner-config.html">Malware Scanner</a></li>
-<li class="toctree-l2"><a class="reference internal" href="05-operating-system-scanner-config.html">Operating System Scanner</a></li>
-<li class="toctree-l2"><a class="reference internal" href="06-issue-replicator-config.html">Issue Replicator</a></li>
-<li class="toctree-l2"><a class="reference internal" href="08-license-and-intellectual-property-scanner-config.html">License and Intellectual Property Scanner</a></li>
-<li class="toctree-l2"><a class="reference internal" href="10-cryptographic-asset-scanner-config.html">Cryptographic Asset Scanner</a></li>
-<li class="toctree-l2"><a class="reference internal" href="12-findings-report-generator-config.html">Findings Report Generator</a></li>
-<li class="toctree-l2"><a class="reference internal" href="13-github-secret-scanner-config.html">GitHub Secret Scanner</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Static Application Security Testing Attestor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="16-sla-violation-profiler-config.html">SLA Violation Profiler</a></li>
-<li class="toctree-l2"><a class="reference internal" href="17-codeql-scanner-config.html">CodeQL Scanner</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../reference/extensions/index.html">Extension Configuration</a><input aria-label="Toggle navigation of Extension Configuration" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../reference/01-software-bill-of-material-generator-config.html">Software Bill of Material Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/03-vulnerability-scanner-config.html">Vulnerability Scanner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/04-malware-scanner-config.html">Malware Scanner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/05-operating-system-scanner-config.html">Operating System Scanner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/06-issue-replicator-config.html">Issue Replicator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/08-license-and-intellectual-property-scanner-config.html">License and Intellectual Property Scanner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/10-cryptographic-asset-scanner-config.html">Cryptographic Asset Scanner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/12-findings-report-generator-config.html">Findings Report Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/13-github-secret-scanner-config.html">GitHub Secret Scanner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/14-static-application-security-testing-attestor-config.html">Static Application Security Testing Attestor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/16-sla-violation-profiler-config.html">SLA Violation Profiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/17-codeql-scanner-config.html">CodeQL Scanner</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="18-ocm-labels.html">OCM Labels used by ODG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/18-ocm-labels.html">OCM Labels used by ODG</a></li>
 </ul>
 
 </div>
@@ -274,7 +274,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="../../_sources/contents/reference/14-static-application-security-testing-attestor-config.md.txt" title="View this page">
+  <a class="muted-link" href="../../_sources/contents/how-to/09-prepare-component-for-odg.md.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -292,65 +292,84 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="static-application-security-testing-attestor">
-<h1>Static Application Security Testing Attestor<a class="headerlink" href="#static-application-security-testing-attestor" title="Link to this heading">¶</a></h1>
-<p>The Static Application Security Testing Attestor extension checks whether static analysis scans have been executed for components and creates findings when scans are missing or outdated.</p>
-<section id="configuration-example">
-<h2>Configuration Example<a class="headerlink" href="#configuration-example" title="Link to this heading">¶</a></h2>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">sast</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">86400</span><span class="w">                    </span><span class="c1"># 24 hours</span>
-<span class="w">  </span><span class="nt">on_unsupported</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">warning</span>
+          <section id="prepare-your-component-for-odg">
+<h1>Prepare Your Component for ODG<a class="headerlink" href="#prepare-your-component-for-odg" title="Link to this heading">¶</a></h1>
+<p>This guide is for component authors who want to get the most out of ODG
+scanning. By adding a small set of <a class="reference internal" href="../reference/18-ocm-labels.html"><span class="std std-doc">OCM labels</span></a>
+to your component descriptor, you can control scan behaviour, ensure findings
+are routed to the right team, and provide context that helps ODG produce more
+accurate results.</p>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>An OCM component descriptor (<code class="docutils literal notranslate"><span class="pre">component-descriptor.yaml</span></code> or equivalent)</p></li>
+<li><p>Familiarity with the <a class="reference external" href="https://ocm.software/docs/reference/component-descriptor/#component-labels">OCM label format</a></p></li>
+</ul>
+</section>
+<section id="declare-responsible-owners">
+<h2>Declare Responsible Owners<a class="headerlink" href="#declare-responsible-owners" title="Link to this heading">¶</a></h2>
+<p>Add the <code class="docutils literal notranslate"><span class="pre">odg.ocm.software/responsibles</span></code> label so that ODG and the issue
+replicator know whom to assign findings to.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">odg.ocm.software/responsibles</span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">githubTeam</span>
+<span class="w">        </span><span class="nt">teamname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-org/my-team</span>
 </pre></div>
 </div>
-</section>
-<section id="top-level-options">
-<h2>Top-Level Options<a class="headerlink" href="#top-level-options" title="Link to this heading">¶</a></h2>
-<div class="table-wrapper colwidths-auto docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Option</p></th>
-<th class="head"><p>Type</p></th>
-<th class="head"><p>Default</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">interval</span></code></p></td>
-<td><p>int (seconds)</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">86400</span></code></p></td>
-<td><p>Maximum time before a component is re-checked.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">on_unsupported</span></code></p></td>
-<td><p>string</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">warning</span></code></p></td>
-<td><p>Behaviour when artefact kind/type/access is unsupported. Options: <code class="docutils literal notranslate"><span class="pre">fail</span></code>, <code class="docutils literal notranslate"><span class="pre">ignore</span></code>, <code class="docutils literal notranslate"><span class="pre">warning</span></code>.</p></td>
-</tr>
-</tbody>
-</table>
+<p>See the <a class="reference internal" href="../reference/18-ocm-labels.html#odgocmsoftwareresponsibles-v1"><span class="std std-ref">label reference</span></a>
+for all supported types (<code class="docutils literal notranslate"><span class="pre">githubUser</span></code>, <code class="docutils literal notranslate"><span class="pre">codeowners</span></code>, etc.).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The responsibles extension can override or extend these assignments at runtime
+via configurable rules. See
+<a class="reference internal" href="../concepts/04-responsibles.html"><span class="doc">Overwriting OCM component responsibles</span></a> for details.</p>
 </div>
 </section>
-<section id="configuration-details">
-<h2>Configuration Details<a class="headerlink" href="#configuration-details" title="Link to this heading">¶</a></h2>
-<section id="interval">
-<h3><code class="docutils literal notranslate"><span class="pre">interval</span></code><a class="headerlink" href="#interval" title="Link to this heading">¶</a></h3>
-<p>The maximum time (in seconds) before a component is re-checked for SAST
-scan execution. Default is 86400 seconds (24 hours).</p>
-<p>This interval ensures:</p>
-<ul class="simple">
-<li><p>Components are regularly verified for SAST coverage</p></li>
-<li><p>New components are identified quickly if they lack scans</p></li>
-<li><p>Scan execution tracking remains current</p></li>
-</ul>
+<section id="provide-risk-profile-context">
+<h2>Provide Risk Profile Context<a class="headerlink" href="#provide-risk-profile-context" title="Link to this heading">¶</a></h2>
+<p>Add the <code class="docutils literal notranslate"><span class="pre">security.ocm.software/risk-profile</span></code> label to describe the deployment
+context of your component. ODG uses this to suggest adjusted CVE severity
+scores that reflect actual exposure rather than the theoretical maximum.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">security.ocm.software/risk-profile</span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">network_exposure</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;private&quot;</span>
+<span class="w">      </span><span class="nt">authentication_enforced</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">user_interaction</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;end-user&quot;</span>
+<span class="w">      </span><span class="nt">confidentiality_requirement</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;low&quot;</span>
+<span class="w">      </span><span class="nt">integrity_requirement</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;high&quot;</span>
+<span class="w">      </span><span class="nt">availability_requirement</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;high&quot;</span>
+</pre></div>
+</div>
+<p>Only set the fields that are meaningful for your component; omitted fields are
+treated as unknown and do not affect rescoring. See the
+<a class="reference internal" href="../reference/18-ocm-labels.html#securityocmsoftwarerisk-profile-v1"><span class="std std-ref">label reference</span></a>
+for all fields and allowed values.</p>
 </section>
-<section id="on-unsupported">
-<h3><code class="docutils literal notranslate"><span class="pre">on_unsupported</span></code><a class="headerlink" href="#on-unsupported" title="Link to this heading">¶</a></h3>
-<p>Defines the behaviour when an artefact kind, type, or access method is not supported:</p>
-<ul class="simple">
-<li><p><strong><code class="docutils literal notranslate"><span class="pre">fail</span></code></strong>: Raise an exception and stop processing</p></li>
-<li><p><strong><code class="docutils literal notranslate"><span class="pre">ignore</span></code></strong>: Silently skip the unsupported artefact</p></li>
-<li><p><strong><code class="docutils literal notranslate"><span class="pre">warning</span></code></strong> (default): Skip the artefact and log a warning message</p></li>
-</ul>
-</section>
+<section id="skip-binary-or-source-scans">
+<h2>Skip Binary or Source Scans<a class="headerlink" href="#skip-binary-or-source-scans" title="Link to this heading">¶</a></h2>
+<p>You can configure whether ODG should run binary vulnerability scans or SAST
+(Static Application Security Testing) source analysis. Usually <code class="docutils literal notranslate"><span class="pre">skip</span></code> is set
+when the pipeline already ran the equivalent scan.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">odg.ocm.software/binary-scan-policy</span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">policy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;skip&quot;</span>
+<span class="w">      </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Scanned</span><span class="nv"> </span><span class="s">upstream,</span><span class="nv"> </span><span class="s">results</span><span class="nv"> </span><span class="s">attached</span><span class="nv"> </span><span class="s">as</span><span class="nv"> </span><span class="s">SBOM&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">odg.ocm.software/source-scan-policy</span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">policy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;skip&quot;</span>
+<span class="w">      </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;We</span><span class="nv"> </span><span class="s">use</span><span class="nv"> </span><span class="s">gosec</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">SAST</span><span class="nv"> </span><span class="s">scanning,</span><span class="nv"> </span><span class="s">see</span><span class="nv"> </span><span class="s">attached</span><span class="nv"> </span><span class="s">log&quot;</span>
+</pre></div>
+</div>
+<p>See the
+<a class="reference internal" href="../reference/18-ocm-labels.html#odgocmsoftwarebinary-scan-policy-v1"><span class="std std-ref">label reference</span></a>
+for all fields and allowed values.</p>
 </section>
 </section>
 
@@ -359,23 +378,23 @@ scan execution. Default is 86400 seconds (24 hours).</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="16-sla-violation-profiler-config.html">
+          <a class="next-page" href="../tutorial/00-contributing-extension.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">SLA Violation Profiler</div>
+                <div class="title">Contribute a new Extension</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="13-github-secret-scanner-config.html">
+          <a class="prev-page" href="08-run-sql-statements.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">GitHub Secret Scanner</div>
+                <div class="title">Run custom SQL commands in ODG</div>
                 
               </div>
             </a>
@@ -409,14 +428,11 @@ scan execution. Default is 86400 seconds (24 hours).</p>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Static Application Security Testing Attestor</a><ul>
-<li><a class="reference internal" href="#configuration-example">Configuration Example</a></li>
-<li><a class="reference internal" href="#top-level-options">Top-Level Options</a></li>
-<li><a class="reference internal" href="#configuration-details">Configuration Details</a><ul>
-<li><a class="reference internal" href="#interval"><code class="docutils literal notranslate"><span class="pre">interval</span></code></a></li>
-<li><a class="reference internal" href="#on-unsupported"><code class="docutils literal notranslate"><span class="pre">on_unsupported</span></code></a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#">Prepare Your Component for ODG</a><ul>
+<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li><a class="reference internal" href="#declare-responsible-owners">Declare Responsible Owners</a></li>
+<li><a class="reference internal" href="#provide-risk-profile-context">Provide Risk Profile Context</a></li>
+<li><a class="reference internal" href="#skip-binary-or-source-scans">Skip Binary or Source Scans</a></li>
 </ul>
 </li>
 </ul>

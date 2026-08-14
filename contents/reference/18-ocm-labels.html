@@ -3,11 +3,11 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="SLA Violation Profiler" href="16-sla-violation-profiler-config.html"><link rel="prev" title="GitHub Secret Scanner" href="13-github-secret-scanner-config.html">
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="prev" title="CodeQL Scanner" href="17-codeql-scanner-config.html">
         <link rel="prefetch" href="../../_static/odg.svg" as="image">
 
     <link rel="shortcut icon" href="../../_static/odg.svg"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Static Application Security Testing Attestor - Open Delivery Gear documentation</title>
+        <title>OCM Labels used by ODG - Open Delivery Gear documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
@@ -238,7 +238,7 @@
 <li class="toctree-l2"><a class="reference internal" href="15-responsibles-config.html">Responsibles</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current has-children"><a class="reference internal" href="extensions/index.html">Extension Configuration</a><input aria-label="Toggle navigation of Extension Configuration" checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="extensions/index.html">Extension Configuration</a><input aria-label="Toggle navigation of Extension Configuration" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="01-software-bill-of-material-generator-config.html">Software Bill of Material Generator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="03-vulnerability-scanner-config.html">Vulnerability Scanner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="04-malware-scanner-config.html">Malware Scanner</a></li>
@@ -248,12 +248,12 @@
 <li class="toctree-l2"><a class="reference internal" href="10-cryptographic-asset-scanner-config.html">Cryptographic Asset Scanner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="12-findings-report-generator-config.html">Findings Report Generator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="13-github-secret-scanner-config.html">GitHub Secret Scanner</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Static Application Security Testing Attestor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14-static-application-security-testing-attestor-config.html">Static Application Security Testing Attestor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="16-sla-violation-profiler-config.html">SLA Violation Profiler</a></li>
 <li class="toctree-l2"><a class="reference internal" href="17-codeql-scanner-config.html">CodeQL Scanner</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="18-ocm-labels.html">OCM Labels used by ODG</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">OCM Labels used by ODG</a></li>
 </ul>
 
 </div>
@@ -274,7 +274,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="../../_sources/contents/reference/14-static-application-security-testing-attestor-config.md.txt" title="View this page">
+  <a class="muted-link" href="../../_sources/contents/reference/18-ocm-labels.md.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -292,65 +292,188 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="static-application-security-testing-attestor">
-<h1>Static Application Security Testing Attestor<a class="headerlink" href="#static-application-security-testing-attestor" title="Link to this heading">¶</a></h1>
-<p>The Static Application Security Testing Attestor extension checks whether static analysis scans have been executed for components and creates findings when scans are missing or outdated.</p>
-<section id="configuration-example">
-<h2>Configuration Example<a class="headerlink" href="#configuration-example" title="Link to this heading">¶</a></h2>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">sast</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">86400</span><span class="w">                    </span><span class="c1"># 24 hours</span>
-<span class="w">  </span><span class="nt">on_unsupported</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">warning</span>
+          <section id="ocm-labels-used-by-odg">
+<h1>OCM Labels used by ODG<a class="headerlink" href="#ocm-labels-used-by-odg" title="Link to this heading">¶</a></h1>
+<p>ODG uses <a class="reference external" href="https://ocm.software/docs/reference/component-descriptor/#component-labels">OCM labels</a> to influence scanning behaviour, CVE rescoring, responsible assignment, and metadata.</p>
+<hr class="docutils" />
+<section id="odg-ocm-software-binary-scan-policy-v1">
+<h2><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/binary-scan-policy</span></code> v1<a class="headerlink" href="#odg-ocm-software-binary-scan-policy-v1" title="Link to this heading">¶</a></h2>
+<p>Controls whether a binary vulnerability scan is skipped in ODG.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">odg.ocm.software/binary-scan-policy</span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">policy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;scan&quot;</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> &quot;skip&quot;</span>
+<span class="w">      </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;free-text</span><span class="nv"> </span><span class="s">string&quot;</span>
 </pre></div>
 </div>
-</section>
-<section id="top-level-options">
-<h2>Top-Level Options<a class="headerlink" href="#top-level-options" title="Link to this heading">¶</a></h2>
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>Option</p></th>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
 <th class="head"><p>Type</p></th>
-<th class="head"><p>Default</p></th>
+<th class="head"><p>Required</p></th>
 <th class="head"><p>Description</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">interval</span></code></p></td>
-<td><p>int (seconds)</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">86400</span></code></p></td>
-<td><p>Maximum time before a component is re-checked.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">on_unsupported</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">policy</span></code></p></td>
 <td><p>string</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">warning</span></code></p></td>
-<td><p>Behaviour when artefact kind/type/access is unsupported. Options: <code class="docutils literal notranslate"><span class="pre">fail</span></code>, <code class="docutils literal notranslate"><span class="pre">ignore</span></code>, <code class="docutils literal notranslate"><span class="pre">warning</span></code>.</p></td>
+<td><p>yes</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">scan</span></code> runs the scan (default behaviour); <code class="docutils literal notranslate"><span class="pre">skip</span></code> bypasses the vulnerability scan for this resource.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">comment</span></code></p></td>
+<td><p>string</p></td>
+<td><p>no</p></td>
+<td><p>Human-readable explanation for skipping the scan.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 </section>
-<section id="configuration-details">
-<h2>Configuration Details<a class="headerlink" href="#configuration-details" title="Link to this heading">¶</a></h2>
-<section id="interval">
-<h3><code class="docutils literal notranslate"><span class="pre">interval</span></code><a class="headerlink" href="#interval" title="Link to this heading">¶</a></h3>
-<p>The maximum time (in seconds) before a component is re-checked for SAST
-scan execution. Default is 86400 seconds (24 hours).</p>
-<p>This interval ensures:</p>
-<ul class="simple">
-<li><p>Components are regularly verified for SAST coverage</p></li>
-<li><p>New components are identified quickly if they lack scans</p></li>
-<li><p>Scan execution tracking remains current</p></li>
-</ul>
+<hr class="docutils" />
+<section id="odg-ocm-software-source-scan-policy-v1">
+<h2><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/source-scan-policy</span></code> v1<a class="headerlink" href="#odg-ocm-software-source-scan-policy-v1" title="Link to this heading">¶</a></h2>
+<p>Controls whether SAST (Static Application Security Testing) source analysis is run in ODG. Usually <code class="docutils literal notranslate"><span class="pre">skip</span></code> is set when the pipeline already ran a SAST scan.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">odg.ocm.software/source-scan-policy</span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">policy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;scan&quot;</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> &quot;skip&quot;</span>
+<span class="w">      </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;free-text</span><span class="nv"> </span><span class="s">string&quot;</span>
+</pre></div>
+</div>
+<p>The fields are identical to those of <a class="reference internal" href="#odgocmsoftwarebinary-scan-policy-v1"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/binary-scan-policy</span></code></span></a>.</p>
 </section>
-<section id="on-unsupported">
-<h3><code class="docutils literal notranslate"><span class="pre">on_unsupported</span></code><a class="headerlink" href="#on-unsupported" title="Link to this heading">¶</a></h3>
-<p>Defines the behaviour when an artefact kind, type, or access method is not supported:</p>
-<ul class="simple">
-<li><p><strong><code class="docutils literal notranslate"><span class="pre">fail</span></code></strong>: Raise an exception and stop processing</p></li>
-<li><p><strong><code class="docutils literal notranslate"><span class="pre">ignore</span></code></strong>: Silently skip the unsupported artefact</p></li>
-<li><p><strong><code class="docutils literal notranslate"><span class="pre">warning</span></code></strong> (default): Skip the artefact and log a warning message</p></li>
-</ul>
+<hr class="docutils" />
+<section id="security-ocm-software-risk-profile-v1">
+<h2><code class="docutils literal notranslate"><span class="pre">security.ocm.software/risk-profile</span></code> v1<a class="headerlink" href="#security-ocm-software-risk-profile-v1" title="Link to this heading">¶</a></h2>
+<p>Describes the deployment context of a component or artefact. ODG uses this information to suggest adjusted CVE severity scores that reflect the actual exposure of the component.</p>
+<p>All fields are optional. Fields that are omitted are treated as unknown and do not contribute to rescoring decisions.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">security.ocm.software/risk-profile</span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">network_exposure</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;private&quot;</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> &quot;protected&quot; | &quot;public&quot;</span><span class="w">    </span><span class="c1"># maps to CVSS: Attack Vector (AV)</span>
+<span class="w">      </span><span class="nt">authentication_enforced</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true | false</span><span class="w">    </span><span class="c1"># CVSS: Privileges Required (PR)</span>
+<span class="w">      </span><span class="nt">user_interaction</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;operator&quot;</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> &quot;end-user&quot;</span><span class="w">    </span><span class="c1"># CVSS: User Interaction (UI)</span>
+<span class="w">      </span><span class="nt">confidentiality_requirement</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;none&quot;</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> &quot;low&quot; | &quot;high&quot;</span><span class="w">   </span><span class="c1"># CVSS: Confidentiality Requirement (CR)</span>
+<span class="w">      </span><span class="nt">integrity_requirement</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;none&quot;</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> &quot;low&quot; | &quot;high&quot;</span><span class="w">   </span><span class="c1"># CVSS: Integrity Requirement (IR)</span>
+<span class="w">      </span><span class="nt">availability_requirement</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;none&quot;</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> &quot;low&quot; | &quot;high&quot;</span><span class="w">   </span><span class="c1"># CVSS: Availability Requirement (AR)</span>
+<span class="w">      </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;free-text</span><span class="nv"> </span><span class="s">string&quot;</span>
+</pre></div>
+</div>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">network_exposure</span></code></p></td>
+<td><p>string</p></td>
+<td><p>How reachable the component is from a network perspective. <code class="docutils literal notranslate"><span class="pre">private</span></code>: not reachable from outside a private network. <code class="docutils literal notranslate"><span class="pre">protected</span></code>: reachable from a restricted network or behind authentication. <code class="docutils literal notranslate"><span class="pre">public</span></code>: reachable from the internet.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">authentication_enforced</span></code></p></td>
+<td><p>boolean</p></td>
+<td><p>Whether all access to the component requires authentication.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">user_interaction</span></code></p></td>
+<td><p>string</p></td>
+<td><p>Who interacts with the component. <code class="docutils literal notranslate"><span class="pre">operator</span></code>: only operators/administrators. <code class="docutils literal notranslate"><span class="pre">end-user</span></code>: arbitrary end users.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">confidentiality_requirement</span></code></p></td>
+<td><p>string</p></td>
+<td><p>How sensitive the data processed by the component is (<code class="docutils literal notranslate"><span class="pre">none</span></code>, <code class="docutils literal notranslate"><span class="pre">low</span></code> or <code class="docutils literal notranslate"><span class="pre">high</span></code>).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">integrity_requirement</span></code></p></td>
+<td><p>string</p></td>
+<td><p>How critical correct operation of the component is (<code class="docutils literal notranslate"><span class="pre">none</span></code>, <code class="docutils literal notranslate"><span class="pre">low</span></code> or <code class="docutils literal notranslate"><span class="pre">high</span></code>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">availability_requirement</span></code></p></td>
+<td><p>string</p></td>
+<td><p>How critical continuous availability of the component is (<code class="docutils literal notranslate"><span class="pre">none</span></code>, <code class="docutils literal notranslate"><span class="pre">low</span></code> or <code class="docutils literal notranslate"><span class="pre">high</span></code>).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">comment</span></code></p></td>
+<td><p>string</p></td>
+<td><p>Human-readable explanation of the categorisation choices.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
+<hr class="docutils" />
+<section id="odg-ocm-software-responsibles-v1">
+<h2><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/responsibles</span></code> v1<a class="headerlink" href="#odg-ocm-software-responsibles-v1" title="Link to this heading">¶</a></h2>
+<p>Explicitly declares who is responsible for a component or artefact.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">odg.ocm.software/responsibles</span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;githubUser&quot;</span>
+<span class="w">        </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;some-github-handle&quot;</span>
+<span class="w">        </span><span class="nt">github_hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;github.com&quot;</span><span class="w">    </span><span class="c1"># optional, defaults to the hostname defined in the source access</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;githubTeam&quot;</span>
+<span class="w">        </span><span class="nt">teamname</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;my-org/my-team&quot;</span>
+<span class="w">        </span><span class="nt">github_hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;github.com&quot;</span><span class="w">    </span><span class="c1"># optional, defaults to the hostname defined in the source access</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;codeowners&quot;</span>
+</pre></div>
+</div>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Type</p></th>
+<th class="head"><p>Required fields</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">githubUser</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">username</span></code></p></td>
+<td><p>A specific GitHub user.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">githubTeam</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">teamname</span></code></p></td>
+<td><p>A GitHub team in <code class="docutils literal notranslate"><span class="pre">org/team</span></code> format.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">codeowners</span></code></p></td>
+<td><p><em>(none)</em></p></td>
+<td><p>Resolves responsibles from the CODEOWNERS file in the component’s source repository.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="odg-ocm-software-purposes-v1">
+<h2><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/purposes</span></code> v1<a class="headerlink" href="#odg-ocm-software-purposes-v1" title="Link to this heading">¶</a></h2>
+<p>Tags a resource with a set of named functional purposes. ODG uses this to discover resources that serve a specific role within a component.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">odg.ocm.software/purposes</span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lint</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sast</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pybandit</span>
+</pre></div>
+</div>
+<p>Currently the following values are recognised:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Value</p></th>
+<th class="head"><p>Effect</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sast</span></code></p></td>
+<td><p>The linting report</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
 </section>
 
@@ -359,23 +482,15 @@ scan execution. Default is 86400 seconds (24 hours).</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="16-sla-violation-profiler-config.html">
-              <div class="page-info">
-                <div class="context">
-                  <span>Next</span>
-                </div>
-                <div class="title">SLA Violation Profiler</div>
-              </div>
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-            </a>
-          <a class="prev-page" href="13-github-secret-scanner-config.html">
+          
+          <a class="prev-page" href="17-codeql-scanner-config.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">GitHub Secret Scanner</div>
+                <div class="title">CodeQL Scanner</div>
                 
               </div>
             </a>
@@ -409,14 +524,12 @@ scan execution. Default is 86400 seconds (24 hours).</p>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Static Application Security Testing Attestor</a><ul>
-<li><a class="reference internal" href="#configuration-example">Configuration Example</a></li>
-<li><a class="reference internal" href="#top-level-options">Top-Level Options</a></li>
-<li><a class="reference internal" href="#configuration-details">Configuration Details</a><ul>
-<li><a class="reference internal" href="#interval"><code class="docutils literal notranslate"><span class="pre">interval</span></code></a></li>
-<li><a class="reference internal" href="#on-unsupported"><code class="docutils literal notranslate"><span class="pre">on_unsupported</span></code></a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#">OCM Labels used by ODG</a><ul>
+<li><a class="reference internal" href="#odg-ocm-software-binary-scan-policy-v1"><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/binary-scan-policy</span></code> v1</a></li>
+<li><a class="reference internal" href="#odg-ocm-software-source-scan-policy-v1"><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/source-scan-policy</span></code> v1</a></li>
+<li><a class="reference internal" href="#security-ocm-software-risk-profile-v1"><code class="docutils literal notranslate"><span class="pre">security.ocm.software/risk-profile</span></code> v1</a></li>
+<li><a class="reference internal" href="#odg-ocm-software-responsibles-v1"><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/responsibles</span></code> v1</a></li>
+<li><a class="reference internal" href="#odg-ocm-software-purposes-v1"><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/purposes</span></code> v1</a></li>
 </ul>
 </li>
 </ul>

@@ -220,6 +220,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../how-to/06-sbom-diagnose-failures.html">Diagnose Failed SBOM Generation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../how-to/07-change-vulnerability-sla.html">Change the SLAs for Vulnerability Findings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../how-to/08-run-sql-statements.html">Run custom SQL commands in ODG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how-to/09-prepare-component-for-odg.html">Prepare Your Component for ODG</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul>
@@ -252,6 +253,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../reference/17-codeql-scanner-config.html">CodeQL Scanner</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/18-ocm-labels.html">OCM Labels used by ODG</a></li>
 </ul>
 
 </div>
@@ -293,7 +295,9 @@
           <section id="overwriting-ocm-component-responsibles">
 <h1>Overwriting OCM component responsibles<a class="headerlink" href="#overwriting-ocm-component-responsibles" title="Link to this heading">¶</a></h1>
 <p>The responsibles extension is able to determine responsibles based on
-configured <code class="docutils literal notranslate"><span class="pre">rules</span></code>. The determined responsibles are uploaded as
+configured <code class="docutils literal notranslate"><span class="pre">rules</span></code>, overriding or extending what is declared statically via
+the <a class="reference internal" href="../reference/18-ocm-labels.html#odgocmsoftwareresponsibles-v1"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/responsibles</span></code> OCM label</span></a>.
+The determined responsibles are uploaded as
 <code class="docutils literal notranslate"><span class="pre">ArtefactMetadata</span></code> of type <code class="docutils literal notranslate"><span class="pre">meta/responsibles</span></code>. A rule in this context is made
 up by a list of <code class="docutils literal notranslate"><span class="pre">filters</span></code> and a list of assigned <code class="docutils literal notranslate"><span class="pre">strategies</span></code>. A rule is
 considered to be a match if and only if all of the filters of a rule match the given
