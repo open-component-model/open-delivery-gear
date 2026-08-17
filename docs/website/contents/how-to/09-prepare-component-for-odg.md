@@ -25,7 +25,7 @@ labels:
         teamname: my-org/my-team
 ```
 
-See the [label reference](../reference/18-ocm-labels.md#odgocmsoftwareresponsibles-v1)
+See the {ref}`label reference <odgocmsoftwareresponsibles-v1>`
 for all supported types (`githubUser`, `codeowners`, etc.).
 
 ```{note}
@@ -55,7 +55,7 @@ labels:
 
 Only set the fields that are meaningful for your component; omitted fields are
 treated as unknown and do not affect rescoring. See the
-[label reference](../reference/18-ocm-labels.md#securityocmsoftwarerisk-profile-v1)
+{ref}`label reference <securityocmsoftwarerisk-profile-v1>`
 for all fields and allowed values.
 
 ## Skip Binary or Source Scans
@@ -79,5 +79,5 @@ labels:
 ```
 
 See the
-[label reference](../reference/18-ocm-labels.md#odgocmsoftwarebinary-scan-policy-v1)
+{ref}`label reference <odgocmsoftwarebinary-scan-policy-v1>`
 for all fields and allowed values.

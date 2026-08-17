@@ -1,14 +1,16 @@
-# OCM Labels used by ODG
+# OCM Label Index
 
 ODG uses [OCM labels](https://ocm.software/docs/reference/component-descriptor/#component-labels) to influence scanning behaviour, CVE rescoring, responsible assignment, and metadata.
 
 ---
 
+(odgocmsoftwarebinary-scan-policy-v1)=
 ## `odg.ocm.software/binary-scan-policy` v1
 
 Controls whether a binary vulnerability scan is skipped in ODG.
 
-```yaml
+```{code-block} yaml
+:force: true
 labels:
   - name: odg.ocm.software/binary-scan-policy
     version: v1
@@ -18,17 +20,19 @@ labels:
 ```
 
 | Field | Type | Required | Description |
-|---|---|---|---|
+|:---|:---|:---|:---|
 | `policy` | string | yes | `scan` runs the scan (default behaviour); `skip` bypasses the vulnerability scan for this resource. |
 | `comment` | string | no | Human-readable explanation for skipping the scan. |
 
 ---
 
+(odgocmsoftwaresource-scan-policy-v1)=
 ## `odg.ocm.software/source-scan-policy` v1
 
 Controls whether SAST (Static Application Security Testing) source analysis is run in ODG. Usually `skip` is set when the pipeline already ran a SAST scan.
 
-```yaml
+```{code-block} yaml
+:force: true
 labels:
   - name: odg.ocm.software/source-scan-policy
     version: v1
@@ -37,17 +41,19 @@ labels:
       comment: "free-text string"
 ```
 
-The fields are identical to those of [`odg.ocm.software/binary-scan-policy`](#odgocmsoftwarebinary-scan-policy-v1).
+The fields are identical to those of {ref}`odg.ocm.software/binary-scan-policy <odgocmsoftwarebinary-scan-policy-v1>`.
 
 ---
 
+(securityocmsoftwarerisk-profile-v1)=
 ## `security.ocm.software/risk-profile` v1
 
 Describes the deployment context of a component or artefact. ODG uses this information to suggest adjusted CVE severity scores that reflect the actual exposure of the component.
 
 All fields are optional. Fields that are omitted are treated as unknown and do not contribute to rescoring decisions.
 
-```yaml
+```{code-block} yaml
+:force: true
 labels:
   - name: security.ocm.software/risk-profile
     version: v1
@@ -62,7 +68,7 @@ labels:
 ```
 
 | Field | Type | Description |
-|---|---|---|
+|:---|:---|:---|
 | `network_exposure` | string | How reachable the component is from a network perspective. `private`: not reachable from outside a private network. `protected`: reachable from a restricted network or behind authentication. `public`: reachable from the internet. |
 | `authentication_enforced` | boolean | Whether all access to the component requires authentication. |
 | `user_interaction` | string | Who interacts with the component. `operator`: only operators/administrators. `end-user`: arbitrary end users. |
@@ -73,6 +79,7 @@ labels:
 
 ---
 
+(odgocmsoftwareresponsibles-v1)=
 ## `odg.ocm.software/responsibles` v1
 
 Explicitly declares who is responsible for a component or artefact.
@@ -92,7 +99,7 @@ labels:
 ```
 
 | Type | Required fields | Description |
-|---|---|---|
+|:---|:---|:---|
 | `githubUser` | `username` | A specific GitHub user. |
 | `githubTeam` | `teamname` | A GitHub team in `org/team` format. |
 | `codeowners` | *(none)* | Resolves responsibles from the CODEOWNERS file in the component's source repository. |
@@ -116,5 +123,5 @@ labels:
 Currently the following values are recognised:
 
 | Value | Effect |
-|---|---|
+|:---|:---|
 | `sast` | The linting report |

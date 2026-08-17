@@ -2,7 +2,7 @@
 
 The responsibles extension is able to determine responsibles based on
 configured `rules`, overriding or extending what is declared statically via
-the [`odg.ocm.software/responsibles` OCM label](../reference/18-ocm-labels.md#odgocmsoftwareresponsibles-v1).
+the {ref}`odg.ocm.software/responsibles OCM label <odgocmsoftwareresponsibles-v1>`.
 The determined responsibles are uploaded as
 `ArtefactMetadata` of type `meta/responsibles`. A rule in this context is made
 up by a list of `filters` and a list of assigned `strategies`. A rule is
