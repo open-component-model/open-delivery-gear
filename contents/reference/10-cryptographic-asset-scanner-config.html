@@ -253,7 +253,7 @@
 <li class="toctree-l2"><a class="reference internal" href="17-codeql-scanner-config.html">CodeQL Scanner</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="18-ocm-labels.html">OCM Labels used by ODG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="18-ocm-labels.html">OCM Label Index</a></li>
 </ul>
 
 </div>
@@ -301,7 +301,7 @@
 <span class="w">  </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">86400</span><span class="w">                    </span><span class="c1"># 24 hours</span>
 <span class="w">  </span><span class="nt">on_unsupported</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">warning</span>
 <span class="w">  </span><span class="nt">mappings</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;acme.org/product-a&#39;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">'acme.org/product-a'</span>
 <span class="w">      </span><span class="nt">included_asset_types</span><span class="p">:</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">algorithm</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">certificate</span>
@@ -315,7 +315,7 @@
 <span class="w">          </span><span class="nt">ref</span><span class="p">:</span>
 <span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">odg/crypto_defaults.yaml</span>
 <span class="w">      </span><span class="nt">aws_secret_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aws-account-prod</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;&#39;</span><span class="w">                     </span><span class="c1"># catch-all</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">''</span><span class="w">                     </span><span class="c1"># catch-all</span>
 <span class="w">      </span><span class="nt">included_asset_types</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span><span class="w">     </span><span class="c1"># all types</span>
 <span class="w">      </span><span class="nt">libraries</span><span class="p">:</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">ref</span><span class="p">:</span>

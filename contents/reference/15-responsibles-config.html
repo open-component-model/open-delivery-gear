@@ -253,7 +253,7 @@
 <li class="toctree-l2"><a class="reference internal" href="17-codeql-scanner-config.html">CodeQL Scanner</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="18-ocm-labels.html">OCM Labels used by ODG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="18-ocm-labels.html">OCM Label Index</a></li>
 </ul>
 
 </div>
@@ -306,7 +306,7 @@
 <span class="w">      </span><span class="nt">filters</span><span class="p">:</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">component-filter</span>
 <span class="w">          </span><span class="nt">include_component_names</span><span class="p">:</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;acme.org/frontend/.*&quot;</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"acme.org/frontend/.*"</span>
 <span class="w">          </span><span class="nt">exclude_component_names</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
 <span class="w">      </span><span class="nt">strategies</span><span class="p">:</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">static-responsibles</span>
@@ -321,7 +321,7 @@
 <span class="w">      </span><span class="nt">filters</span><span class="p">:</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">datatype-filter</span>
 <span class="w">          </span><span class="nt">include_types</span><span class="p">:</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;finding/vulnerability&quot;</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"finding/vulnerability"</span>
 <span class="w">          </span><span class="nt">exclude_types</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
 <span class="w">      </span><span class="nt">strategies</span><span class="p">:</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">static-responsibles</span>
@@ -336,7 +336,7 @@
 <span class="w">      </span><span class="nt">filters</span><span class="p">:</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">artefact-filter</span>
 <span class="w">          </span><span class="nt">include_artefact_types</span><span class="p">:</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;ociImage&quot;</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"ociImage"</span>
 <span class="w">          </span><span class="nt">exclude_artefact_types</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
 <span class="w">      </span><span class="nt">strategies</span><span class="p">:</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">static-responsibles</span>
@@ -435,10 +435,10 @@
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">filters</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">component-filter</span>
 <span class="w">    </span><span class="nt">include_component_names</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;acme.org/.*&quot;</span><span class="w">              </span><span class="c1"># Regex: all acme.org components</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;example.com/product-a&quot;</span><span class="w">    </span><span class="c1"># Specific component</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"acme.org/.*"</span><span class="w">              </span><span class="c1"># Regex: all acme.org components</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"example.com/product-a"</span><span class="w">    </span><span class="c1"># Specific component</span>
 <span class="w">    </span><span class="nt">exclude_component_names</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;acme.org/deprecated/.*&quot;</span><span class="w">   </span><span class="c1"># Exclude deprecated components</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"acme.org/deprecated/.*"</span><span class="w">   </span><span class="c1"># Exclude deprecated components</span>
 </pre></div>
 </div>
 </section>
@@ -448,14 +448,14 @@
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">filters</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">artefact-filter</span>
 <span class="w">    </span><span class="nt">include_artefact_names</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;my-service&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"my-service"</span>
 <span class="w">    </span><span class="nt">exclude_artefact_names</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
 <span class="w">    </span><span class="nt">include_artefact_types</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;ociImage&quot;</span><span class="w">                 </span><span class="c1"># Container images</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;helm&quot;</span><span class="w">                     </span><span class="c1"># Helm charts</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"ociImage"</span><span class="w">                 </span><span class="c1"># Container images</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"helm"</span><span class="w">                     </span><span class="c1"># Helm charts</span>
 <span class="w">    </span><span class="nt">exclude_artefact_types</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
 <span class="w">    </span><span class="nt">include_artefact_kinds</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;source&quot;</span><span class="w">                   </span><span class="c1"># Source code artefacts</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"source"</span><span class="w">                   </span><span class="c1"># Source code artefacts</span>
 <span class="w">    </span><span class="nt">exclude_artefact_kinds</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
 </pre></div>
 </div>
@@ -466,10 +466,10 @@
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">filters</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">datatype-filter</span>
 <span class="w">    </span><span class="nt">include_types</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;finding/vulnerability&quot;</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;finding/malware&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"finding/vulnerability"</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"finding/malware"</span>
 <span class="w">    </span><span class="nt">exclude_types</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;finding/license&quot;</span><span class="w">          </span><span class="c1"># License issues handled separately</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"finding/license"</span><span class="w">          </span><span class="c1"># License issues handled separately</span>
 </pre></div>
 </div>
 </section>
@@ -570,7 +570,7 @@
 <span class="w">      </span><span class="nt">assignee_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">extend</span><span class="w">           </span><span class="c1"># Add security team to existing owners</span>
 <span class="w">      </span><span class="nt">filters</span><span class="p">:</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">datatype-filter</span>
-<span class="w">          </span><span class="nt">include_types</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;finding/vulnerability&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">          </span><span class="nt">include_types</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"finding/vulnerability"</span><span class="p p-Indicator">]</span>
 <span class="w">      </span><span class="nt">strategies</span><span class="p">:</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">static-responsibles</span>
 <span class="w">          </span><span class="nt">responsibles</span><span class="p">:</span>
@@ -583,7 +583,7 @@
 <span class="w">      </span><span class="nt">assignee_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">overwrite</span><span class="w">        </span><span class="c1"># Security team takes full ownership</span>
 <span class="w">      </span><span class="nt">filters</span><span class="p">:</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">datatype-filter</span>
-<span class="w">          </span><span class="nt">include_types</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;finding/malware&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">          </span><span class="nt">include_types</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"finding/malware"</span><span class="p p-Indicator">]</span>
 <span class="w">      </span><span class="nt">strategies</span><span class="p">:</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">static-responsibles</span>
 <span class="w">          </span><span class="nt">responsibles</span><span class="p">:</span>
@@ -604,7 +604,7 @@
 <span class="w">      </span><span class="nt">assignee_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">overwrite</span>
 <span class="w">      </span><span class="nt">filters</span><span class="p">:</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">artefact-filter</span>
-<span class="w">          </span><span class="nt">include_artefact_types</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;ociImage&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">          </span><span class="nt">include_artefact_types</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"ociImage"</span><span class="p p-Indicator">]</span>
 <span class="w">      </span><span class="nt">strategies</span><span class="p">:</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">static-responsibles</span>
 <span class="w">          </span><span class="nt">responsibles</span><span class="p">:</span>
@@ -617,7 +617,7 @@
 <span class="w">      </span><span class="nt">assignee_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">overwrite</span>
 <span class="w">      </span><span class="nt">filters</span><span class="p">:</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">artefact-filter</span>
-<span class="w">          </span><span class="nt">include_artefact_types</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;helm&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">          </span><span class="nt">include_artefact_types</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"helm"</span><span class="p p-Indicator">]</span>
 <span class="w">      </span><span class="nt">strategies</span><span class="p">:</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">static-responsibles</span>
 <span class="w">          </span><span class="nt">responsibles</span><span class="p">:</span>
@@ -638,7 +638,7 @@
 <span class="w">      </span><span class="nt">assignee_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">extend</span><span class="w">           </span><span class="c1"># Add to component-defined owners</span>
 <span class="w">      </span><span class="nt">filters</span><span class="p">:</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">datatype-filter</span>
-<span class="w">          </span><span class="nt">include_types</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;finding/vulnerability&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;finding/malware&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">          </span><span class="nt">include_types</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"finding/vulnerability"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"finding/malware"</span><span class="p p-Indicator">]</span>
 <span class="w">      </span><span class="nt">strategies</span><span class="p">:</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">static-responsibles</span>
 <span class="w">          </span><span class="nt">responsibles</span><span class="p">:</span>

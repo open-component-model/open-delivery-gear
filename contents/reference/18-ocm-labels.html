@@ -7,7 +7,7 @@
         <link rel="prefetch" href="../../_static/odg.svg" as="image">
 
     <link rel="shortcut icon" href="../../_static/odg.svg"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>OCM Labels used by ODG - Open Delivery Gear documentation</title>
+        <title>OCM Label Index - Open Delivery Gear documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
@@ -253,7 +253,7 @@
 <li class="toctree-l2"><a class="reference internal" href="17-codeql-scanner-config.html">CodeQL Scanner</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">OCM Labels used by ODG</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">OCM Label Index</a></li>
 </ul>
 
 </div>
@@ -292,155 +292,155 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="ocm-labels-used-by-odg">
-<h1>OCM Labels used by ODG<a class="headerlink" href="#ocm-labels-used-by-odg" title="Link to this heading">¶</a></h1>
+          <section id="ocm-label-index">
+<h1>OCM Label Index<a class="headerlink" href="#ocm-label-index" title="Link to this heading">¶</a></h1>
 <p>ODG uses <a class="reference external" href="https://ocm.software/docs/reference/component-descriptor/#component-labels">OCM labels</a> to influence scanning behaviour, CVE rescoring, responsible assignment, and metadata.</p>
 <hr class="docutils" />
 <section id="odg-ocm-software-binary-scan-policy-v1">
-<h2><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/binary-scan-policy</span></code> v1<a class="headerlink" href="#odg-ocm-software-binary-scan-policy-v1" title="Link to this heading">¶</a></h2>
+<span id="odgocmsoftwarebinary-scan-policy-v1"></span><h2><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/binary-scan-policy</span></code> v1<a class="headerlink" href="#odg-ocm-software-binary-scan-policy-v1" title="Link to this heading">¶</a></h2>
 <p>Controls whether a binary vulnerability scan is skipped in ODG.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">labels</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">odg.ocm.software/binary-scan-policy</span>
 <span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
 <span class="w">    </span><span class="nt">value</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">policy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;scan&quot;</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> &quot;skip&quot;</span>
-<span class="w">      </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;free-text</span><span class="nv"> </span><span class="s">string&quot;</span>
+<span class="w">      </span><span class="nt">policy</span><span class="p">:</span><span class="w"> </span><span class="s">"scan"</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> "skip"</span>
+<span class="w">      </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="s">"free-text</span><span class="nv"> </span><span class="s">string"</span>
 </pre></div>
 </div>
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>Field</p></th>
-<th class="head"><p>Type</p></th>
-<th class="head"><p>Required</p></th>
-<th class="head"><p>Description</p></th>
+<tr class="row-odd"><th class="head text-left"><p>Field</p></th>
+<th class="head text-left"><p>Type</p></th>
+<th class="head text-left"><p>Required</p></th>
+<th class="head text-left"><p>Description</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">policy</span></code></p></td>
-<td><p>string</p></td>
-<td><p>yes</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">scan</span></code> runs the scan (default behaviour); <code class="docutils literal notranslate"><span class="pre">skip</span></code> bypasses the vulnerability scan for this resource.</p></td>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">policy</span></code></p></td>
+<td class="text-left"><p>string</p></td>
+<td class="text-left"><p>yes</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">scan</span></code> runs the scan (default behaviour); <code class="docutils literal notranslate"><span class="pre">skip</span></code> bypasses the vulnerability scan for this resource.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">comment</span></code></p></td>
-<td><p>string</p></td>
-<td><p>no</p></td>
-<td><p>Human-readable explanation for skipping the scan.</p></td>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">comment</span></code></p></td>
+<td class="text-left"><p>string</p></td>
+<td class="text-left"><p>no</p></td>
+<td class="text-left"><p>Human-readable explanation for skipping the scan.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-</section>
 <hr class="docutils" />
+</section>
 <section id="odg-ocm-software-source-scan-policy-v1">
-<h2><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/source-scan-policy</span></code> v1<a class="headerlink" href="#odg-ocm-software-source-scan-policy-v1" title="Link to this heading">¶</a></h2>
+<span id="odgocmsoftwaresource-scan-policy-v1"></span><h2><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/source-scan-policy</span></code> v1<a class="headerlink" href="#odg-ocm-software-source-scan-policy-v1" title="Link to this heading">¶</a></h2>
 <p>Controls whether SAST (Static Application Security Testing) source analysis is run in ODG. Usually <code class="docutils literal notranslate"><span class="pre">skip</span></code> is set when the pipeline already ran a SAST scan.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">labels</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">odg.ocm.software/source-scan-policy</span>
 <span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
 <span class="w">    </span><span class="nt">value</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">policy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;scan&quot;</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> &quot;skip&quot;</span>
-<span class="w">      </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;free-text</span><span class="nv"> </span><span class="s">string&quot;</span>
+<span class="w">      </span><span class="nt">policy</span><span class="p">:</span><span class="w"> </span><span class="s">"scan"</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> "skip"</span>
+<span class="w">      </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="s">"free-text</span><span class="nv"> </span><span class="s">string"</span>
 </pre></div>
 </div>
-<p>The fields are identical to those of <a class="reference internal" href="#odgocmsoftwarebinary-scan-policy-v1"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/binary-scan-policy</span></code></span></a>.</p>
-</section>
+<p>The fields are identical to those of <a class="reference internal" href="#odgocmsoftwarebinary-scan-policy-v1"><span class="std std-ref">odg.ocm.software/binary-scan-policy</span></a>.</p>
 <hr class="docutils" />
+</section>
 <section id="security-ocm-software-risk-profile-v1">
-<h2><code class="docutils literal notranslate"><span class="pre">security.ocm.software/risk-profile</span></code> v1<a class="headerlink" href="#security-ocm-software-risk-profile-v1" title="Link to this heading">¶</a></h2>
+<span id="securityocmsoftwarerisk-profile-v1"></span><h2><code class="docutils literal notranslate"><span class="pre">security.ocm.software/risk-profile</span></code> v1<a class="headerlink" href="#security-ocm-software-risk-profile-v1" title="Link to this heading">¶</a></h2>
 <p>Describes the deployment context of a component or artefact. ODG uses this information to suggest adjusted CVE severity scores that reflect the actual exposure of the component.</p>
 <p>All fields are optional. Fields that are omitted are treated as unknown and do not contribute to rescoring decisions.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">labels</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">security.ocm.software/risk-profile</span>
 <span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
 <span class="w">    </span><span class="nt">value</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">network_exposure</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;private&quot;</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> &quot;protected&quot; | &quot;public&quot;</span><span class="w">    </span><span class="c1"># maps to CVSS: Attack Vector (AV)</span>
+<span class="w">      </span><span class="nt">network_exposure</span><span class="p">:</span><span class="w"> </span><span class="s">"private"</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> "protected" | "public"</span><span class="w">    </span><span class="c1"># maps to CVSS: Attack Vector (AV)</span>
 <span class="w">      </span><span class="nt">authentication_enforced</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true | false</span><span class="w">    </span><span class="c1"># CVSS: Privileges Required (PR)</span>
-<span class="w">      </span><span class="nt">user_interaction</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;operator&quot;</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> &quot;end-user&quot;</span><span class="w">    </span><span class="c1"># CVSS: User Interaction (UI)</span>
-<span class="w">      </span><span class="nt">confidentiality_requirement</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;none&quot;</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> &quot;low&quot; | &quot;high&quot;</span><span class="w">   </span><span class="c1"># CVSS: Confidentiality Requirement (CR)</span>
-<span class="w">      </span><span class="nt">integrity_requirement</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;none&quot;</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> &quot;low&quot; | &quot;high&quot;</span><span class="w">   </span><span class="c1"># CVSS: Integrity Requirement (IR)</span>
-<span class="w">      </span><span class="nt">availability_requirement</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;none&quot;</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> &quot;low&quot; | &quot;high&quot;</span><span class="w">   </span><span class="c1"># CVSS: Availability Requirement (AR)</span>
-<span class="w">      </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;free-text</span><span class="nv"> </span><span class="s">string&quot;</span>
+<span class="w">      </span><span class="nt">user_interaction</span><span class="p">:</span><span class="w"> </span><span class="s">"operator"</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> "end-user"</span><span class="w">    </span><span class="c1"># CVSS: User Interaction (UI)</span>
+<span class="w">      </span><span class="nt">confidentiality_requirement</span><span class="p">:</span><span class="w"> </span><span class="s">"none"</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> "low" | "high"</span><span class="w">   </span><span class="c1"># CVSS: Confidentiality Requirement (CR)</span>
+<span class="w">      </span><span class="nt">integrity_requirement</span><span class="p">:</span><span class="w"> </span><span class="s">"none"</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> "low" | "high"</span><span class="w">   </span><span class="c1"># CVSS: Integrity Requirement (IR)</span>
+<span class="w">      </span><span class="nt">availability_requirement</span><span class="p">:</span><span class="w"> </span><span class="s">"none"</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> "low" | "high"</span><span class="w">   </span><span class="c1"># CVSS: Availability Requirement (AR)</span>
+<span class="w">      </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="s">"free-text</span><span class="nv"> </span><span class="s">string"</span>
 </pre></div>
 </div>
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>Field</p></th>
-<th class="head"><p>Type</p></th>
-<th class="head"><p>Description</p></th>
+<tr class="row-odd"><th class="head text-left"><p>Field</p></th>
+<th class="head text-left"><p>Type</p></th>
+<th class="head text-left"><p>Description</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">network_exposure</span></code></p></td>
-<td><p>string</p></td>
-<td><p>How reachable the component is from a network perspective. <code class="docutils literal notranslate"><span class="pre">private</span></code>: not reachable from outside a private network. <code class="docutils literal notranslate"><span class="pre">protected</span></code>: reachable from a restricted network or behind authentication. <code class="docutils literal notranslate"><span class="pre">public</span></code>: reachable from the internet.</p></td>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">network_exposure</span></code></p></td>
+<td class="text-left"><p>string</p></td>
+<td class="text-left"><p>How reachable the component is from a network perspective. <code class="docutils literal notranslate"><span class="pre">private</span></code>: not reachable from outside a private network. <code class="docutils literal notranslate"><span class="pre">protected</span></code>: reachable from a restricted network or behind authentication. <code class="docutils literal notranslate"><span class="pre">public</span></code>: reachable from the internet.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">authentication_enforced</span></code></p></td>
-<td><p>boolean</p></td>
-<td><p>Whether all access to the component requires authentication.</p></td>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">authentication_enforced</span></code></p></td>
+<td class="text-left"><p>boolean</p></td>
+<td class="text-left"><p>Whether all access to the component requires authentication.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">user_interaction</span></code></p></td>
-<td><p>string</p></td>
-<td><p>Who interacts with the component. <code class="docutils literal notranslate"><span class="pre">operator</span></code>: only operators/administrators. <code class="docutils literal notranslate"><span class="pre">end-user</span></code>: arbitrary end users.</p></td>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">user_interaction</span></code></p></td>
+<td class="text-left"><p>string</p></td>
+<td class="text-left"><p>Who interacts with the component. <code class="docutils literal notranslate"><span class="pre">operator</span></code>: only operators/administrators. <code class="docutils literal notranslate"><span class="pre">end-user</span></code>: arbitrary end users.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">confidentiality_requirement</span></code></p></td>
-<td><p>string</p></td>
-<td><p>How sensitive the data processed by the component is (<code class="docutils literal notranslate"><span class="pre">none</span></code>, <code class="docutils literal notranslate"><span class="pre">low</span></code> or <code class="docutils literal notranslate"><span class="pre">high</span></code>).</p></td>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">confidentiality_requirement</span></code></p></td>
+<td class="text-left"><p>string</p></td>
+<td class="text-left"><p>How sensitive the data processed by the component is (<code class="docutils literal notranslate"><span class="pre">none</span></code>, <code class="docutils literal notranslate"><span class="pre">low</span></code> or <code class="docutils literal notranslate"><span class="pre">high</span></code>).</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">integrity_requirement</span></code></p></td>
-<td><p>string</p></td>
-<td><p>How critical correct operation of the component is (<code class="docutils literal notranslate"><span class="pre">none</span></code>, <code class="docutils literal notranslate"><span class="pre">low</span></code> or <code class="docutils literal notranslate"><span class="pre">high</span></code>).</p></td>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">integrity_requirement</span></code></p></td>
+<td class="text-left"><p>string</p></td>
+<td class="text-left"><p>How critical correct operation of the component is (<code class="docutils literal notranslate"><span class="pre">none</span></code>, <code class="docutils literal notranslate"><span class="pre">low</span></code> or <code class="docutils literal notranslate"><span class="pre">high</span></code>).</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">availability_requirement</span></code></p></td>
-<td><p>string</p></td>
-<td><p>How critical continuous availability of the component is (<code class="docutils literal notranslate"><span class="pre">none</span></code>, <code class="docutils literal notranslate"><span class="pre">low</span></code> or <code class="docutils literal notranslate"><span class="pre">high</span></code>).</p></td>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">availability_requirement</span></code></p></td>
+<td class="text-left"><p>string</p></td>
+<td class="text-left"><p>How critical continuous availability of the component is (<code class="docutils literal notranslate"><span class="pre">none</span></code>, <code class="docutils literal notranslate"><span class="pre">low</span></code> or <code class="docutils literal notranslate"><span class="pre">high</span></code>).</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">comment</span></code></p></td>
-<td><p>string</p></td>
-<td><p>Human-readable explanation of the categorisation choices.</p></td>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">comment</span></code></p></td>
+<td class="text-left"><p>string</p></td>
+<td class="text-left"><p>Human-readable explanation of the categorisation choices.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-</section>
 <hr class="docutils" />
+</section>
 <section id="odg-ocm-software-responsibles-v1">
-<h2><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/responsibles</span></code> v1<a class="headerlink" href="#odg-ocm-software-responsibles-v1" title="Link to this heading">¶</a></h2>
+<span id="odgocmsoftwareresponsibles-v1"></span><h2><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/responsibles</span></code> v1<a class="headerlink" href="#odg-ocm-software-responsibles-v1" title="Link to this heading">¶</a></h2>
 <p>Explicitly declares who is responsible for a component or artefact.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">labels</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">odg.ocm.software/responsibles</span>
 <span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
 <span class="w">    </span><span class="nt">value</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;githubUser&quot;</span>
-<span class="w">        </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;some-github-handle&quot;</span>
-<span class="w">        </span><span class="nt">github_hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;github.com&quot;</span><span class="w">    </span><span class="c1"># optional, defaults to the hostname defined in the source access</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;githubTeam&quot;</span>
-<span class="w">        </span><span class="nt">teamname</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;my-org/my-team&quot;</span>
-<span class="w">        </span><span class="nt">github_hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;github.com&quot;</span><span class="w">    </span><span class="c1"># optional, defaults to the hostname defined in the source access</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;codeowners&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">"githubUser"</span>
+<span class="w">        </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">"some-github-handle"</span>
+<span class="w">        </span><span class="nt">github_hostname</span><span class="p">:</span><span class="w"> </span><span class="s">"github.com"</span><span class="w">    </span><span class="c1"># optional, defaults to the hostname defined in the source access</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">"githubTeam"</span>
+<span class="w">        </span><span class="nt">teamname</span><span class="p">:</span><span class="w"> </span><span class="s">"my-org/my-team"</span>
+<span class="w">        </span><span class="nt">github_hostname</span><span class="p">:</span><span class="w"> </span><span class="s">"github.com"</span><span class="w">    </span><span class="c1"># optional, defaults to the hostname defined in the source access</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">"codeowners"</span>
 </pre></div>
 </div>
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>Type</p></th>
-<th class="head"><p>Required fields</p></th>
-<th class="head"><p>Description</p></th>
+<tr class="row-odd"><th class="head text-left"><p>Type</p></th>
+<th class="head text-left"><p>Required fields</p></th>
+<th class="head text-left"><p>Description</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">githubUser</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">username</span></code></p></td>
-<td><p>A specific GitHub user.</p></td>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">githubUser</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">username</span></code></p></td>
+<td class="text-left"><p>A specific GitHub user.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">githubTeam</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">teamname</span></code></p></td>
-<td><p>A GitHub team in <code class="docutils literal notranslate"><span class="pre">org/team</span></code> format.</p></td>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">githubTeam</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">teamname</span></code></p></td>
+<td class="text-left"><p>A GitHub team in <code class="docutils literal notranslate"><span class="pre">org/team</span></code> format.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">codeowners</span></code></p></td>
-<td><p><em>(none)</em></p></td>
-<td><p>Resolves responsibles from the CODEOWNERS file in the component’s source repository.</p></td>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">codeowners</span></code></p></td>
+<td class="text-left"><p><em>(none)</em></p></td>
+<td class="text-left"><p>Resolves responsibles from the CODEOWNERS file in the component’s source repository.</p></td>
 </tr>
 </tbody>
 </table>
@@ -463,13 +463,13 @@
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>Value</p></th>
-<th class="head"><p>Effect</p></th>
+<tr class="row-odd"><th class="head text-left"><p>Value</p></th>
+<th class="head text-left"><p>Effect</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sast</span></code></p></td>
-<td><p>The linting report</p></td>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">sast</span></code></p></td>
+<td class="text-left"><p>The linting report</p></td>
 </tr>
 </tbody>
 </table>
@@ -524,7 +524,7 @@
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">OCM Labels used by ODG</a><ul>
+<li><a class="reference internal" href="#">OCM Label Index</a><ul>
 <li><a class="reference internal" href="#odg-ocm-software-binary-scan-policy-v1"><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/binary-scan-policy</span></code> v1</a></li>
 <li><a class="reference internal" href="#odg-ocm-software-source-scan-policy-v1"><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/source-scan-policy</span></code> v1</a></li>
 <li><a class="reference internal" href="#security-ocm-software-risk-profile-v1"><code class="docutils literal notranslate"><span class="pre">security.ocm.software/risk-profile</span></code> v1</a></li>

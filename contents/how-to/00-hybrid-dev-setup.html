@@ -253,7 +253,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../reference/17-codeql-scanner-config.html">CodeQL Scanner</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../reference/18-ocm-labels.html">OCM Labels used by ODG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/18-ocm-labels.html">OCM Label Index</a></li>
 </ul>
 
 </div>
@@ -357,7 +357,7 @@ ODG will pick it up when referencing via <code class="docutils literal notransla
 <section id="odg-api">
 <h4>ODG API<a class="headerlink" href="#odg-api" title="Link to this heading">¶</a></h4>
 <p>Depending on the GitHub instances the ODG API supports, create a GitHub secret in the ODG secret structure.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39; &gt; /path/to/odg-api/secrets/github/odg-api.yaml</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span><span class="s">&lt;&lt; 'EOF' &gt; /path/to/odg-api/secrets/github/odg-api.yaml</span>
 <span class="s">api_url: https://api.github.com</span>
 <span class="s">http_url: https://github.com</span>
 <span class="s">username: &lt;your-username&gt;</span>
@@ -367,7 +367,7 @@ ODG will pick it up when referencing via <code class="docutils literal notransla
 </pre></div>
 </div>
 <p>On ODG code startup, provide the URL to the ODG API with <code class="docutils literal notranslate"><span class="pre">--delivery-service-url</span></code> parameter.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">my</span><span class="o">-</span><span class="n">odg</span><span class="o">-</span><span class="n">extension</span> <span class="o">--</span><span class="n">delivery</span><span class="o">-</span><span class="n">service</span><span class="o">-</span><span class="n">url</span> <span class="s1">&#39;https://delivery-service.demo.ci.gardener.cloud&#39;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">my</span><span class="o">-</span><span class="n">odg</span><span class="o">-</span><span class="n">extension</span> <span class="o">--</span><span class="n">delivery</span><span class="o">-</span><span class="n">service</span><span class="o">-</span><span class="n">url</span> <span class="s1">'https://delivery-service.demo.ci.gardener.cloud'</span>
 </pre></div>
 </div>
 </section>

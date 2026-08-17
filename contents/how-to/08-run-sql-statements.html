@@ -253,7 +253,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../reference/17-codeql-scanner-config.html">CodeQL Scanner</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../reference/18-ocm-labels.html">OCM Labels used by ODG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/18-ocm-labels.html">OCM Label Index</a></li>
 </ul>
 
 </div>
@@ -358,15 +358,15 @@
 </div>
 <p>Query the most recent vulnerability entry for a component:</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">artefact_metadata</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="k">TYPE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;finding/vulnerability&#39;</span>
-<span class="k">AND</span><span class="w"> </span><span class="n">component_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;acme.org/sovereign/postgres&#39;</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="k">TYPE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'finding/vulnerability'</span>
+<span class="k">AND</span><span class="w"> </span><span class="n">component_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'acme.org/sovereign/postgres'</span>
 <span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">creation_date</span><span class="w"> </span><span class="k">DESC</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>This returns the raw low-level database entry. To extract the CVE identifier specifically, query the <code class="docutils literal notranslate"><span class="pre">data</span></code> field:</p>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="k">data</span><span class="o">-&gt;&gt;</span><span class="s1">&#39;cve&#39;</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">CVE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">artefact_metadata</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="k">TYPE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;finding/vulnerability&#39;</span>
-<span class="k">AND</span><span class="w"> </span><span class="n">component_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;acme.org/sovereign/postgres&#39;</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="k">data</span><span class="o">-&gt;&gt;</span><span class="s1">'cve'</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">CVE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">artefact_metadata</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="k">TYPE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'finding/vulnerability'</span>
+<span class="k">AND</span><span class="w"> </span><span class="n">component_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'acme.org/sovereign/postgres'</span>
 <span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">creation_date</span><span class="w"> </span><span class="k">DESC</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 </pre></div>
 </div>
@@ -380,8 +380,8 @@
 <h3>Search for a CVE across multiple components<a class="headerlink" href="#search-for-a-cve-across-multiple-components" title="Link to this heading">¶</a></h3>
 <p>To reverse the previous query and find all components affected by a specific CVE:</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">component_name</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">artefact_metadata</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="k">TYPE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;finding/vulnerability&#39;</span>
-<span class="k">AND</span><span class="w"> </span><span class="k">data</span><span class="o">-&gt;&gt;</span><span class="s1">&#39;cve&#39;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;CVE-2026-42504&#39;</span><span class="p">;</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="k">TYPE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'finding/vulnerability'</span>
+<span class="k">AND</span><span class="w"> </span><span class="k">data</span><span class="o">-&gt;&gt;</span><span class="s1">'cve'</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'CVE-2026-42504'</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>This produces output such as:</p>
