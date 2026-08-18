@@ -1,0 +1,33 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1367.0
+release_notes:
+- audience: user
+  author:
+    hostname: github.com
+    type: githubUser
+    username: ChrisSchneider
+  category: improvement
+  contents: |-
+    Streamline OCM labels: Label names have been migrated to the
+    `ocm.software` namespace (e.g. `odg.ocm.software/binary-scan-policy`,
+    `odg.ocm.software/source-scan-policy`, `odg.ocm.software/responsibles`).
+
+    All legacy label names and values remain fully supported for backwards
+    compatibility with existing OCM components.
+
+    Please see https://open-component-model.github.io/open-delivery-gear/contents/reference/17-ocm-labels.html for the new label schemes.
+  mimetype: text/markdown
+  reference: '[#910](https://github.com/open-component-model/odg-core/pull/910)'
+  type: standard
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: ChrisSchneider
+  category: improvement
+  contents: The vulnerability finding and rescoring data model now includes a `cvss_score`
+    next to `cvss_v3_score`
+  mimetype: text/markdown
+  reference: '[#916](https://github.com/open-component-model/odg-core/pull/916)'
+  type: standard
