@@ -3,7 +3,7 @@
 | Status   | Proposed   |
 |----------|------------|
 | Date     | 2026-08-12 |
-| Deciders |            |
+| Deciders | Philipp Heil, Alexander Bassmanow |
 
 ## Context and Problem Statement
 
@@ -16,7 +16,7 @@ ODG-Core consumes open-source packages at multiple levels - Python runtime depen
 - GitHub Actions workflows reference floating tags (`actions/checkout@v4`, `gardener/cc-utils/...@v1`)
 - `.ocm/base-component.yaml` records upstream OCM artefact versions (Helm charts, OCI images) that are updated manually
 
-This means the effective dependency version vector is not fully controlled, creating supply-chain risk and making builds non-reproducible. Dependency drift goes unnoticed until something breaks.
+This means the effective dependency version vector is not fully controlled and potentially outdated, creating supply-chain risk and making builds non-reproducible. Dependency drift goes unnoticed until something breaks.
 
 Dependabot is already configured for `pip` and `docker`, but currently provides little value: it has nothing to update for Python because the `requirements.txt` files contain no pinned versions, and it does not cover GitHub Actions. More importantly, it cannot handle `.ocm/base-component.yaml` at all.
 
@@ -57,9 +57,9 @@ Pros:
 - Covers all four types: Python/uv lockfile, Dockerfiles, GitHub Actions, `.ocm/base-component.yaml` via regex manager
 - `minimumReleaseAge` (e.g. 7 days) prevents merging freshly-published releases; security updates can be configured to bypass the cooldown
 - Dependency dashboard issue gives a single overview of all pending updates
-- Grouped PRs reduce noise (especially for high-frequency repos like `gardener/cc-utils`)
+- Configurable grouped PRs reduce noise
 - Mirrors the pattern already in use in the sibling OCM project
-- Auto-merge scoped precisely: patch + minor after cooldown, major bumps require review
+- Auto-merge scoped precisely: patch + minor after cooldown (e.g. 7 day period), major bumps require review
 - Supports centralized presets if rolled out to multiple repos
 
 Cons:
@@ -87,7 +87,9 @@ Auto-merge is allowed only when:
 - Update type is patch or minor
 - `minimumReleaseAge` has passed (7 days)
 
-Major version bumps always require manual review. Auto-merge will be enabled conservatively after an initial observation period without it.
+Major version bumps always require manual review.
+
+The cooldown period is ignored if a CVE for a library gets published.
 
 ## Consequences
 
@@ -98,31 +100,6 @@ Major version bumps always require manual review. Auto-merge will be enabled con
 - Docker and GitHub Actions dependencies are pinned to immutable references
 
 **Negative:**
-- Renovate requires write credentials and a workflow to maintain
+- Renovate requires write credentials and a workflow to maintain, so we either need to use or setup an GitHub App.
 - Regex managers for `.ocm/base-component.yaml` need careful testing to avoid incorrect replacements
-- Initial rollout will create many update PRs as existing floating references are pinned
-
-## Renovate Configuration Summary
-
-| Setting | Value |
-|---|---|
-| Workflow | Daily cron, modelled on sibling OCM project's `renovate.yml` |
-| Managers | `uv`, `dockerfile`, `github-actions`, `regex` |
-| Auto-merge | Patch + minor after `minimumReleaseAge: 7 days` |
-| Major bumps | PR only - no auto-merge |
-| PR grouping | Non-major updates grouped per ecosystem |
-| `gardener/cc-utils` | SHA-pinned, all bumps grouped into one PR (high release cadence) |
-| Dry-run on PRs | `RENOVATE_DRY_RUN=extract` when renovate config itself changes |
-| Dependency dashboard | Enabled |
-
-## Open Questions
-
-1. **OCI image tag retention in `europe-docker.pkg.dev`** - The Helm chart registry accumulates tags (`10.12.4`, `16.6.1`), but the postgres OCI image registry currently only exposes a single tag (`16.8.0`). If Gardener prunes old image tags, Renovate cannot propose a bump - there is no newer tag to reference. We need to confirm whether this registry accumulates tags over time or replaces them. If tags are pruned, the OCI image entry may need to track the upstream PostgreSQL image on Docker Hub instead.
-
-2. **Registry credentials** - Both `europe-docker.pkg.dev` registries are publicly readable (verified via `crane ls` and `docker pull`). No host rules or secrets are required in the Renovate workflow.
-
-3. **Auto-merge scope for Docker and GitHub Actions** - Minor base image updates can occasionally be disruptive. Auto-merge for these managers should be reviewed after the initial observation period.
-
-4. **Rollout scope and central preset** - This ADR was developed against `odg-core` but the same policy should apply to all ODG repositories. Open questions before broader rollout:
-   - Which repos are in scope? A list of affected repositories should be agreed.
-   - Should each repo get its own standalone `renovate.json5`, or should we create a shared preset (e.g. `github>open-delivery-gear/renovate-config`) that repos extend with a single line? A central preset makes policy changes easier but adds a dependency. Starting repo-by-repo is lower risk; the preset can be extracted once the config stabilizes.
+- Initial rollout may create many update PRs as existing floating references are getting pinned

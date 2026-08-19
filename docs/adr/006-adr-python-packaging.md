@@ -3,11 +3,9 @@
 | Status   | Proposed   |
 |----------|------------|
 | Date     | 2026-08-12 |
-| Deciders |            |
+| Deciders | Philipp Heil, Alexander Bassmanow |
 
 ## Context and Problem Statement
-
-> **Note:** This ADR was primarily written based on analysis of `odg-core`.
 
 ODG-Core currently manages Python dependencies via bare `requirements*.txt` files and three `setup.py` build scripts. There is no lockfile, meaning dependency resolution happens at install time and results are not reproducible - two CI runs on different days can install different transitive dependency versions.
 
@@ -37,8 +35,6 @@ Pros:
 - No tooling change
 
 Cons:
-
-- No lockfile - hashes not verified
 - High manual burden to keep pins current
 - Does not compose well with Renovate
 
@@ -62,7 +58,7 @@ Pros:
 - `uv.lock` with hash verification - fully reproducible installs
 - Native workspace support: three packages in one repo with a single lockfile
 - Fast (Rust-based); actively developed; now the community standard
-- PEP 517 build backend - replaces `setup.py` with standard `pyproject.toml`
+- PEP 517 build backend - Can replace `setup.py` with standard `pyproject.toml`
 - First-class Renovate manager support
 
 Cons:
@@ -71,27 +67,22 @@ Cons:
 - Version bumping strategy changes: `setup.bdba-client.py` and `setup.odg-client.py` currently call `bump_minor()` dynamically at build time by reading `VERSION` files; with `pyproject.toml` the version is a static field and the release pipeline must be updated to use `uv version --bump minor` or equivalent
 - CI workflows need to switch from `pip install` to `uv sync` / `uv build`
 
-## Decision Proposal
+## Decision
+Adopt **uv** as dependency manager. For simpler repos we do a full migration (e.g. this repo).
 
-Adopt **uv** with a workspace layout. Each of the three packages gets its own `pyproject.toml`; a root-level `uv.lock` covers the full dependency graph. Published library metadata (`[project.dependencies]`) retains compatible version ranges rather than exact pins - exact pinning belongs in the lockfile, not in library metadata consumed by downstream users.
+For a complex repo such as `odg-core` a nuanced approach is needed.
+A full migration to uv would require many changes in versioning and the downstream build pipelines. 
+We will use `uv` as a build-frontend (dependency management, lockfile, virtual env creation) but use the existing build setup with setuptools as the build backend.
 
 ## Consequences
 
-**Positive:**
+**Positive (all):**
 - Reproducible installs in CI, dev, and runtime environments
 - Hash-verified dependency installation
 - Unlocks Renovate's `uv` manager for automated Python dependency updates
-- Consolidates three `setup.py` files into a standard workspace layout
 
-**Negative:**
+**Negative (odg-core):**
 - Release pipeline needs updating for the new version bumping approach
 - One-time migration effort across three packages and their CI workflows
-
-## Implementation Steps
-
-1. Convert each `setup.py` to `pyproject.toml` with `[project]` / `[project.dependencies]`
-2. Configure uv workspace in root `pyproject.toml`
-3. Run `uv lock` to generate `uv.lock`
-4. Update CI workflows: replace `pip install -r requirements.txt` with `uv sync`
-5. Update release workflows: replace dynamic `bump_minor()` with `uv version --bump minor` (or equivalent script)
-6. Update Dockerfile build steps accordingly
+- Without a full migration, we can't use `uv`s version setting properly
+- Need workaround to pin the dependencies in the Dockerfile
