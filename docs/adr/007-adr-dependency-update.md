@@ -79,6 +79,7 @@ Adopt **Renovate** to replace Dependabot version-update automation. Renovate wil
 | Dockerfile base images | Digest-pinned (`FROM alpine:3.20@sha256:...`), with human-readable tag retained as comment |
 | GitHub Actions | SHA-pinned (`uses: actions/checkout@abc123...`); Renovate maintains SHAs automatically |
 | `.ocm/base-component.yaml` | Tag-pinned via regex manager; digest pinning TBD pending open question below |
+|CC utils workflows | cc-utils workflows are not updated with renovate but kept at @v1 without further pinning |
 
 ### Auto-merge rules
 
