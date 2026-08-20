@@ -89,6 +89,7 @@ contents/how-to/05-sbom-download.md
 contents/how-to/06-sbom-diagnose-failures.md
 contents/how-to/07-change-vulnerability-sla.md
 contents/how-to/08-run-sql-statements.md
+contents/how-to/09-prepare-component-for-odg.md
 ```
 
 ## Tutorials
@@ -114,6 +115,7 @@ contents/tutorial/01-mac-setup-from-scratch.md
 contents/reference/00-artefact-metadata-query.md
 contents/reference/core/index.md
 contents/reference/extensions/index.md
+contents/reference/18-ocm-labels.md
 ```
 
 ---
