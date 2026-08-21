@@ -11,7 +11,7 @@ An environment, capable of running ODG code (packages, libraries, ...) connected
 ## Prerequisites
 
 - An ODG instance and a kubeconfig (using static credentials)
-- `python3`, `pip3`
+- `python3`, `uv`
 - GitHub Token authorised to access ODG API
 
 ## Actions
@@ -19,10 +19,10 @@ An environment, capable of running ODG code (packages, libraries, ...) connected
 ### Preparation
 
 Pull the [ODG Core repository](https://github.com/open-component-model/odg-core).
-Install dependencies using `pip3`.
+Install dependencies using `uv`.
 
 ```
-pip3 install -r requirements-dev.txt
+uv sync
 ```
 
 **Hint**: if you are not using virtual environments, you have to additionally provide the `--break-system-packages` flag
