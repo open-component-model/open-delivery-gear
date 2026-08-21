@@ -75,6 +75,14 @@
   //   executionMode: 'branch',
   // },
   customManagers: [
+    {
+      // Track the Renovate version used in the workflow
+      customType: 'regex',
+      managerFilePatterns: ['.github/workflows/renovate.yml'],
+      matchStrings: ["renovate-version:\\s*'(?<currentValue>[^'@]+)(?:@(?<currentDigest>sha256:[a-f0-9]+))?'"],
+      depNameTemplate: 'ghcr.io/renovatebot/renovate',
+      datasourceTemplate: 'docker',
+    },
     // {
     //   // Track external OCI images in OCM component descriptors.
     //   // Two matchStrings create two matches per resource (same depName):

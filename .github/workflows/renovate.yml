@@ -54,6 +54,7 @@ jobs:
         uses: renovatebot/github-action@e09d604f8f803bb527bd8321ed5be06c460b8682 # v46.2.2
         with:
           docker-cmd-file: renovate-config-validator.sh
+          renovate-version: '44.39.0@sha256:e331219979fc6b38fc5cf7cd5beda63d4fc19963c3ef20404a2e99c8c12118a0'
           token: ${{ secrets.GITHUB_TOKEN }}
 
   renovate:
@@ -118,6 +119,7 @@ jobs:
           env-regex: |
             ^(?:RENOVATE_\w+|LOG_LEVEL|GITHUB_COM_TOKEN|NODE_OPTIONS|(?:HTTPS?|NO)_PROXY|(?:https?|no)_proxy)$
           token: ${{ steps.generate_token.outputs.token || secrets.GITHUB_TOKEN }}
+          renovate-version: '44.39.0@sha256:e331219979fc6b38fc5cf7cd5beda63d4fc19963c3ef20404a2e99c8c12118a0'
         env:
           RENOVATE_ONBOARDING: 'false'
           RENOVATE_USERNAME: 'odgbot[bot]'
