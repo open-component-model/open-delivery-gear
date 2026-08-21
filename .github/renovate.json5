@@ -13,9 +13,10 @@
   'minimumReleaseAge': '7 days',
   'ignorePaths': ['.ocm/'],
   'branchPrefix': 'renovate/',
-  'gitAuthor': 'ocmbot[bot] <125909804+ocmbot[bot]@users.noreply.github.com>',
+  // You can build the email with this info: curl -s https://api.github.com/users/odgbot%5Bbot%5D | grep -E '"id"|"login"' — format: <id>+<slug>[bot]@users.noreply.github.com
+  'gitAuthor': 'odgbot[bot] <319464553+odgbot[bot]@users.noreply.github.com>',
   'gitIgnoredAuthors': [
-    '125909804+ocmbot[bot]@users.noreply.github.com',
+    '319464553+odgbot[bot]@users.noreply.github.com',
   ],
   prConcurrentLimit: 0,
   prHourlyLimit: 0,
