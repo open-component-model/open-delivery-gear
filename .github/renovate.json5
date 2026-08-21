@@ -75,14 +75,6 @@
   //   executionMode: 'branch',
   // },
   customManagers: [
-    {
-      // Track the Renovate container image version used in the validate job
-      customType: 'regex',
-      managerFilePatterns: ['.github/workflows/renovate.yml'],
-      matchStrings: ['image: ghcr.io/renovatebot/renovate:(?<currentValue>[^@\\s]+)'],
-      depNameTemplate: 'ghcr.io/renovatebot/renovate',
-      datasourceTemplate: 'docker',
-    },
     // {
     //   // Track external OCI images in OCM component descriptors.
     //   // Two matchStrings create two matches per resource (same depName):

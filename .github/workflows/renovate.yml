@@ -40,9 +40,6 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    container:
-      image: ghcr.io/renovatebot/renovate:44.32.6@sha256:03dec876d0b8941fe3b3558c19e79b3038f73acc296f6d2550eca5df8e678294
-      options: -u 1001:0 --group-add 1000 --group-add 12021 --group-add 127
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -50,8 +47,14 @@ jobs:
           sparse-checkout: ${{ env.RENOVATE_CONFIG_FILE }}
           persist-credentials: false
 
+      - name: Create validator script
+        run: printf '#!/bin/bash\nrenovate-config-validator "$RENOVATE_CONFIG_FILE"\n' > renovate-config-validator.sh && chmod +x renovate-config-validator.sh
+
       - name: Validate Renovate config
-        run: renovate-config-validator ${{ env.RENOVATE_CONFIG_FILE }}
+        uses: renovatebot/github-action@e09d604f8f803bb527bd8321ed5be06c460b8682 # v46.2.2
+        with:
+          docker-cmd-file: renovate-config-validator.sh
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   renovate:
     runs-on: ubuntu-latest
@@ -89,7 +92,7 @@ jobs:
           sudo chown -R 12021:0 /tmp/renovate/
           ls -R "$cache_dir" || true
 
-      - name: Generate ocmbot token
+      - name: Generate odgbot token
         if: ${{ github.event_name != 'pull_request' && github.repository_owner == 'open-component-model' }}
         id: generate_token
         uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
@@ -110,14 +113,14 @@ jobs:
         run: echo "RENOVATE_DRY_RUN=extract" >> $GITHUB_ENV
 
       - name: Run
-        uses: renovatebot/github-action@22e0a16091fc706b04affe6ae53d5e3358ac4023 # v46.1.19
+        uses: renovatebot/github-action@e09d604f8f803bb527bd8321ed5be06c460b8682 # v46.2.2
         with:
           env-regex: |
             ^(?:RENOVATE_\w+|LOG_LEVEL|GITHUB_COM_TOKEN|NODE_OPTIONS|(?:HTTPS?|NO)_PROXY|(?:https?|no)_proxy)$
           token: ${{ steps.generate_token.outputs.token || secrets.GITHUB_TOKEN }}
         env:
           RENOVATE_ONBOARDING: 'false'
-          RENOVATE_USERNAME: 'ocmbot[bot]'
+          RENOVATE_USERNAME: 'odgbot[bot]'
           RENOVATE_PLATFORM: 'github'
           RENOVATE_PLATFORM_COMMIT: 'enabled'
           RENOVATE_REPOSITORIES: "${{ github.repository }}"
