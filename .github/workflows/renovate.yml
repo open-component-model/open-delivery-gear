@@ -13,6 +13,11 @@ on:
         description: 'Ignore renovate.json5 schedule'
         type: boolean
         default: false
+      logLevel:
+        description: 'Log level'
+        type: choice
+        default: info
+        options: [ info, debug ]
   push:
     branches:
       - main
@@ -128,6 +133,7 @@ jobs:
           RENOVATE_REPOSITORIES: "${{ github.repository }}"
           RENOVATE_REPOSITORY_CACHE: ${{ github.event_name == 'workflow_dispatch' && inputs.repoCache || 'enabled' }}
           RENOVATE_FORCE: ${{ (github.event_name == 'workflow_dispatch' && inputs.ignoreSchedule) && '{"schedule":null}' || '' }}
+          LOG_LEVEL: ${{ github.event_name == 'workflow_dispatch' && inputs.logLevel || 'info' }}
           # RENOVATE_ALLOWED_POST_UPGRADE_COMMANDS: '["sed"]'
 
       - name: Compress renovate cache
