@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Send Diki findings to ODG-API" href="04-diki.html"><link rel="prev" title="Use the ODG Python Package to resolve an OCM component" href="02-use-odg-api.html">
         <link rel="prefetch" href="../../_static/odg.svg" as="image">
 
-    <link rel="shortcut icon" href="../../_static/odg.svg"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+    <link rel="shortcut icon" href="../../_static/odg.svg"><!-- Generated with Sphinx 8.0.0 and Furo 2025.12.19 -->
         <title>Get all vulnerabilities for a Component - Open Delivery Gear documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
@@ -319,21 +319,21 @@
 <h2>Actions<a class="headerlink" href="#actions" title="Link to this heading">¶</a></h2>
 <section id="preparing-environment">
 <h3>Preparing Environment<a class="headerlink" href="#preparing-environment" title="Link to this heading">¶</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">ODG_API</span><span class="o">=</span><span class="s1">'https://delivery-service.demo.ci.gardener.cloud'</span>
-<span class="nb">export</span><span class="w"> </span><span class="nv">GH_TOKEN</span><span class="o">=</span><span class="s1">'github_pat_xxx'</span>
-<span class="nb">export</span><span class="w"> </span><span class="nv">GH_API</span><span class="o">=</span><span class="s1">'https://api.github.com'</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">ODG_API</span><span class="o">=</span><span class="s1">&#39;https://delivery-service.demo.ci.gardener.cloud&#39;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">GH_TOKEN</span><span class="o">=</span><span class="s1">&#39;github_pat_xxx&#39;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">GH_API</span><span class="o">=</span><span class="s1">&#39;https://api.github.com&#39;</span>
 </pre></div>
 </div>
 </section>
 <section id="authenticate-against-odg-instance">
 <h3>Authenticate against ODG instance<a class="headerlink" href="#authenticate-against-odg-instance" title="Link to this heading">¶</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">ODG_TOKEN</span><span class="o">=</span><span class="k">$(</span>curl<span class="w"> </span>-c<span class="w"> </span>-<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">ODG_API</span><span class="si">}</span><span class="s2">/auth?api_url=</span><span class="si">${</span><span class="nv">GH_API</span><span class="si">}</span><span class="s2">&amp;access_token=</span><span class="si">${</span><span class="nv">GH_TOKEN</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">'/bearer_token/ {print $NF}'</span><span class="k">)</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">ODG_TOKEN</span><span class="o">=</span><span class="k">$(</span>curl<span class="w"> </span>-c<span class="w"> </span>-<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">ODG_API</span><span class="si">}</span><span class="s2">/auth?api_url=</span><span class="si">${</span><span class="nv">GH_API</span><span class="si">}</span><span class="s2">&amp;access_token=</span><span class="si">${</span><span class="nv">GH_TOKEN</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;/bearer_token/ {print $NF}&#39;</span><span class="k">)</span>
 </pre></div>
 </div>
 </section>
 <section id="fetch-vulnerabilities-from-api">
 <h3>Fetch Vulnerabilities from API<a class="headerlink" href="#fetch-vulnerabilities-from-api" title="Link to this heading">¶</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>-d<span class="w"> </span><span class="s1">'{"entries": [{"component_name": "acme.org/sovereign/postgres", "component_version": "1.0.0"}]}'</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">"Accept: application/json"</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="si">${</span><span class="nv">ODG_TOKEN</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">ODG_API</span><span class="si">}</span><span class="s2">/artefacts/metadata/query?type=finding/vulnerability"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;entries&quot;: [{&quot;component_name&quot;: &quot;acme.org/sovereign/postgres&quot;, &quot;component_version&quot;: &quot;1.0.0&quot;}]}&#39;</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Accept: application/json&quot;</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="si">${</span><span class="nv">ODG_TOKEN</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">ODG_API</span><span class="si">}</span><span class="s2">/artefacts/metadata/query?type=finding/vulnerability&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
 </pre></div>
 </div>
 </section>
@@ -417,8 +417,8 @@
     </aside>
   </div>
 </div><script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     </body>

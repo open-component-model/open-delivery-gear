@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="License and Intellectual Property Scanner" href="08-license-and-intellectual-property-scanner-config.html"><link rel="prev" title="Operating System Scanner" href="05-operating-system-scanner-config.html">
         <link rel="prefetch" href="../../_static/odg.svg" as="image">
 
-    <link rel="shortcut icon" href="../../_static/odg.svg"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+    <link rel="shortcut icon" href="../../_static/odg.svg"><!-- Generated with Sphinx 8.0.0 and Furo 2025.12.19 -->
         <title>Issue Replicator - Open Delivery Gear documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
@@ -301,16 +301,16 @@
 <span class="w">  </span><span class="nt">delivery_dashboard_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://delivery-dashboard.example.com</span>
 <span class="w">  </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3600</span><span class="w">                     </span><span class="c1"># 1 hour</span>
 <span class="w">  </span><span class="nt">mappings</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">'acme.org/product-a'</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;acme.org/product-a&#39;</span>
 <span class="w">      </span><span class="nt">github_repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github.com/acme/product-a-issues</span>
-<span class="w">      </span><span class="nt">github_issue_labels_to_preserve</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"do-not-remove-.*"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"priority-.*"</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">github_issue_labels_to_preserve</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;do-not-remove-.*&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;priority-.*&quot;</span><span class="p p-Indicator">]</span>
 <span class="w">      </span><span class="nt">number_included_closed_issues</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
 <span class="w">      </span><span class="nt">milestones</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">title</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">"sprint-"</span>
+<span class="w">          </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sprint-&quot;</span>
 <span class="w">          </span><span class="nt">sprint</span><span class="p">:</span>
 <span class="w">            </span><span class="nt">value_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">name</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">''</span><span class="w">                     </span><span class="c1"># catch-all for all other components</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;&#39;</span><span class="w">                     </span><span class="c1"># catch-all for all other components</span>
 <span class="w">      </span><span class="nt">github_repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github.com/acme/security-findings</span>
 <span class="w">      </span><span class="nt">github_issue_labels_to_preserve</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
 <span class="w">      </span><span class="nt">number_included_closed_issues</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50</span>
@@ -459,9 +459,9 @@ should not be removed when ODG updates an issue. This is useful for:</p>
 </ul>
 <p><strong>Example:</strong></p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">github_issue_labels_to_preserve</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"do-not-remove-.*"</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"priority-.*"</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"team-assignment"</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;do-not-remove-.*&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;priority-.*&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;team-assignment&quot;</span>
 </pre></div>
 </div>
 </section>
@@ -563,8 +563,8 @@ looks when deciding whether to create a new issue or reopen an existing closed o
     </aside>
   </div>
 </div><script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     </body>

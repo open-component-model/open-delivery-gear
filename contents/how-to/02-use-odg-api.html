@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Get all vulnerabilities for a Component" href="03-vulnerabilities-for-component.html"><link rel="prev" title="Deploying the Open Delivery Gear Locally" href="01-local-setup.html">
         <link rel="prefetch" href="../../_static/odg.svg" as="image">
 
-    <link rel="shortcut icon" href="../../_static/odg.svg"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+    <link rel="shortcut icon" href="../../_static/odg.svg"><!-- Generated with Sphinx 8.0.0 and Furo 2025.12.19 -->
         <title>Use the ODG Python Package to resolve an OCM component - Open Delivery Gear documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
@@ -326,9 +326,9 @@
 <h3>Initialise the client<a class="headerlink" href="#initialise-the-client" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">odg_client</span>
 
-<span class="n">ODG_API</span> <span class="o">=</span> <span class="s1">'https://delivery-service.demo.ci.gardener.cloud'</span>
-<span class="n">GH_TOKEN</span> <span class="o">=</span> <span class="s1">'github_pat_xxx'</span>
-<span class="n">GH_API</span> <span class="o">=</span> <span class="s1">'https://api.github.com'</span>
+<span class="n">ODG_API</span> <span class="o">=</span> <span class="s1">&#39;https://delivery-service.demo.ci.gardener.cloud&#39;</span>
+<span class="n">GH_TOKEN</span> <span class="o">=</span> <span class="s1">&#39;github_pat_xxx&#39;</span>
+<span class="n">GH_API</span> <span class="o">=</span> <span class="s1">&#39;https://api.github.com&#39;</span>
 
 <span class="n">odg_api</span> <span class="o">=</span> <span class="n">odg_client</span><span class="o">.</span><span class="n">DeliveryServiceClient</span><span class="p">(</span>
     <span class="n">routes</span><span class="o">=</span><span class="n">odg_client</span><span class="o">.</span><span class="n">DeliveryServiceRoutes</span><span class="p">(</span>
@@ -347,8 +347,8 @@ There is no guarantee that all endpoints are covered, but the low-level client f
 <p>An OCM component is resolved via <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/ocm/component</span></code> endpoints, which features parameters like <code class="docutils literal notranslate"><span class="pre">component-name</span></code> and <code class="docutils literal notranslate"><span class="pre">ocm-repo</span></code>.
 The corresponding python implementation to resolve the OCM component <code class="docutils literal notranslate"><span class="pre">acme.org/sovereign/postgres</span></code> in a certain version looks like this.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">component_descriptor</span> <span class="o">=</span> <span class="n">odg_api</span><span class="o">.</span><span class="n">component_descriptor</span><span class="p">(</span>
-    <span class="n">name</span><span class="o">=</span><span class="s1">'acme.org/sovereign/postgres'</span><span class="p">,</span>
-    <span class="n">version</span><span class="o">=</span><span class="s1">'1.0.0'</span>
+    <span class="n">name</span><span class="o">=</span><span class="s1">&#39;acme.org/sovereign/postgres&#39;</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.0.0&#39;</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -433,8 +433,8 @@ The corresponding python implementation to resolve the OCM component <code class
     </aside>
   </div>
 </div><script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     </body>

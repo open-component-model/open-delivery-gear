@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Backlog Controller" href="07-backlog-controller-config.html"><link rel="prev" title="Core Configuration" href="core/index.html">
         <link rel="prefetch" href="../../_static/odg.svg" as="image">
 
-    <link rel="shortcut icon" href="../../_static/odg.svg"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+    <link rel="shortcut icon" href="../../_static/odg.svg"><!-- Generated with Sphinx 8.0.0 and Furo 2025.12.19 -->
         <title>Artefact Enumerator - Open Delivery Gear documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
@@ -299,12 +299,12 @@
 <h2>Configuration Example<a class="headerlink" href="#configuration-example" title="Link to this heading">¶</a></h2>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">artefact_enumerator</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">compliance_snapshot_grace_period</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">86400</span><span class="w">  </span><span class="c1"># 24 hours</span>
-<span class="w">  </span><span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">'*/5</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*'</span><span class="w">                   </span><span class="c1"># every 5 minutes</span>
+<span class="w">  </span><span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;*/5</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*&#39;</span><span class="w">                   </span><span class="c1"># every 5 minutes</span>
 <span class="w">  </span><span class="nt">successful_jobs_history_limit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
 <span class="w">  </span><span class="nt">failed_jobs_history_limit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
 <span class="w">  </span><span class="nt">components</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">component_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ocm.software/open-delivery-gear</span>
-<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">greatest</span><span class="w">               </span><span class="c1"># or specific version like '0.1.0'</span>
+<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">greatest</span><span class="w">               </span><span class="c1"># or specific version like &#39;0.1.0&#39;</span>
 <span class="w">      </span><span class="nt">max_versions_limit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">component_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme.org/my-component</span>
 <span class="w">      </span><span class="nt">version</span><span class="p">:</span>
@@ -453,16 +453,16 @@ status hasn’t meaningfully changed.</p>
 Default is <code class="docutils literal notranslate"><span class="pre">*/5</span> <span class="pre">*</span> <span class="pre">*</span> <span class="pre">*</span> <span class="pre">*</span></code> (every 5 minutes).</p>
 <p><strong>Common schedule patterns:</strong></p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Every 5 minutes (default)</span>
-<span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">'*/5</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*'</span>
+<span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;*/5</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*&#39;</span>
 
 <span class="c1"># Every 10 minutes</span>
-<span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">'*/10</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*'</span>
+<span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;*/10</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*&#39;</span>
 
 <span class="c1"># Every hour</span>
-<span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">'0</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*'</span>
+<span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;0</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*&#39;</span>
 
 <span class="c1"># Every 30 minutes</span>
-<span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">'*/30</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*'</span>
+<span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;*/30</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*&#39;</span>
 </pre></div>
 </div>
 </section>
@@ -624,8 +624,8 @@ which is useful for understanding trends and ensuring older versions meet compli
     </aside>
   </div>
 </div><script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     </body>

@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Deploying the Open Delivery Gear Locally" href="01-local-setup.html"><link rel="prev" title="SLA Violation Profiler" href="../concepts/06-sla-violation-profiler.html">
         <link rel="prefetch" href="../../_static/odg.svg" as="image">
 
-    <link rel="shortcut icon" href="../../_static/odg.svg"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+    <link rel="shortcut icon" href="../../_static/odg.svg"><!-- Generated with Sphinx 8.0.0 and Furo 2025.12.19 -->
         <title>Setting up a hybrid dev setup - Open Delivery Gear documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
@@ -306,7 +306,7 @@
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>An ODG instance and a kubeconfig (using static credentials)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">python3</span></code>, <code class="docutils literal notranslate"><span class="pre">pip3</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">python3</span></code>, <code class="docutils literal notranslate"><span class="pre">uv</span></code></p></li>
 <li><p>GitHub Token authorised to access ODG API</p></li>
 </ul>
 </section>
@@ -315,8 +315,8 @@
 <section id="preparation">
 <h3>Preparation<a class="headerlink" href="#preparation" title="Link to this heading">¶</a></h3>
 <p>Pull the <a class="reference external" href="https://github.com/open-component-model/odg-core">ODG Core repository</a>.
-Install dependencies using <code class="docutils literal notranslate"><span class="pre">pip3</span></code>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip3</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">-</span><span class="n">dev</span><span class="o">.</span><span class="n">txt</span>
+Install dependencies using <code class="docutils literal notranslate"><span class="pre">uv</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">uv</span> <span class="n">sync</span>
 </pre></div>
 </div>
 <p><strong>Hint</strong>: if you are not using virtual environments, you have to additionally provide the <code class="docutils literal notranslate"><span class="pre">--break-system-packages</span></code> flag</p>
@@ -357,7 +357,7 @@ ODG will pick it up when referencing via <code class="docutils literal notransla
 <section id="odg-api">
 <h4>ODG API<a class="headerlink" href="#odg-api" title="Link to this heading">¶</a></h4>
 <p>Depending on the GitHub instances the ODG API supports, create a GitHub secret in the ODG secret structure.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span><span class="s">&lt;&lt; 'EOF' &gt; /path/to/odg-api/secrets/github/odg-api.yaml</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39; &gt; /path/to/odg-api/secrets/github/odg-api.yaml</span>
 <span class="s">api_url: https://api.github.com</span>
 <span class="s">http_url: https://github.com</span>
 <span class="s">username: &lt;your-username&gt;</span>
@@ -367,7 +367,7 @@ ODG will pick it up when referencing via <code class="docutils literal notransla
 </pre></div>
 </div>
 <p>On ODG code startup, provide the URL to the ODG API with <code class="docutils literal notranslate"><span class="pre">--delivery-service-url</span></code> parameter.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">my</span><span class="o">-</span><span class="n">odg</span><span class="o">-</span><span class="n">extension</span> <span class="o">--</span><span class="n">delivery</span><span class="o">-</span><span class="n">service</span><span class="o">-</span><span class="n">url</span> <span class="s1">'https://delivery-service.demo.ci.gardener.cloud'</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">my</span><span class="o">-</span><span class="n">odg</span><span class="o">-</span><span class="n">extension</span> <span class="o">--</span><span class="n">delivery</span><span class="o">-</span><span class="n">service</span><span class="o">-</span><span class="n">url</span> <span class="s1">&#39;https://delivery-service.demo.ci.gardener.cloud&#39;</span>
 </pre></div>
 </div>
 </section>
@@ -470,8 +470,8 @@ ODG will pick it up when referencing via <code class="docutils literal notransla
     </aside>
   </div>
 </div><script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     </body>

@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Vulnerability Scanner" href="03-vulnerability-scanner-config.html"><link rel="prev" title="Extension Configuration" href="extensions/index.html">
         <link rel="prefetch" href="../../_static/odg.svg" as="image">
 
-    <link rel="shortcut icon" href="../../_static/odg.svg"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+    <link rel="shortcut icon" href="../../_static/odg.svg"><!-- Generated with Sphinx 8.0.0 and Furo 2025.12.19 -->
         <title>Software Bill of Material Generator - Open Delivery Gear documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
@@ -300,15 +300,15 @@
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">sbom_generator</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">86400</span><span class="w">                         </span><span class="c1"># 24 hours</span>
 <span class="w">  </span><span class="nt">on_unsupported</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">warning</span>
-<span class="w">  </span><span class="nt">generation_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">syft</span><span class="w">                   </span><span class="c1"># or 'bdba'</span>
-<span class="w">  </span><span class="nt">output_format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cyclonedx</span><span class="w">                </span><span class="c1"># or 'spdx', 'bdio'</span>
+<span class="w">  </span><span class="nt">generation_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">syft</span><span class="w">                   </span><span class="c1"># or &#39;bdba&#39;</span>
+<span class="w">  </span><span class="nt">output_format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cyclonedx</span><span class="w">                </span><span class="c1"># or &#39;spdx&#39;, &#39;bdio&#39;</span>
 <span class="w">  </span><span class="nt">create_new_scan_if_missing</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">       </span><span class="c1"># BDBA mode only</span>
-<span class="w">  </span><span class="nt">processing_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">force_upload</span><span class="w">           </span><span class="c1"># or 'rescan' (BDBA mode)</span>
+<span class="w">  </span><span class="nt">processing_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">force_upload</span><span class="w">           </span><span class="c1"># or &#39;rescan&#39; (BDBA mode)</span>
 <span class="w">  </span><span class="nt">mappings</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">'acme.org/product-a'</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;acme.org/product-a&#39;</span>
 <span class="w">      </span><span class="nt">group_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1234</span><span class="w">                      </span><span class="c1"># Required for BDBA mode</span>
 <span class="w">      </span><span class="nt">aws_secret_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aws-account-prod</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">''</span><span class="w">                          </span><span class="c1"># catch-all</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;&#39;</span><span class="w">                          </span><span class="c1"># catch-all</span>
 <span class="w">      </span><span class="nt">group_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9999</span>
 <span class="w">      </span><span class="nt">aws_secret_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aws-account-default</span>
 </pre></div>
@@ -471,11 +471,11 @@ secrets configuration.</p>
 <span class="w">  </span><span class="nt">output_format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cyclonedx</span>
 <span class="w">  </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">86400</span>
 <span class="w">  </span><span class="nt">mappings</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">'acme.org/product-a'</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;acme.org/product-a&#39;</span>
 <span class="w">      </span><span class="nt">aws_secret_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aws-account-prod</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">'acme.org'</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;acme.org&#39;</span>
 <span class="w">      </span><span class="nt">aws_secret_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aws-account-dev</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">''</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;&#39;</span>
 <span class="w">      </span><span class="nt">aws_secret_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aws-account-default</span>
 </pre></div>
 </div>
@@ -569,8 +569,8 @@ secrets configuration.</p>
     </aside>
   </div>
 </div><script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     </body>
