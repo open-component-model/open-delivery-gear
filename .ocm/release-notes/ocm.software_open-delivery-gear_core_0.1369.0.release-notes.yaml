@@ -1,0 +1,24 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1369.0
+release_notes:
+- audience: developer
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: breaking
+  contents: The minimum supported Python version has been bumped from 3.12 to 3.14
+  mimetype: text/markdown
+  reference: '[#930](https://github.com/open-component-model/odg-core/pull/930)'
+  type: standard
+- audience: developer
+  author:
+    hostname: github.com
+    type: githubUser
+    username: ChrisSchneider
+  category: feature
+  contents: Claude skill to create a scanner extension
+  mimetype: text/markdown
+  reference: '[#926](https://github.com/open-component-model/odg-core/pull/926)'
+  type: standard
