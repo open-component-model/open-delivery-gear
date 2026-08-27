@@ -30,8 +30,9 @@ for all supported types (`githubUser`, `codeowners`, etc.).
 
 ```{note}
 The responsibles extension can override or extend these assignments at runtime
-via configurable rules. See
-{doc}`/contents/concepts/04-responsibles` for details.
+via configurable rules. See the
+{doc}`/contents/concepts/04-responsibles`
+for all fields, allowed values and scopes.
 ```
 
 ## Provide Risk Profile Context
@@ -56,7 +57,7 @@ labels:
 Only set the fields that are meaningful for your component; omitted fields are
 treated as unknown and do not affect rescoring. See the
 {ref}`label reference <securityocmsoftwarerisk-profile-v1>`
-for all fields and allowed values.
+for all fields, allowed values and scopes.
 
 ## Skip Binary or Source Scans
 
@@ -64,20 +65,30 @@ You can configure whether ODG should run binary vulnerability scans or SAST
 (Static Application Security Testing) source analysis. Usually `skip` is set
 when the pipeline already ran the equivalent scan.
 
+These two labels are **not effective at the component level** — they must be
+placed directly on the individual resource or source they control.
+
 ```yaml
-labels:
-  - name: odg.ocm.software/binary-scan-policy
-    version: v1
-    value:
-      policy: "skip"
-      comment: "Scanned upstream, results attached as SBOM"
-  - name: odg.ocm.software/source-scan-policy
-    version: v1
-    value:
-      policy: "skip"
-      comment: "We use gosec for SAST scanning, see attached log"
+resources:
+  - name: my-image
+    ...
+    labels:
+      - name: odg.ocm.software/binary-scan-policy
+        version: v1
+        value:
+          policy: "skip"
+          comment: "Scanned upstream, results attached as SBOM"
+sources:
+  - name: my-source
+    ...
+    labels:
+      - name: odg.ocm.software/source-scan-policy
+        version: v1
+        value:
+          policy: "skip"
+          comment: "We use gosec for SAST scanning, see attached log"
 ```
 
 See the
 {ref}`label reference <odgocmsoftwarebinary-scan-policy-v1>`
-for all fields and allowed values.
+for all fields, allowed values and scopes.
