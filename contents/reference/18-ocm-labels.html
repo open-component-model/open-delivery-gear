@@ -295,16 +295,62 @@
           <section id="ocm-label-index">
 <h1>OCM Label Index<a class="headerlink" href="#ocm-label-index" title="Link to this heading">¶</a></h1>
 <p>ODG uses <a class="reference external" href="https://ocm.software/docs/reference/component-descriptor/#component-labels">OCM labels</a> to influence scanning behaviour, CVE rescoring, responsible assignment, and metadata.</p>
+<section id="scope-matrix">
+<h2>Scope Matrix<a class="headerlink" href="#scope-matrix" title="Link to this heading">¶</a></h2>
+<p>The labels are effective at the following scopes:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Label</p></th>
+<th class="head text-center"><p>Resource</p></th>
+<th class="head text-center"><p>Source</p></th>
+<th class="head text-center"><p>Component</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/binary-scan-policy</span></code></p></td>
+<td class="text-center"><p>✓</p></td>
+<td class="text-center"><p>—</p></td>
+<td class="text-center"><p>—</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/source-scan-policy</span></code></p></td>
+<td class="text-center"><p>—</p></td>
+<td class="text-center"><p>✓</p></td>
+<td class="text-center"><p>—</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">security.ocm.software/risk-profile</span></code></p></td>
+<td class="text-center"><p>✓</p></td>
+<td class="text-center"><p>-</p></td>
+<td class="text-center"><p>✓ fallback</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/responsibles</span></code></p></td>
+<td class="text-center"><p>✓</p></td>
+<td class="text-center"><p>✓</p></td>
+<td class="text-center"><p>✓ fallback</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/purposes</span></code></p></td>
+<td class="text-center"><p>✓</p></td>
+<td class="text-center"><p>—</p></td>
+<td class="text-center"><p>—</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 <hr class="docutils" />
+</section>
 <section id="odg-ocm-software-binary-scan-policy-v1">
 <span id="odgocmsoftwarebinary-scan-policy-v1"></span><h2><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/binary-scan-policy</span></code> v1<a class="headerlink" href="#odg-ocm-software-binary-scan-policy-v1" title="Link to this heading">¶</a></h2>
 <p>Controls whether a binary vulnerability scan is skipped in ODG.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">labels</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">odg.ocm.software/binary-scan-policy</span>
-<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">policy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;scan&quot;</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> &quot;skip&quot;</span>
-<span class="w">      </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;free-text</span><span class="nv"> </span><span class="s">string&quot;</span>
+<p><strong>Effective at:</strong> resource only</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">resources</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-image</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">odg.ocm.software/binary-scan-policy</span>
+<span class="w">        </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="w">        </span><span class="nt">value</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">policy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;scan&quot;</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> &quot;skip&quot;</span>
+<span class="w">          </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;free-text</span><span class="nv"> </span><span class="s">string&quot;</span>
 </pre></div>
 </div>
 <div class="table-wrapper colwidths-auto docutils container">
@@ -335,12 +381,16 @@
 <section id="odg-ocm-software-source-scan-policy-v1">
 <span id="odgocmsoftwaresource-scan-policy-v1"></span><h2><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/source-scan-policy</span></code> v1<a class="headerlink" href="#odg-ocm-software-source-scan-policy-v1" title="Link to this heading">¶</a></h2>
 <p>Controls whether SAST (Static Application Security Testing) source analysis is run in ODG. Usually <code class="docutils literal notranslate"><span class="pre">skip</span></code> is set when the pipeline already ran a SAST scan.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">labels</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">odg.ocm.software/source-scan-policy</span>
-<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">policy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;scan&quot;</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> &quot;skip&quot;</span>
-<span class="w">      </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;free-text</span><span class="nv"> </span><span class="s">string&quot;</span>
+<p><strong>Effective at:</strong> source only</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">sources</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-source</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">odg.ocm.software/source-scan-policy</span>
+<span class="w">        </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="w">        </span><span class="nt">value</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">policy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;scan&quot;</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> &quot;skip&quot;</span>
+<span class="w">          </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;free-text</span><span class="nv"> </span><span class="s">string&quot;</span>
 </pre></div>
 </div>
 <p>The fields are identical to those of <a class="reference internal" href="#odgocmsoftwarebinary-scan-policy-v1"><span class="std std-ref">odg.ocm.software/binary-scan-policy</span></a>.</p>
@@ -349,6 +399,7 @@
 <section id="security-ocm-software-risk-profile-v1">
 <span id="securityocmsoftwarerisk-profile-v1"></span><h2><code class="docutils literal notranslate"><span class="pre">security.ocm.software/risk-profile</span></code> v1<a class="headerlink" href="#security-ocm-software-risk-profile-v1" title="Link to this heading">¶</a></h2>
 <p>Describes the deployment context of a component or artefact. ODG uses this information to suggest adjusted CVE severity scores that reflect the actual exposure of the component.</p>
+<p><strong>Effective at:</strong> resource (takes priority), component (fallback)</p>
 <p>All fields are optional. Fields that are omitted are treated as unknown and do not contribute to rescoring decisions.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">labels</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">security.ocm.software/risk-profile</span>
@@ -408,6 +459,7 @@
 <section id="odg-ocm-software-responsibles-v1">
 <span id="odgocmsoftwareresponsibles-v1"></span><h2><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/responsibles</span></code> v1<a class="headerlink" href="#odg-ocm-software-responsibles-v1" title="Link to this heading">¶</a></h2>
 <p>Explicitly declares who is responsible for a component or artefact.</p>
+<p><strong>Effective at:</strong> resource/source (takes priority), component (fallback)</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">labels</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">odg.ocm.software/responsibles</span>
 <span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
@@ -450,13 +502,17 @@
 <section id="odg-ocm-software-purposes-v1">
 <h2><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/purposes</span></code> v1<a class="headerlink" href="#odg-ocm-software-purposes-v1" title="Link to this heading">¶</a></h2>
 <p>Tags a resource with a set of named functional purposes. ODG uses this to discover resources that serve a specific role within a component.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">labels</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">odg.ocm.software/purposes</span>
-<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lint</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sast</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pybandit</span>
+<p><strong>Effective at:</strong> resource only</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">resources</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-image</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">odg.ocm.software/purposes</span>
+<span class="w">        </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="w">        </span><span class="nt">value</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lint</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sast</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pybandit</span>
 </pre></div>
 </div>
 <p>Currently the following values are recognised:</p>
@@ -525,6 +581,7 @@
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">OCM Label Index</a><ul>
+<li><a class="reference internal" href="#scope-matrix">Scope Matrix</a></li>
 <li><a class="reference internal" href="#odg-ocm-software-binary-scan-policy-v1"><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/binary-scan-policy</span></code> v1</a></li>
 <li><a class="reference internal" href="#odg-ocm-software-source-scan-policy-v1"><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/source-scan-policy</span></code> v1</a></li>
 <li><a class="reference internal" href="#security-ocm-software-risk-profile-v1"><code class="docutils literal notranslate"><span class="pre">security.ocm.software/risk-profile</span></code> v1</a></li>

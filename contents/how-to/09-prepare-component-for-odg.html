@@ -323,8 +323,9 @@ for all supported types (<code class="docutils literal notranslate"><span class=
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The responsibles extension can override or extend these assignments at runtime
-via configurable rules. See
-<a class="reference internal" href="../concepts/04-responsibles.html"><span class="doc">Overwriting OCM component responsibles</span></a> for details.</p>
+via configurable rules. See the
+<a class="reference internal" href="../concepts/04-responsibles.html"><span class="doc">Overwriting OCM component responsibles</span></a>
+for all fields, allowed values and scopes.</p>
 </div>
 </section>
 <section id="provide-risk-profile-context">
@@ -347,29 +348,38 @@ scores that reflect actual exposure rather than the theoretical maximum.</p>
 <p>Only set the fields that are meaningful for your component; omitted fields are
 treated as unknown and do not affect rescoring. See the
 <a class="reference internal" href="../reference/18-ocm-labels.html#securityocmsoftwarerisk-profile-v1"><span class="std std-ref">label reference</span></a>
-for all fields and allowed values.</p>
+for all fields, allowed values and scopes.</p>
 </section>
 <section id="skip-binary-or-source-scans">
 <h2>Skip Binary or Source Scans<a class="headerlink" href="#skip-binary-or-source-scans" title="Link to this heading">¶</a></h2>
 <p>You can configure whether ODG should run binary vulnerability scans or SAST
 (Static Application Security Testing) source analysis. Usually <code class="docutils literal notranslate"><span class="pre">skip</span></code> is set
 when the pipeline already ran the equivalent scan.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">labels</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">odg.ocm.software/binary-scan-policy</span>
-<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">policy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;skip&quot;</span>
-<span class="w">      </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Scanned</span><span class="nv"> </span><span class="s">upstream,</span><span class="nv"> </span><span class="s">results</span><span class="nv"> </span><span class="s">attached</span><span class="nv"> </span><span class="s">as</span><span class="nv"> </span><span class="s">SBOM&quot;</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">odg.ocm.software/source-scan-policy</span>
-<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">policy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;skip&quot;</span>
-<span class="w">      </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;We</span><span class="nv"> </span><span class="s">use</span><span class="nv"> </span><span class="s">gosec</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">SAST</span><span class="nv"> </span><span class="s">scanning,</span><span class="nv"> </span><span class="s">see</span><span class="nv"> </span><span class="s">attached</span><span class="nv"> </span><span class="s">log&quot;</span>
+<p>These two labels are <strong>not effective at the component level</strong> — they must be
+placed directly on the individual resource or source they control.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">resources</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-image</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">odg.ocm.software/binary-scan-policy</span>
+<span class="w">        </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="w">        </span><span class="nt">value</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">policy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;skip&quot;</span>
+<span class="w">          </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Scanned</span><span class="nv"> </span><span class="s">upstream,</span><span class="nv"> </span><span class="s">results</span><span class="nv"> </span><span class="s">attached</span><span class="nv"> </span><span class="s">as</span><span class="nv"> </span><span class="s">SBOM&quot;</span>
+<span class="nt">sources</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-source</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">odg.ocm.software/source-scan-policy</span>
+<span class="w">        </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="w">        </span><span class="nt">value</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">policy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;skip&quot;</span>
+<span class="w">          </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;We</span><span class="nv"> </span><span class="s">use</span><span class="nv"> </span><span class="s">gosec</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">SAST</span><span class="nv"> </span><span class="s">scanning,</span><span class="nv"> </span><span class="s">see</span><span class="nv"> </span><span class="s">attached</span><span class="nv"> </span><span class="s">log&quot;</span>
 </pre></div>
 </div>
 <p>See the
 <a class="reference internal" href="../reference/18-ocm-labels.html#odgocmsoftwarebinary-scan-policy-v1"><span class="std std-ref">label reference</span></a>
-for all fields and allowed values.</p>
+for all fields, allowed values and scopes.</p>
 </section>
 </section>
 

@@ -2,6 +2,18 @@
 
 ODG uses [OCM labels](https://ocm.software/docs/reference/component-descriptor/#component-labels) to influence scanning behaviour, CVE rescoring, responsible assignment, and metadata.
 
+## Scope Matrix
+
+The labels are effective at the following scopes:
+
+| Label | Resource | Source | Component |
+|:---|:---:|:---:|:---:|
+| `odg.ocm.software/binary-scan-policy` | ✓ | — | — |
+| `odg.ocm.software/source-scan-policy` | — | ✓ | — |
+| `security.ocm.software/risk-profile` | ✓ | - | ✓ fallback |
+| `odg.ocm.software/responsibles` | ✓ | ✓ | ✓ fallback |
+| `odg.ocm.software/purposes` | ✓ | — | — |
+
 ---
 
 (odgocmsoftwarebinary-scan-policy-v1)=
@@ -9,14 +21,19 @@ ODG uses [OCM labels](https://ocm.software/docs/reference/component-descriptor/#
 
 Controls whether a binary vulnerability scan is skipped in ODG.
 
+**Effective at:** resource only
+
 ```{code-block} yaml
 :force: true
-labels:
-  - name: odg.ocm.software/binary-scan-policy
-    version: v1
-    value:
-      policy: "scan" | "skip"
-      comment: "free-text string"
+resources:
+  - name: my-image
+    ...
+    labels:
+      - name: odg.ocm.software/binary-scan-policy
+        version: v1
+        value:
+          policy: "scan" | "skip"
+          comment: "free-text string"
 ```
 
 | Field | Type | Required | Description |
@@ -31,14 +48,19 @@ labels:
 
 Controls whether SAST (Static Application Security Testing) source analysis is run in ODG. Usually `skip` is set when the pipeline already ran a SAST scan.
 
+**Effective at:** source only
+
 ```{code-block} yaml
 :force: true
-labels:
-  - name: odg.ocm.software/source-scan-policy
-    version: v1
-    value:
-      policy: "scan" | "skip"
-      comment: "free-text string"
+sources:
+  - name: my-source
+    ...
+    labels:
+      - name: odg.ocm.software/source-scan-policy
+        version: v1
+        value:
+          policy: "scan" | "skip"
+          comment: "free-text string"
 ```
 
 The fields are identical to those of {ref}`odg.ocm.software/binary-scan-policy <odgocmsoftwarebinary-scan-policy-v1>`.
@@ -49,6 +71,8 @@ The fields are identical to those of {ref}`odg.ocm.software/binary-scan-policy <
 ## `security.ocm.software/risk-profile` v1
 
 Describes the deployment context of a component or artefact. ODG uses this information to suggest adjusted CVE severity scores that reflect the actual exposure of the component.
+
+**Effective at:** resource (takes priority), component (fallback)
 
 All fields are optional. Fields that are omitted are treated as unknown and do not contribute to rescoring decisions.
 
@@ -84,6 +108,8 @@ labels:
 
 Explicitly declares who is responsible for a component or artefact.
 
+**Effective at:** resource/source (takes priority), component (fallback)
+
 ```yaml
 labels:
   - name: odg.ocm.software/responsibles
@@ -110,14 +136,19 @@ labels:
 
 Tags a resource with a set of named functional purposes. ODG uses this to discover resources that serve a specific role within a component.
 
+**Effective at:** resource only
+
 ```yaml
-labels:
-  - name: odg.ocm.software/purposes
-    version: v1
-    value:
-      - lint
-      - sast
-      - pybandit
+resources:
+  - name: my-image
+    ...
+    labels:
+      - name: odg.ocm.software/purposes
+        version: v1
+        value:
+          - lint
+          - sast
+          - pybandit
 ```
 
 Currently the following values are recognised:
