@@ -139,13 +139,16 @@ Tags a resource with a set of named functional purposes. ODG uses this to discov
 **Effective at:** resource only
 
 ```yaml
-labels:
-  - name: odg.ocm.software/purposes
-    version: v1
-    value:
-      - lint
-      - sast
-      - pybandit
+resources:
+  - name: my-image
+    ...
+    labels:
+      - name: odg.ocm.software/purposes
+        version: v1
+        value:
+          - lint
+          - sast
+          - pybandit
 ```
 
 Currently the following values are recognised:
