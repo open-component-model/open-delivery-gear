@@ -1,7 +1,7 @@
 name: Renovate ODG
 on:
   schedule:
-    - cron: '0 */2 * * *' # Every 2 hours (testing)
+    - cron: '0 1 * * *' # Daily at 01:00 UTC (02:00/03:00 CET/CEST)
   workflow_dispatch:
     inputs:
       repoCache:
@@ -18,9 +18,6 @@ on:
         type: choice
         default: info
         options: [ info, debug ]
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
