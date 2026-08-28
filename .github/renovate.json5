@@ -11,7 +11,6 @@
   ],
   'internalChecksFilter': 'strict',
   'minimumReleaseAge': '7 days',
-  'ignorePaths': ['.ocm/'],
   'branchPrefix': 'renovate/',
   // You can build the email with this info: curl -s https://api.github.com/users/odgbot%5Bbot%5D | grep -E '"id"|"login"' — format: <id>+<slug>[bot]@users.noreply.github.com
   'gitAuthor': 'odgbot[bot] <319464553+odgbot[bot]@users.noreply.github.com>',
@@ -43,37 +42,29 @@
       matchDepNames: ['gardener/cc-utils'],
       enabled: false,
     },
-    // {
-    //   // gateway-helm and gateway tags use a v-prefix (v1.8.x).
-    //   // versionCompatibility captures the 'v' as compatibility so Renovate
-    //   // restores it when writing back the new version.
-    //   matchDepNames: [
-    //     'docker.io/envoyproxy/gateway-helm',
-    //     'docker.io/envoyproxy/gateway',
-    //   ],
-    //   versionCompatibility: '^(?<compatibility>v?)(?<version>.+)$',
-    //   versioning: 'semver',
-    // },
-    // {
-    //   // envoy tags use a distroless- prefix (distroless-v1.38.x).
-    //   // versionCompatibility makes 'distroless-' optional so the regex
-    //   // matches BOTH the tag (distroless-v1.38.3) and the version field
-    //   // (v1.38.3). The compatibility prefix is restored on write-back,
-    //   // so the tag gets 'distroless-' and the version field does not.
-    //   matchDepNames: ['docker.io/envoyproxy/envoy'],
-    //   versionCompatibility: '^(?<compatibility>distroless-)?(?<version>.+)$',
-    //   versioning: 'semver',
-    // },
+    {
+      matchDepNames: [
+        'docker.io/envoyproxy/gateway-helm',
+        'docker.io/envoyproxy/gateway',
+      ],
+      versionCompatibility: '^(?<compatibility>v?)(?<version>.+)$',
+      versioning: 'semver',
+      pinDigests: true,
+    },
+    {
+      matchDepNames: ['docker.io/envoyproxy/envoy'],
+      versionCompatibility: '^(?<compatibility>distroless-)?(?<version>.+)$',
+      versioning: 'semver',
+      pinDigests: true,
+    },
   ],
-  // postUpgradeTasks: {
-  //   // Strip @sha256:... that Renovate may append to the version: field
-  //   // (the digest should only live in imageReference:).
-  //   commands: [
-  //     'sed -i -E "s/^([[:space:]]*version:[[:space:]]+[^@[:space:]]+)@sha256:[a-fA-F0-9]+/\\1/" .ocm/base-component.yaml',
-  //   ],
-  //   fileFilters: ['.ocm/base-component.yaml'],
-  //   executionMode: 'branch',
-  // },
+  postUpgradeTasks: {
+    commands: [
+      'python3 .ci/renovate-sync-ocm',
+    ],
+    fileFilters: ['.ocm/base-component.yaml', 'extension-definitions.yaml'],
+    executionMode: 'branch',
+  },
   customManagers: [
     {
       // Track the Renovate version used in the workflow
@@ -83,24 +74,13 @@
       depNameTemplate: 'ghcr.io/renovatebot/renovate',
       datasourceTemplate: 'docker',
     },
-    // {
-    //   // Track external OCI images in OCM component descriptors.
-    //   // Two matchStrings create two matches per resource (same depName):
-    //   //   [0] captures the tag from imageReference: as currentValue +
-    //   //       the digest as currentDigest (so Renovate updates both).
-    //   //   [1] captures the separate version: field as currentValue,
-    //   //       linked to the same depName via a multiline match back to
-    //   //       imageReference:. Also captures currentDigest so Renovate
-    //   //       fetches newDigest during version updates too.
-    //   // Renovate deduplicates by depName and updates ALL occurrences of
-    //   // currentValue, so both the tag and the version field stay in sync.
-    //   customType: 'regex',
-    //   managerFilePatterns: ['.ocm/base-component.yaml'],
-    //   matchStrings: [
-    //     'imageReference:\\s*(?<depName>[^:\\s]+):(?<currentValue>[^@\\s]+)(?:@(?<currentDigest>sha256:[a-f0-9]+))?',
-    //     'imageReference:\\s*(?<depName>[^:\\s]+):[^@\\s]+(?:@(?<currentDigest>sha256:[a-f0-9]+))?[\\s\\S]{0,500}?\\n\\s*version:\\s*(?<currentValue>[^@\\s]+)',
-    //   ],
-    //   datasourceTemplate: 'docker',
-    // },
+    {
+      customType: 'regex',
+      managerFilePatterns: ['.ocm/base-component.yaml'],
+      matchStrings: [
+        'imageReference:\\s*(?<depName>[^:\\s]+):(?<currentValue>[^@\\s]+)(?:@(?<currentDigest>sha256:[a-f0-9]+))?'
+      ],
+      datasourceTemplate: 'docker',
+    },
   ],
 }

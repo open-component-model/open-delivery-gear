@@ -1,0 +1,96 @@
+#!/usr/bin/env python3
+
+import os
+import re
+import sys
+
+import yaml
+
+
+own_dir = os.path.dirname(__file__)
+repo_dir = os.path.abspath(os.path.join(own_dir, os.path.pardir))
+BASE_COMPONENT_FILE = os.path.join(repo_dir, '.ocm', 'base-component.yaml')
+EXTENSION_DEFINITIONS_FILE = os.path.join(repo_dir, 'extension-definitions.yaml')
+
+
+def derive_version(image_reference):
+    ref = image_reference.split('@')[0]
+    return ref.rsplit(':', 1)[-1].removeprefix('distroless-')
+
+
+def update_base_component(filepath):
+    with open(filepath) as f:
+        lines = f.readlines()
+
+    result = []
+    pending_version = None
+    current_type = None
+    current_name = None
+    helmchart_versions = {}
+
+    for line in lines:
+        if line.startswith('- '):
+            pending_version = None
+            current_type = None
+            current_name = None
+
+        m = re.match(r'^    imageReference:\s*(.+)$', line)
+        if m:
+            ref = m.group(1).strip()
+            pending_version = derive_version(ref)
+            result.append(line)
+            continue
+
+        m = re.match(r'^  name:\s*(.+)$', line)
+        if m:
+            current_name = m.group(1).strip()
+            result.append(line)
+            continue
+
+        m = re.match(r'^  type:\s*(.+)$', line)
+        if m:
+            current_type = m.group(1).strip()
+            result.append(line)
+            continue
+
+        m = re.match(r'^  version:\s*(.+)$', line)
+        if m and pending_version is not None:
+            result.append(f'  version: {pending_version}\n')
+            if current_type == 'helmChart/v1':
+                helmchart_versions[current_name] = pending_version
+            pending_version = None
+            continue
+
+        result.append(line)
+
+    with open(filepath, 'w') as f:
+        f.writelines(result)
+
+    return helmchart_versions
+
+
+def update_extension_definitions(filepath, helmchart_versions):
+    if not helmchart_versions:
+        return
+
+    with open(filepath) as f:
+        docs = list(yaml.safe_load_all(f.read()))
+
+    for doc in docs:
+        for ref in doc.get('installation', {}).get('ocm_references', []):
+            artefact = ref.get('artefact', {})
+            name = artefact.get('name')
+            if name in helmchart_versions:
+                artefact['version'] = helmchart_versions[name]
+
+    with open(filepath, 'w') as f:
+        yaml.safe_dump_all(docs, f)
+
+
+def main():
+    helmchart_versions = update_base_component(BASE_COMPONENT_FILE)
+    update_extension_definitions(EXTENSION_DEFINITIONS_FILE, helmchart_versions)
+
+
+if __name__ == '__main__':
+    main()
