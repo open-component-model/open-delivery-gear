@@ -411,12 +411,12 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "furo" },
-    { name = "myst-parser" },
-    { name = "sphinx" },
-    { name = "sphinx-autobuild" },
-    { name = "sphinx-design" },
-    { name = "sphinxcontrib-mermaid" },
+    { name = "furo", specifier = "==2025.12.19" },
+    { name = "myst-parser", specifier = "==5.1.0" },
+    { name = "sphinx", specifier = "==8.0.0" },
+    { name = "sphinx-autobuild", specifier = "==2025.8.25" },
+    { name = "sphinx-design", specifier = "==0.7.0" },
+    { name = "sphinxcontrib-mermaid", specifier = "==2.1.0" },
 ]
 
 [[package]]

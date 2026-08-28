@@ -3,10 +3,10 @@ name = "odg-website"
 version = "0.1.0"
 requires-python = ">=3.12"
 dependencies = [
-    "furo",
-    "sphinx",
-    "myst-parser",
-    "sphinx-autobuild",
-    "sphinx-design",
-    "sphinxcontrib-mermaid",
+    "furo==2025.12.19",
+    "sphinx==8.0.0",
+    "myst-parser==5.1.0",
+    "sphinx-autobuild==2025.8.25",
+    "sphinx-design==0.7.0",
+    "sphinxcontrib-mermaid==2.1.0",
 ]
