@@ -1,0 +1,36 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1370.0
+release_notes:
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: ChrisSchneider
+  category: noteworthy
+  contents: '[Trivy scanner extension](https://open-component-model.github.io/open-delivery-gear/contents/reference/03-vulnerability-scanner-config.html)
+    is now available to scan OCM components with Trivy for CVEs'
+  mimetype: text/markdown
+  reference: '[#931](https://github.com/open-component-model/odg-core/pull/931)'
+  type: standard
+- audience: developer
+  author:
+    hostname: github.com
+    type: githubUser
+    username: ChrisSchneider
+  category: noteworthy
+  contents: Add AGENTS.md with project conventions and structure for AI coding agents
+  mimetype: text/markdown
+  reference: '[#933](https://github.com/open-component-model/odg-core/pull/933)'
+  type: standard
+- audience: developer
+  author:
+    hostname: github.com
+    type: githubUser
+    username: ChrisSchneider
+  category: feature
+  contents: A new Claude skill `odg-create-scanner` is now available to create vulnerability
+    scanner extensions
+  mimetype: text/markdown
+  reference: '[#931](https://github.com/open-component-model/odg-core/pull/931)'
+  type: standard
