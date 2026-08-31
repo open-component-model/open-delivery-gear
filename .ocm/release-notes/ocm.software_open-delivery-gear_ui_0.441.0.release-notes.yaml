@@ -1,0 +1,25 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/ui
+  component_version: 0.441.0
+release_notes:
+- audience: user
+  author:
+    hostname: github.com
+    type: githubUser
+    username: ChrisSchneider
+  category: improvement
+  contents: 'Trivy scanner: If available, recommendations and rating sources are shown
+    in the rescoring view'
+  mimetype: text/markdown
+  reference: '[#478](https://github.com/open-component-model/odg-ui/pull/478)'
+  type: standard
+- audience: user
+  author:
+    hostname: github.com
+    type: githubUser
+    username: ChrisSchneider
+  category: improvement
+  contents: Vulnerability findings from Trivy are now shown in ODG UI
+  mimetype: text/markdown
+  reference: '[#479](https://github.com/open-component-model/odg-ui/pull/479)'
+  type: standard
