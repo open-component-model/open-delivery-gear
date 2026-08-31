@@ -2,10 +2,16 @@ name: Renovate ODG
 on:
   schedule:
     - cron: '0 1 * * *' # Daily at 01:00 UTC (02:00/03:00 CET/CEST)
+  # Run after every merge to main so renovate rebases / automerges its PRs
+  # before they go stale. In the open-component-model org this is a full run;
+  # in forks it only produces validate + dry-run runs (see conditions below).
+  push:
+    branches:
+      - main
   workflow_dispatch:
     inputs:
       repoCache:
-        description: 'Reset or disable the cache?'
+        description: 'Repository cache: enabled (use + update), disabled (skip), reset (discard old, start fresh)'
         type: choice
         default: enabled
         options: [ enabled, disabled, reset ]
@@ -37,7 +43,6 @@ permissions:
   contents: read
 
 env:
-  cache_archive: renovate_cache.tar.gz
   cache_dir: /tmp/renovate/cache/renovate/repository
   cache_key: renovate-cache
   RENOVATE_CONFIG_FILE: .github/renovate.json5
@@ -64,15 +69,20 @@ jobs:
           renovate-version: '44.39.0@sha256:e331219979fc6b38fc5cf7cd5beda63d4fc19963c3ef20404a2e99c8c12118a0'
           token: ${{ secrets.GITHUB_TOKEN }}
 
-  # PR events get a read-only dry-run everywhere (incl. forks, which can then
-  # test config changes in their own PRs). Scheduled runs only happen in the
-  # open-component-model org. Manual runs (workflow_dispatch) additionally work
-  # in forks: the odgbot App credentials are used when toggled on and
-  # configured, otherwise the run falls back to GITHUB_TOKEN.
+  # Behaviour depends on whether the odgbot App credentials are used (see
+  # USE_ODGBOT): full runs (upstream schedule/pushes, manual runs with the
+  # toggle on) manage real PRs, everything else — PRs, forks, manual runs
+  # without the toggle — is a read-only dry-run.
   renovate:
     if: github.event_name != 'schedule' || github.repository_owner == 'open-component-model'
     runs-on: ubuntu-latest
     needs: validate
+    env:
+      # Full runs use the odgbot App credentials whenever they are configured —
+      # except for PRs (always read-only) and manual runs with the toggle off.
+      # Forks don't have the credentials configured, so they always dry-run
+      # unless their owner configures the App and dispatches manually.
+      USE_ODGBOT: ${{ github.event_name != 'pull_request' && vars.ODG_BOT_APP_ID != '' && (github.event_name != 'workflow_dispatch' || inputs.useOdgbotCredentials) }}
     environment:
       name: automation
       deployment: false
@@ -84,34 +94,29 @@ jobs:
             ${{ env.RENOVATE_CONFIG_FILE }}
           persist-credentials: false
 
-      # Restore previous cache artifact if enabled
-      - name: Restore renovate cache artifact
-        if: ${{ github.event_name != 'workflow_dispatch' || inputs.repoCache != 'disabled' }}
-        uses: dawidd6/action-download-artifact@d63b86af1b34672e53c440b1b83979861906bad7 # v24
-        continue-on-error: true
+      # Restore the repository cache written by the last full run (unique key
+      # per run, prefix-matched on restore; unused entries expire after 7
+      # days). Skipped when the cache is disabled or reset — reset rebuilds a
+      # fresh cache below and ignores the old one.
+      - name: Restore renovate cache
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.repoCache == 'enabled' }}
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          name: ${{ env.cache_key }}
-          path: cache-download
+          path: ${{ env.cache_dir }}
+          key: ${{ env.cache_key }}-${{ github.run_id }}
+          restore-keys: ${{ env.cache_key }}-
 
-      - name: Extract renovate cache
+      # The containerized renovate runs as uid 12021 and needs write access to
+      # the restored cache directory.
+      - name: Fix cache directory permissions
         if: ${{ github.event_name != 'workflow_dispatch' || inputs.repoCache != 'disabled' }}
         run: |
           set -euxo pipefail
-          if [ ! -d cache-download ]; then
-            echo "No cache found."
-            exit 0
-          fi
-          mkdir -p "$cache_dir"
-          tar -xzf "cache-download/${cache_archive}" -C "$cache_dir"
+          sudo mkdir -p "$cache_dir"
           sudo chown -R 12021:0 /tmp/renovate/
-          ls -R "$cache_dir" || true
 
       - name: Generate odgbot token
-        # Scheduled runs always use the App credentials; manual runs only when
-        # the toggle is on and the credentials are configured — otherwise the
-        # GITHUB_TOKEN fallback in the Run step kicks in. PR dry-runs never
-        # need a token.
-        if: ${{ github.event_name == 'schedule' || (inputs.useOdgbotCredentials && vars.ODG_BOT_APP_ID != '') }}
+        if: env.USE_ODGBOT == 'true'
         id: generate_token
         uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         with:
@@ -126,12 +131,11 @@ jobs:
           permission-workflows: write
           permission-vulnerability-alerts: read
 
+      # Exactly the opposite of the token generation above: without odgbot
+      # credentials the run is read-only (the GITHUB_TOKEN fallback cannot
+      # push branches or PRs).
       - name: Ensure Dry-Run without odgbot credentials
-        # Dry-run whenever no odgbot App token will be generated (negated
-        # condition of the Generate odgbot token step): PRs always, and manual
-        # runs with the toggle off or without configured credentials. The
-        # read-only GITHUB_TOKEN fallback cannot push branches or PRs.
-        if: ${{ !(github.event_name == 'schedule' || (inputs.useOdgbotCredentials && vars.ODG_BOT_APP_ID != '')) }}
+        if: env.USE_ODGBOT != 'true'
         run: echo "RENOVATE_DRY_RUN=extract" >> "$GITHUB_ENV"
 
       - name: Run
@@ -152,17 +156,10 @@ jobs:
           LOG_LEVEL: ${{ github.event_name == 'workflow_dispatch' && inputs.logLevel || 'info' }}
           RENOVATE_ALLOWED_POST_UPGRADE_COMMANDS: '["python3"]'
 
-      - name: Compress renovate cache
-        if: ${{ env.RENOVATE_DRY_RUN == '' && (github.event_name != 'workflow_dispatch' || inputs.repoCache != 'disabled') }}
-        run: |
-          set -euxo pipefail
-          ls "$cache_dir" || true
-          tar -czvf "$cache_archive" -C "$cache_dir" .
-
-      - name: Upload renovate cache artifact
-        if: ${{ env.RENOVATE_DRY_RUN == '' && (github.event_name != 'workflow_dispatch' || inputs.repoCache != 'disabled') }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+      # Only full runs write back an up-to-date cache.
+      - name: Save renovate cache
+        if: ${{ env.USE_ODGBOT == 'true' && (github.event_name != 'workflow_dispatch' || inputs.repoCache != 'disabled') }}
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          name: ${{ env.cache_key }}
-          path: ${{ env.cache_archive }}
-          retention-days: 1
+          path: ${{ env.cache_dir }}
+          key: ${{ env.cache_key }}-${{ github.run_id }}
