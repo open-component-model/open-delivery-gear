@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
     inputs:
       repoCache:
-        description: 'Reset or disable the cache?'
+        description: 'Repository cache: enabled (use + update), disabled (skip), reset (discard old, start fresh)'
         type: choice
         default: enabled
         options: [ enabled, disabled, reset ]
@@ -95,9 +95,11 @@ jobs:
           persist-credentials: false
 
       # Restore the repository cache written by the last full run (unique key
-      # per run, prefix-matched on restore; unused entries expire after 7 days).
+      # per run, prefix-matched on restore; unused entries expire after 7
+      # days). Skipped when the cache is disabled or reset — reset rebuilds a
+      # fresh cache below and ignores the old one.
       - name: Restore renovate cache
-        if: ${{ github.event_name != 'workflow_dispatch' || inputs.repoCache != 'disabled' }}
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.repoCache == 'enabled' }}
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ${{ env.cache_dir }}
