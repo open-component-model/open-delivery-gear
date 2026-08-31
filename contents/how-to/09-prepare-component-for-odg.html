@@ -337,12 +337,12 @@ scores that reflect actual exposure rather than the theoretical maximum.</p>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">security.ocm.software/risk-profile</span>
 <span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
 <span class="w">    </span><span class="nt">value</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">network_exposure</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;private&quot;</span>
+<span class="w">      </span><span class="nt">network_exposure</span><span class="p">:</span><span class="w"> </span><span class="s">"private"</span>
 <span class="w">      </span><span class="nt">authentication_enforced</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">      </span><span class="nt">user_interaction</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;end-user&quot;</span>
-<span class="w">      </span><span class="nt">confidentiality_requirement</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;low&quot;</span>
-<span class="w">      </span><span class="nt">integrity_requirement</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;high&quot;</span>
-<span class="w">      </span><span class="nt">availability_requirement</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;high&quot;</span>
+<span class="w">      </span><span class="nt">user_interaction</span><span class="p">:</span><span class="w"> </span><span class="s">"end-user"</span>
+<span class="w">      </span><span class="nt">confidentiality_requirement</span><span class="p">:</span><span class="w"> </span><span class="s">"low"</span>
+<span class="w">      </span><span class="nt">integrity_requirement</span><span class="p">:</span><span class="w"> </span><span class="s">"high"</span>
+<span class="w">      </span><span class="nt">availability_requirement</span><span class="p">:</span><span class="w"> </span><span class="s">"high"</span>
 </pre></div>
 </div>
 <p>Only set the fields that are meaningful for your component; omitted fields are
@@ -364,8 +364,8 @@ placed directly on the individual resource or source they control.</p>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">odg.ocm.software/binary-scan-policy</span>
 <span class="w">        </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
 <span class="w">        </span><span class="nt">value</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">policy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;skip&quot;</span>
-<span class="w">          </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Scanned</span><span class="nv"> </span><span class="s">upstream,</span><span class="nv"> </span><span class="s">results</span><span class="nv"> </span><span class="s">attached</span><span class="nv"> </span><span class="s">as</span><span class="nv"> </span><span class="s">SBOM&quot;</span>
+<span class="w">          </span><span class="nt">policy</span><span class="p">:</span><span class="w"> </span><span class="s">"skip"</span>
+<span class="w">          </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="s">"Scanned</span><span class="nv"> </span><span class="s">upstream,</span><span class="nv"> </span><span class="s">results</span><span class="nv"> </span><span class="s">attached</span><span class="nv"> </span><span class="s">as</span><span class="nv"> </span><span class="s">SBOM"</span>
 <span class="nt">sources</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-source</span>
 <span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
@@ -373,8 +373,8 @@ placed directly on the individual resource or source they control.</p>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">odg.ocm.software/source-scan-policy</span>
 <span class="w">        </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
 <span class="w">        </span><span class="nt">value</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">policy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;skip&quot;</span>
-<span class="w">          </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;We</span><span class="nv"> </span><span class="s">use</span><span class="nv"> </span><span class="s">gosec</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">SAST</span><span class="nv"> </span><span class="s">scanning,</span><span class="nv"> </span><span class="s">see</span><span class="nv"> </span><span class="s">attached</span><span class="nv"> </span><span class="s">log&quot;</span>
+<span class="w">          </span><span class="nt">policy</span><span class="p">:</span><span class="w"> </span><span class="s">"skip"</span>
+<span class="w">          </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="s">"We</span><span class="nv"> </span><span class="s">use</span><span class="nv"> </span><span class="s">gosec</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">SAST</span><span class="nv"> </span><span class="s">scanning,</span><span class="nv"> </span><span class="s">see</span><span class="nv"> </span><span class="s">attached</span><span class="nv"> </span><span class="s">log"</span>
 </pre></div>
 </div>
 <p>See the

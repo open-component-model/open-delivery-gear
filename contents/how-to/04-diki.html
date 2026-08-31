@@ -311,50 +311,50 @@ of the delivery-service has to be made. The request body must contain a list of
 <code class="docutils literal notranslate"><span class="pre">entries</span></code>, one of which should be of type <code class="docutils literal notranslate"><span class="pre">meta/artefact_scan_info</span></code>. <code class="docutils literal notranslate"><span class="pre">Diki</span></code>
 findings are separated by rule in <code class="docutils literal notranslate"><span class="pre">finding/diki</span></code> type:</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;entries&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">  </span><span class="nt">"entries"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">      </span><span class="nt">&quot;artefact&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;component_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;component_name&gt;&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;component_version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;component_version&gt;&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;artefact_kind&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;runtime&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;artefact&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">          </span><span class="nt">&quot;artefact_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;artefact_name&gt;&quot;</span><span class="p">,</span>
-<span class="w">          </span><span class="nt">&quot;artefact_version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;diki&quot;</span><span class="p">,</span>
-<span class="w">          </span><span class="nt">&quot;artefact_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dikiReport&quot;</span>
+<span class="w">      </span><span class="nt">"artefact"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"component_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;component_name&gt;"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"component_version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;component_version&gt;"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"artefact_kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"runtime"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"artefact"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"artefact_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;artefact_name&gt;"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"artefact_version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"diki"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"artefact_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dikiReport"</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">      </span><span class="p">},</span>
-<span class="w">      </span><span class="nt">&quot;meta&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;meta/artefact_scan_info&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;datasource&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;diki&quot;</span>
+<span class="w">      </span><span class="nt">"meta"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"meta/artefact_scan_info"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"datasource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"diki"</span>
 <span class="w">      </span><span class="p">},</span>
-<span class="w">      </span><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">      </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span>
 <span class="w">    </span><span class="p">},</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">      </span><span class="nt">&quot;artefact&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;component_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;component_name&gt;&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;component_version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;component_version&gt;&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;artefact_kind&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;runtime&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;artefact&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">          </span><span class="nt">&quot;artefact_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;artefact_name&gt;&quot;</span><span class="p">,</span>
-<span class="w">          </span><span class="nt">&quot;artefact_version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;diki&quot;</span><span class="p">,</span>
-<span class="w">          </span><span class="nt">&quot;artefact_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dikiReport&quot;</span>
+<span class="w">      </span><span class="nt">"artefact"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"component_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;component_name&gt;"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"component_version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;component_version&gt;"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"artefact_kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"runtime"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"artefact"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"artefact_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;artefact_name&gt;"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"artefact_version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"diki"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"artefact_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dikiReport"</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">      </span><span class="p">},</span>
-<span class="w">      </span><span class="nt">&quot;meta&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;finding/diki&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;datasource&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;diki&quot;</span>
+<span class="w">      </span><span class="nt">"meta"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"finding/diki"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"datasource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"diki"</span>
 <span class="w">      </span><span class="p">},</span>
-<span class="w">      </span><span class="nt">&quot;discovery_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;YYYY-MM-DD&gt;&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;severity&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;severity&gt;&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;provider_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;provider_id&gt;&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;ruleset_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;ruleset_id&gt;&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;ruleset_version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;ruleset_version&gt;&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;rule_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;rule_id&gt;&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;checks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="nt">"discovery_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;YYYY-MM-DD&gt;"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"severity"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;severity&gt;"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"provider_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;provider_id&gt;"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"ruleset_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;ruleset_id&gt;"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"ruleset_version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;ruleset_version&gt;"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"rule_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;rule_id&gt;"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"checks"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 <span class="w">          </span><span class="p">{</span>
-<span class="w">            </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;message&gt;&quot;</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">&quot;targets&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w"> </span><span class="c1">// List of targets, if the findings are from multiple instances this field can be presented as a map, where the keys are the names of the checked instances and the values are their targets</span>
+<span class="w">            </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;message&gt;"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"targets"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w"> </span><span class="c1">// List of targets, if the findings are from multiple instances this field can be presented as a map, where the keys are the names of the checked instances and the values are their targets</span>
 <span class="w">          </span><span class="p">}</span>
 <span class="w">        </span><span class="p">]</span>
 <span class="w">      </span><span class="p">}</span>
@@ -369,15 +369,15 @@ Kubernetes cluster, a <code class="docutils literal notranslate"><span class="pr
 <code class="docutils literal notranslate"><span class="pre">/service-extensions/runtime-artefacts</span></code> endpoint of the delivery-service must
 be made. The request body should look like:</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;artefacts&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">  </span><span class="nt">"artefacts"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">      </span><span class="nt">&quot;component_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;component_name&gt;&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">&quot;component_version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;component_version&gt;&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">&quot;artefact_kind&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;runtime&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">&quot;artefact&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;artefact_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;artefact_name&gt;&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;artefact_version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;diki&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;artefact_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dikiReport&quot;</span>
+<span class="w">      </span><span class="nt">"component_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;component_name&gt;"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"component_version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;component_version&gt;"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"artefact_kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"runtime"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"artefact"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"artefact_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;artefact_name&gt;"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"artefact_version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"diki"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"artefact_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dikiReport"</span>
 <span class="w">      </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">  </span><span class="p">]</span>

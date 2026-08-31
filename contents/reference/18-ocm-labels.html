@@ -349,8 +349,8 @@
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">odg.ocm.software/binary-scan-policy</span>
 <span class="w">        </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
 <span class="w">        </span><span class="nt">value</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">policy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;scan&quot;</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> &quot;skip&quot;</span>
-<span class="w">          </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;free-text</span><span class="nv"> </span><span class="s">string&quot;</span>
+<span class="w">          </span><span class="nt">policy</span><span class="p">:</span><span class="w"> </span><span class="s">"scan"</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> "skip"</span>
+<span class="w">          </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="s">"free-text</span><span class="nv"> </span><span class="s">string"</span>
 </pre></div>
 </div>
 <div class="table-wrapper colwidths-auto docutils container">
@@ -389,8 +389,8 @@
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">odg.ocm.software/source-scan-policy</span>
 <span class="w">        </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
 <span class="w">        </span><span class="nt">value</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">policy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;scan&quot;</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> &quot;skip&quot;</span>
-<span class="w">          </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;free-text</span><span class="nv"> </span><span class="s">string&quot;</span>
+<span class="w">          </span><span class="nt">policy</span><span class="p">:</span><span class="w"> </span><span class="s">"scan"</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> "skip"</span>
+<span class="w">          </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="s">"free-text</span><span class="nv"> </span><span class="s">string"</span>
 </pre></div>
 </div>
 <p>The fields are identical to those of <a class="reference internal" href="#odgocmsoftwarebinary-scan-policy-v1"><span class="std std-ref">odg.ocm.software/binary-scan-policy</span></a>.</p>
@@ -405,13 +405,13 @@
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">security.ocm.software/risk-profile</span>
 <span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
 <span class="w">    </span><span class="nt">value</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">network_exposure</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;private&quot;</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> &quot;protected&quot; | &quot;public&quot;</span><span class="w">    </span><span class="c1"># maps to CVSS: Attack Vector (AV)</span>
+<span class="w">      </span><span class="nt">network_exposure</span><span class="p">:</span><span class="w"> </span><span class="s">"private"</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> "protected" | "public"</span><span class="w">    </span><span class="c1"># maps to CVSS: Attack Vector (AV)</span>
 <span class="w">      </span><span class="nt">authentication_enforced</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true | false</span><span class="w">    </span><span class="c1"># CVSS: Privileges Required (PR)</span>
-<span class="w">      </span><span class="nt">user_interaction</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;operator&quot;</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> &quot;end-user&quot;</span><span class="w">    </span><span class="c1"># CVSS: User Interaction (UI)</span>
-<span class="w">      </span><span class="nt">confidentiality_requirement</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;none&quot;</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> &quot;low&quot; | &quot;high&quot;</span><span class="w">   </span><span class="c1"># CVSS: Confidentiality Requirement (CR)</span>
-<span class="w">      </span><span class="nt">integrity_requirement</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;none&quot;</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> &quot;low&quot; | &quot;high&quot;</span><span class="w">   </span><span class="c1"># CVSS: Integrity Requirement (IR)</span>
-<span class="w">      </span><span class="nt">availability_requirement</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;none&quot;</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> &quot;low&quot; | &quot;high&quot;</span><span class="w">   </span><span class="c1"># CVSS: Availability Requirement (AR)</span>
-<span class="w">      </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;free-text</span><span class="nv"> </span><span class="s">string&quot;</span>
+<span class="w">      </span><span class="nt">user_interaction</span><span class="p">:</span><span class="w"> </span><span class="s">"operator"</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> "end-user"</span><span class="w">    </span><span class="c1"># CVSS: User Interaction (UI)</span>
+<span class="w">      </span><span class="nt">confidentiality_requirement</span><span class="p">:</span><span class="w"> </span><span class="s">"none"</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> "low" | "high"</span><span class="w">   </span><span class="c1"># CVSS: Confidentiality Requirement (CR)</span>
+<span class="w">      </span><span class="nt">integrity_requirement</span><span class="p">:</span><span class="w"> </span><span class="s">"none"</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> "low" | "high"</span><span class="w">   </span><span class="c1"># CVSS: Integrity Requirement (IR)</span>
+<span class="w">      </span><span class="nt">availability_requirement</span><span class="p">:</span><span class="w"> </span><span class="s">"none"</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="err"> "low" | "high"</span><span class="w">   </span><span class="c1"># CVSS: Availability Requirement (AR)</span>
+<span class="w">      </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="s">"free-text</span><span class="nv"> </span><span class="s">string"</span>
 </pre></div>
 </div>
 <div class="table-wrapper colwidths-auto docutils container">
@@ -464,13 +464,13 @@
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">odg.ocm.software/responsibles</span>
 <span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
 <span class="w">    </span><span class="nt">value</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;githubUser&quot;</span>
-<span class="w">        </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;some-github-handle&quot;</span>
-<span class="w">        </span><span class="nt">github_hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;github.com&quot;</span><span class="w">    </span><span class="c1"># optional, defaults to the hostname defined in the source access</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;githubTeam&quot;</span>
-<span class="w">        </span><span class="nt">teamname</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;my-org/my-team&quot;</span>
-<span class="w">        </span><span class="nt">github_hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;github.com&quot;</span><span class="w">    </span><span class="c1"># optional, defaults to the hostname defined in the source access</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;codeowners&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">"githubUser"</span>
+<span class="w">        </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">"some-github-handle"</span>
+<span class="w">        </span><span class="nt">github_hostname</span><span class="p">:</span><span class="w"> </span><span class="s">"github.com"</span><span class="w">    </span><span class="c1"># optional, defaults to the hostname defined in the source access</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">"githubTeam"</span>
+<span class="w">        </span><span class="nt">teamname</span><span class="p">:</span><span class="w"> </span><span class="s">"my-org/my-team"</span>
+<span class="w">        </span><span class="nt">github_hostname</span><span class="p">:</span><span class="w"> </span><span class="s">"github.com"</span><span class="w">    </span><span class="c1"># optional, defaults to the hostname defined in the source access</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">"codeowners"</span>
 </pre></div>
 </div>
 <div class="table-wrapper colwidths-auto docutils container">

@@ -302,30 +302,30 @@
 <span class="w">  </span><span class="nt">label_rules</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gpl-license</span>
 <span class="w">      </span><span class="nt">selector</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">license_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;GPL.*&#39;</span><span class="w">        </span><span class="c1"># regex pattern</span>
+<span class="w">        </span><span class="nt">license_name</span><span class="p">:</span><span class="w"> </span><span class="s">'GPL.*'</span><span class="w">        </span><span class="c1"># regex pattern</span>
 <span class="w">        </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
 <span class="w">        </span><span class="nt">policy_violation_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">critical-policy</span>
 <span class="w">      </span><span class="nt">selector</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">policy_violation_id</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;VULN_.*&#39;</span>
-<span class="w">        </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;blackduck.prod.example.com&#39;</span>
+<span class="w">        </span><span class="nt">policy_violation_id</span><span class="p">:</span><span class="w"> </span><span class="s">'VULN_.*'</span>
+<span class="w">        </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">'blackduck.prod.example.com'</span>
 <span class="w">        </span><span class="nt">license_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
 <span class="w">  </span><span class="nt">mappings</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;acme.org/product-a&#39;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">'acme.org/product-a'</span>
 <span class="w">      </span><span class="nt">targets</span><span class="p">:</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">group_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1234&quot;</span>
-<span class="w">          </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;blackduck.prod.example.com&quot;</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">group_id</span><span class="p">:</span><span class="w"> </span><span class="s">"1234"</span>
+<span class="w">          </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">"blackduck.prod.example.com"</span>
 <span class="w">          </span><span class="nt">distribution_mode_overwrite</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">INTERNAL</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">group_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;5678&quot;</span>
-<span class="w">          </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;blackduck.compliance.example.com&quot;</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">group_id</span><span class="p">:</span><span class="w"> </span><span class="s">"5678"</span>
+<span class="w">          </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">"blackduck.compliance.example.com"</span>
 <span class="w">          </span><span class="nt">distribution_mode_overwrite</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
 <span class="w">      </span><span class="nt">deduplicate_across_component_versions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">      </span><span class="nt">cleanup_deprecated_project_versions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <span class="w">      </span><span class="nt">aws_secret_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aws-account-prod</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;&#39;</span><span class="w">                     </span><span class="c1"># catch-all</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">''</span><span class="w">                     </span><span class="c1"># catch-all</span>
 <span class="w">      </span><span class="nt">targets</span><span class="p">:</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">group_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;9999&quot;</span>
-<span class="w">          </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;blackduck.example.com&quot;</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">group_id</span><span class="p">:</span><span class="w"> </span><span class="s">"9999"</span>
+<span class="w">          </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">"blackduck.example.com"</span>
 <span class="w">      </span><span class="nt">deduplicate_across_component_versions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">      </span><span class="nt">cleanup_deprecated_project_versions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">      </span><span class="nt">aws_secret_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aws-account-default</span>

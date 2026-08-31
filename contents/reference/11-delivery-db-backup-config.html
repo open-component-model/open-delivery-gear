@@ -298,14 +298,14 @@
 <section id="configuration-example">
 <h2>Configuration Example<a class="headerlink" href="#configuration-example" title="Link to this heading">¶</a></h2>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">delivery_db_backup</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;0</span><span class="nv"> </span><span class="s">0</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*&#39;</span><span class="w">              </span><span class="c1"># daily at midnight</span>
+<span class="w">  </span><span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s">'0</span><span class="nv"> </span><span class="s">0</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*'</span><span class="w">              </span><span class="c1"># daily at midnight</span>
 <span class="w">  </span><span class="nt">successful_jobs_history_limit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
 <span class="w">  </span><span class="nt">failed_jobs_history_limit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
 <span class="w">  </span><span class="nt">component_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme.org/odg-backups</span>
 <span class="w">  </span><span class="nt">ocm_repo_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://ocm-registry.example.com</span>
 <span class="w">  </span><span class="nt">backup_retention_count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
 <span class="w">  </span><span class="nt">initial_version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1.0</span>
-<span class="w">  </span><span class="nt">extra_pg_dump_args</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;--verbose&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">extra_pg_dump_args</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"--verbose"</span><span class="p p-Indicator">]</span>
 </pre></div>
 </div>
 </section>
@@ -430,16 +430,16 @@ the minor version is automatically bumped.</p>
 customize backup behaviour.</p>
 <p><strong>Common examples:</strong></p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Verbose output for debugging</span>
-<span class="nt">extra_pg_dump_args</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;--verbose&quot;</span><span class="p p-Indicator">]</span>
+<span class="nt">extra_pg_dump_args</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"--verbose"</span><span class="p p-Indicator">]</span>
 
 <span class="c1"># Include BLOB data</span>
-<span class="nt">extra_pg_dump_args</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;--blobs&quot;</span><span class="p p-Indicator">]</span>
+<span class="nt">extra_pg_dump_args</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"--blobs"</span><span class="p p-Indicator">]</span>
 
 <span class="c1"># Compress backup</span>
-<span class="nt">extra_pg_dump_args</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;--compress=9&quot;</span><span class="p p-Indicator">]</span>
+<span class="nt">extra_pg_dump_args</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"--compress=9"</span><span class="p p-Indicator">]</span>
 
 <span class="c1"># Multiple arguments</span>
-<span class="nt">extra_pg_dump_args</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;--verbose&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;--compress=9&quot;</span><span class="p p-Indicator">]</span>
+<span class="nt">extra_pg_dump_args</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"--verbose"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"--compress=9"</span><span class="p p-Indicator">]</span>
 </pre></div>
 </div>
 <p><strong>Available options:</strong> See <a class="reference external" href="https://www.postgresql.org/docs/current/app-pgdump.html">pg_dump documentation</a></p>

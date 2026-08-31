@@ -318,7 +318,7 @@ For the concise reference, see
 <span class="sd-summary-text">Verify Colima works</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
 <p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">ps</span></code> should now work. Run a test container:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>hello-world
-<span class="c1"># &quot;This message shows that your installation appears to be working correctly.&quot;</span>
+<span class="c1"># "This message shows that your installation appears to be working correctly."</span>
 </pre></div>
 </div>
 </div>
@@ -339,7 +339,7 @@ gh<span class="w"> </span>auth<span class="w"> </span>login<span class="w">   </
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>To verify the binary manually (requires <code class="docutils literal notranslate"><span class="pre">gh</span></code>):</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gh<span class="w"> </span>attestation<span class="w"> </span>verify<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/.local/bin/ocm&quot;</span><span class="w"> </span><span class="se">\</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gh<span class="w"> </span>attestation<span class="w"> </span>verify<span class="w"> </span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/.local/bin/ocm"</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--repo<span class="w"> </span>open-component-model/open-component-model
 <span class="c1"># ✓ Verification succeeded!</span>
 </pre></div>
@@ -541,8 +541,8 @@ fails on its default <code class="docutils literal notranslate"><span class="pre
 </pre></div>
 </div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">persistence</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">hostPath</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/Users/&lt;your-username&gt;/odg-postgres-data&quot;</span>
-<span class="w">  </span><span class="nt">containerPath</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/var/delivery-db&quot;</span>
+<span class="w">  </span><span class="nt">hostPath</span><span class="p">:</span><span class="w"> </span><span class="s">"/Users/&lt;your-username&gt;/odg-postgres-data"</span>
+<span class="w">  </span><span class="nt">containerPath</span><span class="p">:</span><span class="w"> </span><span class="s">"/var/delivery-db"</span>
 </pre></div>
 </div>
 <details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
@@ -551,7 +551,7 @@ fails on its default <code class="docutils literal notranslate"><span class="pre
 <p class="sd-card-text">Without it, <code class="docutils literal notranslate"><span class="pre">delivery-db-0</span></code> crash-loops because it can’t create its data
 directory:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">delivery</span><span class="o">-</span><span class="n">db</span><span class="o">-</span><span class="mi">0</span>   <span class="mi">0</span><span class="o">/</span><span class="mi">1</span>   <span class="n">CrashLoopBackOff</span>
-<span class="n">mkdir</span><span class="p">:</span> <span class="n">can</span><span class="s1">&#39;t create directory &#39;</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">pgdata</span><span class="s1">&#39;: Permission denied</span>
+<span class="n">mkdir</span><span class="p">:</span> <span class="n">can</span><span class="s1">'t create directory '</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">pgdata</span><span class="s1">': Permission denied</span>
 </pre></div>
 </div>
 <p class="sd-card-text">No special permissions are needed on the local folder.</p>
@@ -586,7 +586,7 @@ cluster too.</p>
 <h2>6. Access the cluster with kubectl<a class="headerlink" href="#access-the-cluster-with-kubectl" title="Link to this heading">¶</a></h2>
 <p>The setup writes a kubeconfig to <code class="docutils literal notranslate"><span class="pre">local-setup/kind/kubeconfig</span></code>. Add this to your
 <code class="docutils literal notranslate"><span class="pre">~/.zshrc</span></code> so the context is always available:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">KUBECONFIG</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/&lt;your-code-dir&gt;/open-delivery-gear/local-setup/kind/kubeconfig:</span><span class="nv">$HOME</span><span class="s2">/.kube/config&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">KUBECONFIG</span><span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/&lt;your-code-dir&gt;/open-delivery-gear/local-setup/kind/kubeconfig:</span><span class="nv">$HOME</span><span class="s2">/.kube/config"</span>
 </pre></div>
 </div>
 <p>After sourcing, select the context and check the pods:</p>
