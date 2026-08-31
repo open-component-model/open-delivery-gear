@@ -20,7 +20,7 @@ Open Delivery Gear is a comprehensive compliance automation platform that:
 :gutter: 3
 
 :::{grid-item-card} 🔍 Automated Scanning
-Continuous scanning of OCI images, source code, and runtime artefacts using industry-standard tools like BDBA, ClamAV, and Syft.
+Continuous scanning of OCI images, source code, and runtime artefacts using industry-standard tools like BDBA, Trivy, ClamAV, and Syft.
 :::
 
 :::{grid-item-card} 📊 Compliance Dashboard
