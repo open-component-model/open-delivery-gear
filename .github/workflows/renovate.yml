@@ -18,6 +18,10 @@ on:
         type: choice
         default: info
         options: [ info, debug ]
+      useOdgbotCredentials:
+        description: 'Use odgbot GitHub App credentials if configured (else: GITHUB_TOKEN)'
+        type: boolean
+        default: true
   pull_request:
     branches:
       - main
@@ -39,6 +43,7 @@ env:
   RENOVATE_CONFIG_FILE: .github/renovate.json5
 
 jobs:
+  # validate is side-effect-free and runs everywhere (incl. forks).
   validate:
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -59,7 +64,13 @@ jobs:
           renovate-version: '44.39.0@sha256:e331219979fc6b38fc5cf7cd5beda63d4fc19963c3ef20404a2e99c8c12118a0'
           token: ${{ secrets.GITHUB_TOKEN }}
 
+  # PR events get a read-only dry-run everywhere (incl. forks, which can then
+  # test config changes in their own PRs). Scheduled runs only happen in the
+  # open-component-model org. Manual runs (workflow_dispatch) additionally work
+  # in forks: the odgbot App credentials are used when toggled on and
+  # configured, otherwise the run falls back to GITHUB_TOKEN.
   renovate:
+    if: github.event_name != 'schedule' || github.repository_owner == 'open-component-model'
     runs-on: ubuntu-latest
     needs: validate
     environment:
@@ -96,7 +107,11 @@ jobs:
           ls -R "$cache_dir" || true
 
       - name: Generate odgbot token
-        if: ${{ github.event_name != 'pull_request' && github.repository_owner == 'open-component-model' }}
+        # Scheduled runs always use the App credentials; manual runs only when
+        # the toggle is on and the credentials are configured — otherwise the
+        # GITHUB_TOKEN fallback in the Run step kicks in. PR dry-runs never
+        # need a token.
+        if: ${{ github.event_name == 'schedule' || (inputs.useOdgbotCredentials && vars.ODG_BOT_APP_ID != '') }}
         id: generate_token
         uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         with:
@@ -111,9 +126,13 @@ jobs:
           permission-workflows: write
           permission-vulnerability-alerts: read
 
-      - name: Ensure Dry-Run on Pull Requests
-        if: ${{ github.event_name == 'pull_request' }}
-        run: echo "RENOVATE_DRY_RUN=extract" >> $GITHUB_ENV
+      - name: Ensure Dry-Run without odgbot credentials
+        # Dry-run whenever no odgbot App token will be generated (negated
+        # condition of the Generate odgbot token step): PRs always, and manual
+        # runs with the toggle off or without configured credentials. The
+        # read-only GITHUB_TOKEN fallback cannot push branches or PRs.
+        if: ${{ !(github.event_name == 'schedule' || (inputs.useOdgbotCredentials && vars.ODG_BOT_APP_ID != '')) }}
+        run: echo "RENOVATE_DRY_RUN=extract" >> "$GITHUB_ENV"
 
       - name: Run
         uses: renovatebot/github-action@e09d604f8f803bb527bd8321ed5be06c460b8682 # v46.2.2

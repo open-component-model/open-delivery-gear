@@ -2,15 +2,29 @@
 
 import os
 import re
-import sys
-
-import yaml
+import subprocess
 
 
 own_dir = os.path.dirname(__file__)
-repo_dir = os.path.abspath(os.path.join(own_dir, os.path.pardir))
+repo_dir = os.path.abspath(os.path.join(own_dir, os.pardir))
 BASE_COMPONENT_FILE = os.path.join(repo_dir, '.ocm', 'base-component.yaml')
 EXTENSION_DEFINITIONS_FILE = os.path.join(repo_dir, 'extension-definitions.yaml')
+
+
+def image_reference_changed():
+    try:
+        result = subprocess.run(
+            ['git', 'diff', '--', BASE_COMPONENT_FILE],
+            capture_output=True, text=True, check=True,
+            cwd=repo_dir,
+        )
+        for line in result.stdout.splitlines():
+            if line.startswith(('+', '-')) and not line.startswith(('+++', '---')):
+                if 'imageReference:' in line:
+                    return True
+        return False
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return True
 
 
 def derive_version(image_reference):
@@ -34,27 +48,27 @@ def update_base_component(filepath):
             current_type = None
             current_name = None
 
-        m = re.match(r'^    imageReference:\s*(.+)$', line)
-        if m:
-            ref = m.group(1).strip()
+        match = re.match(r'^    imageReference:\s*(.+)$', line)
+        if match:
+            ref = match.group(1).strip()
             pending_version = derive_version(ref)
             result.append(line)
             continue
 
-        m = re.match(r'^  name:\s*(.+)$', line)
-        if m:
-            current_name = m.group(1).strip()
+        match = re.match(r'^  name:\s*(.+)$', line)
+        if match:
+            current_name = match.group(1).strip()
             result.append(line)
             continue
 
-        m = re.match(r'^  type:\s*(.+)$', line)
-        if m:
-            current_type = m.group(1).strip()
+        match = re.match(r'^  type:\s*(.+)$', line)
+        if match:
+            current_type = match.group(1).strip()
             result.append(line)
             continue
 
-        m = re.match(r'^  version:\s*(.+)$', line)
-        if m and pending_version is not None:
+        match = re.match(r'^  version:\s*(.+)$', line)
+        if match and pending_version is not None:
             result.append(f'  version: {pending_version}\n')
             if current_type == 'helmChart/v1':
                 helmchart_versions[current_name] = pending_version
@@ -74,20 +88,50 @@ def update_extension_definitions(filepath, helmchart_versions):
         return
 
     with open(filepath) as f:
-        docs = list(yaml.safe_load_all(f.read()))
+        lines = f.readlines()
 
-    for doc in docs:
-        for ref in doc.get('installation', {}).get('ocm_references', []):
-            artefact = ref.get('artefact', {})
-            name = artefact.get('name')
-            if name in helmchart_versions:
-                artefact['version'] = helmchart_versions[name]
+    # Line-based replacement of the 'version:' of matching 'artefact:' blocks.
+    # Deliberately avoids PyYAML: it is not available in the renovate container,
+    # and a yaml round-trip would reformat the whole file.
+    result = []
+    artefact_indent = None
+    pending_version = None
+
+    for line in lines:
+        match = re.match(r'^(\s*)(?:-\s*)?artefact:\s*$', line)
+        if match:
+            artefact_indent = len(match.group(1)) + (2 if line.lstrip().startswith('-') else 0)
+            pending_version = None
+            result.append(line)
+            continue
+
+        if artefact_indent is not None and line.strip():
+            indent = len(line) - len(line.lstrip())
+            if indent <= artefact_indent:
+                artefact_indent = None
+                pending_version = None
+            else:
+                match = re.match(r'^\s*name:\s*(\S+)\s*$', line)
+                if match:
+                    pending_version = helmchart_versions.get(match.group(1))
+                    result.append(line)
+                    continue
+
+                match = re.match(r'^(\s*)version:.*$', line)
+                if match and pending_version is not None:
+                    result.append(f'{match.group(1)}version: {pending_version}\n')
+                    pending_version = None
+                    continue
+
+        result.append(line)
 
     with open(filepath, 'w') as f:
-        yaml.safe_dump_all(docs, f)
+        f.writelines(result)
 
 
 def main():
+    if not image_reference_changed():
+        return
     helmchart_versions = update_base_component(BASE_COMPONENT_FILE)
     update_extension_definitions(EXTENSION_DEFINITIONS_FILE, helmchart_versions)
 
