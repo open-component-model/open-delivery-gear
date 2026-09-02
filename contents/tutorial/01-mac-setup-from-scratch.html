@@ -295,34 +295,20 @@
           <section id="setup-from-scratch-macos">
 <h1>Setup from Scratch (macOS)<a class="headerlink" href="#setup-from-scratch-macos" title="Link to this heading">¶</a></h1>
 <p>This is a detailed, opinionated walkthrough of setting up an Open Delivery Gear
-(ODG) cluster locally on an <strong>Apple Silicon Mac</strong> with the <a class="reference external" href="https://colima.run/">Colima</a> container runtime, from zero to a running cluster.
+(ODG) cluster locally on an <strong>Apple Silicon Mac</strong> with <a class="reference external" href="https://www.docker.com/products/docker-desktop/">Docker Desktop</a>, from zero to a running cluster.
 For the concise reference, see
 <a class="reference internal" href="../how-to/01-local-setup.html"><span class="doc">Deploying the Open Delivery Gear Locally</span></a>.</p>
 <section id="install-the-tooling">
 <h2>1. Install the tooling<a class="headerlink" href="#install-the-tooling" title="Link to this heading">¶</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>brew<span class="w"> </span>install<span class="w"> </span>kubectl<span class="w"> </span>k9s<span class="w"> </span>colima<span class="w"> </span>docker<span class="w"> </span>docker-compose<span class="w"> </span>kind<span class="w"> </span>helm<span class="w"> </span>wget<span class="w"> </span>yq
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>brew<span class="w"> </span>install<span class="w"> </span>kubectl<span class="w"> </span>k9s<span class="w"> </span>docker<span class="w"> </span>docker-compose<span class="w"> </span>kind<span class="w"> </span>helm<span class="w"> </span>wget<span class="w"> </span>yq
 </pre></div>
 </div>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">kubectl</span></code> / <code class="docutils literal notranslate"><span class="pre">k9s</span></code> — interact with the cluster</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">colima</span></code> — container runtime (Docker Desktop works too)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">kind</span></code> — runs the local cluster</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">helm</span></code>, <code class="docutils literal notranslate"><span class="pre">wget</span></code>, <code class="docutils literal notranslate"><span class="pre">yq</span></code> — required by the setup scripts</p></li>
 </ul>
-<p>Start Colima:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>colima<span class="w"> </span>start<span class="w"> </span>--mount-type<span class="o">=</span>virtiofs
-</pre></div>
-</div>
 <details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
-<summary class="sd-summary-title sd-card-header">
-<span class="sd-summary-text">Verify Colima works</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
-<p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">ps</span></code> should now work. Run a test container:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>hello-world
-<span class="c1"># "This message shows that your installation appears to be working correctly."</span>
-</pre></div>
-</div>
-</div>
-</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
 <summary class="sd-summary-title sd-card-header">
 <span class="sd-summary-text">Recommended: Install the GitHub CLI</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
 <p class="sd-card-text">The OCM installer uses <code class="docutils literal notranslate"><span class="pre">gh</span></code> to verify the install.</p>
@@ -535,8 +521,7 @@ http://delivery-service.odg.svc.cluster.local:8080/auth?...&amp;api_url=https://
 </section>
 <section id="create-values-local-yaml">
 <h3>Create <code class="docutils literal notranslate"><span class="pre">values-local.yaml</span></code><a class="headerlink" href="#create-values-local-yaml" title="Link to this heading">¶</a></h3>
-<p>Colima auto-mounts <code class="docutils literal notranslate"><span class="pre">$HOME</span></code> but not paths like <code class="docutils literal notranslate"><span class="pre">/var/</span></code>, so the Postgres volume
-fails on its default <code class="docutils literal notranslate"><span class="pre">/var/delivery-db</span></code> mount. Point it at a subfolder in your home directory instead:</p>
+<p>The volume mount where you want to keep your postgres data to a subfolder in your home directory:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp<span class="w"> </span>local-setup/values-local.yaml.example<span class="w"> </span>local-setup/values-local.yaml
 </pre></div>
 </div>
