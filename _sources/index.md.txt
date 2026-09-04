@@ -116,6 +116,7 @@ contents/reference/00-artefact-metadata-query.md
 contents/reference/core/index.md
 contents/reference/extensions/index.md
 contents/reference/18-ocm-labels.md
+contents/reference/19-resource-consumption.md
 ```
 
 ---
