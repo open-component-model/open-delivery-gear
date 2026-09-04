@@ -1,0 +1,37 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1371.0
+release_notes:
+- audience: developer
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: bugfix
+  contents: The python packages numpy and scipy are now installed as runtime requirements
+    (again) to fix responsibles heuristics
+  mimetype: text/markdown
+  reference: '[#938](https://github.com/open-component-model/odg-core/pull/938)'
+  type: standard
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: Jonas Brand
+  category: noteworthy
+  contents: Adjusted the Kubernetes resource requests + limits for delivery-service
+    and extension workloads
+  mimetype: text/markdown
+  reference: '[open-component-model/odg-core@510699c3348cc049e2af5604e4716514826b9f62](https://github.com/open-component-model/odg-core/commit/510699c3348cc049e2af5604e4716514826b9f62)'
+  type: standard
+- audience: developer
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: noteworthy
+  contents: The Delivery-Service Helm chart now includes an optional Gateway resource
+    necessary for the provisioning on the OCP platform
+  mimetype: text/markdown
+  reference: '[#939](https://github.com/open-component-model/odg-core/pull/939)'
+  type: standard
