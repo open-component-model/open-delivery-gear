@@ -1,0 +1,15 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1370.1
+release_notes:
+- audience: developer
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: bugfix
+  contents: The python packages numpy and scipy are now installed as runtime
+    requirements (again) to fix responsibles heuristics
+  mimetype: text/markdown
+  reference: '[#940](https://github.com/open-component-model/odg-core/pull/940)'
+  type: standard
