@@ -1,7 +1,7 @@
 name: Renovate
 on:
   schedule:
-    - cron: '0 2 * * *'  # nightly at 2am UTC
+    - cron: '0 1 * * *'  # nightly at 1am UTC
   # Run after every merge to the default branch so renovate rebases /
   # automerges its PRs before they go stale.
   push:
@@ -43,9 +43,8 @@ jobs:
     secrets: inherit
     with:
       repository: ${{ github.repository }}
-      # TODO(prod): after rollout, drop centralConfig (default points to
-      # open-component-model/.github@v1).
-      centralConfig: alexbass01/open-component-model-github@v1
+      # use centralConfig setting in forks for testing
+      # centralConfig: alexbass01/open-component-model-github@v1
       repoCache: ${{ inputs.repoCache || 'enabled' }}
       ignoreSchedule: ${{ github.event_name == 'workflow_dispatch' && inputs.ignoreSchedule }}
       logLevel: ${{ inputs.logLevel || 'info' }}
