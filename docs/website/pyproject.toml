@@ -8,5 +8,5 @@ dependencies = [
     "myst-parser==5.1.0",
     "sphinx-autobuild==2025.8.25",
     "sphinx-design==0.7.0",
-    "sphinxcontrib-mermaid==2.1.0",
+    "sphinxcontrib-mermaid==2.1.1",
 ]
