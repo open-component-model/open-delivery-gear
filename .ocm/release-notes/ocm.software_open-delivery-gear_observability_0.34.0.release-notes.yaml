@@ -1,0 +1,14 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/observability
+  component_version: 0.34.0
+release_notes:
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: noteworthy
+  contents: Adjusted the Kubernetes resource requests + limits for prometheus workloads
+  mimetype: text/markdown
+  reference: '[#29](https://github.com/open-component-model/odg-observability/pull/29)'
+  type: standard
