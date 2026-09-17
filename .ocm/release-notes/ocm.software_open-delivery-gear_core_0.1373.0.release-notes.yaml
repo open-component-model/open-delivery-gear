@@ -1,0 +1,37 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1373.0
+release_notes:
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: improvement
+  contents: The backlog controller now exposes a new `extension_options_overwrite`
+    configuration option to overwrite max replicas per extension
+  mimetype: text/markdown
+  reference: '[#969](https://github.com/open-component-model/odg-core/pull/969)'
+  type: standard
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: Michael5601
+  category: improvement
+  contents: Add OIDC token authentication to delivery service
+  mimetype: text/markdown
+  reference: '[#936](https://github.com/open-component-model/odg-core/pull/936)'
+  type: standard
+- audience: user
+  author:
+    hostname: github.com
+    type: githubUser
+    username: bedirhan-yilmaz
+  category: feature
+  contents: The sbom-generator extension now checks for SBoM resources linked via
+    the `ocm.software/artifact-references` label (`v1alpha1`) before falling back
+    to ad-hoc generation.
+  mimetype: text/markdown
+  reference: '[#921](https://github.com/open-component-model/odg-core/pull/921)'
+  type: standard
