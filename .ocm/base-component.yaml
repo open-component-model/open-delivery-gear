@@ -7,7 +7,7 @@ componentReferences:
   version: 0.34.0
 - componentName: ocm.software/open-delivery-gear/ui
   name: odg-ui
-  version: 0.442.0
+  version: 0.443.0
 labels:
 - name: cloud.gardener.cnudie/responsibles
   value:
