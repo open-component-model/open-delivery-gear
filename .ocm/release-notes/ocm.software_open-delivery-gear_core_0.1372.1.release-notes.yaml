@@ -1,0 +1,15 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1372.1
+release_notes:
+- audience: user
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: bugfix
+  contents: The compliance summary now honours rescorings of scope `Component`
+    and `Global` again
+  mimetype: text/markdown
+  reference: '[#979](https://github.com/open-component-model/odg-core/pull/979)'
+  type: standard
