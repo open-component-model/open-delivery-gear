@@ -17,6 +17,9 @@ postgresqlDataDir: /data/pgdata
 primary:
   persistence:
     mountPath: /data/
+    # custom persistent volume claim (pvc) required to ensure a stable pvc name across
+    # cluster re-creations (-> this allows using a stable host file mount on the host)
+    existingClaim: pvc-delivery-db-0
   containerSecurityContext:
     # this is an intermediate workaround to restore behaviour from previously used helmchart version 10.12.4
     # see: https://github.com/bitnami/charts/tree/main/bitnami/postgresql#to-1500
@@ -33,9 +36,8 @@ primary:
       cpu: 250m
       memory: 256Mi
 
-# configuration of custom persistent volume claim (pvc) required to ensure a stable pvc name across
-# cluster re-creations (-> this allows using a stable host file mount on the host)
+# host path mount configuration for the kind cluster nodes and the custom pv/pvc
+# (consumed by the kind cluster chart and the delivery-db-pv chart, not by the postgresql chart)
 persistence:
-  existingClaim: pvc-delivery-db-0
   hostPath: "/var/delivery-db"
   containerPath: "/var/delivery-db"

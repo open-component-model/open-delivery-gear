@@ -203,7 +203,7 @@ Scanners are the most common extension type, performing security or compliance a
 
 **Examples:**
 
-- **Vulnerability Scanner (BDBA)**: Detects known vulnerabilities in software packages
+- **Vulnerability Scanner (BDBA, Trivy)**: Detects known vulnerabilities in software packages
 - **Malware Scanner (ClamAV)**: Scans artefacts for malicious content
 - **Cryptographic Asset Inventory**: Catalogues cryptographic material
 - **OS End-of-Life Detection**: Identifies unsupported operating system versions

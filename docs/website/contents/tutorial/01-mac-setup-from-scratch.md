@@ -1,7 +1,7 @@
 # Setup from Scratch (macOS)
 
 This is a detailed, opinionated walkthrough of setting up an Open Delivery Gear
-(ODG) cluster locally on an **Apple Silicon Mac** with the [Colima](https://colima.run/) container runtime, from zero to a running cluster.
+(ODG) cluster locally on an **Apple Silicon Mac** with [Docker Desktop](https://www.docker.com/products/docker-desktop/), from zero to a running cluster.
 For the concise reference, see
 {doc}`Deploying the Open Delivery Gear Locally </contents/how-to/01-local-setup>`.
 
@@ -9,28 +9,12 @@ For the concise reference, see
 ## 1. Install the tooling
 
 ```bash
-brew install kubectl k9s colima docker docker-compose kind helm wget yq
+brew install kubectl k9s docker docker-compose kind helm wget yq
 ```
 
 - `kubectl` / `k9s` — interact with the cluster
-- `colima` — container runtime (Docker Desktop works too)
 - `kind` — runs the local cluster
 - `helm`, `wget`, `yq` — required by the setup scripts
-
-Start Colima:
-
-```bash
-colima start --mount-type=virtiofs
-```
-
-:::{dropdown} Verify Colima works
-`docker ps` should now work. Run a test container:
-
-```bash
-docker run hello-world
-# "This message shows that your installation appears to be working correctly."
-```
-:::
 
 :::{dropdown} Recommended: Install the GitHub CLI
 The OCM installer uses `gh` to verify the install.
@@ -188,8 +172,7 @@ http://delivery-service.odg.svc.cluster.local:8080/auth?...&api_url=https://api.
 
 ### Create `values-local.yaml`
 
-Colima auto-mounts `$HOME` but not paths like `/var/`, so the Postgres volume
-fails on its default `/var/delivery-db` mount. Point it at a subfolder in your home directory instead:
+The volume mount where you want to keep your postgres data to a subfolder in your home directory:
 
 ```bash
 cp local-setup/values-local.yaml.example local-setup/values-local.yaml
