@@ -1,0 +1,14 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1375.0
+release_notes:
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: ChrisSchneider
+  category: feature
+  contents: The Trivy scanner now supports S3 resources
+  mimetype: text/markdown
+  reference: '[#994](https://github.com/open-component-model/odg-core/pull/994)'
+  type: standard
