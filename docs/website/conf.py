@@ -37,6 +37,7 @@ html_static_path = ['_static']
 html_favicon = '_static/odg.svg'
 html_logo = '_static/odg.svg'
 html_css_files = ['custom.css']
+html_js_files = ['custom.js']
 
 # Custom footer
 html_theme_options = {
