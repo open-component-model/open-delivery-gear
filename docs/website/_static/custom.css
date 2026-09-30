@@ -6,6 +6,11 @@
     border-color: #bbdefb !important;
 }
 
+/* Darker blue on hover for Why ODG card in light mode */
+.sd-card.sd-bg-primary:hover {
+    background-color: #d1e7fd !important;
+}
+
 /* Ensure text remains readable on light blue background */
 .sd-card.sd-bg-primary .sd-card-title,
 .sd-card.sd-bg-primary .sd-card-text {
@@ -35,10 +40,19 @@ body:not([data-theme="light"]) .sd-card.sd-bg-primary {
     border-color: #2c5282 !important;
 }
 
+/* Lighter blue on hover for Why ODG card in dark mode */
+[data-theme="dark"] .sd-card.sd-bg-primary:hover {
+    background-color: #2a4a75 !important;
+}
+
 @media (prefers-color-scheme: dark) {
     body:not([data-theme="light"]) .sd-card.sd-bg-primary {
         background-color: #1e3a5f !important;
         border-color: #2c5282 !important;
+    }
+
+    body:not([data-theme="light"]) .sd-card.sd-bg-primary:hover {
+        background-color: #2a4a75 !important;
     }
 }
 
