@@ -1,0 +1,16 @@
+{%- extends "furo/footer.html" %}
+
+{%- block footer %}
+<footer>
+  <div style="text-align: center; padding: 1.5rem 0 1rem 0; border-top: 1px solid var(--color-background-border);">
+    <div style="display: flex; justify-content: center; align-items: center; gap: 2rem; flex-wrap: wrap; margin-bottom: 1rem;">
+      <img src="{{ pathto('_static/ord-footer-bmwe.png', 1) }}" alt="Funded by EU and German Government" style="max-height: 50px; width: auto;">
+      <picture>
+        <source srcset="{{ pathto('_static/ord-footer-neonephos-light.svg', 1) }}" media="(prefers-color-scheme: dark)">
+        <img src="{{ pathto('_static/ord-footer-neonephos.svg', 1) }}" alt="Neo Nephos" style="max-height: 35px; width: auto;">
+      </picture>
+    </div>
+  </div>
+  {{ super() }}
+</footer>
+{%- endblock %}

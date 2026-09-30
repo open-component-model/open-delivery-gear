@@ -7,7 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'Open Delivery Gear'
-copyright = '2026, Neo Nephos'
+copyright = ''  # Empty - custom footer in template handles all text
 author = 'ODG Team'
 
 # -- General configuration ---------------------------------------------------
@@ -36,3 +36,15 @@ html_theme = 'furo'
 html_static_path = ['_static']
 html_favicon = '_static/odg.svg'
 html_logo = '_static/odg.svg'
+
+# Custom footer
+html_theme_options = {
+    "footer_icons": [
+        {
+            "name": "GitHub",
+            "url": "https://github.com/open-component-model/open-delivery-gear",
+            "html": "",
+            "class": "",
+        },
+    ],
+}

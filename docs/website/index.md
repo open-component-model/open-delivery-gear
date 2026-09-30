@@ -1,143 +1,107 @@
 # Open Delivery Gear
 
-**Compliance is not living next to software. Instead, it is an integral part of it.**
+**Secure Delivery for Sovereign Clouds**
 
-Open Delivery Gear (ODG) integrates compliance into the software lifecycle through automated scanning, tracking, and reporting of security findings, vulnerabilities, and compliance issues for your OCM components.
+Open Delivery Gear automates compliance scanning, tracking, and reporting for OCM components throughout your software delivery pipeline. Turn security and compliance from a manual bottleneck into a continuous, automated process.
 
-## What is ODG?
+---
 
-Open Delivery Gear is a comprehensive compliance automation platform that:
-
-- **Scans OCM components** for vulnerabilities, license compliance, and security issues
-- **Tracks findings** throughout the component lifecycle with configurable processing times
-- **Replicates issues** to GitHub for visibility and workflow integration
-- **Generates SBOMs** (Software Bill of Materials) for transparency and compliance
-- **Manages responsibles** by automatically assigning findings to the right teams
-
-## Key Features
+## Getting Started
 
 ::::{grid} 1 1 2 2
-:gutter: 3
+:gutter: 4
 
-:::{grid-item-card} 🔍 Automated Scanning
-Continuous scanning of OCI images, source code, and runtime artefacts using industry-standard tools like BDBA, Trivy, ClamAV, and Syft.
+:::{grid-item-card} 👤 For Platform Users
+:link: contents/end-user/index.html
+
+Use ODG to monitor and secure your software delivery
 :::
 
-:::{grid-item-card} 📊 Compliance Dashboard
-Centralized view of all findings with filtering, sorting, and drill-down capabilities to understand your security posture.
-:::
+:::{grid-item-card} 🛠️ For Contributors
+:link: contents/contributor/index.html
 
-:::{grid-item-card} 🔄 Issue Lifecycle Management
-Automatic creation, updating, and closing of GitHub issues based on finding state and processing times.
-:::
-
-:::{grid-item-card} 🎯 Responsible Assignment
-Intelligent assignment of findings to component owners and teams based on configurable rules and strategies.
+Extend and contribute to the ODG platform
 :::
 
 ::::
 
 ---
 
-## Getting Started
+## Overview
 
-```{note}
-New to ODG?
-Start here to understand the fundamentals and how to run and extend it.
-```
+::::{grid} 1 1 3 3
+:gutter: 4
 
-*Guided learning journey starting with OCM fundamentals all the way to running and extending ODG*
+:::{grid-item-card} 💡 Why ODG?
+:link: contents/overview.html#why-open-delivery-gear
+:class-card: sd-bg-light
 
-```{toctree}
-:maxdepth: 1
-:caption: Getting Started
+**Start here:** Understand the business value and benefits
+:::
 
-contents/getting-started/00-introduction.md
-```
+:::{grid-item-card} ⚙️ How It Works
+:link: contents/overview.html#how-it-works
 
-## Concepts
+See how ODG fits into your workflow
+:::
 
-*Deep-dive into ODG architecture, data models, and how extensions work*
+:::{grid-item-card} 📦 What Is It?
+:link: contents/overview.html#what-is-odg
 
-```{toctree}
-:maxdepth: 1
-:caption: Concepts
+Explore features and capabilities
+:::
 
-contents/concepts/00-odg-architecture.md
-contents/concepts/01-data-model.md
-contents/concepts/02-artefact-enumerator.md
-contents/concepts/03-issue-replicator.md
-contents/concepts/04-responsibles.md
-contents/concepts/05-sbom-generator.md
-contents/concepts/06-sla-violation-profiler.md
-```
-
-## How-to Guides
-
-*Step-by-step instructions for common tasks and workflows*
+::::
 
 ```{toctree}
-:maxdepth: 1
-:caption: How-to Guides
+:maxdepth: 3
+:hidden:
 
-contents/how-to/00-hybrid-dev-setup.md
-contents/how-to/01-local-setup.md
-contents/how-to/02-use-odg-api.md
-contents/how-to/03-vulnerabilities-for-component.md
-contents/how-to/04-diki.md
-contents/how-to/05-sbom-download.md
-contents/how-to/06-sbom-diagnose-failures.md
-contents/how-to/07-change-vulnerability-sla.md
-contents/how-to/08-run-sql-statements.md
-contents/how-to/09-prepare-component-for-odg.md
-```
-
-## Tutorials
-
-*Guided lessons to learn ODG by doing*
-
-```{toctree}
-:maxdepth: 1
-:caption: Tutorials
-
-contents/tutorial/00-contributing-extension.md
-contents/tutorial/01-mac-setup-from-scratch.md
-```
-
-## References
-
-*Technical specifications, API documentation, and configuration references*
-
-```{toctree}
-:maxdepth: 2
-:caption: References
-
-contents/reference/00-artefact-metadata-query.md
-contents/reference/core/index.md
-contents/reference/extensions/index.md
-contents/reference/18-ocm-labels.md
-contents/reference/19-resource-consumption.md
+contents/overview.md
+contents/end-user/index.md
+contents/contributor/index.md
 ```
 
 ---
 
-## Additional Resources
+## Get in Touch
 
 ::::{grid} 1 1 3 3
-:gutter: 2
+:gutter: 3
+
+:::{grid-item-card} 📅 Community Calls
+:link: https://github.com/open-component-model/open-delivery-gear/discussions
+:link-type: url
+
+Join our regular community meetings
+:::
+
+:::{grid-item-card} 🗺️ Roadmap
+:link: https://github.com/orgs/open-component-model/projects/17/views/10
+:link-type: url
+
+See what we're working on next
+:::
+
+:::{grid-item-card} 🐛 Report an Issue
+:link: https://github.com/open-component-model/open-delivery-gear/issues/new
+:link-type: url
+
+Found a bug? Let us know
+:::
+
+:::{grid-item-card} 💡 Request a Feature
+:link: https://github.com/open-component-model/open-delivery-gear/issues/new
+:link-type: url
+
+Share your ideas with us
+:::
 
 :::{grid-item-card} 💻 GitHub Repository
 :link: https://github.com/open-component-model/open-delivery-gear
 :link-type: url
 
-Source code, issues, and contributions
-:::
-
-:::{grid-item-card} 🏗️ ODG Core
-:link: https://github.com/open-component-model/odg-core
-:link-type: url
-
-Core service implementation
+Source code and contributions
 :::
 
 :::{grid-item-card} 📦 Open Component Model
@@ -148,14 +112,3 @@ Learn about OCM
 :::
 
 ::::
-
-```{eval-rst}
-.. note::
-   This documentation is organised using the `Diataxis framework <https://diataxis.fr/>`_:
-   
-   - **Getting Started**: Introduction and orientation for new users
-   - **Tutorials**: Learning-oriented lessons
-   - **How-to Guides**: Problem-oriented, goal-focused instructions
-   - **Concepts**: Understanding-oriented explanations
-   - **References**: Information-oriented technical descriptions
-```
