@@ -50,11 +50,16 @@
             <div style="padding: 1rem 0; margin: 0.5rem 0;">
               <table style="width: 100%; border-collapse: collapse;">
                 <tr>
-                  <td style="text-align: left; vertical-align: middle; width: 15%; padding-right: 1rem;">
-                    <img src="{{ pathto('_static/ord-footer-bmwe.png', 1) }}" alt="EU Funding" style="max-height: 35px; width: auto; display: block;">
+                  <td style="text-align: left; vertical-align: middle; width: 30%; padding-right: 1rem;">
+                    <img src="{{ pathto('_static/ord-footer-bmwe.png', 1) }}" alt="EU Funding" style="max-height: 160px; width: auto; display: block;">
                   </td>
-                  <td style="text-align: left; vertical-align: middle; width: 85%;">
-                    <span style="font-size: 0.85em; line-height: 1.4;">Funded by the European Union – NextGenerationEU</span>
+                  <td style="text-align: left; vertical-align: middle; width: 70%;">
+                    <div style="font-size: 0.85em; line-height: 1.4;">
+                      <div style="margin-bottom: 0.5rem;">Funded by the European Union – NextGenerationEU</div>
+                      <div style="font-size: 0.9em; color: var(--color-foreground-secondary);">
+                        The views and opinions expressed are solely those of the author(s) and do not necessarily reflect the views of the European Union or the European Commission. Neither the European Union nor the European Commission can be held responsible for them.
+                      </div>
+                    </div>
                   </td>
                 </tr>
                 <tr>
@@ -83,8 +88,7 @@
               <div style="font-size: 0.85em; color: var(--color-foreground-secondary); text-align: right;">
                 {% trans %}Made with {% endtrans -%}
                 {%- if show_sphinx -%}
-                <a href="https://www.sphinx-doc.org/">Sphinx</a> and
-                {%- endif -%}
+                <a href="https://www.sphinx-doc.org/">Sphinx</a> and {% endif -%}
                 <a href="https://github.com/pradyunsg/furo">Furo</a>
               </div>
             </div>
