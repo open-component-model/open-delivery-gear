@@ -76,7 +76,7 @@ Questions? Ideas? Bugs? We're here to help and collaborate:
 :gutter: 3
 
 :::{grid-item-card} 📅 Community Calls
-:link: https://github.com/open-component-model/open-delivery-gear/discussions
+:link: https://ocm.software/community/
 :link-type: url
 
 Join our regular community meetings
@@ -90,14 +90,14 @@ See what we're working on next
 :::
 
 :::{grid-item-card} 🐛 Report an Issue
-:link: https://github.com/open-component-model/open-delivery-gear/issues/new
+:link: https://github.com/open-component-model/open-delivery-gear/issues
 :link-type: url
 
 Found a bug? Let us know
 :::
 
 :::{grid-item-card} 💡 Propose a Feature
-:link: https://github.com/open-component-model/open-delivery-gear/issues/new
+:link: https://github.com/open-component-model/open-delivery-gear/issues
 :link-type: url
 
 Share your ideas with us
