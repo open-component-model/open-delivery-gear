@@ -1,0 +1,13 @@
+/* Custom styling for landing page cards */
+
+/* Light baby blue background for Why ODG card */
+.sd-card.sd-bg-primary {
+    background-color: #e3f2fd !important;
+    border-color: #bbdefb !important;
+}
+
+/* Ensure text remains readable on light blue background */
+.sd-card.sd-bg-primary .sd-card-title,
+.sd-card.sd-bg-primary .sd-card-text {
+    color: var(--color-foreground-primary) !important;
+}

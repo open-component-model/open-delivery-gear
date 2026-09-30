@@ -36,9 +36,11 @@ html_theme = 'furo'
 html_static_path = ['_static']
 html_favicon = '_static/odg.svg'
 html_logo = '_static/odg.svg'
+html_css_files = ['custom.css']
 
 # Custom footer
 html_theme_options = {
+    "announcement": "🎉 <strong>New Release!</strong> ODG Service Provider v1 (Beta) for Open Control Plane is now available. <a href='https://github.com/open-component-model/service-provider-odg' target='_blank'>Learn more</a>",
     "footer_icons": [
         {
             "name": "GitHub",

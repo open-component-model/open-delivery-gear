@@ -34,7 +34,7 @@ Extend and contribute to the ODG platform
 
 :::{grid-item-card} 💡 Why ODG?
 :link: contents/overview.html#why-open-delivery-gear
-:class-card: sd-bg-light
+:class-card: sd-bg-primary sd-bg-text-primary
 
 **Start here:** Understand the business value and benefits
 :::
@@ -90,7 +90,7 @@ See what we're working on next
 Found a bug? Let us know
 :::
 
-:::{grid-item-card} 💡 Request a Feature
+:::{grid-item-card} 💡 Propose a Feature
 :link: https://github.com/open-component-model/open-delivery-gear/issues/new
 :link-type: url
 
