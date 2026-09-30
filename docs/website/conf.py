@@ -40,7 +40,15 @@ html_css_files = ['custom.css']
 
 # Custom footer
 html_theme_options = {
-    "announcement": "🎉 <strong>New Release!</strong> ODG Service Provider v1 (Beta) for Open Control Plane is now available. <a href='https://github.com/open-component-model/service-provider-odg' target='_blank'>Learn more</a>",
+    "announcement": "🎉 <strong>New Release!</strong> ODG Service Provider (<strong>Beta</strong>) for Open Control Plane is now available. <a href='https://github.com/open-component-model/service-provider-odg' target='_blank'>Learn more</a>",
+    "light_css_variables": {
+        "color-brand-primary": "#2196F3",
+        "color-brand-content": "#1976D2",
+    },
+    "dark_css_variables": {
+        "color-brand-primary": "#90CAF9",
+        "color-brand-content": "#64B5F6",
+    },
     "footer_icons": [
         {
             "name": "GitHub",

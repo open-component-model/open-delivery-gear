@@ -8,10 +8,12 @@ Open Delivery Gear automates compliance scanning, tracking, and reporting for OC
 
 ## Getting Started
 
+Choose your documentation path based on your role and interests, or explore the [Overview](#overview) section below to learn more about our mission and motivation:
+
 ::::{grid} 1 1 2 2
 :gutter: 4
 
-:::{grid-item-card} 👤 For Platform Users
+:::{grid-item-card} 👤 For ODG Users
 :link: contents/end-user/index.html
 
 Use ODG to monitor and secure your software delivery
@@ -29,6 +31,8 @@ Extend and contribute to the ODG platform
 
 ## Overview
 
+We believe security and compliance should be embedded, not bolted on. Read up on our mission, explore our approach, and discover our capabilities:
+
 ::::{grid} 1 1 3 3
 :gutter: 4
 
@@ -36,19 +40,19 @@ Extend and contribute to the ODG platform
 :link: contents/overview.html#why-open-delivery-gear
 :class-card: sd-bg-primary sd-bg-text-primary
 
-**Start here:** Understand the business value and benefits
+Learn **why** security and compliance needs to be embedded into software deliveries
 :::
 
 :::{grid-item-card} ⚙️ How It Works
 :link: contents/overview.html#how-it-works
 
-See how ODG fits into your workflow
+Understand **how** ODG automates processes and integrates into supply chain security
 :::
 
 :::{grid-item-card} 📦 What Is It?
 :link: contents/overview.html#what-is-odg
 
-Explore features and capabilities
+Explore **what** end-to-end automations are provided and what integration points fit your use-case
 :::
 
 ::::
@@ -65,6 +69,8 @@ contents/contributor/index.md
 ---
 
 ## Get in Touch
+
+Questions? Ideas? Bugs? We're here to help and collaborate:
 
 ::::{grid} 1 1 3 3
 :gutter: 3
