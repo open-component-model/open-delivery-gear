@@ -10,6 +10,8 @@ extensions_cfg:
       - component_name: ocm.software/ocmcli
       - component_name: acme.org/sovereign/product
       - component_name: opendesk.poc.sap.com/base
+      - component_name: github.com/open-component-model/service-provider-ocm
+      - component_name: github.com/openmcp-project/service-provider-kro
   bdba:
     mappings:
       - prefix: ''
@@ -36,6 +38,8 @@ extensions_cfg:
       components:
         - component_name: ocm.software/ocm
         - component_name: ocm.software/ocmcli
+        - component_name: github.com/open-component-model/service-provider-ocm
+        - component_name: github.com/openmcp-project/service-provider-kro
   clamav:
     mappings:
       - prefix: ''
@@ -334,6 +338,20 @@ features_cfg:
       version: greatest
       icon: home
       releasePipelineUrl: https://github.com/open-component-model/ocm/actions/workflows/release.yaml
+    - id: 9dd1acb7-33cf-4707-914b-0a5096595fa4
+      name: github.com/open-component-model/service-provider-ocm
+      displayName: Service Provider OCM
+      type: ServiceProvider
+      version: greatest
+      icon: home
+      releasePipelineUrl: https://github.com/open-component-model/service-provider-ocm/actions/workflows/release.yaml
+    - id: 2986ba33-f937-4679-aa33-1d2ecaef7fe9
+      name: github.com/openmcp-project/service-provider-kro
+      displayName: Service Provider kro
+      type: ServiceProvider
+      version: greatest
+      icon: home
+      releasePipelineUrl: https://github.com/openmcp-project/service-provider-kro/actions/workflows/release.yaml
     - id: a50275cc-ea57-4e94-856b-5128d67ea598
       name: opendesk.poc.sap.com/base
       displayName: OpenDesk
@@ -383,6 +401,12 @@ ocm_repo_mappings:
   - repository: ghcr.io/open-component-model/ocm
     prefixes:
       - ocm.software/ocmcli
+  - repository: ghcr.io/open-component-model/components
+    prefixes:
+      - github.com/open-component-model/service-provider-ocm
+  - repository: ghcr.io/openmcp-project/components
+    prefixes:
+      - github.com/openmcp-project/service-provider-kro
   - repository: ghcr.io/platform-mesh/samples-opendesk-ocm-landscaper
     prefixes:
       - opendesk.poc.sap.com
@@ -399,6 +423,18 @@ profiles:
     special_component_ids:
       - 13d4496b-2e8e-4634-81e0-4852e09bca3a
       - bd545620-3e40-4c7e-aa39-8ef565047c9f
+
+  - name: Service Providers
+    finding_types:
+      - finding/crypto
+      - finding/license
+      - finding/malware
+      - finding/osid
+      - finding/sast
+      - finding/vulnerability
+    special_component_ids:
+      - 9dd1acb7-33cf-4707-914b-0a5096595fa4
+      - 2986ba33-f937-4679-aa33-1d2ecaef7fe9
 
   - name: OpenDesk
     finding_types:
