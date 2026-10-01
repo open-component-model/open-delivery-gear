@@ -14,9 +14,11 @@ Choose your documentation path based on your role and interests, or explore the 
 :gutter: 4
 
 :::{grid-item-card} 👤 For ODG Users
-:link: contents/end-user/index.html
+:class-card: sd-text-muted
 
 Use ODG to monitor and secure your software delivery
+
+🚧 *Under construction*
 :::
 
 :::{grid-item-card} 🛠️ For Contributors
@@ -62,7 +64,6 @@ Explore **what** end-to-end automations are provided and what integration points
 :hidden:
 
 contents/overview.md
-contents/end-user/index.md
 contents/contributor/index.md
 ```
 
