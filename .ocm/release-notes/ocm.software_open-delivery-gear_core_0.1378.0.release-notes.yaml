@@ -1,0 +1,15 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1378.0
+release_notes:
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: feature
+  contents: The `sla-report` is now merged into the `sla-violation-profiler` extension
+    and does not need to be enabled separately
+  mimetype: text/markdown
+  reference: '[#1014](https://github.com/open-component-model/odg-core/pull/1014)'
+  type: standard
