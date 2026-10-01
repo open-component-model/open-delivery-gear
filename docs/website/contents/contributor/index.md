@@ -20,7 +20,7 @@ Welcome to the ODG contributor documentation. This section is for those who want
 :::{grid-item-card} 🚀 Zero to Hero
 :link: getting-started/index.html
 
-New to ODG? Start here to understand the fundamentals and get up to speed
+New to ODG? Start here to understand the fundamentals and get up to speed.
 :::
 
 ::::

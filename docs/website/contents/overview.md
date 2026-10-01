@@ -1,6 +1,6 @@
 # Overview
 
-Security and compliance shouldn't slow you down. Open Delivery Gear automates scanning, tracking, and reporting across your entire software supply chain, turning compliance from a regular audit into a continuous, automated process. This page will walk you through our motivation and goals, and how ODG helps you deliver secure and compliant software to sovereign clouds around the world.
+Security and compliance shouldn't slow you down. Open Delivery Gear automates scanning, tracking, and reporting across your entire software supply chain, transforming compliance from a periodic audit into a continuous, automated process. This page walks you through our motivation and goals, and demonstrates how ODG helps you deliver secure and compliant software to sovereign clouds around the world.
 
 ## Why do we need to change something?
 
@@ -16,9 +16,9 @@ This shift introduces a critical field of tension for sovereign clouds. On one h
 
 ### Security and Compliance Can't Be an Afterthought
 
-While most teams excel at providing full technical capabilities, **security and compliance often come short**. In sovereign cloud contexts, these must be part of the shipment itself, self-contained and complete. You can't patch security processes adhoc.
+Whilst most teams excel at providing full technical capabilities, **security and compliance often fall short**. In sovereign cloud contexts, these must be part of the shipment itself, self-contained and complete. You can't patch security processes ad hoc.
 
-This becomes even more critical as AI-powered vulnerability research floods development teams with findings. Without top-tier automation and lifecycle processes that allow quick, flexible interaction, teams have no chance to properly assess, prioritize, and remediate these findings at scale.
+This becomes even more critical as AI-powered vulnerability research floods development teams with findings. Without top-tier automation and lifecycle processes that enable quick, flexible interaction, teams have no opportunity to properly assess, prioritise, and remediate these findings at scale.
 
 ### The Path Forward
 
@@ -53,7 +53,7 @@ Built for sovereign cloud environments with extensible architecture and OCM-nati
 
 ## How we help you with a sovereign cloud delivery
 
-Open Delivery Gear provides an **opinionated end-to-end automation flow** that embeds security and compliance into your delivery lifecycle, without disrupting your existing processes.
+Open Delivery Gear provides an **opinionated end-to-end automation flow** that embeds security and compliance into your delivery lifecycle without disrupting your existing processes.
 
 ### Asynchronous and Non-Blocking
 
@@ -61,7 +61,7 @@ ODG operates asynchronously, pulling in artifacts right after your build complet
 
 ### Delivery SLA Tracking
 
-While CI/CD pipelines remain unblocked, teams still need to ensure they're clean from a compliance perspective when they deliver. ODG implements a **delivery tracking mechanism** where findings are tracked according to configurable delivery SLAs. This ensures compliance issues surface in time for teams to address them before releases, without blocking the build itself.
+Whilst CI/CD pipelines remain unblocked, teams still need to ensure they're clean from a compliance perspective when they deliver. ODG implements a **delivery tracking mechanism** where findings are tracked according to configurable delivery SLAs. This ensures compliance issues surface in time for teams to address them before releases, without blocking the build itself.
 
 ### Intelligent Tracking and Assignment
 
@@ -69,7 +69,7 @@ Once findings are discovered, ODG provides **detailed tracking across the entire
 
 ### Unified Assessment Experience
 
-Developer teams work through a **unified finding assessment experience**, where they can review, prioritize, and remediate security findings in one place. Integration with GitHub means developers can track issues alongside their regular workflow. This reduces context switching and accelerates resolution.
+Developer teams work through a **unified finding assessment experience**, where they can review, prioritise, and remediate security findings in one place. Integration with GitHub means developers can track issues alongside their regular workflow. This reduces context switching and accelerates resolution.
 
 ### Audit-Proof Traceability
 
@@ -91,7 +91,7 @@ At its core, ODG works with the [Open Component Model (OCM)](https://ocm.softwar
 
 ### Extensible by Design
 
-ODG's architecture is built for extensibility. Add custom scanners, integrate proprietary compliance tools, or implement organization-specific policies without forking the core platform. The plugin-based scanner framework makes it easy to adapt ODG to your specific security and compliance requirements as they evolve.
+ODG's architecture is built for extensibility. Add custom scanners, integrate proprietary compliance tools, or implement organisation-specific policies without forking the core platform. The plugin-based scanner framework makes it straightforward to adapt ODG to your specific security and compliance requirements as they evolve.
 
 ---
 

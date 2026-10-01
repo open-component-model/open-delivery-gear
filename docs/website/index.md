@@ -2,7 +2,7 @@
 
 **Secure Delivery for Sovereign Clouds**
 
-Open Delivery Gear automates compliance scanning, tracking, and reporting for OCM components throughout your software delivery pipeline. Turn security and compliance from a manual bottleneck into a continuous, automated process.
+Open Delivery Gear automates compliance scanning, tracking, and reporting for OCM components throughout your software delivery pipeline. Transform security and compliance from a manual bottleneck into a continuous, automated process.
 
 ---
 
@@ -42,7 +42,7 @@ We believe security and compliance should be embedded, not bolted on. Read up on
 :link: contents/overview.html#why-do-we-need-to-change-something
 :class-card: sd-bg-primary sd-bg-text-primary
 
-Learn **why** security and compliance needs to be embedded into software deliveries
+Learn **why** security and compliance need to be embedded into software deliveries
 :::
 
 :::{grid-item-card} ⚙️ How It Works
