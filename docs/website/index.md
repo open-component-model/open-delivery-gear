@@ -39,20 +39,20 @@ We believe security and compliance should be embedded, not bolted on. Read up on
 :gutter: 4
 
 :::{grid-item-card} 💡 Why ODG?
-:link: contents/overview.html#why-open-delivery-gear
+:link: contents/overview.html#why-do-we-need-to-change-something
 :class-card: sd-bg-primary sd-bg-text-primary
 
 Learn **why** security and compliance needs to be embedded into software deliveries
 :::
 
 :::{grid-item-card} ⚙️ How It Works
-:link: contents/overview.html#how-it-works
+:link: contents/overview.html#how-we-help-you-with-a-sovereign-cloud-delivery
 
 Understand **how** ODG automates processes and integrates into supply chain security
 :::
 
 :::{grid-item-card} 📦 What Is It?
-:link: contents/overview.html#what-is-odg
+:link: contents/overview.html#what-is-open-delivery-gear
 
 Explore **what** end-to-end automations are provided and what integration points fit your use-case
 :::
