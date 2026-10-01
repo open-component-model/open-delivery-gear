@@ -397,7 +397,9 @@ ocm_repo_mappings:
   - repository: europe-docker.pkg.dev/gardener-project/releases
   - repository: ghcr.io/open-component-model
     prefixes:
+      - ocm.software/cli
       - ocm.software/ocm
+      - ocm.software/kubernetes
   - repository: ghcr.io/open-component-model/ocm
     prefixes:
       - ocm.software/ocmcli
