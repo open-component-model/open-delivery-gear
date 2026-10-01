@@ -1,10 +1,32 @@
 # Overview
 
-## Why Open Delivery Gear?
+Security and compliance shouldn't slow you down. Open Delivery Gear automates scanning, tracking, and reporting across your entire software supply chain, turning compliance from a regular audit into a continuous, automated process. This page will walk you through our motivation and goals, and how ODG helps you deliver secure and compliant software to sovereign clouds around the world.
+
+## Why do we need to change something?
 
 **Compliance is not living next to software. Instead, it is an integral part of it.**
 
-Open Delivery Gear integrates compliance directly into your software delivery pipeline, turning security and compliance from a bottleneck into an automated, continuous process.
+### The Shift from On-Premise to Cloud
+
+Software providers have a long history of on-premise delivery. We built contained software packages, shipped them to customers, and updates came in carefully orchestrated release cycles. When we switched to cloud models, delivery principles fundamentally changed. Patches can now roll out in hours. Teams focus on smaller deliveries with higher frequency.
+
+### The Sovereign Cloud Tension
+
+This shift introduces a critical field of tension for sovereign clouds. On one hand, we have high-frequency delivery practices optimized for speed. On the other hand, sovereign cloud consumers expect contained, self-sufficient deliveries they can trust and operate independently. The air-gap requirement forces sovereign cloud teams to tackle all questions on their own, without the luxury of reaching back to upstream services or support channels.
+
+### Security and Compliance Can't Be an Afterthought
+
+While most teams excel at providing full technical capabilities, **security and compliance often come short**. In sovereign cloud contexts, these must be part of the shipment itself, self-contained and complete. You can't patch security processes after the fact when you're operating in an air-gapped environment.
+
+This becomes even more critical as AI-powered vulnerability research floods development teams with findings. Without top-tier automation and lifecycle processes that allow quick, flexible interaction, teams have no chance to properly assess, prioritize, and remediate these findings at scale.
+
+### The Path Forward
+
+This can only be achieved by **fundamentally changing how we package and deliver software**. Security and compliance must be embedded early in the software lifecycle, making them an integral part of every self-contained shipment. For sovereign cloud deliveries, this isn't optional. It's the only way to maintain both velocity and trust.
+
+### Value Proposition
+
+Open Delivery Gear provides numerous benefits for your software delivery pipeline. Here are some key highlights:
 
 ::::{grid} 1 1 2 2
 :gutter: 3
@@ -29,60 +51,46 @@ Built for sovereign cloud environments with extensible architecture and OCM-nati
 
 ---
 
-## How It Works
+## How we help you with a sovereign cloud delivery
 
-::::{grid} 1 1 2 2
-:gutter: 3
+Open Delivery Gear provides an **opinionated end-to-end automation flow** that embeds security and compliance into your delivery lifecycle, without disrupting your existing processes.
 
-:::{grid-item-card} 🛡️ For Security Teams
-Automated vulnerability tracking with GitHub issue lifecycle management. Track remediation progress without manual follow-ups.
-:::
+### Asynchronous and Non-Blocking
 
-:::{grid-item-card} 📋 For Compliance Officers
-Audit-ready SBOM generation and comprehensive finding reports. Demonstrate compliance posture at any time.
-:::
+ODG operates asynchronously, pulling in artifacts right after your build completes. Your delivery pipeline continues uninterrupted while ODG schedules specialized agents in the background to perform vulnerability scans, license checks, SBOM generation, and compliance assessments.
 
-:::{grid-item-card} 🚀 For Development Teams
-Continuous feedback on security posture integrated into CI/CD. Fix issues early, before they reach production.
-:::
+### Delivery SLA Tracking
 
-:::{grid-item-card} 🏗️ For Platform Engineers
-Extensible scanning framework for custom compliance requirements. Add new scanners and policies as needs evolve.
-:::
+While CI/CD pipelines remain unblocked, teams still need to ensure they're clean from a compliance perspective when they deliver. ODG implements a **delivery tracking mechanism** where findings are tracked according to configurable delivery SLAs. This ensures compliance issues surface in time for teams to address them before releases, without blocking the build itself.
 
-::::
+### Intelligent Tracking and Assignment
+
+Once findings are discovered, ODG provides **detailed tracking across the entire lifecycle**. Action items are automatically assigned to individual developer teams based on component ownership. Findings reach the right people without manual triage. No more spreadsheets, no more status meetings. Just clear ownership and accountability.
+
+### Unified Assessment Experience
+
+Developer teams work through a **unified finding assessment experience**, where they can review, prioritize, and remediate security findings in one place. Integration with GitHub means developers can track issues alongside their regular workflow. This reduces context switching and accelerates resolution.
+
+### Audit-Proof Traceability
+
+Every action, assessment, and state change is tracked with **audit-proof traceability and reporting**. When auditors come knocking or compliance reports are due, ODG provides complete visibility into what was scanned, when findings were discovered, who assessed them, and how they were resolved. All automatically generated and ready to share.
 
 ---
 
-## What is ODG?
+## What is Open Delivery Gear?
 
-Open Delivery Gear (ODG) is a comprehensive compliance automation platform that:
+Open Delivery Gear is an **extensible security and compliance engine** designed for sovereign cloud delivery at scale.
 
-- **Scans OCM components** for vulnerabilities, license compliance, and security issues
-- **Tracks findings** throughout the component lifecycle with configurable processing times
-- **Replicates issues** to GitHub for visibility and workflow integration
-- **Generates SBOMs** (Software Bill of Materials) for transparency and compliance
-- **Manages responsibles** by automatically assigning findings to the right teams
+### Cloud-Native Architecture
 
-### Key Features
+ODG is implemented as a Kubernetes deployment and follows cloud-native principles. It scales with your infrastructure, integrates seamlessly into your existing cloud platforms, and leverages Kubernetes-native patterns for reliability and maintainability.
 
-::::{grid} 1 1 2 2
-:gutter: 3
+### Built on Open Component Model
 
-:::{grid-item-card} 🔍 Automated Scanning
-Continuous scanning of OCI images, source code, and runtime artefacts using industry-standard tools like BDBA, Trivy, ClamAV, and Syft.
-:::
+At its core, ODG works with the [Open Component Model (OCM)](https://ocm.software), a standard for describing and packaging cloud-native software artifacts. This gives ODG deep visibility into your component structure, dependencies, and artifact lifecycle, enabling precise tracking and compliance enforcement across complex delivery chains.
 
-:::{grid-item-card} 📊 Compliance Dashboard
-Centralized view of all findings with filtering, sorting, and drill-down capabilities to understand your security posture.
-:::
+### Extensible by Design
 
-:::{grid-item-card} 🔄 Issue Lifecycle Management
-Automatic creation, updating, and closing of GitHub issues based on finding state and processing times.
-:::
+ODG's architecture is built for extensibility. Add custom scanners, integrate proprietary compliance tools, or implement organization-specific policies without forking the core platform. The plugin-based scanner framework makes it easy to adapt ODG to your specific security and compliance requirements as they evolve.
 
-:::{grid-item-card} 🎯 Responsible Assignment
-Intelligent assignment of findings to component owners and teams based on configurable rules and strategies.
-:::
-
-::::
+---
