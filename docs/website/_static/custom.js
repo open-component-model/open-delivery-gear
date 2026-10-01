@@ -34,4 +34,16 @@ document.addEventListener('DOMContentLoaded', function() {
             this.style.color = 'var(--color-foreground-primary)';
         });
     }
+
+    // Open external card links in new tabs
+    document.querySelectorAll('.sd-card a.sd-stretched-link').forEach(function(link) {
+        if (link.href.startsWith('http://') || link.href.startsWith('https://')) {
+            // Check if it's an external link (not same domain)
+            const url = new URL(link.href);
+            if (url.hostname !== window.location.hostname) {
+                link.setAttribute('target', '_blank');
+                link.setAttribute('rel', 'noopener noreferrer');
+            }
+        }
+    });
 });

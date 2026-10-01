@@ -4,19 +4,19 @@ Security and compliance shouldn't slow you down. Open Delivery Gear automates sc
 
 ## Why do we need to change something?
 
-**Compliance is not living next to software. Instead, it is an integral part of it.**
+Compliance is not living next to software. Instead, it is an integral part of it.
 
 ### The Shift from On-Premise to Cloud
 
-Software providers have a long history of on-premise delivery. We built contained software packages, shipped them to customers, and updates came in carefully orchestrated release cycles. When we switched to cloud models, delivery principles fundamentally changed. Patches can now roll out in hours. Teams focus on smaller deliveries with higher frequency.
+Software providers have a long history of on-premise delivery. We built self-contained software packages and shipped them to customers. Updates came in carefully orchestrated release cycles. When we switched to cloud models, delivery principles fundamentally changed. Patches can now roll out in hours. Teams focus on smaller deliveries with higher frequency.
 
 ### The Sovereign Cloud Tension
 
-This shift introduces a critical field of tension for sovereign clouds. On one hand, we have high-frequency delivery practices optimized for speed. On the other hand, sovereign cloud consumers expect contained, self-sufficient deliveries they can trust and operate independently. The air-gap requirement forces sovereign cloud teams to tackle all questions on their own, without the luxury of reaching back to upstream services or support channels.
+This shift introduces a critical field of tension for sovereign clouds. On one hand, we have high-frequency delivery practices optimized for speed. On the other hand, sovereign cloud consumers expect self-contained, self-sufficient deliveries they can trust and operate independently. The air-gap requirement mandates that sovereign cloud teams operate independently, without reliance on upstream services or external support channels.
 
 ### Security and Compliance Can't Be an Afterthought
 
-While most teams excel at providing full technical capabilities, **security and compliance often come short**. In sovereign cloud contexts, these must be part of the shipment itself, self-contained and complete. You can't patch security processes after the fact when you're operating in an air-gapped environment.
+While most teams excel at providing full technical capabilities, **security and compliance often come short**. In sovereign cloud contexts, these must be part of the shipment itself, self-contained and complete. You can't patch security processes adhoc.
 
 This becomes even more critical as AI-powered vulnerability research floods development teams with findings. Without top-tier automation and lifecycle processes that allow quick, flexible interaction, teams have no chance to properly assess, prioritize, and remediate these findings at scale.
 
@@ -26,7 +26,7 @@ This can only be achieved by **fundamentally changing how we package and deliver
 
 ### Value Proposition
 
-Open Delivery Gear provides numerous benefits for your software delivery pipeline. Here are some key highlights:
+Open Delivery Gear provides numerous benefits for your software delivery pipeline, the key highlights are:
 
 ::::{grid} 1 1 2 2
 :gutter: 3
@@ -73,7 +73,7 @@ Developer teams work through a **unified finding assessment experience**, where 
 
 ### Audit-Proof Traceability
 
-Every action, assessment, and state change is tracked with **audit-proof traceability and reporting**. When auditors come knocking or compliance reports are due, ODG provides complete visibility into what was scanned, when findings were discovered, who assessed them, and how they were resolved. All automatically generated and ready to share.
+Every action, assessment, and state change is tracked with **audit-proof traceability and reporting**. When auditors come knocking or compliance reports are due, ODG provides complete visibility into what was scanned, when findings were discovered, who assessed them, and how they were resolved. All automatically generated and ready to share. This transparency is part of the software delivery itself and can be verified by consumers.
 
 ---
 
@@ -94,3 +94,23 @@ At its core, ODG works with the [Open Component Model (OCM)](https://ocm.softwar
 ODG's architecture is built for extensibility. Add custom scanners, integrate proprietary compliance tools, or implement organization-specific policies without forking the core platform. The plugin-based scanner framework makes it easy to adapt ODG to your specific security and compliance requirements as they evolve.
 
 ---
+
+## Does this spark your interest?
+
+::::{grid} 1 1 2 2
+:gutter: 4
+
+:::{grid-item-card} 🌐 Try Our Demo
+:link: https://delivery-dashboard.demo.ci.gardener.cloud/
+:link-type: url
+
+Explore ODG in action with our live demo environment
+:::
+
+:::{grid-item-card} 🚀 Zero to Hero
+:link: contributor/getting-started/00-introduction.html
+
+Start today with our guided tour and spin up your own end-to-end security and compliance workflow!
+:::
+
+::::
