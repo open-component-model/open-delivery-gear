@@ -41,7 +41,7 @@ html_js_files = ['custom.js']
 
 # Custom footer
 html_theme_options = {
-    "announcement": "🎉 <strong>New Release!</strong> ODG Service Provider (<strong>Beta</strong>) for Open Control Plane is now available. <a href='https://github.com/open-component-model/service-provider-odg' target='_blank'>Learn more</a>",
+    "announcement": "🎉 <strong>New Release!</strong> ODG Service Provider (<strong>Alpha</strong>) for Open Control Plane is now available. <a href='https://github.com/open-component-model/service-provider-odg' target='_blank'>Learn more</a>",
     "light_css_variables": {
         "color-brand-primary": "#2196F3",
         "color-brand-content": "#1976D2",
