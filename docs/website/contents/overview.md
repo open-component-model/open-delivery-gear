@@ -18,6 +18,8 @@ This shift introduces a critical field of tension for sovereign clouds. On one h
 
 Whilst most teams excel at providing full technical capabilities, **security and compliance often fall short**. In sovereign cloud contexts, these must be part of the shipment itself, self-contained and complete. You can't patch security processes ad hoc.
 
+The cloud-native shift amplifies this challenge. Immutable containers and declarative infrastructure mean operations teams can no longer patch libraries or apply fixes after deployment. What worked for twenty years—updating a database version or hardening a system post-delivery—no longer works. Security and compliance must now be embedded by development teams from the start, or the necessary configuration points must be built into the software itself.
+
 This becomes even more critical as AI-powered vulnerability research floods development teams with findings. Without top-tier automation and lifecycle processes that enable quick, flexible interaction, teams have no opportunity to properly assess, prioritise, and remediate these findings at scale.
 
 ### The Path Forward
@@ -40,7 +42,7 @@ Continuous monitoring of all OCM components with configurable SLAs ensures vulne
 :::
 
 :::{grid-item-card} 🔍 Full Transparency
-Complete visibility into your software supply chain with automated SBOM generation and component tracking across your entire delivery pipeline.
+Complete visibility into your software supply chain with automated SBOM generation and component tracking. Essential for navigating regulatory frameworks like EU Cyber Resilience Act, DORA, and NIST standards.
 :::
 
 :::{grid-item-card} 🏛️ Sovereign Cloud Ready

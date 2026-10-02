@@ -29,6 +29,9 @@ myst_enable_extensions = [
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', '.venv']
 
+# Table of contents options
+toc_object_entries_show_parents = 'hide'
+
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
@@ -50,6 +53,8 @@ html_theme_options = {
         "color-brand-primary": "#90CAF9",
         "color-brand-content": "#64B5F6",
     },
+    "navigation_with_keys": True,
+    "sidebar_hide_name": False,
     "footer_icons": [
         {
             "name": "GitHub",

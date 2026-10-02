@@ -1,8 +1,10 @@
 # Open Delivery Gear
 
-**Secure Delivery for Sovereign Clouds**
+**Do you know if your next software shipment is compliant? ODG does.**
 
-Open Delivery Gear automates compliance scanning, tracking, and reporting for OCM components throughout your software delivery pipeline. Transform security and compliance from a manual bottleneck into a continuous, automated process.
+Open Delivery Gear automates compliance scanning, tracking, and reporting for software components throughout your delivery pipeline. Continuous monitoring for CVEs, malware, licences, and secrets with automated assignment to the right teams and GitHub integration for seamless workflow.
+
+Compliance visibility for every shipment at scale, from container images to static binaries to cloud artefacts, built for sovereign cloud deliveries.
 
 ---
 
@@ -63,7 +65,7 @@ Explore **what** end-to-end automations are provided and what integration points
 :maxdepth: 3
 :hidden:
 
-contents/overview.md
+contents/overview
 contents/contributor/index.md
 ```
 
@@ -91,14 +93,14 @@ See what we're working on next
 :::
 
 :::{grid-item-card} 🐛 Report an Issue
-:link: https://github.com/open-component-model/open-delivery-gear/issues
+:link: https://github.com/open-component-model/open-delivery-gear/issues/new?template=bug.md
 :link-type: url
 
 Found a bug? Let us know
 :::
 
 :::{grid-item-card} 💡 Propose a Feature
-:link: https://github.com/open-component-model/open-delivery-gear/issues
+:link: https://github.com/open-component-model/open-delivery-gear/issues/new?template=feature.md
 :link-type: url
 
 Share your ideas with us

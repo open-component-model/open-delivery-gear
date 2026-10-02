@@ -55,3 +55,13 @@ Information-oriented technical descriptions and API documentation
 :::
 
 ::::
+
+```{toctree}
+:maxdepth: 2
+
+getting-started/index
+concepts/index
+how-to/index
+tutorial/index
+reference/index
+```

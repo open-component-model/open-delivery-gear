@@ -46,4 +46,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
+
+    // Expand first level of navigation (level 2 items under top-level sections)
+    document.querySelectorAll('.toctree-l1.has-children > .toctree-checkbox').forEach(function(checkbox) {
+        checkbox.checked = true;
+    });
 });
