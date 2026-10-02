@@ -1,0 +1,584 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html"><link rel="next" title="CodeQL Scanner" href="17-codeql-scanner-config.html"><link rel="prev" title="Static Application Security Testing Attestor" href="14-static-application-security-testing-attestor-config.html">
+        <link rel="prefetch" href="../../../_static/odg.svg" as="image">
+
+    <link rel="shortcut icon" href="../../../_static/odg.svg"><!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+        <title>SLA Violation Profiler - Open Delivery Gear documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=d7944402" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  --color-brand-primary: #2196F3;
+  --color-brand-content: #1976D2;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #90CAF9;
+  --color-brand-content: #64B5F6;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #90CAF9;
+  --color-brand-content: #64B5F6;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+<div class="announcement">
+  <aside class="announcement-content">
+     🎉 <strong>New Release!</strong> ODG Service Provider (<strong>Alpha</strong>) for Open Control Plane is now available. <a href='https://github.com/open-component-model/service-provider-odg' target='_blank'>Learn more</a> 
+  </aside>
+</div>
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">Open Delivery Gear  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../../../_static/odg.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">Open Delivery Gear  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">Contributor Documentation</a><input aria-label="Toggle navigation of Contributor Documentation" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../getting-started/index.html">Getting Started</a><input aria-label="Toggle navigation of Getting Started" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/00-introduction.html">🚀 From Zero to Hero</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../concepts/index.html">Concepts</a><input aria-label="Toggle navigation of Concepts" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../concepts/00-odg-architecture.html">ODG’s System Architecture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../concepts/01-data-model.html">Correlating metadata to OCM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../concepts/02-artefact-enumerator.html">Reacting upon OCM events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../concepts/03-issue-replicator.html">Lifecycling GitHub Issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../concepts/04-responsibles.html">Overwriting OCM component responsibles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../concepts/05-sbom-generator.html">Generating Software Bill of Materials</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../concepts/06-sla-violation-profiler.html">SLA Violation Profiler</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../how-to/index.html">How-to Guides</a><input aria-label="Toggle navigation of How-to Guides" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../how-to/00-hybrid-dev-setup.html">Setting up a hybrid dev setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../how-to/02-use-odg-api.html">Use the ODG Python Package to resolve an OCM component</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../how-to/03-vulnerabilities-for-component.html">Get all vulnerabilities for a Component</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../how-to/04-diki.html">Send Diki findings to ODG-API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../how-to/05-sbom-download.html">Download SBOM Documents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../how-to/06-sbom-diagnose-failures.html">Diagnose Failed SBOM Generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../how-to/07-change-vulnerability-sla.html">Change the SLAs for Vulnerability Findings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../how-to/08-run-sql-statements.html">Run custom SQL commands in ODG</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../how-to/09-prepare-component-for-odg.html">Prepare Your Component for ODG</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../tutorial/index.html">Tutorials</a><input aria-label="Toggle navigation of Tutorials" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../tutorial/00-contributing-extension.html">Contribute a new Extension</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tutorial/01-mac-setup-from-scratch.html">Setup from Scratch (macOS)</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current has-children"><a class="reference internal" href="index.html">References</a><input aria-label="Toggle navigation of References" checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="00-artefact-metadata-query.html">Artefact Metadata Search</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="core/index.html">Core Configuration</a><input aria-label="Toggle navigation of Core Configuration" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="02-artefact-enumerator-config.html">Artefact Enumerator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="07-backlog-controller-config.html">Backlog Controller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="09-cache-manager-config.html">Cache Manager</a></li>
+<li class="toctree-l4"><a class="reference internal" href="11-delivery-db-backup-config.html">Delivery Database Backup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="15-responsibles-config.html">Responsibles</a></li>
+</ul>
+</li>
+<li class="toctree-l3 current has-children"><a class="reference internal" href="extensions/index.html">Extension Configuration</a><input aria-label="Toggle navigation of Extension Configuration" checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="01-software-bill-of-material-generator-config.html">Software Bill of Material Generator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="03-vulnerability-scanner-config.html">Vulnerability Scanner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="04-malware-scanner-config.html">Malware Scanner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="05-operating-system-scanner-config.html">Operating System Scanner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="06-issue-replicator-config.html">Issue Replicator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="08-license-and-intellectual-property-scanner-config.html">License and Intellectual Property Scanner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-cryptographic-asset-scanner-config.html">Cryptographic Asset Scanner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="12-findings-report-generator-config.html">Findings Report Generator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="13-github-secret-scanner-config.html">GitHub Secret Scanner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="14-static-application-security-testing-attestor-config.html">Static Application Security Testing Attestor</a></li>
+<li class="toctree-l4 current current-page"><a class="current reference internal" href="#">SLA Violation Profiler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="17-codeql-scanner-config.html">CodeQL Scanner</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="18-ocm-labels.html">OCM Label Index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="19-resource-consumption.html">Resource Consumption</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../../../_sources/contents/contributor/reference/16-sla-violation-profiler-config.md.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="sla-violation-profiler">
+<h1>SLA Violation Profiler<a class="headerlink" href="#sla-violation-profiler" title="Link to this heading">¶</a></h1>
+<p>The SLA Violation Profiler evaluates whether findings for configured OCM root components were resolved or rescored within their SLA-mandated processing times, and persists the results as <code class="docutils literal notranslate"><span class="pre">sla_violation</span></code> records in the ODG database for audit reporting.</p>
+<section id="configuration-example">
+<h2>Configuration Example<a class="headerlink" href="#configuration-example" title="Link to this heading">¶</a></h2>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">sla_violation_profiler</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">components</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">component_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme.org/my-product</span>
+<span class="w">      </span><span class="nt">ocm_repo_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">europe-docker.pkg.dev/acme/releases</span>
+<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">greatest</span>
+<span class="w">      </span><span class="nt">max_versions_limit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">      </span><span class="nt">time_range</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">days_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-365</span>
+<span class="w">        </span><span class="nt">days_to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+</pre></div>
+</div>
+</section>
+<section id="top-level-options">
+<h2>Top-Level Options<a class="headerlink" href="#top-level-options" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">components</span></code></p></td>
+<td><p>list</p></td>
+<td><p>—</p></td>
+<td><p>List of OCM root components to evaluate. See component fields below.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="component-fields">
+<h2>Component Fields<a class="headerlink" href="#component-fields" title="Link to this heading">¶</a></h2>
+<p>Each entry in the <code class="docutils literal notranslate"><span class="pre">components</span></code> list supports the following fields:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">component_name</span></code></p></td>
+<td><p>string</p></td>
+<td><p>yes</p></td>
+<td><p>OCM component name to evaluate (e.g., <code class="docutils literal notranslate"><span class="pre">acme.org/my-product</span></code>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">version</span></code></p></td>
+<td><p>string</p></td>
+<td><p>no</p></td>
+<td><p>Specific version to evaluate, or <code class="docutils literal notranslate"><span class="pre">greatest</span></code> to use the most recent version. If omitted, <code class="docutils literal notranslate"><span class="pre">time_range</span></code> must be specified.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ocm_repo_url</span></code></p></td>
+<td><p>string</p></td>
+<td><p>no</p></td>
+<td><p>Override default OCM repository lookup.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">max_versions_limit</span></code></p></td>
+<td><p>int</p></td>
+<td><p>no</p></td>
+<td><p>Maximum number of versions to evaluate per run. Only relevant when <code class="docutils literal notranslate"><span class="pre">version</span></code> is <code class="docutils literal notranslate"><span class="pre">greatest</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">time_range</span></code></p></td>
+<td><p>object</p></td>
+<td><p>no</p></td>
+<td><p>Restricts version discovery to a date range. See time range fields below.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="time-range-fields">
+<h2>Time Range Fields<a class="headerlink" href="#time-range-fields" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">time_range</span></code> object restricts which component versions are considered during version discovery. Dates are computed relative to the current day at runtime.</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">days_from</span></code></p></td>
+<td><p>int</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-365</span></code></p></td>
+<td><p>Start of the time range in days relative to today (negative = past).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">days_to</span></code></p></td>
+<td><p>int</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>End of the time range in days relative to today (<code class="docutils literal notranslate"><span class="pre">0</span></code> = today).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="configuration-details">
+<h2>Configuration Details<a class="headerlink" href="#configuration-details" title="Link to this heading">¶</a></h2>
+<section id="components">
+<h3><code class="docutils literal notranslate"><span class="pre">components</span></code><a class="headerlink" href="#components" title="Link to this heading">¶</a></h3>
+<p>Each entry defines one OCM root component to be profiled. The profiler traverses
+the full component graph of each version to collect findings across all transitively
+referenced components.</p>
+<section id="version">
+<h4><code class="docutils literal notranslate"><span class="pre">version</span></code><a class="headerlink" href="#version" title="Link to this heading">¶</a></h4>
+<p>Controls which component versions are evaluated:</p>
+<ul class="simple">
+<li><p><strong>Fixed version</strong> (e.g., <code class="docutils literal notranslate"><span class="pre">1.2.3</span></code>): Evaluates exactly that version. Any configured <code class="docutils literal notranslate"><span class="pre">time_range</span></code> is ignored.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">greatest</span></code></strong>: Resolves to the most recent version(s) available. Combined with
+<code class="docutils literal notranslate"><span class="pre">max_versions_limit</span></code>, this caps how many versions are processed per run.
+Any configured <code class="docutils literal notranslate"><span class="pre">time_range</span></code> is ignored.</p></li>
+<li><p><strong>Omitted</strong>: Version discovery relies entirely on <code class="docutils literal notranslate"><span class="pre">time_range</span></code> to determine which
+versions to evaluate.</p></li>
+</ul>
+</section>
+<section id="max-versions-limit">
+<h4><code class="docutils literal notranslate"><span class="pre">max_versions_limit</span></code><a class="headerlink" href="#max-versions-limit" title="Link to this heading">¶</a></h4>
+<p>Caps the number of versions resolved when <code class="docutils literal notranslate"><span class="pre">version</span></code> is <code class="docutils literal notranslate"><span class="pre">greatest</span></code>. Increase this
+value to backfill SLA records for a larger history in a single run.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">components</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">component_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme.org/my-product</span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">greatest</span>
+<span class="w">    </span><span class="nt">max_versions_limit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">52</span><span class="w"> </span><span class="c1"># evaluate up to 52 versions per run</span>
+</pre></div>
+</div>
+</section>
+<section id="time-range">
+<h4><code class="docutils literal notranslate"><span class="pre">time_range</span></code><a class="headerlink" href="#time-range" title="Link to this heading">¶</a></h4>
+<p>Restricts version discovery to a rolling date window. Both values are offsets
+in days relative to the current date at the time of the run:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">time_range</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">days_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-90</span><span class="w"> </span><span class="c1"># versions created from 90 days ago</span>
+<span class="w">  </span><span class="nt">days_to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"> </span><span class="c1"># up to today</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="17-codeql-scanner-config.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">CodeQL Scanner</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="14-static-application-security-testing-attestor-config.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Static Application Security Testing Attestor</div>
+                
+              </div>
+            </a>
+        </div>
+
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright" style="display: none;">
+                Copyright &#169; 
+            </div>
+
+            
+            <div style="padding: 1rem 0; margin: 0.5rem 0;">
+              <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                  <td style="text-align: left; vertical-align: middle; width: 30%; padding-right: 1rem;">
+                    <img src="../../../_static/ord-footer-bmwe.png" alt="EU Funding" style="max-height: 160px; width: auto; display: block;">
+                  </td>
+                  <td style="text-align: left; vertical-align: middle; width: 70%;">
+                    <div style="font-size: 0.85em; line-height: 1.4;">
+                      <div style="margin-bottom: 0.5rem;">Funded by the European Union – NextGenerationEU</div>
+                      <div style="font-size: 0.9em; color: var(--color-foreground-secondary);">
+                        The views and opinions expressed are solely those of the author(s) and do not necessarily reflect the views of the European Union or the European Commission. Neither the European Union nor the European Commission can be held responsible for them.
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2" style="text-align: left; padding-top: 0.5rem; font-size: 0.85em; color: var(--color-foreground-secondary);">
+                    Copyright © Linux Foundation Europe
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div class="right-details">
+            
+            <div style="padding: 1rem 0; margin: 0.5rem 0; display: flex; flex-direction: column; align-items: flex-end; gap: 0.75rem;">
+              <picture>
+                <source srcset="../../../_static/ord-footer-neonephos-light.svg" media="(prefers-color-scheme: dark)">
+                <img src="../../../_static/ord-footer-neonephos.svg" alt="Neo Nephos" style="max-height: 25px; width: auto; display: block;">
+              </picture>
+              <div style="font-size: 0.85em; color: var(--color-foreground-secondary); text-align: right;">
+                Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a href="https://github.com/pradyunsg/furo">Furo</a>
+              </div>
+            </div>
+
+            <div class="icons">
+              <a class="muted-link " href="https://github.com/open-component-model/open-delivery-gear" aria-label="GitHub"></a>
+              
+            </div>
+            </div>
+        </div>
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">SLA Violation Profiler</a><ul>
+<li><a class="reference internal" href="#configuration-example">Configuration Example</a></li>
+<li><a class="reference internal" href="#top-level-options">Top-Level Options</a></li>
+<li><a class="reference internal" href="#component-fields">Component Fields</a></li>
+<li><a class="reference internal" href="#time-range-fields">Time Range Fields</a></li>
+<li><a class="reference internal" href="#configuration-details">Configuration Details</a><ul>
+<li><a class="reference internal" href="#components"><code class="docutils literal notranslate"><span class="pre">components</span></code></a><ul>
+<li><a class="reference internal" href="#version"><code class="docutils literal notranslate"><span class="pre">version</span></code></a></li>
+<li><a class="reference internal" href="#max-versions-limit"><code class="docutils literal notranslate"><span class="pre">max_versions_limit</span></code></a></li>
+<li><a class="reference internal" href="#time-range"><code class="docutils literal notranslate"><span class="pre">time_range</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../../_static/documentation_options.js?v=8a448e45"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/custom.js?v=c4765569"></script>
+    </body>
+</html>

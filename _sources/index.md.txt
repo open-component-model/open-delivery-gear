@@ -1,143 +1,116 @@
 # Open Delivery Gear
 
-**Compliance is not living next to software. Instead, it is an integral part of it.**
+**Do you know if your next software shipment is compliant? ODG does.**
 
-Open Delivery Gear (ODG) integrates compliance into the software lifecycle through automated scanning, tracking, and reporting of security findings, vulnerabilities, and compliance issues for your OCM components.
+Open Delivery Gear automates compliance scanning, tracking, and reporting for software components throughout your delivery pipeline. Continuous monitoring for CVEs, malware, licences, and secrets with automated assignment to the right teams and GitHub integration for seamless workflow.
 
-## What is ODG?
+Compliance visibility for every shipment at scale, from container images to static binaries to cloud artefacts, built for sovereign cloud deliveries.
 
-Open Delivery Gear is a comprehensive compliance automation platform that:
+---
 
-- **Scans OCM components** for vulnerabilities, license compliance, and security issues
-- **Tracks findings** throughout the component lifecycle with configurable processing times
-- **Replicates issues** to GitHub for visibility and workflow integration
-- **Generates SBOMs** (Software Bill of Materials) for transparency and compliance
-- **Manages responsibles** by automatically assigning findings to the right teams
+## Getting Started
 
-## Key Features
+Choose your documentation path based on your role and interests, or explore the [Overview](#overview) section below to learn more about our mission and motivation:
 
 ::::{grid} 1 1 2 2
-:gutter: 3
+:gutter: 4
 
-:::{grid-item-card} 🔍 Automated Scanning
-Continuous scanning of OCI images, source code, and runtime artefacts using industry-standard tools like BDBA, Trivy, ClamAV, and Syft.
+:::{grid-item-card} 👤 For ODG Users
+:class-card: sd-text-muted
+
+Use ODG to monitor and secure your software delivery
+
+🚧 *Under construction*
 :::
 
-:::{grid-item-card} 📊 Compliance Dashboard
-Centralized view of all findings with filtering, sorting, and drill-down capabilities to understand your security posture.
-:::
+:::{grid-item-card} 🛠️ For Contributors
+:link: contents/contributor/index.html
 
-:::{grid-item-card} 🔄 Issue Lifecycle Management
-Automatic creation, updating, and closing of GitHub issues based on finding state and processing times.
-:::
-
-:::{grid-item-card} 🎯 Responsible Assignment
-Intelligent assignment of findings to component owners and teams based on configurable rules and strategies.
+Extend and contribute to the ODG platform
 :::
 
 ::::
 
 ---
 
-## Getting Started
+## Overview
 
-```{note}
-New to ODG?
-Start here to understand the fundamentals and how to run and extend it.
-```
+We believe security and compliance should be embedded, not bolted on. Read up on our mission, explore our approach, and discover our capabilities:
 
-*Guided learning journey starting with OCM fundamentals all the way to running and extending ODG*
+::::{grid} 1 1 3 3
+:gutter: 4
 
-```{toctree}
-:maxdepth: 1
-:caption: Getting Started
+:::{grid-item-card} 💡 Why ODG?
+:link: contents/overview.html#why-do-we-need-to-change-something
+:class-card: sd-bg-primary sd-bg-text-primary
 
-contents/getting-started/00-introduction.md
-```
+Learn **why** security and compliance need to be embedded into software deliveries
+:::
 
-## Concepts
+:::{grid-item-card} ⚙️ How It Works
+:link: contents/overview.html#how-we-help-you-with-a-sovereign-cloud-delivery
 
-*Deep-dive into ODG architecture, data models, and how extensions work*
+Understand **how** ODG automates processes and integrates into supply chain security
+:::
 
-```{toctree}
-:maxdepth: 1
-:caption: Concepts
+:::{grid-item-card} 📦 What Is It?
+:link: contents/overview.html#what-is-open-delivery-gear
 
-contents/concepts/00-odg-architecture.md
-contents/concepts/01-data-model.md
-contents/concepts/02-artefact-enumerator.md
-contents/concepts/03-issue-replicator.md
-contents/concepts/04-responsibles.md
-contents/concepts/05-sbom-generator.md
-contents/concepts/06-sla-violation-profiler.md
-```
+Explore **what** end-to-end automations are provided and what integration points fit your use-case
+:::
 
-## How-to Guides
-
-*Step-by-step instructions for common tasks and workflows*
+::::
 
 ```{toctree}
-:maxdepth: 1
-:caption: How-to Guides
+:maxdepth: 3
+:hidden:
 
-contents/how-to/00-hybrid-dev-setup.md
-contents/how-to/01-local-setup.md
-contents/how-to/02-use-odg-api.md
-contents/how-to/03-vulnerabilities-for-component.md
-contents/how-to/04-diki.md
-contents/how-to/05-sbom-download.md
-contents/how-to/06-sbom-diagnose-failures.md
-contents/how-to/07-change-vulnerability-sla.md
-contents/how-to/08-run-sql-statements.md
-contents/how-to/09-prepare-component-for-odg.md
-```
-
-## Tutorials
-
-*Guided lessons to learn ODG by doing*
-
-```{toctree}
-:maxdepth: 1
-:caption: Tutorials
-
-contents/tutorial/00-contributing-extension.md
-contents/tutorial/01-mac-setup-from-scratch.md
-```
-
-## References
-
-*Technical specifications, API documentation, and configuration references*
-
-```{toctree}
-:maxdepth: 2
-:caption: References
-
-contents/reference/00-artefact-metadata-query.md
-contents/reference/core/index.md
-contents/reference/extensions/index.md
-contents/reference/18-ocm-labels.md
-contents/reference/19-resource-consumption.md
+contents/overview
+contents/contributor/index.md
 ```
 
 ---
 
-## Additional Resources
+## Get in Touch
+
+Questions? Ideas? Bugs? We're here to help and collaborate:
 
 ::::{grid} 1 1 3 3
-:gutter: 2
+:gutter: 3
+
+:::{grid-item-card} 📅 Community Calls
+:link: https://ocm.software/community/
+:link-type: url
+
+Join our regular community meetings
+:::
+
+:::{grid-item-card} 🗺️ Roadmap
+:link: https://github.com/orgs/open-component-model/projects/17/views/10
+:link-type: url
+
+See what we're working on next
+:::
+
+:::{grid-item-card} 🐛 Report an Issue
+:link: https://github.com/open-component-model/open-delivery-gear/issues/new?template=bug.md
+:link-type: url
+
+Found a bug? Let us know
+:::
+
+:::{grid-item-card} 💡 Propose a Feature
+:link: https://github.com/open-component-model/open-delivery-gear/issues/new?template=feature.md
+:link-type: url
+
+Share your ideas with us
+:::
 
 :::{grid-item-card} 💻 GitHub Repository
 :link: https://github.com/open-component-model/open-delivery-gear
 :link-type: url
 
-Source code, issues, and contributions
-:::
-
-:::{grid-item-card} 🏗️ ODG Core
-:link: https://github.com/open-component-model/odg-core
-:link-type: url
-
-Core service implementation
+Source code and contributions
 :::
 
 :::{grid-item-card} 📦 Open Component Model
@@ -148,14 +121,3 @@ Learn about OCM
 :::
 
 ::::
-
-```{eval-rst}
-.. note::
-   This documentation is organised using the `Diataxis framework <https://diataxis.fr/>`_:
-   
-   - **Getting Started**: Introduction and orientation for new users
-   - **Tutorials**: Learning-oriented lessons
-   - **How-to Guides**: Problem-oriented, goal-focused instructions
-   - **Concepts**: Understanding-oriented explanations
-   - **References**: Information-oriented technical descriptions
-```
