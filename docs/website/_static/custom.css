@@ -1,0 +1,83 @@
+/* Custom styling for landing page cards */
+
+/* Light baby blue background for Why ODG card in light mode */
+.sd-card.sd-bg-primary {
+    background-color: #e3f2fd !important;
+    border-color: #bbdefb !important;
+}
+
+/* Darker blue on hover for Why ODG card in light mode */
+.sd-card.sd-bg-primary:hover {
+    background-color: #d1e7fd !important;
+}
+
+/* Ensure text remains readable on light blue background */
+.sd-card.sd-bg-primary .sd-card-title,
+.sd-card.sd-bg-primary .sd-card-text {
+    color: var(--color-foreground-primary) !important;
+}
+
+/* Announcement banner - blue background for both light and dark modes */
+.announcement {
+    background-color: #1e3a5f !important;
+    border-bottom-color: #2c5282 !important;
+    color: #ffffff !important;
+}
+
+.announcement a {
+    color: #90caf9 !important;
+    font-weight: 600;
+}
+
+.announcement a:hover {
+    color: #bbdefb !important;
+}
+
+/* Dark mode styles - apply to both manual dark and auto dark */
+[data-theme="dark"] .sd-card.sd-bg-primary,
+body:not([data-theme="light"]) .sd-card.sd-bg-primary {
+    background-color: #1e3a5f !important;
+    border-color: #2c5282 !important;
+}
+
+/* Lighter blue on hover for Why ODG card in dark mode */
+[data-theme="dark"] .sd-card.sd-bg-primary:hover {
+    background-color: #2a4a75 !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    body:not([data-theme="light"]) .sd-card.sd-bg-primary {
+        background-color: #1e3a5f !important;
+        border-color: #2c5282 !important;
+    }
+
+    body:not([data-theme="light"]) .sd-card.sd-bg-primary:hover {
+        background-color: #2a4a75 !important;
+    }
+}
+
+/* Make all cards more visible in dark mode */
+[data-theme="dark"] .sd-card {
+    background-color: #2d3748 !important;
+    border-color: #4a5568 !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    body:not([data-theme="light"]) .sd-card {
+        background-color: #2d3748 !important;
+        border-color: #4a5568 !important;
+    }
+}
+
+/* Keep the special dark blue for Why ODG card in dark mode */
+[data-theme="dark"] .sd-card.sd-bg-primary {
+    background-color: #1e3a5f !important;
+    border-color: #2c5282 !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    body:not([data-theme="light"]) .sd-card.sd-bg-primary {
+        background-color: #1e3a5f !important;
+        border-color: #2c5282 !important;
+    }
+}

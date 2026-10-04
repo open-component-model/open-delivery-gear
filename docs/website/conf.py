@@ -7,7 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'Open Delivery Gear'
-copyright = '2026, Neo Nephos'
+copyright = ''  # Empty - custom footer in template handles all text
 author = 'ODG Team'
 
 # -- General configuration ---------------------------------------------------
@@ -29,6 +29,9 @@ myst_enable_extensions = [
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', '.venv']
 
+# Table of contents options
+toc_object_entries_show_parents = 'hide'
+
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
@@ -36,3 +39,28 @@ html_theme = 'furo'
 html_static_path = ['_static']
 html_favicon = '_static/odg.svg'
 html_logo = '_static/odg.svg'
+html_css_files = ['custom.css']
+html_js_files = ['custom.js']
+
+# Custom footer
+html_theme_options = {
+    "announcement": "🎉 <strong>New Release!</strong> ODG Service Provider (<strong>Alpha</strong>) for Open Control Plane is now available. <a href='https://github.com/open-component-model/service-provider-odg' target='_blank'>Learn more</a>",
+    "light_css_variables": {
+        "color-brand-primary": "#2196F3",
+        "color-brand-content": "#1976D2",
+    },
+    "dark_css_variables": {
+        "color-brand-primary": "#90CAF9",
+        "color-brand-content": "#64B5F6",
+    },
+    "navigation_with_keys": True,
+    "sidebar_hide_name": False,
+    "footer_icons": [
+        {
+            "name": "GitHub",
+            "url": "https://github.com/open-component-model/open-delivery-gear",
+            "html": "",
+            "class": "",
+        },
+    ],
+}

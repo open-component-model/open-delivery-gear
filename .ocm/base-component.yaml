@@ -1,13 +1,13 @@
 componentReferences:
 - componentName: ocm.software/open-delivery-gear/core
   name: odg-core
-  version: 0.1374.0
+  version: 0.1379.0
 - componentName: ocm.software/open-delivery-gear/observability
   name: odg-observability
-  version: 0.34.0
+  version: 0.35.0
 - componentName: ocm.software/open-delivery-gear/ui
   name: odg-ui
-  version: 0.443.0
+  version: 0.445.0
 labels:
 - name: cloud.gardener.cnudie/responsibles
   value:
@@ -43,9 +43,9 @@ resources:
   type: ociImage
   version: v1.9.1
 - access:
-    imageReference: docker.io/envoyproxy/envoy:distroless-v1.39.1@sha256:eb2c01c13125d1629637cb4e4cce7207009fb7cc2c8027f9742758549d15b6f4
+    imageReference: docker.io/envoyproxy/envoy:distroless-v1.39.2@sha256:dced08cf7c472e1a1d067f906878266078eeeb63c110b4961882c039a622853a
     type: ociRegistry
   name: envoy-proxy
   relation: external
   type: ociImage
-  version: v1.39.1
+  version: v1.39.2

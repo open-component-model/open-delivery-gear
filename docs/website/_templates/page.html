@@ -1,0 +1,109 @@
+{%- extends "furo/page.html" %}
+
+{%- block footer %}
+        <div class="related-pages">
+          {% if next -%}
+            <a class="next-page" href="{{ next.link }}">
+              <div class="page-info">
+                <div class="context">
+                  <span>{{ _("Next") }}</span>
+                </div>
+                <div class="title">{{ next.title }}</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          {%- endif %}
+          {% if prev -%}
+            <a class="prev-page" href="{{ prev.link }}">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>{{ _("Previous") }}</span>
+                </div>
+                {% if prev.link == pathto(master_doc) %}
+                <div class="title">{{ _("Home") }}</div>
+                {% else %}
+                <div class="title">{{ prev.title }}</div>
+                {% endif %}
+              </div>
+            </a>
+          {%- endif %}
+        </div>
+
+        <div class="bottom-of-page">
+          <div class="left-details">
+            {%- if show_copyright %}
+            <div class="copyright" style="display: none;">
+              {%- if hasdoc('copyright') %}
+                {% trans path=pathto('copyright'), copyright=copyright|e -%}
+                  <a href="{{ path }}">Copyright</a> &#169; {{ copyright }}
+                {%- endtrans %}
+              {%- else %}
+                {% trans copyright=copyright|e -%}
+                  Copyright &#169; {{ copyright }}
+                {%- endtrans %}
+              {%- endif %}
+            </div>
+            {%- endif %}
+
+            {# Left side: EU logo, funding text, copyright #}
+            <div style="padding: 1rem 0; margin: 0.5rem 0;">
+              <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                  <td style="text-align: left; vertical-align: middle; width: 30%; padding-right: 1rem;">
+                    <img src="{{ pathto('_static/ord-footer-bmwe.png', 1) }}" alt="EU Funding" style="max-height: 160px; width: auto; display: block;">
+                  </td>
+                  <td style="text-align: left; vertical-align: middle; width: 70%;">
+                    <div style="font-size: 0.85em; line-height: 1.4;">
+                      <div style="margin-bottom: 0.5rem;">Funded by the European Union – NextGenerationEU</div>
+                      <div style="font-size: 0.9em; color: var(--color-foreground-secondary);">
+                        The views and opinions expressed are solely those of the author(s) and do not necessarily reflect the views of the European Union or the European Commission. Neither the European Union nor the European Commission can be held responsible for them.
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2" style="text-align: left; padding-top: 0.5rem; font-size: 0.85em; color: var(--color-foreground-secondary);">
+                    Copyright © Linux Foundation Europe
+                  </td>
+                </tr>
+              </table>
+            </div>
+
+            {%- if last_updated -%}
+            <div class="last-updated">
+              {% trans last_updated=last_updated|e -%}
+                Last updated on {{ last_updated }}
+              {%- endtrans -%}
+            </div>
+            {%- endif %}
+          </div>
+          <div class="right-details">
+            {# Right side: Neo Nephos logo and Made with text #}
+            <div style="padding: 1rem 0; margin: 0.5rem 0; display: flex; flex-direction: column; align-items: flex-end; gap: 0.75rem;">
+              <picture>
+                <source srcset="{{ pathto('_static/ord-footer-neonephos-light.svg', 1) }}" media="(prefers-color-scheme: dark)">
+                <img src="{{ pathto('_static/ord-footer-neonephos.svg', 1) }}" alt="Neo Nephos" style="max-height: 25px; width: auto; display: block;">
+              </picture>
+              <div style="font-size: 0.85em; color: var(--color-foreground-secondary); text-align: right;">
+                {% trans %}Made with {% endtrans -%}
+                {%- if show_sphinx -%}
+                <a href="https://www.sphinx-doc.org/">Sphinx</a> and {% endif -%}
+                <a href="https://github.com/pradyunsg/furo">Furo</a>
+              </div>
+            </div>
+
+            {% if theme_footer_icons or READTHEDOCS -%}
+            <div class="icons">
+              {% if theme_footer_icons -%}
+              {% for icon_dict in theme_footer_icons -%}
+              <a class="muted-link {{ icon_dict.class }}" href="{{ icon_dict.url }}" aria-label="{{ icon_dict.name }}">
+                {{- icon_dict.html -}}
+              </a>
+              {% endfor %}
+              {%- endif %}
+            </div>
+            {% endif -%}
+          </div>
+        </div>
+{%- endblock %}
