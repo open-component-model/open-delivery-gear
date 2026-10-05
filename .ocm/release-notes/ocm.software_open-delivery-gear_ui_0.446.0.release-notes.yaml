@@ -1,0 +1,15 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/ui
+  component_version: 0.446.0
+release_notes:
+- audience: user
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: bugfix
+  contents: Fixes a bug where a finding is displayed as resolved in ODG UI but the
+    respective GitHub issue stays open.
+  mimetype: text/markdown
+  reference: '[#521](https://github.com/open-component-model/odg-ui/pull/521)'
+  type: standard
