@@ -9,14 +9,14 @@ componentReferences:
   name: odg-ui
   version: 0.446.0
 labels:
-- name: cloud.gardener.cnudie/responsibles
+- name: odg.ocm.software/responsibles
   value:
   - github_hostname: github.com
     teamname: open-component-model/odg-maintainers
     type: githubTeam
 main-source:
   labels:
-  - name: cloud.gardener.cnudie/dso/scanning-hints/source_analysis/v1
+  - name: odg.ocm.software/source-scan-policy
     value:
       comment: 'this repository does not contain source code, but only build descriptions
 
