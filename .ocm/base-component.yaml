@@ -27,14 +27,14 @@ main-source:
 name: ocm.software/open-delivery-gear
 resources:
 - access:
-    imageReference: docker.io/envoyproxy/gateway-helm:v1.9.1@sha256:91bae9aedb91ab34731e987afe01a3ccf454393015abeca705eea8ee15553e86
+    imageReference: docker.io/envoyproxy/gateway-helm:v1.9.2@sha256:be034275b55deeddd6b7bc1f4da6eeb02b8efc418a4a29e2b1977851b24b1e63
     type: ociRegistry
   extraIdentity:
     type: helmChart/v1
   name: envoy-gateway
   relation: external
   type: helmChart/v1
-  version: v1.9.1
+  version: v1.9.2
 - access:
     imageReference: docker.io/envoyproxy/gateway:v1.9.2@sha256:9d67017c442a70e6ae9f1a358e6c80eb653c67c2e40823d9a991e0daf37ba926
     type: ociRegistry
