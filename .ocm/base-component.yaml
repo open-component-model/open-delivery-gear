@@ -43,9 +43,9 @@ resources:
   type: ociImage
   version: v1.9.2
 - access:
-    imageReference: docker.io/envoyproxy/envoy:distroless-v1.39.2@sha256:dced08cf7c472e1a1d067f906878266078eeeb63c110b4961882c039a622853a
+    imageReference: docker.io/envoyproxy/envoy:distroless-v1.39.3@sha256:7369b033550a14997e5d698677b7b51f0210a80754f5d084c5caa1a78268267b
     type: ociRegistry
   name: envoy-proxy
   relation: external
   type: ociImage
-  version: v1.39.2
+  version: v1.39.3
