@@ -31,6 +31,9 @@ Return your results using these sections, in this order, no others:
 - <!-- Relevant log lines: `$REPORT_DIR/logs/<pod>/logs-<pod>.txt:<line>` -->
 - <!-- Actual observed behavior vs. normal -->
 
+## Reproduce
+- <!-- Observations that help to reproduce the issue, based on evidence -->
+
 ## Possible causes
 - Mechanism: <!-- one sentence -->
 - Evidence:
