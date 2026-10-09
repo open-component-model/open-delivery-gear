@@ -20,6 +20,7 @@ jobs:
       id-token: write
     with:
       mode: ${{ inputs.mode }}
+      version-prerelease: ${{ inputs.mode == 'snapshot' && '${epoch}' || '' }}
 
   odg-extension-definitions:
     runs-on: ubuntu-latest
