@@ -8,7 +8,6 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 CLUSTER_NAME=""
 CHART=""
-EXTERNAL_DB_SECRET=""
 
 parse_flags() {
   while test $# -gt 0; do
@@ -18,9 +17,6 @@ parse_flags() {
       ;;
     --path-cluster-chart)
       shift; CHART="$1"
-      ;;
-    --external-db-secret)
-      shift; EXTERNAL_DB_SECRET="$1"
       ;;
     esac
 
@@ -75,7 +71,15 @@ helm upgrade -i bootstrapping oci://${BOOTSTRAPPING_CHART} \
   "${HELM_OVERRIDE_ARGS[@]}" \
   --wait
 
-if [ -z "${EXTERNAL_DB_SECRET}" ]; then
+EXTERNAL_DB_FILE="${SCRIPT_DIR}/external-db-local.yaml"
+EXTERNAL_DB_ARGS=()
+if [ -f "${EXTERNAL_DB_FILE}" ]; then
+  echo ">>> External DB file found at ${EXTERNAL_DB_FILE}, skipping delivery-database installation"
+  kubectl create secret generic secret-external-db \
+    --namespace $NAMESPACE \
+    --from-file=primary="${EXTERNAL_DB_FILE}"
+  EXTERNAL_DB_ARGS=(--set "deliveryDb.existingSecret=secret-external-db")
+else
   echo ">>> Installing delivery-database from ${DELIVERY_DATABASE_CHART}"
   # First, install custom pv and pvc to allow re-usage of host's filesystem mount
   kubectl apply -f <(helm template delivery-db-pv "${CHART}/delivery-db-pv" --values "${SCRIPT_DIR}/cluster/values-delivery-db.yaml" "${HELM_OVERRIDE_ARGS[@]}") --namespace $NAMESPACE
@@ -84,12 +88,7 @@ if [ -z "${EXTERNAL_DB_SECRET}" ]; then
     --values ${CHART}/values-delivery-db.yaml \
     "${HELM_OVERRIDE_ARGS[@]}" \
     --wait
-else
-  echo ">>> Skipping delivery-database installation (using external secret: ${EXTERNAL_DB_SECRET})"
 fi
-
-EXTERNAL_DB_ARGS=()
-[ -n "${EXTERNAL_DB_SECRET}" ] && EXTERNAL_DB_ARGS=(--set "deliveryDb.existingSecret=${EXTERNAL_DB_SECRET}")
 
 echo ">>> Installing delivery-service from ${DELIVERY_SERVICE_CHART}"
 helm upgrade -i delivery-service oci://${DELIVERY_SERVICE_CHART} \

@@ -60,31 +60,23 @@ you have to delete the `/var/delivery-db` directory.
 
 By default, `make kind-up` deploys a bundled PostgreSQL instance inside the
 KinD cluster. If you want to use a managed or external PostgreSQL database
-instead, you can skip the bundled installation by passing
-`--external-db-secret` directly to the startup script.
+instead, create a file `local-setup/kind/external-db-local.yaml` with the
+connection fields:
 
-**Step 1 — create a Kubernetes secret** with the connection details before
-running `kind-up.sh`:
-
-```bash
-kubectl create secret generic my-external-db \
-  --namespace odg \
-  --from-literal=username=<user> \
-  --from-literal=password=<password> \
-  --from-literal=hostname=<host> \
-  --from-literal=port=5432
+```yaml
+username: postgres
+password: <password>
+hostname: <host>
+port: 5432
 ```
 
-**Step 2 — start the cluster**, passing the secret name via the `EXTERNAL_DB_SECRET` env var:
+> [!NOTE]
+> `port` can be omitted When omitted, port 5432 is used.
 
-```bash
-EXTERNAL_DB_SECRET=my-external-db make kind-up
-```
-
-The bundled `delivery-db` Helm chart and its PersistentVolume are not created
-in this mode. The delivery-service will mount `my-external-db` directly
-(`deliveryDb.existingSecret`) instead of the secret produced by the
-bootstrapping chart's secret-factory.
+When this file is present, `make kind-up` and `make kind-update` will
+automatically skip the bundled `delivery-db` Helm chart, create a
+`secret-external-db` Kubernetes secret from it, and configure the
+delivery-service to use it (`deliveryDb.existingSecret`).
 
 ## Extensions
 ODG extensions can be dynamically added to your installation. Therefore, the
