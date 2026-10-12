@@ -72,8 +72,8 @@ port: 5432  # can be omitted, defaults to 5432
 
 When this file is present, `make kind-up` and `make kind-update` will
 automatically skip the bundled `delivery-db` Helm chart, create a
-`secret-external-db` Kubernetes secret from it, and configure the
-delivery-service to use it (`deliveryDb.existingSecret`).
+`secret-external-db` secret from it, and configure the
+delivery-service Helm chart to use it (`deliveryDb.existingSecret`).
 
 ## Extensions
 ODG extensions can be dynamically added to your installation. Therefore, the
