@@ -56,6 +56,36 @@ If you wish to stop ODG and delete the KinD cluster, you have to run
 is permanently stored on the host machine. To also clear the database storage,
 you have to delete the `/var/delivery-db` directory.
 
+## External PostgreSQL
+
+By default, `make kind-up` deploys a bundled PostgreSQL instance inside the
+KinD cluster. If you want to use a managed or external PostgreSQL database
+instead, you can skip the bundled installation by passing
+`--external-db-secret` directly to the startup script.
+
+**Step 1 — create a Kubernetes secret** with the connection details before
+running `kind-up.sh`:
+
+```bash
+kubectl create secret generic my-external-db \
+  --namespace odg \
+  --from-literal=username=<user> \
+  --from-literal=password=<password> \
+  --from-literal=hostname=<host> \
+  --from-literal=port=5432
+```
+
+**Step 2 — start the cluster**, passing the secret name via the `EXTERNAL_DB_SECRET` env var:
+
+```bash
+EXTERNAL_DB_SECRET=my-external-db make kind-up
+```
+
+The bundled `delivery-db` Helm chart and its PersistentVolume are not created
+in this mode. The delivery-service will mount `my-external-db` directly
+(`deliveryDb.existingSecret`) instead of the secret produced by the
+bootstrapping chart's secret-factory.
+
 ## Extensions
 ODG extensions can be dynamically added to your installation. Therefore, the
 configuration of the extensions must be done via `extensions_cfg` in the

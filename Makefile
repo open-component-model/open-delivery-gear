@@ -7,7 +7,8 @@ kind-up kind-update: export PATH_CLUSTER_CHART = $(REPO_ROOT)/local-setup/kind/c
 kind-up: $(KIND) $(KUBECTL) $(HELM) $(OCM) ## Start local KinD cluster with ODG
 	./local-setup/kind/kind-up.sh \
 		--cluster-name $(CLUSTER_NAME) \
-		--path-cluster-chart $(PATH_CLUSTER_CHART)
+		--path-cluster-chart $(PATH_CLUSTER_CHART) \
+		$(if $(EXTERNAL_DB_SECRET),--external-db-secret $(EXTERNAL_DB_SECRET))
 kind-update: $(KIND) $(KUBECTL) $(HELM) $(OCM) ## Update existing KinD cluster with latest changes
 	./local-setup/kind/kind-update.sh \
 		--path-cluster-chart $(PATH_CLUSTER_CHART)
