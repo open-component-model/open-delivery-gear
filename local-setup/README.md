@@ -67,11 +67,8 @@ connection fields:
 username: postgres
 password: <password>
 hostname: <host>
-port: 5432
+port: 5432  # can be omitted, defaults to 5432
 ```
-
-> [!NOTE]
-> `port` can be omitted When omitted, port 5432 is used.
 
 When this file is present, `make kind-up` and `make kind-update` will
 automatically skip the bundled `delivery-db` Helm chart, create a
