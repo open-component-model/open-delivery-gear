@@ -1,0 +1,35 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/ui
+  component_version: 0.447.0
+release_notes:
+- audience: user
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: improvement
+  contents: The compliance tab now also shows GitHub usernames as responsibles (if
+    available)
+  mimetype: text/markdown
+  reference: '[#524](https://github.com/open-component-model/odg-ui/pull/524)'
+  type: standard
+- audience: user
+  author:
+    hostname: github.com
+    type: githubUser
+    username: zkdev
+  category: improvement
+  contents: Rescoring UI now shows most critical categorisation filter first
+  mimetype: text/markdown
+  reference: '[#527](https://github.com/open-component-model/odg-ui/pull/527)'
+  type: standard
+- audience: user
+  author:
+    hostname: github.com
+    type: githubUser
+    username: zkdev
+  category: feature
+  contents: The rescoring view now features copy buttons for finding and package information
+  mimetype: text/markdown
+  reference: '[#526](https://github.com/open-component-model/odg-ui/pull/526)'
+  type: standard
