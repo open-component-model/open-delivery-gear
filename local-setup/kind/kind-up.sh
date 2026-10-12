@@ -74,7 +74,7 @@ helm upgrade -i bootstrapping oci://${BOOTSTRAPPING_CHART} \
 EXTERNAL_DB_FILE="${SCRIPT_DIR}/external-db-local.yaml"
 EXTERNAL_DB_ARGS=()
 if [ -f "${EXTERNAL_DB_FILE}" ]; then
-  echo ">>> External DB file found at ${EXTERNAL_DB_FILE}, skipping delivery-database installation"
+  echo ">>> External DB file found at ${EXTERNAL_DB_FILE}, using external delivery-database"
   kubectl create secret generic secret-external-db \
     --namespace $NAMESPACE \
     --from-file=primary="${EXTERNAL_DB_FILE}"
