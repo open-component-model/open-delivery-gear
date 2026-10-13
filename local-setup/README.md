@@ -60,20 +60,23 @@ you have to delete the `/var/delivery-db` directory.
 
 By default, `make kind-up` deploys a bundled PostgreSQL instance inside the
 KinD cluster. If you want to use a managed or external PostgreSQL database
-instead, create a file `local-setup/kind/external-db-local.yaml` with the
-connection fields:
+instead, add a `hostname` to the `delivery-db` secret in
+`local-setup/kind/secrets-local.yaml`:
 
 ```yaml
-username: postgres
-password: <password>
-hostname: <host>
-port: 5432  # can be omitted, defaults to 5432
+secrets:
+  delivery-db:
+    local:
+      username: postgres
+      password: <password>
+      hostname: <host>   # e.g. host.docker.internal
+      port: 5432         # can be omitted, defaults to 5432
 ```
 
-When this file is present, `make kind-up` and `make kind-update` will
-automatically skip the bundled `delivery-db` Helm chart, create a
-`secret-external-db` secret from it, and configure the
-delivery-service Helm chart to use it (`deliveryDb.existingSecret`).
+When `hostname` is set, `make kind-up` and `make kind-update` will
+automatically skip the bundled `delivery-db` Helm chart. The bootstrapping
+chart picks up `hostname` from the secret values and uses it directly in the
+connection URL.
 
 ## Extensions
 ODG extensions can be dynamically added to your installation. Therefore, the
