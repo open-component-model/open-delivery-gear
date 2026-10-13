@@ -70,7 +70,8 @@ secrets:
       username: postgres
       password: <password>
       hostname: <host>   # e.g. host.docker.internal
-      port: 5432         # can be omitted, defaults to 5432
+      port: 5432         # optional, defaults to 5432
+      database: ""       # optional
 ```
 
 When `hostname` is set, `make kind-up` and `make kind-update` will
