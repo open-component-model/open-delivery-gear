@@ -1,0 +1,49 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1381.0
+release_notes:
+- audience: developer
+  author:
+    hostname: github.com
+    type: githubUser
+    username: Michael5601
+  category: noteworthy
+  contents: Deprecated the `DeliveryServiceClient` initialiser in favour of the new
+    `for_github` and `for_oidc` constructor functions
+  mimetype: text/markdown
+  reference: '[#1060](https://github.com/open-component-model/odg-core/pull/1060)'
+  type: standard
+- audience: developer
+  author:
+    hostname: github.com
+    type: githubUser
+    username: Michael5601
+  category: improvement
+  contents: Added a new `for_oidc` constructor function to the `DeliveryServiceClient`
+    to feature OIDC auth
+  mimetype: text/markdown
+  reference: '[#1060](https://github.com/open-component-model/odg-core/pull/1060)'
+  type: standard
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: ChrisSchneider
+  category: bugfix
+  contents: Decoupled HTTP blob streaming from clamd Unix socket writes to prevent
+    registry stream timeouts caused by backpressure.
+  mimetype: text/markdown
+  reference: '[#1069](https://github.com/open-component-model/odg-core/pull/1069)'
+  type: standard
+- audience: developer
+  author:
+    hostname: github.com
+    type: githubUser
+    username: ChrisSchneider
+  category: improvement
+  contents: You can now configure an external/managed PostgreSQL instance by setting
+    hostname, port, and database in the delivery-db secret, and optionally point all
+    charts to a custom secret name via deliveryDb.secretName.
+  mimetype: text/markdown
+  reference: '[#1055](https://github.com/open-component-model/odg-core/pull/1055)'
+  type: standard
