@@ -7,7 +7,7 @@ Use deployment context information to enable assisted rescoring in ODG.
 ## You'll end up with
 
 - A component descriptor with a `security.ocm.software/risk-profile` label
-- Assisted rescoring suggestions in the ODG UI based on your deployment context
+- Assisted rescoring suggestions in the ODG Dashboard based on your deployment context
 - Faster and more accurate vulnerability triage with context-aware severity recommendations
 
 ## Prerequisites
@@ -39,9 +39,9 @@ Determine the security characteristics of your component.
    - end-user: Arbitrary end users
 
 4. **Data sensitivity** - What kind of data does it process?
-- Confidentiality requirement: none, low, or high
-- Integrity requirement: none, low, or high
-- Availability requirement: none, low, or high
+   - Confidentiality requirement: none, low, or high
+   - Integrity requirement: none, low, or high
+   - Availability requirement: none, low, or high
 
 **Example:**
 
@@ -119,11 +119,11 @@ resources:
 
 > **Note:** Resource-level labels take priority over component-level labels. Use component-level for uniform deployments, resource-level for mixed contexts.
 
-### 3. Use assisted rescoring in the ODG UI
+### 3. Use assisted rescoring in the ODG Dashboard
 
 When you open a vulnerability finding, the rescoring UI will automatically include a suggestion if one is available based on your risk profile.
 
-**In the ODG UI:**
+**In the ODG Dashboard:**
 
 1. Open a vulnerability finding (via GitHub issue link or ODG dashboard)
 2. Open the rescoring interface
@@ -133,7 +133,6 @@ When you open a vulnerability finding, the rescoring UI will automatically inclu
 
 - **Suggested severity** - Pre-selected based on your deployment context
 - **Matching rule** - Which risk profile fields triggered this suggestion
-- **Draft justification** - Pre-filled in the comment field
 
 ![Assisted Rescoring View](/_static/odg-assissted-rescoring-view.png)
 

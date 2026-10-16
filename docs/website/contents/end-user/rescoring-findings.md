@@ -14,29 +14,29 @@ Override the severity assessment of a security or compliance finding when the sc
 
 ## Prerequisites
 
-- Access to the ODG web interface
+- Access to the ODG Dashboard
 - Permission to rescore findings in your organisation
-- The direct ODG-UI finding URL
+- The direct ODG Dashboard finding URL
 
 ---
 
 ## Steps
 
-Use the ODG web interface to rescore findings interactively.
+Use the ODG Dashboard to rescore findings interactively.
 
 ![Rescoring Instructions](/_static/odg-rescoring-instructions-dark.png)
 
-### 1. Open the finding in ODG-UI
+### 1. Open the finding in the ODG Dashboard
 
 Navigate to the finding you want to rescore.
 
-**In the ODG UI:**
+**In the ODG Dashboard:**
 
 1. Open the finding either:
-   - **Via direct link** from the GitHub compliance issue (e.g., [example ODG-UI link](https://delivery-dashboard.demo.ci.gardener.cloud/#/component?name=ocm.software%2Fcli&view=bom&rootExpanded=True&findingType=finding%2Fvulnerability&version=0.19.1&sprints=2611a&rescoreArtefacts=image|0.19.1|ociImage|resource))
-   - **Via manual navigation** through the ODG dashboard
+   - **Via direct link** from the GitHub compliance issue (e.g., [example ODG Dashboard link](https://delivery-dashboard.demo.ci.gardener.cloud/#/component?name=ocm.software%2Fcli&view=bom&rootExpanded=True&findingType=finding%2Fvulnerability&version=0.19.1&sprints=2611a&rescoreArtefacts=image|0.19.1|ociImage|resource))
+   - **Via manual navigation** through the ODG Dashboard
 
-> **Tip:** GitHub compliance issues automatically include direct ODG-UI links in the issue description.
+> **Tip:** GitHub compliance issues automatically include direct ODG Dashboard links in the issue description.
 
 ### 2. Research the finding and prepare your rescoring
 
@@ -68,12 +68,12 @@ Choose how broadly this rescoring should apply.
 
 1. Click the **Scope** dropdown
 2. Select the appropriate scope:
-   - **This version only** - Applies to the specific artefact version (recommended)
-   - **All versions of this artefact** - Applies to all versions of this artefact
-   - **All artefacts in this component** - Applies to all artefacts in the component
+   - **Single** - Applies to the specific artefact version
+   - **Artefact** - Applies to all versions of this artefact (recommended)
+   - **Component** - Applies to all artefacts in the component
    - **Global** - Applies everywhere this finding appears (requires administrator approval)
 
-> **Best practice:** Use the narrowest scope that makes sense. Start with version-specific rescorings unless you're certain the context applies more broadly.
+> **Recommendation:** Use Artefact scope in most cases, as deployment context and finding rescorings typically remain consistent across artefact updates. Only use Single scope when the rescoring is specific to a particular version.
 
 ### 5. Apply the rescoring
 
@@ -100,6 +100,7 @@ Submit the rescoring and verify it was applied.
 
 ## Related Documentation
 
+- {doc}`assisted-rescoring`
 - {doc}`../contributor/how-to/03-vulnerabilities-for-component`
 - {doc}`../contributor/concepts/01-data-model`
 

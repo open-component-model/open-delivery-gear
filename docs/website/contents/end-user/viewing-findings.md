@@ -11,7 +11,7 @@ Find all security and compliance findings you are responsible for in ODG.
 
 ## Prerequisites
 
-- Access to the ODG UI
+- Access to the ODG Dashboard
 - Optionally: Access to GitHub compliance issues
 - Assigned responsibility for at least one component
 
@@ -51,19 +51,19 @@ Use the Compliance tab to see all findings assigned to you.
 
 ### Steps
 
-#### 1. Access the ODG UI
+#### 1. Access the ODG Dashboard
 
-Navigate to the ODG web interface and log in.
+Navigate to the ODG Dashboard and log in.
 
 #### 2. Filter by responsibility
 
 Use the Compliance tab to see your assigned findings.
 
-**In the ODG UI:**
+**In the ODG Dashboard:**
 
 1. Navigate to the **Compliance** tab
 2. Tick the **"Filter by responsibility"** checkbox
-3. Optionally filter by severity, type, or due date
+3. Optionally filter by severity or type
 
 #### 3. Start rescoring process
 
@@ -90,15 +90,15 @@ Use the Dependencies tab to see all findings for a specific component.
 
 ### Steps
 
-#### 1. Access the ODG UI
+#### 1. Access the ODG Dashboard
 
-Navigate to the ODG web interface and log in.
+Navigate to the ODG Dashboard and log in.
 
 #### 2. Navigate to the component
 
 Use the Dependencies tab to find and explore your component.
 
-**In the ODG UI:**
+**In the ODG Dashboard:**
 
 1. Navigate to the **Dependencies** tab
 2. Find your component using one of these methods:
