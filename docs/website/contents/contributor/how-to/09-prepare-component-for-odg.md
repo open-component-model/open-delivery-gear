@@ -31,7 +31,7 @@ for all supported types (`githubUser`, `codeowners`, etc.).
 ```{note}
 The responsibles extension can override or extend these assignments at runtime
 via configurable rules. See the
-{doc}`/contents/concepts/04-responsibles`
+{doc}`../concepts/04-responsibles`
 for all fields, allowed values and scopes.
 ```
 

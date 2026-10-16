@@ -11,7 +11,7 @@ artefact + datatype. The first matching rule "wins". In case no rule matches,
 no responsible objects are uploaded.
 
 The hereby determined responsibles are then used by the
-{doc}`issue-replicator extension </contents/concepts/03-issue-replicator>` as option
+{doc}`issue-replicator extension <03-issue-replicator>` as option
 for the GitHub issue assignees. Please refer to the documentation of the
 issue-replicator for more details on the **precedence behaviour** of
 responsibles.

@@ -382,7 +382,7 @@ All persistent state resides in the **ODG Database**, accessed exclusively throu
 ### For Extensions
 
 - See [Scanner Extensions](scanner-extensions) for architecture overview
-- See {doc}`/contents/tutorial/00-contributing-extension` for development guide
+- See {doc}`../tutorial/00-contributing-extension` for development guide
 
 ### For Operators
 
