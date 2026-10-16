@@ -3,12 +3,12 @@
 ## Setup Local Development Environment
 
 For instructions on how to setup a local development environment, please refer
-to {doc}`/contents/how-to/01-local-setup`.
+to {doc}`../how-to/01-local-setup`.
 
 ## Model
 
 For information on the `ArtefactMetadata` model and how to extend it, please
-refer to {doc}`/contents/concepts/01-data-model`.
+refer to {doc}`../concepts/01-data-model`.
 
 (extensions-configuration)=
 ## Extensions Configuration
@@ -37,7 +37,7 @@ as an example for this chapter.
 (findings-configuration)=
 ## Findings Configuration
 
-If the extension emits findings (see {doc}`/contents/concepts/01-data-model` for information on the
+If the extension emits findings (see {doc}`../concepts/01-data-model` for information on the
 supported datatypes), it will also be necessary to add the new finding type to
 the findings configuration (see `odg.findings_cfg` module for the model
 definition and `odg/findings_cfg.yaml` for the example used for the local
@@ -88,14 +88,14 @@ The Open Delivery Gear currently features two kinds of triggers:
    Kubernetes Cronjob with a well-defined `schedule`. If running as a Cronjob,
    the extension might have to be able to retrieve the information for which
    artefacts it should run. This is relevant as the
-   {doc}`/contents/concepts/01-data-model` requires the data to be always correlated to a certain
+   {doc}`../concepts/01-data-model` requires the data to be always correlated to a certain
    `artefact`. This information should be passed to the extension using the
    [extensions-configuration](#extensions-configuration).
 
 2. *Artefact-Enumerator*
 
    Another common trigger is the artefact-enumerator (see
-   {doc}`artefact-enumerator extension </contents/concepts/02-artefact-enumerator>`). The
+   {doc}`artefact-enumerator extension <../concepts/02-artefact-enumerator>`). The
    artefact-enumerator itself is a Kubernetes Cronjob as described before which
    retrieves a list of artefacts via the [extensions-configuration](#extensions-configuration). For
    these artefacts, it periodically checks if there are any updates or the
@@ -119,7 +119,7 @@ artefact-enumerator might look like.
 ### General Flow
 
 The general flow for extensions which are intended to submit
-{doc}`/contents/concepts/01-data-model` via the ODG API is usually very similar. In case of
+{doc}`../concepts/01-data-model` via the ODG API is usually very similar. In case of
 findings, there is a well-defined overview of the supported states of a finding
 (see Fig. 1).
 
@@ -175,7 +175,7 @@ which extensions require `BacklogItems` to be created.
 ## Issue-Replicator
 
 In order to enable the
-{doc}`issue-replicator extension </contents/concepts/03-issue-replicator>` to also report
+{doc}`issue-replicator extension <../concepts/03-issue-replicator>` to also report
 findings for the new extension, it must be defined how the findings should be
 templated into a GitHub issue. Therefore, a minor change must be added to the
 issue-replicator (see [open-component-model/odg-core@adb7239](https://github.com/open-component-model/odg-core/commit/adb723957c2f6ec115ac702463f94802b35ed6df)).

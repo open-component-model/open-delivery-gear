@@ -3,7 +3,7 @@
 This is a detailed, opinionated walkthrough of setting up an Open Delivery Gear
 (ODG) cluster locally on an **Apple Silicon Mac** with [Docker Desktop](https://www.docker.com/products/docker-desktop/), from zero to a running cluster.
 For the concise reference, see
-{doc}`Deploying the Open Delivery Gear Locally </contents/how-to/01-local-setup>`.
+{doc}`Deploying the Open Delivery Gear Locally <../how-to/01-local-setup>`.
 
 
 ## 1. Install the tooling

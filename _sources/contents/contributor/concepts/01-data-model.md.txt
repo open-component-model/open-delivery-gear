@@ -172,7 +172,7 @@ the `datasource` and the `type` share a global namespace. When it comes to the
    of a reporting via GitHub issues, the `responsibles` detected by the
    extension can be also added to the `meta` field to overwrite the default
    fallback (see
-   {doc}`issue-replicator extension </contents/concepts/03-issue-replicator>`). The
+   {doc}`issue-replicator extension <03-issue-replicator>`). The
    relationship of findings and an [artefact](#artefact) is typically n:1.
 
 3. *Informational Types*

@@ -74,7 +74,7 @@ Thus, ODG implements an end-to-end trust-but-verify scenario.
 
 ODG employs an asynchronous architecture with eventual consistency, implemented as Kubernetes-native deployments. It leverages core Kubernetes concepts such as desired state, reconciliation loops, and custom resources, whilst providing multiple interaction points including custom HTTP APIs, a web UI, and native Kubernetes operations.
 
-Read more: {doc}`/contents/concepts/00-odg-architecture`
+Read more: {doc}`../concepts/00-odg-architecture`
 
 ### Extending ODG
 
@@ -83,7 +83,7 @@ ODG offers multiple extension points. As ODG provides an automation scheduling f
 For now, we'll focus on integrating a new data source.
 Follow the guide linked below to learn how to set up a local development environment so you can start working on your first ODG extension.
 
-Read more: {doc}`/contents/tutorial/00-contributing-extension`
+Read more: {doc}`../tutorial/00-contributing-extension`
 
 ---
 

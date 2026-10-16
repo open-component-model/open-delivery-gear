@@ -10,17 +10,15 @@ Compliance visibility for every shipment at scale, from container images to stat
 
 ## Getting Started
 
-Choose your documentation path based on your role and interests, or explore the [Overview](#overview) section below to learn more about our mission and motivation:
+Choose your documentation path based on your role and interests, or explore the Overview section below to learn more about our mission and motivation:
 
 ::::{grid} 1 1 2 2
 :gutter: 4
 
 :::{grid-item-card} 👤 For ODG Users
-:class-card: sd-text-muted
+:link: contents/end-user/index.html
 
 Use ODG to monitor and secure your software delivery
-
-🚧 *Under construction*
 :::
 
 :::{grid-item-card} 🛠️ For Contributors
@@ -66,6 +64,7 @@ Explore **what** end-to-end automations are provided and what integration points
 :hidden:
 
 contents/overview
+contents/end-user/index.md
 contents/contributor/index.md
 ```
 
