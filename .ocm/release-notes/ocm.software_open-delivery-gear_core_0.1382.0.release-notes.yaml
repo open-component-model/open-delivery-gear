@@ -1,0 +1,15 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1382.0
+release_notes:
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: zkdev
+  category: breaking
+  contents: Delivery-service now requires at least 2GB of memory to be scheduled (previously
+    it was 1GB)
+  mimetype: text/markdown
+  reference: '[#1088](https://github.com/open-component-model/odg-core/pull/1088)'
+  type: standard
