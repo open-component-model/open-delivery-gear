@@ -1,0 +1,26 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/ui
+  component_version: 0.448.0
+release_notes:
+- audience: user
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: feature
+  contents: The dependencies tab will now handle unresolvable component dependencies
+    more gracefully
+  mimetype: text/markdown
+  reference: '[#545](https://github.com/open-component-model/odg-ui/pull/545)'
+  type: standard
+- audience: user
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: bugfix
+  contents: Fixed a bug where the personal filter in the compliance tab was not working
+    as expected when resolving usernames from `github.com`
+  mimetype: text/markdown
+  reference: '[#537](https://github.com/open-component-model/odg-ui/pull/537)'
+  type: standard
