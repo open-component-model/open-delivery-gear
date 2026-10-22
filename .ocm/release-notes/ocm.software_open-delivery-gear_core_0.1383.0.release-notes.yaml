@@ -1,0 +1,67 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1383.0
+release_notes:
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: ChrisSchneider
+  category: improvement
+  contents: Offload JSON and pickle serialisation to the thread executor to keep the
+    event loop responsive under burst load.
+  mimetype: text/markdown
+  reference: '[#1097](https://github.com/open-component-model/odg-core/pull/1097)'
+  type: standard
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: ChrisSchneider
+  category: improvement
+  contents: Auth middleware now caches JSON schema validation
+  mimetype: text/markdown
+  reference: '[#1104](https://github.com/open-component-model/odg-core/pull/1104)'
+  type: standard
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: ChrisSchneider
+  category: improvement
+  contents: Stream POST /artefacts/metadata/query and GET /ocm/component/dependencies
+    responses to prevent memory accumulation
+  mimetype: text/markdown
+  reference: '[#1096](https://github.com/open-component-model/odg-core/pull/1096)'
+  type: standard
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: ChrisSchneider
+  category: improvement
+  contents: Improved blob uploads and downloads for large files.
+  mimetype: text/markdown
+  reference: '[#1099](https://github.com/open-component-model/odg-core/pull/1099)'
+  type: standard
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: ChrisSchneider
+  category: improvement
+  contents: Auth middleware now caches RSA key import and offloads JWT signature verification
+    off the event loop.
+  mimetype: text/markdown
+  reference: '[#1098](https://github.com/open-component-model/odg-core/pull/1098)'
+  type: standard
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: ChrisSchneider
+  category: improvement
+  contents: Optimized DB connection pool usage
+  mimetype: text/markdown
+  reference: '[#1101](https://github.com/open-component-model/odg-core/pull/1101)'
+  type: standard
