@@ -1,0 +1,31 @@
+# Local log backends for open-delivery-gear on your Mac.
+# Metrics live in the in-cluster prometheus (port-forwarded to :9090).
+# Started/stopped by ../observability-on.sh — no need to touch directly.
+name: odg-telemetry
+
+services:
+  opensearch:
+    image: opensearchproject/opensearch:2.19.2
+    environment:
+      discovery.type: single-node
+      DISABLE_SECURITY_PLUGIN: "true"        # lab: no TLS/auth — the chart's
+                                             # opensearch exporter talks plain http
+      OPENSEARCH_JAVA_OPTS: -Xms512m -Xmx512m
+    ulimits:
+      memlock: { soft: -1, hard: -1 }
+    ports:
+      - "9200:9200"
+    networks: [lab]
+
+  dashboards:
+    image: opensearchproject/opensearch-dashboards:2.19.2
+    environment:
+      OPENSEARCH_HOSTS: '["http://opensearch:9200"]'
+      DISABLE_SECURITY_DASHBOARDS_PLUGIN: "true"
+    ports:
+      - "5601:5601"
+    depends_on: [opensearch]
+    networks: [lab]
+
+networks:
+  lab:
