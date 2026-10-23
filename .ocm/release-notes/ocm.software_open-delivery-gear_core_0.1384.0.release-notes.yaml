@@ -1,0 +1,46 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1384.0
+release_notes:
+- audience: developer
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: noteworthy
+  contents: Increased the ClamAV StreamMaxLength from 4096M to 8192M
+  mimetype: text/markdown
+  reference: '[#1119](https://github.com/open-component-model/odg-core/pull/1119)'
+  type: standard
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: ChrisSchneider
+  category: improvement
+  contents: Improve delivery-service performance by caching the JWT signing key between
+    authenticated requests
+  mimetype: text/markdown
+  reference: '[#1112](https://github.com/open-component-model/odg-core/pull/1112)'
+  type: standard
+- audience: developer
+  author:
+    hostname: github.com
+    type: githubUser
+    username: ChrisSchneider
+  category: improvement
+  contents: Optimized rescoring proposal construction
+  mimetype: text/markdown
+  reference: '[#1118](https://github.com/open-component-model/odg-core/pull/1118)'
+  type: standard
+- audience: developer
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: feature
+  contents: The `GET /ocm/component/dependencies` features a new `ignore_missing`
+    parameter to skip unresolvable component dependencies
+  mimetype: text/markdown
+  reference: '[#1089](https://github.com/open-component-model/odg-core/pull/1089)'
+  type: standard
