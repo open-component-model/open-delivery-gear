@@ -1,0 +1,14 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/ui
+  component_version: 0.449.0
+release_notes:
+- audience: user
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: bugfix
+  contents: A graphic for 404 pages is now displayed correctly again
+  mimetype: text/markdown
+  reference: '[#547](https://github.com/open-component-model/odg-ui/pull/547)'
+  type: standard
