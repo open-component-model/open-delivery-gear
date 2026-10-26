@@ -1,0 +1,36 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1385.0
+release_notes:
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: ChrisSchneider
+  category: improvement
+  contents: 'Performance improvement: Replace stdlib json with orjson for all PostgreSQL
+    (de-)serialization'
+  mimetype: text/markdown
+  reference: '[#1113](https://github.com/open-component-model/odg-core/pull/1113)'
+  type: standard
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: improvement
+  contents: The issue replicator now automatically cleans up redundant backlog items
+  mimetype: text/markdown
+  reference: '[#1122](https://github.com/open-component-model/odg-core/pull/1122)'
+  type: standard
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: feature
+  contents: The schedules of CronJobs are now configurable via the ODG resource's
+    `spec.context.schedule_overwrites` field
+  mimetype: text/markdown
+  reference: '[#1086](https://github.com/open-component-model/odg-core/pull/1086)'
+  type: standard
