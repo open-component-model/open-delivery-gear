@@ -1,0 +1,15 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/observability
+  component_version: 0.37.0
+release_notes:
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: improvement
+  contents: Added a default `PromtheusRule` configuration which can be used by the
+    AlertManager
+  mimetype: text/markdown
+  reference: '[#37](https://github.com/open-component-model/odg-observability/pull/37)'
+  type: standard
