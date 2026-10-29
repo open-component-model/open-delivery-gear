@@ -1,0 +1,25 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1388.0
+release_notes:
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: ChrisSchneider
+  category: improvement
+  contents: Delivery service clients now retry transient 5xx responses
+  mimetype: text/markdown
+  reference: '[#1146](https://github.com/open-component-model/odg-core/pull/1146)'
+  type: standard
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: ChrisSchneider
+  category: bugfix
+  contents: 'Delivery service: return 404 for component versions when ODG lacks credentials
+    for the OCI registry'
+  mimetype: text/markdown
+  reference: '[#1145](https://github.com/open-component-model/odg-core/pull/1145)'
+  type: standard
