@@ -1,0 +1,80 @@
+# In-cluster opensearch backends for the local observability stack.
+# Applied by ../observability-on.sh — no need to touch directly.
+# Single-node lab setup: security plugin disabled, plain http, no auth anywhere.
+#
+# Image: opensearchproject/opensearch:2.19.2 (pulled from docker hub by the node).
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: opensearch
+  labels:
+    app: opensearch
+spec:
+  serviceName: opensearch
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opensearch
+  template:
+    metadata:
+      labels:
+        app: opensearch
+        # opt OUT of filelog shipping: opensearch logs its own indexing noise
+        # (telemetry chart's exclusion filter would catch it otherwise, this is cheaper)
+        otel.io/pod-logs: "false"
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: opensearch
+          image: opensearchproject/opensearch:2.19.2
+          imagePullPolicy: IfNotPresent   # pulled once per node, then cached
+          env:
+            - name: discovery.type
+              value: single-node
+            # lab: no TLS/auth — the collector's opensearch exporter talks plain http
+            - name: DISABLE_SECURITY_PLUGIN
+              value: "true"
+            - name: OPENSEARCH_JAVA_OPTS
+              value: -Xms512m -Xmx512m
+          ports:
+            - name: http
+              containerPort: 9200
+          readinessProbe:
+            httpGet:
+              path: /_cluster/health?local=true
+              port: http
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 30
+          resources:
+            requests:
+              memory: 1Gi
+              cpu: 100m
+            limits:
+              memory: 1536Mi
+          volumeMounts:
+            - name: data
+              mountPath: /usr/share/opensearch/data
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ReadWriteOnce]
+        resources:
+          requests:
+            storage: 2Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: opensearch
+  labels:
+    app: opensearch
+spec:
+  selector:
+    app: opensearch
+  ports:
+    - name: http
+      port: 9200
+      targetPort: http

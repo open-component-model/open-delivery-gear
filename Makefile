@@ -1,8 +1,10 @@
 REPO_ROOT := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
-kind-up kind-down: export CLUSTER_NAME = odg-local
-kind-up kind-update: export KUBECONFIG = $(REPO_ROOT)/local-setup/kind/kubeconfig
+kind-up kind-down kind-observability-on: export CLUSTER_NAME = odg-local
+kind-up kind-update kind-observability-on: export KUBECONFIG = $(REPO_ROOT)/local-setup/kind/kubeconfig
 kind-up kind-update: export PATH_CLUSTER_CHART = $(REPO_ROOT)/local-setup/kind/cluster
+# local observability charts come from the sibling odg-observability checkout
+kind-observability-on: export ODG_OBSERVABILITY ?= $(REPO_ROOT)/../odg-observability
 
 kind-up: $(KIND) $(KUBECTL) $(HELM) $(OCM) ## Start local KinD cluster with ODG
 	./local-setup/kind/kind-up.sh \
@@ -14,8 +16,15 @@ kind-update: $(KIND) $(KUBECTL) $(HELM) $(OCM) ## Update existing KinD cluster w
 kind-down: $(KIND) ## Tear down local KinD cluster
 	./local-setup/kind/kind-down.sh \
 		--cluster-name $(CLUSTER_NAME)
+kind-observability-on: $(HELM) $(KUBECTL) ## Observability: opensearch, dashboards, prometheus, perses, collector — all in kind
+	./local-setup/kind/observability-on.sh
+# No kind-observability-off: the stack is part of the kind cluster, and kind is
+# throwaway — `make kind-down` removes everything in one step.
 
-.PHONY: kind-up kind-update kind-down website-build website-setup website-dev website-serve website-clean help
+# BTP backend support was removed with the chart rework — backend=btp still
+# exists in the chart values; re-add make targets when needed.
+
+.PHONY: kind-up kind-update kind-down kind-observability-on website-build website-setup website-dev website-serve website-clean help
 
 # Default target
 .DEFAULT_GOAL := help

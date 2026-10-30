@@ -83,3 +83,56 @@ connection URL.
 ODG extensions can be dynamically added to your installation. Therefore, the
 configuration of the extensions must be done via `extensions_cfg` in the
 [values file](https://github.com/open-component-model/open-delivery-gear/blob/main/local-setup/kind/values.yaml).
+
+## Observability
+
+To add metrics and dashboards on top of your local ODG, run:
+
+    make kind-observability-on
+
+You need a checkout of the [odg-observability](https://github.com/open-component-model/odg-observability)
+repository. By default the script looks for it next to this repository
+(`../odg-observability`). To use a different location, set the environment
+variable `ODG_OBSERVABILITY`:
+
+    ODG_OBSERVABILITY=/path/to/odg-observability make kind-observability-on
+
+Everything runs inside the KinD cluster — nothing is started on your Mac.
+
+### What gets deployed from where
+
+| Component | Comes from |
+|---|---|
+| OpenSearch + OpenSearch Dashboards | raw manifests in this repo: `local-setup/kind/telemetry/` |
+| Network policies for the above | same folder (`networkpolicies.yaml`) |
+| Prometheus operator, Prometheus, kube-state-metrics, Perses | `odg-observability/charts/prometheus-operator` |
+| OTel collector, metrics-operator | `odg-observability/charts/telemetry` |
+
+The OTel collector ships the logs of all pods in the `odg` namespace to the
+in-cluster OpenSearch (delivery-dashboard and delivery-db are excluded in the
+chart — too noisy). Prometheus scrapes the collector and kube-state-metrics.
+Perses serves the dashboards, backed by Prometheus.
+
+### Endpoints on localhost
+
+After `make kind-observability-on` finishes, these port-forwards are running:
+
+| URL | What |
+|---|---|
+| http://localhost:8080 | Perses (Dashboards → odg) |
+| http://localhost:9090 | Prometheus UI |
+| http://localhost:5601 | OpenSearch Dashboards (Discover → `logs-otel-v1`) |
+| grpc://localhost:4317 | OTLP endpoint — push traces/metrics from apps on your Mac |
+
+The port-forwards restart themselves on drops (pod restart, laptop sleep).
+They stop on their own when the cluster is gone — after 3 failed connection
+checks in a row the loop exits, so nothing keeps running after
+`make kind-down`, a reboot, or a deleted kubeconfig. To bring them back after
+a reboot, rerun `make kind-observability-on` (fast when everything is warm).
+Logs: `/tmp/pf-*.log`.
+
+### Removal
+
+There is no separate off-switch. The stack lives entirely inside the KinD
+cluster, so `make kind-down` removes everything. OpenSearch data itself sits
+on a PVC inside the cluster and is removed together with it.
