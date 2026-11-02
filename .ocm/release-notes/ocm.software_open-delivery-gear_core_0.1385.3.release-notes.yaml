@@ -1,0 +1,14 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1385.3
+release_notes:
+- audience: user
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: bugfix
+  contents: 'Fixed a bug where the calculation of DORA metrics failed with an internal server error'
+  mimetype: text/markdown
+  reference: '[#1175](https://github.com/open-component-model/odg-core/pull/1175)'
+  type: standard
