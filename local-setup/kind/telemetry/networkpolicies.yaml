@@ -1,0 +1,136 @@
+# NetworkPolicies for the local observability stack gaps.
+#
+# The odg namespace has a default-deny policy (ingress+egress). The telemetry
+# chart ships its own policies for the otel collector + metrics-operator
+# (allow-ingress/egress-from-otel-collector, …). This file covers what's left:
+#
+#   otel-collector pods ──► opensearch:9200        (log/trace push)
+#   dashboards          ──► opensearch:9200        (Discover queries)
+#   host (kubectl pf)   ──► both services          (kubectl port-forward traffic
+#                        enters the pod with the node's ip as source — outside
+#                        the pod/network range, so no podSelector can express it)
+#   dashboards          ──► kube-dns:53            (resolve the opensearch svc)
+#
+# Prometheus needs egress allowed to scrape its targets (egress to a pod is a
+# *connection from* prometheus, so the default-deny on egress blocks it). Ingress
+# is open on the scrape targets via the charts' own policies.
+# Perses needs:
+#   perses sidecar  ──► kube-apiserver:443         (watch provisioning ConfigMaps)
+#   perses          ──► prometheus:9090            (proxy dashboard queries)
+#   host (kubectl pf) ──► perses:8080              (your browser)
+#
+# Note on the 0.0.0.0/0 ipBlocks on kubectl-port-forward ingress rules: this is
+# the same pattern the ODG platform uses for its gateways, and it's the only way
+# to let port-forward traffic in via NetworkPolicy. It also opens the port to any
+# other pod in the cluster — acceptable for a local lab, not for a real cluster.
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: opensearch
+  labels:
+    app: opensearch
+spec:
+  podSelector:
+    matchLabels:
+      app: opensearch
+  policyTypes: [Ingress, Egress]
+  ingress:
+    - from:
+        # log/trace push from the otel collector daemonset (release instance label
+        # intentionally omitted — works for any telemetry release name)
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: opentelemetry-collector
+        # Discover queries from the dashboards pod
+        - podSelector:
+            matchLabels:
+              app: opensearch-dashboards
+        # kubectl port-forward (node-local source ip; opens to cluster pods too)
+        - ipBlock:
+            cidr: 0.0.0.0/0
+      ports:
+        - port: 9200
+  egress: []   # single-node: nothing outbound
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: opensearch-dashboards
+  labels:
+    app: opensearch-dashboards
+spec:
+  podSelector:
+    matchLabels:
+      app: opensearch-dashboards
+  policyTypes: [Ingress, Egress]
+  ingress:
+    # only reached via kubectl port-forward (node-local source ip)
+    - from:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+      ports:
+        - port: 5601
+  egress:
+    - {}   # any: dashboards queries opensearch + does DNS; lab setup, keep it simple
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: perses
+  labels:
+    app: perses
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: perses
+  policyTypes: [Ingress, Egress]
+  ingress:
+    # browser → kubectl port-forward → perses:8080 (node-local source ip)
+    - from:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+      ports:
+        - port: 8080
+  egress:
+    # sidecar (kiwigrid k8s-sidecar) watches provisioning ConfigMaps via
+    # the kubernetes.default ClusterIP (10.96.0.1:443); perses itself proxies
+    # dashboard queries to the prometheus Service (10.96.x.x:9090). Both are
+    # service CIDR traffic, so one block covers both.
+    - to:
+        - ipBlock:
+            cidr: 10.96.0.0/12
+      ports:
+        - port: 443
+          protocol: TCP
+        - port: 9090
+          protocol: TCP
+    # resolve prometheus + kubernetes service names (kube-dns service IP is
+    # also in the service CIDR above — the ports are what differ)
+    - to:
+        - ipBlock:
+            cidr: 10.96.0.0/12
+      ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+---
+# Prometheus is a scrape *client*: it opens connections to pods' :8889 (collector)
+# and :8080 (kube-state-metrics). With default-deny on egress those connections
+# would never be made. The accepted pattern here (ODG app charts do the same for
+# gateway sidecars) is: allow-any egress for control-plane-style components.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-egress-from-prometheus
+  labels:
+    app: perses
+spec:
+  podSelector:
+    matchLabels:
+      # the Prometheus CR renders pods with this exact label
+      app.kubernetes.io/instance: prometheus
+  policyTypes: [Egress]
+  egress:
+    - {}   # any: scrape targets are pod IPs across many namespaces/netpolicies

@@ -1,0 +1,60 @@
+# OpenSearch Dashboards (Discover UI) for the in-cluster opensearch.
+# Applied by ../observability-on.sh. Image: opensearchproject/opensearch-dashboards:2.19.2.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opensearch-dashboards
+  labels:
+    app: opensearch-dashboards
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opensearch-dashboards
+  template:
+    metadata:
+      labels:
+        app: opensearch-dashboards
+        otel.io/pod-logs: "false"
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: dashboards
+          image: opensearchproject/opensearch-dashboards:2.19.2
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: OPENSEARCH_HOSTS
+              value: '["http://opensearch:9200"]'
+            - name: DISABLE_SECURITY_DASHBOARDS_PLUGIN
+              value: "true"
+          ports:
+            - name: http
+              containerPort: 5601
+          readinessProbe:
+            httpGet:
+              path: /api/status
+              port: http
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 60   # dashboards takes a while to optimize on first boot
+          resources:
+            requests:
+              memory: 384Mi
+              cpu: 50m
+            limits:
+              memory: 768Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: opensearch-dashboards
+  labels:
+    app: opensearch-dashboards
+spec:
+  selector:
+    app: opensearch-dashboards
+  ports:
+    - name: http
+      port: 5601
+      targetPort: http
