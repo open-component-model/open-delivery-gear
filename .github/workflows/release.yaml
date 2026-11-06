@@ -9,8 +9,23 @@ on:
           - bump-patch
 
 jobs:
+  preprocess:
+    runs-on: ubuntu-latest
+    name: Preprocess
+    permissions: {}
+    steps:
+      - name: Verify Release Branch
+        run: |
+          if [[ "$GITHUB_REF_TYPE" != "branch" || ! "$GITHUB_REF_NAME" =~ ^release-[0-9]+\.[0-9]+$ ]]; then
+            echo "Error: release workflow must run on a 'release-<major>.<minor>' branch, got: $GITHUB_REF_NAME"
+            echo "Hint: run the 'Prepare Release Candidate' workflow first to create a release branch."
+            exit 1
+          fi
+
   build:
     uses: ./.github/workflows/build.yaml
+    needs:
+      - preprocess
     permissions:
       contents: read
       packages: write
