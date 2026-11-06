@@ -1,12 +1,6 @@
 name: Release
 on:
   workflow_dispatch:
-    inputs:
-      next-version:
-        type: choice
-        options:
-          - bump-minor
-          - bump-patch
 
 jobs:
   preprocess:
@@ -42,5 +36,5 @@ jobs:
       packages: write
       id-token: write
     with:
-      next-version: ${{ inputs.next-version }}
+      next-version: 'bump-patch'
       github-release-notes-recursion-depth: -1
