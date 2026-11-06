@@ -9,12 +9,11 @@
     ':dependencyDashboard',
     ':rebaseStalePrs',
   ],
-  'internalChecksFilter': 'strict',
-  'minimumReleaseAge': '7 days',
-  'branchPrefix': 'renovate/',
-  // You can build the email with this info: curl -s https://api.github.com/users/odgbot%5Bbot%5D | grep -E '"id"|"login"' — format: <id>+<slug>[bot]@users.noreply.github.com
-  'gitAuthor': 'odgbot[bot] <319464553+odgbot[bot]@users.noreply.github.com>',
-  'gitIgnoredAuthors': [
+  internalChecksFilter: 'strict',
+  minimumReleaseAge: '7 days',
+  branchPrefix: 'renovate/',
+  gitAuthor: 'odgbot[bot] <319464553+odgbot[bot]@users.noreply.github.com>',
+  gitIgnoredAuthors: [
     '319464553+odgbot[bot]@users.noreply.github.com',
   ],
   prConcurrentLimit: 0,
@@ -25,21 +24,30 @@
     minimumReleaseAge: null,
     automerge: false,
   },
+  baseBranchPatterns: [
+    'main',
+    '/^release-/',
+  ],
   packageRules: [
     {
-      matchUpdateTypes: ['patch'],
+      matchUpdateTypes: [
+        'patch',
+      ],
       automerge: true,
     },
     {
-      matchManagers: ['github-actions'],
+      matchManagers: [
+        'github-actions',
+      ],
       automerge: true,
     },
     {
-      // gardener/cc-utils is intentionally pinned to @v1 as a floating major
-      // tag — frequent updates, deliberately unpinned. Disable to avoid
-      // constant SHA-bump PRs.
-      matchManagers: ['github-actions'],
-      matchDepNames: ['gardener/cc-utils'],
+      matchManagers: [
+        'github-actions',
+      ],
+      matchDepNames: [
+        'gardener/cc-utils',
+      ],
       enabled: false,
     },
     {
@@ -52,36 +60,135 @@
       pinDigests: true,
     },
     {
-      matchDepNames: ['docker.io/envoyproxy/envoy'],
+      matchDepNames: [
+        'docker.io/envoyproxy/envoy',
+      ],
       versionCompatibility: '^(?<compatibility>distroless-)?(?<version>.+)$',
       versioning: 'semver',
       pinDigests: true,
       minimumReleaseAge: null,
+    },
+    {
+      matchDepNames: [
+        'ocm.software/open-delivery-gear/core',
+        'ocm.software/open-delivery-gear/observability',
+        'ocm.software/open-delivery-gear/ui',
+      ],
+      ignoreUnstable: false,
+      allowedVersions: '/^[0-9]+\\.[0-9]+\\.[0-9]+(-rc\\.[0-9]+)?$/',
+      minimumReleaseAge: null,
+      internalChecksFilter: 'none',
+      separateMinorPatch: true,
+    },
+    {
+      matchDepNames: [
+        'ocm.software/open-delivery-gear/core',
+      ],
+      sourceUrl: 'https://github.com/open-component-model/odg-core',
+    },
+    {
+      matchDepNames: [
+        'ocm.software/open-delivery-gear/observability',
+      ],
+      sourceUrl: 'https://github.com/open-component-model/odg-observability',
+    },
+    {
+      matchDepNames: [
+        'ocm.software/open-delivery-gear/ui',
+      ],
+      sourceUrl: 'https://github.com/open-component-model/odg-ui',
+    },
+    {
+      matchBaseBranches: [
+        '/^release-/',
+      ],
+      enabled: false,
+    },
+    {
+      matchBaseBranches: [
+        '/^release-/',
+      ],
+      matchFileNames: [
+        '.ocm/base-component.yaml',
+      ],
+      matchDepNames: [
+        'ocm.software/open-delivery-gear/core',
+        'ocm.software/open-delivery-gear/observability',
+        'ocm.software/open-delivery-gear/ui',
+      ],
+      enabled: true,
+    },
+    {
+      matchBaseBranches: [
+        '/^release-/',
+      ],
+      matchFileNames: [
+        '.ocm/base-component.yaml',
+      ],
+      matchDepNames: [
+        'ocm.software/open-delivery-gear/core',
+        'ocm.software/open-delivery-gear/observability',
+        'ocm.software/open-delivery-gear/ui',
+      ],
+      matchUpdateTypes: [
+        'major',
+        'minor',
+      ],
+      enabled: false,
     },
   ],
   postUpgradeTasks: {
     commands: [
       'python3 .ci/renovate-sync-ocm',
     ],
-    fileFilters: ['.ocm/base-component.yaml', 'extension-definitions.yaml'],
+    fileFilters: [
+      '.ocm/base-component.yaml',
+      'extension-definitions.yaml',
+      '.ocm/release-notes/**',
+    ],
     executionMode: 'branch',
+  },
+  customDatasources: {
+    'ocm-gar': {
+      defaultRegistryUrlTemplate: 'https://europe-docker.pkg.dev/v2/gardener-project/releases/component-descriptors/{{packageName}}/tags/list',
+      format: 'json',
+      transformTemplates: [
+        '{"releases": $each(manifest, function($v) { $v.tag.{"version": $} })[]}',
+      ],
+    },
   },
   customManagers: [
     {
-      // Track the Renovate version used in the workflow
       customType: 'regex',
-      managerFilePatterns: ['.github/workflows/renovate.yml'],
-      matchStrings: ["renovate-version:\\s*'(?<currentValue>[^'@]+)(?:@(?<currentDigest>sha256:[a-f0-9]+))?'"],
+      managerFilePatterns: [
+        '.github/workflows/renovate.yml',
+      ],
+      matchStrings: [
+        "renovate-version:\\s*'(?<currentValue>[^'@]+)(?:@(?<currentDigest>sha256:[a-f0-9]+))?'",
+      ],
       depNameTemplate: 'ghcr.io/renovatebot/renovate',
       datasourceTemplate: 'docker',
     },
     {
       customType: 'regex',
-      managerFilePatterns: ['.ocm/base-component.yaml'],
+      managerFilePatterns: [
+        '.ocm/base-component.yaml',
+      ],
       matchStrings: [
-        'imageReference:\\s*(?<depName>[^:\\s]+):(?<currentValue>[^@\\s]+)(?:@(?<currentDigest>sha256:[a-f0-9]+))?'
+        'imageReference:\\s*(?<depName>[^:\\s]+):(?<currentValue>[^@\\s]+)(?:@(?<currentDigest>sha256:[a-f0-9]+))?',
       ],
       datasourceTemplate: 'docker',
+    },
+    {
+      customType: 'regex',
+      managerFilePatterns: [
+        '.ocm/base-component.yaml',
+      ],
+      matchStrings: [
+        'componentName:\\s*(?<depName>[^\\n]+)\\n\\s+name:[^\\n]+\\n\\s+version:\\s*(?<currentValue>[^\\n]+)',
+      ],
+      datasourceTemplate: 'custom.ocm-gar',
+      versioningTemplate: 'semver',
     },
   ],
 }
