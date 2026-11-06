@@ -9,12 +9,11 @@
     ':dependencyDashboard',
     ':rebaseStalePrs',
   ],
-  'internalChecksFilter': 'strict',
-  'minimumReleaseAge': '7 days',
-  'branchPrefix': 'renovate/',
-  // You can build the email with this info: curl -s https://api.github.com/users/odgbot%5Bbot%5D | grep -E '"id"|"login"' — format: <id>+<slug>[bot]@users.noreply.github.com
-  'gitAuthor': 'odgbot[bot] <319464553+odgbot[bot]@users.noreply.github.com>',
-  'gitIgnoredAuthors': [
+  internalChecksFilter: 'strict',
+  minimumReleaseAge: '7 days',
+  branchPrefix: 'renovate/',
+  gitAuthor: 'odgbot[bot] <319464553+odgbot[bot]@users.noreply.github.com>',
+  gitIgnoredAuthors: [
     '319464553+odgbot[bot]@users.noreply.github.com',
   ],
   prConcurrentLimit: 0,
@@ -25,22 +24,30 @@
     minimumReleaseAge: null,
     automerge: false,
   },
-  baseBranches: ['main', '/^release-/'],
+  baseBranchPatterns: [
+    'main',
+    '/^release-/',
+  ],
   packageRules: [
     {
-      matchUpdateTypes: ['patch'],
+      matchUpdateTypes: [
+        'patch',
+      ],
       automerge: true,
     },
     {
-      matchManagers: ['github-actions'],
+      matchManagers: [
+        'github-actions',
+      ],
       automerge: true,
     },
     {
-      // gardener/cc-utils is intentionally pinned to @v1 as a floating major
-      // tag — frequent updates, deliberately unpinned. Disable to avoid
-      // constant SHA-bump PRs.
-      matchManagers: ['github-actions'],
-      matchDepNames: ['gardener/cc-utils'],
+      matchManagers: [
+        'github-actions',
+      ],
+      matchDepNames: [
+        'gardener/cc-utils',
+      ],
       enabled: false,
     },
     {
@@ -53,7 +60,9 @@
       pinDigests: true,
     },
     {
-      matchDepNames: ['docker.io/envoyproxy/envoy'],
+      matchDepNames: [
+        'docker.io/envoyproxy/envoy',
+      ],
       versionCompatibility: '^(?<compatibility>distroless-)?(?<version>.+)$',
       versioning: 'semver',
       pinDigests: true,
@@ -68,37 +77,40 @@
       ignoreUnstable: false,
       allowedVersions: '/^[0-9]+\\.[0-9]+\\.[0-9]+(-rc\\.[0-9]+)?$/',
       minimumReleaseAge: null,
-      // custom datasource returns no timestamps, so internalChecksFilter: strict
-      // would hold all updates as pendingChecks indefinitely.
       internalChecksFilter: 'none',
-      // separateMinorPatch: true causes Renovate to propose both a patch update
-      // (0.1385.0 → 0.1385.3) and a minor update (0.1385.0 → 0.1389.0) separately,
-      // so the minor block rule on release branches only suppresses the minor PR.
       separateMinorPatch: true,
     },
     {
-      matchDepNames: ['ocm.software/open-delivery-gear/core'],
+      matchDepNames: [
+        'ocm.software/open-delivery-gear/core',
+      ],
       sourceUrl: 'https://github.com/open-component-model/odg-core',
     },
     {
-      matchDepNames: ['ocm.software/open-delivery-gear/observability'],
+      matchDepNames: [
+        'ocm.software/open-delivery-gear/observability',
+      ],
       sourceUrl: 'https://github.com/open-component-model/odg-observability',
     },
     {
-      matchDepNames: ['ocm.software/open-delivery-gear/ui'],
+      matchDepNames: [
+        'ocm.software/open-delivery-gear/ui',
+      ],
       sourceUrl: 'https://github.com/open-component-model/odg-ui',
     },
     {
-      // on release branches, disable all updates by default
-      matchBaseBranches: ['/^release-/'],
+      matchBaseBranches: [
+        '/^release-/',
+      ],
       enabled: false,
     },
     {
-      // re-enable OCM componentReference updates on release branches;
-      // major/minor are blocked by the next rule to keep major.minor
-      // pinned to the branch's target minor
-      matchBaseBranches: ['/^release-/'],
-      matchFileNames: ['.ocm/base-component.yaml'],
+      matchBaseBranches: [
+        '/^release-/',
+      ],
+      matchFileNames: [
+        '.ocm/base-component.yaml',
+      ],
       matchDepNames: [
         'ocm.software/open-delivery-gear/core',
         'ocm.software/open-delivery-gear/observability',
@@ -107,15 +119,21 @@
       enabled: true,
     },
     {
-      // block major/minor bumps on release branches
-      matchBaseBranches: ['/^release-/'],
-      matchFileNames: ['.ocm/base-component.yaml'],
+      matchBaseBranches: [
+        '/^release-/',
+      ],
+      matchFileNames: [
+        '.ocm/base-component.yaml',
+      ],
       matchDepNames: [
         'ocm.software/open-delivery-gear/core',
         'ocm.software/open-delivery-gear/observability',
         'ocm.software/open-delivery-gear/ui',
       ],
-      matchUpdateTypes: ['major', 'minor'],
+      matchUpdateTypes: [
+        'major',
+        'minor',
+      ],
       enabled: false,
     },
   ],
@@ -123,12 +141,13 @@
     commands: [
       'python3 .ci/renovate-sync-ocm',
     ],
-    fileFilters: ['.ocm/base-component.yaml', 'extension-definitions.yaml', '.ocm/release-notes/**'],
+    fileFilters: [
+      '.ocm/base-component.yaml',
+      'extension-definitions.yaml',
+      '.ocm/release-notes/**',
+    ],
     executionMode: 'branch',
   },
-  // Fetch OCM component versions from the OCI registry tags list endpoint.
-  // The GCP Artifact Registry tags/list response groups tags under manifest
-  // digests; the JSON transform flattens them into Renovate's releases format.
   customDatasources: {
     'ocm-gar': {
       defaultRegistryUrlTemplate: 'https://europe-docker.pkg.dev/v2/gardener-project/releases/component-descriptors/{{packageName}}/tags/list',
@@ -140,30 +159,31 @@
   },
   customManagers: [
     {
-      // Track the Renovate version used in the workflow
       customType: 'regex',
-      managerFilePatterns: ['.github/workflows/renovate.yml'],
-      matchStrings: ["renovate-version:\\s*'(?<currentValue>[^'@]+)(?:@(?<currentDigest>sha256:[a-f0-9]+))?'"],
+      managerFilePatterns: [
+        '.github/workflows/renovate.yml',
+      ],
+      matchStrings: [
+        "renovate-version:\\s*'(?<currentValue>[^'@]+)(?:@(?<currentDigest>sha256:[a-f0-9]+))?'",
+      ],
       depNameTemplate: 'ghcr.io/renovatebot/renovate',
       datasourceTemplate: 'docker',
     },
     {
       customType: 'regex',
-      managerFilePatterns: ['.ocm/base-component.yaml'],
+      managerFilePatterns: [
+        '.ocm/base-component.yaml',
+      ],
       matchStrings: [
-        'imageReference:\\s*(?<depName>[^:\\s]+):(?<currentValue>[^@\\s]+)(?:@(?<currentDigest>sha256:[a-f0-9]+))?'
+        'imageReference:\\s*(?<depName>[^:\\s]+):(?<currentValue>[^@\\s]+)(?:@(?<currentDigest>sha256:[a-f0-9]+))?',
       ],
       datasourceTemplate: 'docker',
     },
     {
-      // Track OCM componentReferences via the custom ocm-gar datasource, which
-      // reads OCI tags from the Artifact Registry tags/list endpoint.
-      // NOTE: the matchStrings regex assumes componentName/name/version appear
-      // on consecutive lines in that exact order with no blank lines between
-      // them. If the field order or formatting in base-component.yaml changes,
-      // this match will silently stop working.
       customType: 'regex',
-      managerFilePatterns: ['.ocm/base-component.yaml'],
+      managerFilePatterns: [
+        '.ocm/base-component.yaml',
+      ],
       matchStrings: [
         'componentName:\\s*(?<depName>[^\\n]+)\\n\\s+name:[^\\n]+\\n\\s+version:\\s*(?<currentValue>[^\\n]+)',
       ],
