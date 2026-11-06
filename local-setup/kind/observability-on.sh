@@ -115,6 +115,7 @@ helm --kubeconfig="${KUBECONFIG_FILE}" upgrade --install "${TEL_RELEASE}" "${TEL
   --set backend=opensearch \
   --set opensearch.endpoint=http://opensearch.${NAMESPACE}.svc.cluster.local:9200 \
   --set observedNamespace="${NAMESPACE}" \
+  --set 'excludePodPrefixes={opensearch-,opensearch-dashboards-}' \
   --set prometheus.integration.enabled=true \
   --set prometheus.integration.scrapeInterval=15s \
   --timeout 5m || die "telemetry install failed — see above. Rerun is safe (upgrade --install)."
