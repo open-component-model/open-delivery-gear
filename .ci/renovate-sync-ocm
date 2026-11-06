@@ -57,7 +57,7 @@ def component_references_changed() -> list[tuple[str, str, str]]:
             check=True,
             cwd=repo_dir,
         )
-    except subprocess.CalledProcessError, FileNotFoundError:
+    except (subprocess.CalledProcessError, FileNotFoundError):
         return []
 
     for line in result.stdout.splitlines():
