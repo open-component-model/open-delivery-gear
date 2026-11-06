@@ -1,0 +1,15 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1389.0
+release_notes:
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: improvement
+  contents: Improved the efficiency of mixing up findings with rescorings (i.e. relevant
+    for timely issue updates as well as rescoring UI)
+  mimetype: text/markdown
+  reference: '[#1157](https://github.com/open-component-model/odg-core/pull/1157)'
+  type: standard
