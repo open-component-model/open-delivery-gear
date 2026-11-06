@@ -119,13 +119,6 @@
       enabled: false,
     },
   ],
-  postUpgradeTasks: {
-    commands: [
-      'python3 .ci/renovate-sync-ocm',
-    ],
-    fileFilters: ['.ocm/base-component.yaml', 'extension-definitions.yaml', '.ocm/release-notes/**'],
-    executionMode: 'branch',
-  },
   // Fetch OCM component versions from the OCI registry tags list endpoint.
   // The GCP Artifact Registry tags/list response groups tags under manifest
   // digests; the JSON transform flattens them into Renovate's releases format.

@@ -1,0 +1,104 @@
+name: Renovate Sync OCM
+# Replaces the former Renovate postUpgradeTask. Runs after Renovate pushed a
+# branch, so Renovate itself does not need to be allowed to execute commands
+# (RENOVATE_ALLOWED_POST_UPGRADE_COMMANDS).
+on:
+  push:
+    branches:
+      - renovate/**
+
+permissions:
+  contents: read
+
+concurrency:
+  group: renovate-sync-ocm-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # OCM CLI used to fetch release notes; bump version + checksum together
+  OCM_VERSION: '0.22.1'
+  OCM_SHA256: '15532daec120686519dc3d122e078820114f2bd090b1ed3091e9bea6704339ca'
+
+jobs:
+  sync:
+    # Only react to pushes by Renovate. If the sync push below re-triggers this
+    # job, the second run finds nothing to change and exits without pushing.
+    if: github.repository_owner == 'open-component-model' && github.actor == 'odgbot[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+          # no write credentials on disk while running the script
+          persist-credentials: false
+
+      - name: Install OCM CLI
+        shell: bash
+        run: |
+          bindir="${RUNNER_TEMP}/ocm-bin"
+          mkdir -p "$bindir"
+          curl -sfL --proto '=https' --tlsv1.2 -o "${bindir}/ocm" \
+            "https://github.com/open-component-model/open-component-model/releases/download/v${OCM_VERSION}/ocm-linux-amd64"
+          echo "${OCM_SHA256}  ${bindir}/ocm" | sha256sum --check --strict
+          chmod +x "${bindir}/ocm"
+          echo "OCM_BIN=${bindir}/ocm" >> "$GITHUB_ENV"
+
+      - name: Determine base commit
+        id: base
+        shell: bash
+        run: |
+          # closest of main / release-* (fewest commits ahead) is the base of this branch
+          best=''
+          best_count=''
+          for candidate in $(git for-each-ref --format='%(refname:short)' 'refs/remotes/origin/main' 'refs/remotes/origin/release-*'); do
+            count="$(git rev-list --count "${candidate}..HEAD")"
+            if [ -z "$best_count" ] || [ "$count" -lt "$best_count" ]; then
+              best="$candidate"
+              best_count="$count"
+            fi
+          done
+          echo "base=$(git merge-base "$best" HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Sync OCM references
+        id: sync
+        shell: bash
+        env:
+          BASE_REF: ${{ steps.base.outputs.base }}
+        run: |
+          python3 .ci/renovate-sync-ocm
+          git add --all .ocm extension-definitions.yaml
+          if git diff --cached --quiet; then
+            echo 'nothing to sync'
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # write token is only minted when there is something to push
+      - uses: gardener/cc-utils/.github/actions/github-auth@v1
+        if: steps.sync.outputs.changed == 'true'
+        id: fed-token
+        with:
+          token-server: ${{ vars.FEDERATED_GITHUB_ACCESS_TOKEN_SERVER }}
+          repositories: |
+            open-delivery-gear
+          permissions: |
+            contents: write
+
+      - name: Commit and push
+        if: steps.sync.outputs.changed == 'true'
+        shell: bash
+        env:
+          BRANCH: ${{ github.ref_name }}
+          GH_TOKEN: ${{ steps.fed-token.outputs.token }}
+        run: |
+          # Author must be listed in renovate.json5 `gitIgnoredAuthors`, otherwise
+          # Renovate treats the branch as modified and stops rebasing it.
+          git -c user.name='odgbot[bot]' \
+              -c user.email='319464553+odgbot[bot]@users.noreply.github.com' \
+              commit -m 'chore(renovate): sync OCM references and release notes'
+          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" \
+            "HEAD:refs/heads/${BRANCH}"
