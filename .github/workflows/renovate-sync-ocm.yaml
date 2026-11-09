@@ -23,7 +23,7 @@ jobs:
   sync:
     # Only react to pushes by Renovate. If the sync push below re-triggers this
     # job, the second run finds nothing to change and exits without pushing.
-    if: github.repository_owner == 'open-component-model' && github.actor == 'odgbot[bot]'
+    if: github.actor == 'odgbot[bot]' || github.actor == 'alex-ocmbot[bot]'
     runs-on: ubuntu-latest
     permissions:
       contents: read
