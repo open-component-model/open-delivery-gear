@@ -106,7 +106,7 @@
       sourceUrl: 'https://github.com/open-component-model/odg-ui',
     },
     {
-      // Auto-merge minor+patch bumps of our own OCM component references.
+      // Auto-merge minor+patch bumps of our own OCM component references, no wait.
       matchDepNames: [
         'ocm.software/open-delivery-gear/core',
         'ocm.software/open-delivery-gear/observability',
@@ -116,6 +116,7 @@
         'patch',
         'minor',
       ],
+      minimumReleaseAge: null,
       automerge: true,
     },
     {
