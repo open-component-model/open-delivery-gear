@@ -410,6 +410,90 @@ connection URL.</p>
 configuration of the extensions must be done via <code class="docutils literal notranslate"><span class="pre">extensions_cfg</span></code> in the
 <a class="reference external" href="https://github.com/open-component-model/open-delivery-gear/blob/main/local-setup/kind/values.yaml">values file</a>.</p>
 </section>
+<section id="observability">
+<h2>Observability<a class="headerlink" href="#observability" title="Link to this heading">¶</a></h2>
+<p>To add metrics and dashboards on top of your local ODG, run:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>make kind-observability-on
+</pre></div>
+</div>
+<p>You need a checkout of the <a class="reference external" href="https://github.com/open-component-model/odg-observability">odg-observability</a>
+repository. By default the script looks for it next to this repository
+(<code class="docutils literal notranslate"><span class="pre">../odg-observability</span></code>). To use a different location, set the environment
+variable <code class="docutils literal notranslate"><span class="pre">ODG_OBSERVABILITY</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ODG_OBSERVABILITY=/path/to/odg-observability make kind-observability-on
+</pre></div>
+</div>
+<p>Everything runs inside the KinD cluster — nothing is started on your Mac.</p>
+<section id="what-gets-deployed-from-where">
+<h3>What gets deployed from where<a class="headerlink" href="#what-gets-deployed-from-where" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Component</p></th>
+<th class="head"><p>Comes from</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>OpenSearch + OpenSearch Dashboards</p></td>
+<td><p>raw manifests in this repo: <code class="docutils literal notranslate"><span class="pre">local-setup/kind/telemetry/</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Network policies for the above</p></td>
+<td><p>same folder (<code class="docutils literal notranslate"><span class="pre">networkpolicies.yaml</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p>Prometheus operator, Prometheus, kube-state-metrics, Perses</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">odg-observability/charts/prometheus-operator</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>OTel collector, metrics-operator</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">odg-observability/charts/telemetry</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The OTel collector ships the logs of all pods in the <code class="docutils literal notranslate"><span class="pre">odg</span></code> namespace to the
+in-cluster OpenSearch (delivery-dashboard and delivery-db are excluded in the
+chart — too noisy). Prometheus scrapes the collector and kube-state-metrics.
+Perses serves the dashboards, backed by Prometheus.</p>
+</section>
+<section id="endpoints-on-localhost">
+<h3>Endpoints on localhost<a class="headerlink" href="#endpoints-on-localhost" title="Link to this heading">¶</a></h3>
+<p>After <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">kind-observability-on</span></code> finishes, these port-forwards are running:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>URL</p></th>
+<th class="head"><p>What</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>http://localhost:8080</p></td>
+<td><p>Perses (Dashboards → odg)</p></td>
+</tr>
+<tr class="row-odd"><td><p>http://localhost:9090</p></td>
+<td><p>Prometheus UI</p></td>
+</tr>
+<tr class="row-even"><td><p>http://localhost:5601</p></td>
+<td><p>OpenSearch Dashboards (Discover → <code class="docutils literal notranslate"><span class="pre">logs-otel-v1</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>grpc://localhost:4317</p></td>
+<td><p>OTLP endpoint — push traces/metrics from apps on your Mac</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The port-forwards restart themselves on drops (pod restart, laptop sleep).
+They stop on their own when the cluster is gone — after 3 failed connection
+checks in a row the loop exits, so nothing keeps running after
+<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">kind-down</span></code>, a reboot, or a deleted kubeconfig. To bring them back after
+a reboot, rerun <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">kind-observability-on</span></code> (fast when everything is warm).
+Logs: <code class="docutils literal notranslate"><span class="pre">/tmp/pf-*.log</span></code>.</p>
+</section>
+<section id="removal">
+<h3>Removal<a class="headerlink" href="#removal" title="Link to this heading">¶</a></h3>
+<p>There is no separate off-switch. The stack lives entirely inside the KinD
+cluster, so <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">kind-down</span></code> removes everything. OpenSearch data itself sits
+on a PVC inside the cluster and is removed together with it.</p>
+</section>
+</section>
 </section>
 
         </article>
@@ -509,6 +593,12 @@ configuration of the extensions must be done via <code class="docutils literal n
 <li><a class="reference internal" href="#termination">Termination</a></li>
 <li><a class="reference internal" href="#external-postgresql">External PostgreSQL</a></li>
 <li><a class="reference internal" href="#extensions">Extensions</a></li>
+<li><a class="reference internal" href="#observability">Observability</a><ul>
+<li><a class="reference internal" href="#what-gets-deployed-from-where">What gets deployed from where</a></li>
+<li><a class="reference internal" href="#endpoints-on-localhost">Endpoints on localhost</a></li>
+<li><a class="reference internal" href="#removal">Removal</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
