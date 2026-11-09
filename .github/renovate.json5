@@ -106,6 +106,30 @@
       sourceUrl: 'https://github.com/open-component-model/odg-ui',
     },
     {
+      // Auto-merge minor+patch bumps of our own OCM component references.
+      matchDepNames: [
+        'ocm.software/open-delivery-gear/core',
+        'ocm.software/open-delivery-gear/observability',
+        'ocm.software/open-delivery-gear/ui',
+      ],
+      matchUpdateTypes: [
+        'patch',
+        'minor',
+      ],
+      automerge: true,
+    },
+    {
+      // Auto-merge minor+patch of the OCM CLI version in renovate-sync-ocm.yaml.
+      matchDepNames: [
+        'open-component-model/open-component-model',
+      ],
+      matchUpdateTypes: [
+        'patch',
+        'minor',
+      ],
+      automerge: true,
+    },
+    {
       matchBaseBranches: [
         '/^release-/',
       ],
@@ -179,15 +203,14 @@
       datasourceTemplate: 'docker',
     },
     {
-      // Bump OCM_VERSION in renovate-sync-ocm.yaml. OCM_SHA256 stays manual —
-      // Renovate cannot fetch checksums for arbitrary GitHub release binaries.
-      // The workflow's sha256sum check will fail on bump PRs until the checksum
-      // is updated; update it manually on the PR branch (it commits as odgbot,
-      // which gitIgnoredAuthors already tolerates).
+      // OCM_VERSION is matched by this regex manager; the inline
+      // '# renovate: sha256:<hash>' marker is managed by the github-releases
+      // datasource itself (it auto-updates sha256-suffixed currentValues
+      // using the release's checksums.txt, as documented by Renovate).
       customType: 'regex',
       managerFilePatterns: ['.github/workflows/renovate-sync-ocm.yaml'],
       matchStrings: [
-        "OCM_VERSION:\\s*'(?<currentValue>[^']+)'",
+        "OCM_VERSION:\\s*'(?<currentValue>[^' ]+)(?:#\\s*renovate:\\s*(?<currentDigest>sha256:[a-f0-9]+))?'",
       ],
       depNameTemplate: 'open-component-model/open-component-model',
       datasourceTemplate: 'github-releases',

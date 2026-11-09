@@ -21,8 +21,9 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  # OCM CLI used to fetch release notes; bump version + checksum together
-  OCM_VERSION: '0.22.1'
+  # OCM CLI used to fetch release notes.
+  # renovate: datasource=github-releases depName=open-component-model/open-component-model
+  OCM_VERSION: '0.22.1' # renovate: sha256:15532daec120686519dc3d122e078820114f2bd090b1ed3091e9bea6704339ca
   OCM_SHA256: '15532daec120686519dc3d122e078820114f2bd090b1ed3091e9bea6704339ca'
 
 jobs:
@@ -45,11 +46,12 @@ jobs:
       - name: Install OCM CLI
         shell: bash
         run: |
+          [[ "$(uname -m)" == "x86_64" ]] || { echo "::error::OCM CLI pinned to linux-amd64; runner arch $(uname -m) unsupported"; exit 1; }
           bindir="${RUNNER_TEMP}/ocm-bin"
           mkdir -p "$bindir"
           curl -sfL --proto '=https' --tlsv1.2 -o "${bindir}/ocm" \
             "https://github.com/open-component-model/open-component-model/releases/download/v${OCM_VERSION}/ocm-linux-amd64"
-          echo "${OCM_SHA256}  ${bindir}/ocm" | sha256sum --check --strict
+          echo "${OCM_VERSION##*sha256:}  ${bindir}/ocm" | sha256sum --check --strict
           chmod +x "${bindir}/ocm"
           echo "OCM_BIN=${bindir}/ocm" >> "$GITHUB_ENV"
 
