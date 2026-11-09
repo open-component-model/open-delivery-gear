@@ -28,6 +28,12 @@
   baseBranches: ['main', '/^release-/'],
   packageRules: [
     {
+      // The global 7-day minimumReleaseAge applies to lockfile maintenance
+      // too, where it delays refreshing the whole lockfile. Skip it for that as it does not work correctly anyways.
+      matchDepTypes: ['lockFileMaintenance'],
+      minimumReleaseAge: null,
+    },
+    {
       matchUpdateTypes: ['patch'],
       automerge: true,
     },
@@ -147,6 +153,20 @@
         'imageReference:\\s*(?<depName>[^:\\s]+):(?<currentValue>[^@\\s]+)(?:@(?<currentDigest>sha256:[a-f0-9]+))?'
       ],
       datasourceTemplate: 'docker',
+    },
+    {
+      // Bump OCM_VERSION in renovate-sync-ocm.yaml. OCM_SHA256 stays manual —
+      // Renovate cannot fetch checksums for arbitrary GitHub release binaries.
+      // The workflow's sha256sum check will fail on bump PRs until the checksum
+      // is updated; update it manually on the PR branch (it commits as odgbot,
+      // which gitIgnoredAuthors already tolerates).
+      customType: 'regex',
+      managerFilePatterns: ['.github/workflows/renovate-sync-ocm.yaml'],
+      matchStrings: [
+        "OCM_VERSION:\\s*'(?<currentValue>[^']+)'",
+      ],
+      depNameTemplate: 'open-component-model/open-component-model',
+      datasourceTemplate: 'github-releases',
     },
     {
       // Track OCM componentReferences via the custom ocm-gar datasource, which
