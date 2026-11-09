@@ -1,7 +1,7 @@
 name: Renovate
 on:
   schedule:
-    - cron: '0 1 * * *'  # nightly at 1am UTC
+    - cron: '*/30 * * * *'  # every 30 minutes
   # Run after every merge to the default branch so renovate rebases /
   # automerges its PRs before they go stale.
   push:
