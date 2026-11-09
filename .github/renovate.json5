@@ -30,6 +30,13 @@
   ],
   packageRules: [
     {
+      // The global 7-day minimumReleaseAge applies to lockfile maintenance
+      // too, where it delays refreshing the whole lockfile. Skip it for that
+      // as it does not work correctly anyways.
+      matchDepTypes: ['lockFileMaintenance'],
+      minimumReleaseAge: null,
+    },
+    {
       matchUpdateTypes: [
         'patch',
       ],
@@ -137,17 +144,9 @@
       enabled: false,
     },
   ],
-  postUpgradeTasks: {
-    commands: [
-      'python3 .ci/renovate-sync-ocm',
-    ],
-    fileFilters: [
-      '.ocm/base-component.yaml',
-      'extension-definitions.yaml',
-      '.ocm/release-notes/**',
-    ],
-    executionMode: 'branch',
-  },
+  // Fetch OCM component versions from the OCI registry tags list endpoint.
+  // The GCP Artifact Registry tags/list response groups tags under manifest
+  // digests; the JSON transform flattens them into Renovate's releases format.
   customDatasources: {
     'ocm-gar': {
       defaultRegistryUrlTemplate: 'https://europe-docker.pkg.dev/v2/gardener-project/releases/component-descriptors/{{packageName}}/tags/list',
@@ -180,6 +179,26 @@
       datasourceTemplate: 'docker',
     },
     {
+      // Bump OCM_VERSION in renovate-sync-ocm.yaml. OCM_SHA256 stays manual —
+      // Renovate cannot fetch checksums for arbitrary GitHub release binaries.
+      // The workflow's sha256sum check will fail on bump PRs until the checksum
+      // is updated; update it manually on the PR branch (it commits as odgbot,
+      // which gitIgnoredAuthors already tolerates).
+      customType: 'regex',
+      managerFilePatterns: ['.github/workflows/renovate-sync-ocm.yaml'],
+      matchStrings: [
+        "OCM_VERSION:\\s*'(?<currentValue>[^']+)'",
+      ],
+      depNameTemplate: 'open-component-model/open-component-model',
+      datasourceTemplate: 'github-releases',
+    },
+    {
+      // Track OCM componentReferences via the custom ocm-gar datasource, which
+      // reads OCI tags from the Artifact Registry tags/list endpoint.
+      // NOTE: the matchStrings regex assumes componentName/name/version appear
+      // on consecutive lines in that exact order with no blank lines between
+      // them. If the field order or formatting in base-component.yaml changes,
+      // this match will silently stop working.
       customType: 'regex',
       managerFilePatterns: [
         '.ocm/base-component.yaml',
