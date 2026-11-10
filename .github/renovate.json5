@@ -120,17 +120,6 @@
       automerge: true,
     },
     {
-      // Auto-merge minor+patch of the OCM CLI version in renovate-sync-ocm.yaml.
-      matchDepNames: [
-        'open-component-model/open-component-model',
-      ],
-      matchUpdateTypes: [
-        'patch',
-        'minor',
-      ],
-      automerge: true,
-    },
-    {
       matchBaseBranches: [
         '/^release-/',
       ],
@@ -202,19 +191,6 @@
         'imageReference:\\s*(?<depName>[^:\\s]+):(?<currentValue>[^@\\s]+)(?:@(?<currentDigest>sha256:[a-f0-9]+))?',
       ],
       datasourceTemplate: 'docker',
-    },
-    {
-      // OCM_VERSION is matched by this regex manager; the inline
-      // '# renovate: sha256:<hash>' marker is managed by the github-releases
-      // datasource itself (it auto-updates sha256-suffixed currentValues
-      // using the release's checksums.txt, as documented by Renovate).
-      customType: 'regex',
-      managerFilePatterns: ['.github/workflows/renovate-sync-ocm.yaml'],
-      matchStrings: [
-        "OCM_VERSION:\\s*'(?<currentValue>[^' ]+)(?:#\\s*renovate:\\s*(?<currentDigest>sha256:[a-f0-9]+))?'",
-      ],
-      depNameTemplate: 'open-component-model/open-component-model',
-      datasourceTemplate: 'github-releases',
     },
     {
       // Track OCM componentReferences via the custom ocm-gar datasource, which
