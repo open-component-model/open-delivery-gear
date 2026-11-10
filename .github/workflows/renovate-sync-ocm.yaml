@@ -64,6 +64,10 @@ jobs:
               best_count="$count"
             fi
           done
+          if [ -z "$best" ]; then
+            echo 'no base branch (main or release-*) found' >&2
+            exit 1
+          fi
           echo "base=$(git merge-base "$best" HEAD)" >> "$GITHUB_OUTPUT"
 
       - name: Sync OCM references
