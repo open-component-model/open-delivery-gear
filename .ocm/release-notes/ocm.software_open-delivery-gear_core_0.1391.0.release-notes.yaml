@@ -1,0 +1,15 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/core
+  component_version: 0.1391.0
+release_notes:
+- audience: developer
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: breaking
+  contents: Removed the `pickle` encoding type option for the DB cache and favoured
+    `json` instead
+  mimetype: text/markdown
+  reference: '[#1212](https://github.com/open-component-model/odg-core/pull/1212)'
+  type: standard
