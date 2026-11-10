@@ -84,10 +84,12 @@
         'ocm.software/open-delivery-gear/observability',
         'ocm.software/open-delivery-gear/ui',
       ],
+      // Auto-merge bumps of our own OCM component references, no wait.
       ignoreUnstable: false,
       allowedVersions: '/^[0-9]+\\.[0-9]+\\.[0-9]+(-rc\\.[0-9]+)?$/',
       minimumReleaseAge: null,
       internalChecksFilter: 'none',
+      automerge: true,
       separateMinorPatch: true,
     },
     {
@@ -107,20 +109,6 @@
         'ocm.software/open-delivery-gear/ui',
       ],
       sourceUrl: 'https://github.com/open-component-model/odg-ui',
-    },
-    {
-      // Auto-merge minor+patch bumps of our own OCM component references, no wait.
-      matchDepNames: [
-        'ocm.software/open-delivery-gear/core',
-        'ocm.software/open-delivery-gear/observability',
-        'ocm.software/open-delivery-gear/ui',
-      ],
-      matchUpdateTypes: [
-        'patch',
-        'minor',
-      ],
-      minimumReleaseAge: null,
-      automerge: true,
     },
     {
       matchBaseBranches: [

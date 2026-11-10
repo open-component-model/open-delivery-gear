@@ -6,6 +6,8 @@ on:
   push:
     branches:
       - renovate/**
+    paths:
+      - .ocm/**
   workflow_dispatch:
     inputs:
       branch:
@@ -27,7 +29,6 @@ jobs:
     if: github.event_name == 'workflow_dispatch' || (github.repository_owner == 'open-component-model' && github.actor == 'odgbot[bot]')
     runs-on: ubuntu-latest
     permissions:
-      contents: read
       id-token: write
     steps:
       # Checks out the branch and mints the federated write token in one step
