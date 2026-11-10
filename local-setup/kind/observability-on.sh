@@ -21,7 +21,15 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="${REPO_ROOT:-$(cd "${SCRIPT_DIR}/../.." && pwd)}"
 ODG_OBSERVABILITY="${ODG_OBSERVABILITY:-${REPO_ROOT}/../odg-observability}"
-KUBECONFIG_FILE="${KUBECONFIG:-${REPO_ROOT}/local-setup/kind/kubeconfig}"
+# Pin the kind kubeconfig: do NOT fall back to the caller's KUBECONFIG — users
+# often export merged kubeconfigs (kind + gardener + ...); kubectl `config` writes
+# against a merged view then stamp foreign current-contexts (e.g. odg-dev-p0) into
+# this file, breaking later scripted kubectl calls. Only opt-in overrides via
+# KUBECONFIG pointing at a real file; anything else => repo-local file.
+KUBECONFIG_FILE="${REPO_ROOT}/local-setup/kind/kubeconfig"
+case "${KUBECONFIG:-}" in
+  *:*) echo "note: multi-file KUBECONFIG detected (${KUBECONFIG##*:} + more) —\n      pinned to ${KUBECONFIG_FILE} instead" >&2 ;;
+esac
 # All charts deploy into the one namespace where ODG runs: the Prometheus CR
 # selects ServiceMonitors only from its own namespace, so the collector's
 # ServiceMonitor must live beside it.
@@ -153,16 +161,39 @@ pf 8080:8080 "${NAMESPACE}" perses /tmp/pf-perses.log
 pf 5601:5601 "${NAMESPACE}" opensearch-dashboards /tmp/pf-dashboards.log
 pf 4317:4317 "${NAMESPACE}" "${COLLECTOR_SVC}" /tmp/pf-otlp.log
 
-# Data view (index pattern) so Discover works out of the box. 2xx = ok.
-for i in $(seq 1 30); do
-  code=$(curl -s -o /dev/null -w '%{http_code}' \
-    -X POST 'localhost:5601/api/saved_objects/index-pattern/logs-otel-v1?overwrite=true' \
-    -H 'osd-xsrf: true' -H 'Content-Type: application/json' \
-    -d '{"attributes":{"title":"logs-otel-v1","timeFieldName":"@timestamp","name":"otel logs"}}')
-  [[ "$code" =~ ^2 ]] && break
-  sleep 2
+# Data views (index patterns) so Discover works out of the box for logs AND
+# traces. Spans ship to traces-otel-v1 (collector opensearch/traces exporter),
+# logs to logs-otel-v1 (filelog -> opensearch/logs). 2xx = ok.
+#
+# Why the sleep: index patterns save an empty field list when the backing index
+# doesn't exist yet. Collector only creates logs-otel-v1/traces-otel-v1 on
+# first payload. We wait for both, derive fields via _fields_for_wildcard, and
+# store them inline — otherwise Discover breaks with "Could not locate that
+# index-pattern-field (id: startTime)" on a fresh cluster.
+for pattern in logs-otel-v1 traces-otel-v1; do
+  # traces use startTime: the collector's opensearch/traces exporter writes
+  # @timestamp as the 0001-01-01T00:00:00Z sentinel; logs keep @timestamp
+  timefield="@timestamp"; [[ "$pattern" == traces-* ]] && timefield="startTime"
+  # wait for the index to exist (collector creates on first payload)
+  for i in $(seq 1 60); do
+    kubectl --kubeconfig="${KUBECONFIG_FILE}" -n "${NAMESPACE}" exec statefulset/opensearch -- \
+      curl -s -o /dev/null -w '%{http_code}' "localhost:9200/${pattern}" 2>/dev/null | grep -q '^2' && break
+    sleep 2
+  done
+  # fetch the OS mapping -> build the index-pattern fields blob
+  fields_json=$(curl -s "localhost:5601/api/index_patterns/_fields_for_wildcard?pattern=${pattern}&meta_fields=_source&meta_fields=_id&meta_fields=_index&meta_fields=_score" \
+    | python3 -c "import json,sys; d=json.load(sys.stdin); print(json.dumps(d.get('fields', [])))")
+  # create the saved object with fields embedded (overwrite=true for re-runs)
+  for i in $(seq 1 30); do
+    code=$(curl -s -o /dev/null -w '%{http_code}' \
+      -X POST "localhost:5601/api/saved_objects/index-pattern/${pattern}?overwrite=true" \
+      -H 'osd-xsrf: true' -H 'Content-Type: application/json' \
+      -d "{\"attributes\":{\"title\":\"${pattern}\",\"timeFieldName\":\"${timefield}\",\"name\":\"otel ${pattern%%-otel-v1}\",\"fields\":$(python3 -c "import json,sys; print(json.dumps(json.dumps(json.load(sys.stdin))))" <<<"${fields_json}")}}")
+    [[ "$code" =~ ^2 ]] && break
+    sleep 2
+  done
+  [[ "$code" =~ ^2 ]] || info "WARN: data view ${pattern} not created (create manually in OS Dashboards)"
 done
-[[ "$code" =~ ^2 ]] || info "WARN: data view not created (create manually in OS Dashboards)"
 ok "port-forwards up (self-healing loops)"
 
 # ─── Summary ─────────────────────────────────────────────────────────────────
@@ -179,6 +210,7 @@ cat <<EOF
   PUSH from host apps — grpc://localhost:4317 (traces/metrics)
 
   Verify: kubectl -n ${NAMESPACE} exec statefulset/opensearch -- curl -s localhost:9200/logs-otel-v1/_count
+          kubectl -n ${NAMESPACE} exec statefulset/opensearch -- curl -s localhost:9200/traces-otel-v1/_count
           curl -s 'localhost:9090/api/v1/query?query=kube_pod_info'
 
   Down: make kind-down (the stack is part of the throwaway kind cluster)
