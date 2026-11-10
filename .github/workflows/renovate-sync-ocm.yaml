@@ -30,12 +30,19 @@ jobs:
       contents: read
       id-token: write
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      # Checks out the branch and mints the federated write token in one step
+      # (checkout credentials are persisted, so `git push origin` works below).
+      # init-git-identity sets the git author to github-actions[bot]; its email
+      # is listed in renovate.json5 `gitIgnoredAuthors`.
+      - uses: gardener/cc-utils/.github/actions/trusted-checkout@v1
         with:
+          token-server: ${{ vars.FEDERATED_GITHUB_ACCESS_TOKEN_SERVER }}
+          github-auth-token-permissions: |
+            contents: write
+            workflows: write
+          init-git-identity: true
           ref: ${{ inputs.branch || github.ref_name }}
           fetch-depth: 0
-          # no write credentials on disk while running the script
-          persist-credentials: false
 
       # Installs the latest stable OCM v2 CLI, verified against the release
       # asset digest and build provenance attestation, and adds it to PATH.
@@ -83,28 +90,11 @@ jobs:
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
-      # write token is only minted when there is something to push
-      - uses: gardener/cc-utils/.github/actions/github-auth@v1
-        if: steps.sync.outputs.changed == 'true'
-        id: fed-token
-        with:
-          token-server: ${{ vars.FEDERATED_GITHUB_ACCESS_TOKEN_SERVER }}
-          repositories: |
-            open-delivery-gear
-          permissions: |
-            contents: write
-
       - name: Commit and push
         if: steps.sync.outputs.changed == 'true'
         shell: bash
         env:
           BRANCH: ${{ inputs.branch || github.ref_name }}
-          GH_TOKEN: ${{ steps.fed-token.outputs.token }}
         run: |
-          # Author must be listed in renovate.json5 `gitIgnoredAuthors`, otherwise
-          # Renovate treats the branch as modified and stops rebasing it.
-          git -c user.name='odgbot[bot]' \
-              -c user.email='319464553+odgbot[bot]@users.noreply.github.com' \
-              commit -m 'chore(renovate): sync OCM references and release notes'
-          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" \
-            "HEAD:refs/heads/${BRANCH}"
+          git commit -m 'chore(renovate): sync OCM references and release notes'
+          git push origin "HEAD:refs/heads/${BRANCH}"

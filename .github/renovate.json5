@@ -15,6 +15,9 @@
   gitAuthor: 'odgbot[bot] <319464553+odgbot[bot]@users.noreply.github.com>',
   gitIgnoredAuthors: [
     '319464553+odgbot[bot]@users.noreply.github.com',
+    // author configured by the trusted-checkout action (init-git-identity),
+    // used by the sync commit in renovate-sync-ocm.yaml
+    '41898282+github-actions[bot]@users.noreply.github.com',
   ],
   prConcurrentLimit: 0,
   prHourlyLimit: 0,
