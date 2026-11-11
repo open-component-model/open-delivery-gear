@@ -35,6 +35,10 @@ installation:
     helm_chart_name: gateway-helm
     value: gateway.envoyproxy.io/gatewayclass-controller-${target_namespace}
     value_type: python-string-template
+  - helm_attribute: certgen.job.annotations."resources.gardener.cloud/ignore"
+    helm_chart_name: gateway-helm
+    value: '"true"'
+    value_type: literal
   - helm_attribute: certgen.job.ttlSecondsAfterFinished
     helm_chart_name: gateway-helm
     value: 2147483647
