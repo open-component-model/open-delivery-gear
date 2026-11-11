@@ -130,8 +130,14 @@ idempotent and does not change images or Helm releases — you can re-run
 `make kind-observability-on` at any time, also after `make kind-local-image`,
 without losing your local image (and vice versa).
 
-Spans land in the `traces-otel-v1` index of the in-cluster OpenSearch — open
-http://localhost:5601 and explore Discover → `traces-otel-v1`.
+Spans land in two places in the in-cluster OpenSearch (open http://localhost:5601):
+
+- Discover → `traces-otel-v1`: raw spans, written by the collector.
+- Observability → Trace Analytics: traces, services and service map. The collector
+  also sends spans to a local Data Prepper, which writes `otel-v1-apm-span-*` and
+  `otel-v1-apm-service-map`. This is the same view as BTP Cloud Logging in
+  production, which runs its own Data Prepper. Traces show up about 10 s after
+  the request.
 
 > [!NOTE]
 > Tracing only produces spans if the workload's image contains the OTEL SDK.
@@ -175,7 +181,7 @@ After `make kind-observability-on` finishes, these port-forwards are running:
 |---|---|
 | http://localhost:8080 | Perses (Dashboards → odg) |
 | http://localhost:9090 | Prometheus UI |
-| http://localhost:5601 | OpenSearch Dashboards (Discover → `logs-otel-v1`, `traces-otel-v1`) |
+| http://localhost:5601 | OpenSearch Dashboards (Discover → `logs-otel-v1`, `traces-otel-v1`; Observability → Trace Analytics) |
 | grpc://localhost:4317 | OTLP endpoint — push traces/metrics from apps on your Mac |
 
 The port-forwards restart themselves on drops (pod restart, laptop sleep).

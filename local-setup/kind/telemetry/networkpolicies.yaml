@@ -46,12 +46,75 @@ spec:
         - podSelector:
             matchLabels:
               app: opensearch-dashboards
+        # trace fan-out from data-prepper (writes otel-v1-apm-span-* and
+        # otel-v1-apm-service-map-* for the Trace Analytics plugin)
+        - podSelector:
+            matchLabels:
+              app: data-prepper
         # kubectl port-forward (node-local source ip; opens to cluster pods too)
         - ipBlock:
             cidr: 0.0.0.0/0
       ports:
         - port: 9200
   egress: []   # single-node: nothing outbound
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: data-prepper
+  labels:
+    app: data-prepper
+spec:
+  podSelector:
+    matchLabels:
+      app: data-prepper
+  policyTypes: [Ingress, Egress]
+  ingress:
+    # otlp-grpc fan-in from the otel collector daemonset
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: opentelemetry-collector
+      ports:
+        - port: 21890
+  egress:
+    # resolve the opensearch svc name
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    # opensearch sinks
+    - to:
+        - podSelector:
+            matchLabels:
+              app: opensearch
+      ports:
+        - port: 9200
+---
+# Collector side of the data-prepper fan-out. The telemetry chart's own
+# allow-egress-from-otel-collector has no :21890 rule (prod has no Data
+# Prepper); NetworkPolicies are additive, so this adds it for kind only.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-egress-from-otel-collector-to-data-prepper
+  labels:
+    app: data-prepper
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: opentelemetry-collector
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app: data-prepper
+      ports:
+        - port: 21890
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
