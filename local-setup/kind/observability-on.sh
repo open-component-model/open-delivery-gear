@@ -56,7 +56,7 @@ command -v curl    >/dev/null || die "curl not found"
 k() { kubectl --kubeconfig="${KUBECONFIG_FILE}" "$@"; }
 
 # ─── 1. opensearch + dashboards manifests ────────────────────────────────────
-info "1/5  opensearch + opensearch dashboards (in-cluster, in namespace ${NAMESPACE})"
+info "1/6  opensearch + opensearch dashboards (in-cluster, in namespace ${NAMESPACE})"
 # images pull straight from docker hub (~2GB total on first node boot; pods
 # schedule fine while the pull runs, so no pre-load step)
 k -n "${NAMESPACE}" apply -f "${BACKENDS}/opensearch.yaml"
@@ -72,7 +72,7 @@ k -n "${NAMESPACE}" rollout status deployment opensearch-dashboards --timeout=30
 ok "backends up (http://opensearch.${NAMESPACE}:9200, http://opensearch-dashboards.${NAMESPACE}:5601)"
 
 # ─── 2. prometheus-operator + kube-state-metrics + perses ───────────────────
-info "2/5  deploy ${PROM_RELEASE} (prometheus-operator + kube-state-metrics + perses)"
+info "2/6  deploy ${PROM_RELEASE} (prometheus-operator + kube-state-metrics + perses)"
 build_helm_override_args "${SCRIPT_DIR}"
 
 # SKIP dependency management: the perses .tgz under charts/ is vendored WITH the
@@ -116,7 +116,7 @@ k rollout status statefulset perses -n "${NAMESPACE}" --timeout=180s \
 ok "prometheus + perses deployed"
 
 # ─── 3. telemetry chart (otel-collector + metrics-operator) ─────────────────
-info "3/5  deploy ${TEL_RELEASE} (backend=opensearch, endpoint=cluster service)"
+info "3/6  deploy ${TEL_RELEASE} (backend=opensearch, endpoint=cluster service)"
 helm --kubeconfig="${KUBECONFIG_FILE}" dependency update "${TEL_CHART}" >/dev/null
 helm --kubeconfig="${KUBECONFIG_FILE}" upgrade --install "${TEL_RELEASE}" "${TEL_CHART}" \
   --namespace "${NAMESPACE}" \
@@ -134,10 +134,63 @@ k -n "${NAMESPACE}" rollout status ds/${COLLECTOR_SVC}-agent --timeout=180s \
   || die "collector not ready — kubectl -n ${NAMESPACE} logs ds/${COLLECTOR_SVC}-agent"
 ok "telemetry deployed"
 
+# ─── 4. start trace ingest on the already-running ODG workloads ─────────────
+# Patch the OTEL env vars onto every odg-core container in the namespace.
+# Touches neither helm releases nor container images: `make kind-up` and
+# `make kind-update` stay using stock published charts, and running
+# `kind-local-image <tag>` before this gets you local code *and* tracing.
+# Warns when it patches a workload on the released registry image so that
+# the absence of spans has an obvious explanation (the SDK may not be in
+# that build yet).
+info "4/6  wiring traces into ODG workloads"
+OTLP_ENDPOINT="http://${COLLECTOR_SVC}.${NAMESPACE}:4317"
+. "${SCRIPT_DIR}/odg-workloads.sh"
+discover_odg_workloads
+
+if [ "${#ODG_RESOURCE[@]}" -eq 0 ]; then
+  warn "no ODG workloads found in ${NAMESPACE} — nothing patched"
+else
+  for i in "${!ODG_RESOURCE[@]}"; do
+    res="${ODG_RESOURCE[$i]}"
+    workload="${ODG_WORKLOAD[$i]}"
+    container="${ODG_CONTAINER[$i]}"
+
+    image=$(k get -n "${NAMESPACE}" "${res}" -o json \
+      | jq -r --arg c "${container}" '
+          (if .kind == "CronJob" then .spec.jobTemplate.spec.template else .spec.template end)
+          | .spec.containers[] | select(.name == $c) | .image')
+    if [[ "${image}" == europe-docker.pkg.dev/* ]]; then
+      warn "${workload}: on released image ${image} — published odg-core builds predate the OTEL SDK, so no spans will be emitted until you run 'kind-local-image <tag>' first"
+    fi
+
+    # Build a kubectl-patch that upserts the three vars instead of append-
+    # only (`kubectl set env` does exactly the right thing: replace when the
+    # name exists, append otherwise). For deployments it patches the pod
+    # template directly; for cronjobs it updates the jobTemplate.
+    if [[ "${res}" == deployment/* ]]; then
+      k set env -n "${NAMESPACE}" "${res}" --containers="${container}" \
+        OTEL_EXPORTER_OTLP_ENDPOINT="${OTLP_ENDPOINT}" \
+        OTEL_SERVICE_NAME="${workload}" \
+        OTEL_RESOURCE_ATTRIBUTES="k8s.pod.name=\$(K8S_POD_NAME),k8s.pod.uid=\$(K8S_POD_UID),k8s.namespace.name=\$(K8S_POD_NAMESPACE),k8s.container.name=${container}" \
+        >/dev/null
+      k -n "${NAMESPACE}" rollout status "${res}" --timeout=120s \
+        || info "    ${workload} still rolling out; traces start when Ready"
+    else
+      # CronJob: kubectl set env knows how to walk the jobTemplate
+      k set env -n "${NAMESPACE}" "${res}" --containers="${container}" \
+        OTEL_EXPORTER_OTLP_ENDPOINT="${OTLP_ENDPOINT}" \
+        OTEL_SERVICE_NAME="${workload}" \
+        OTEL_RESOURCE_ATTRIBUTES="k8s.pod.name=\$(K8S_POD_NAME),k8s.pod.uid=\$(K8S_POD_UID),k8s.namespace.name=\$(K8S_POD_NAMESPACE),k8s.container.name=${container}" \
+        >/dev/null
+    fi
+    ok "${workload} now pushes to ${OTLP_ENDPOINT}"
+  done
+fi
+
 # ─── 4. Port-forwards + data view ────────────────────────────────────────────
 # (no log-annotation step: the telemetry chart's annotationKey is "" = gate off,
 # all odg-namespace pods ship logs except the chart's built-in noisy excludes)
-info "4/4  port-forwards: :9090 prometheus, :8080 perses, :5601 dashboards, :4317 OTLP"
+info "5/6  port-forwards: :9090 prometheus, :8080 perses, :5601 dashboards, :4317 OTLP"
 pf() { # pf <local:remote> <ns> <svc> <logfile>
   pkill -f "kubectl.*port-forward.*${1}" 2>/dev/null || true; sleep 1
   nohup bash -c '
@@ -208,6 +261,8 @@ cat <<EOF
     all odg-namespace pods ship logs (delivery-dashboard + delivery-db excluded by the chart)
 
   PUSH from host apps — grpc://localhost:4317 (traces/metrics)
+  SET in your shell to trace locally-run ODG processes into the kind collector:
+      export OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317
 
   Verify: kubectl -n ${NAMESPACE} exec statefulset/opensearch -- curl -s localhost:9200/logs-otel-v1/_count
           kubectl -n ${NAMESPACE} exec statefulset/opensearch -- curl -s localhost:9200/traces-otel-v1/_count
