@@ -197,33 +197,49 @@ else
     workload="${ODG_WORKLOAD[$i]}"
     container="${ODG_CONTAINER[$i]}"
 
-    image=$(k get -n "${NAMESPACE}" "${res}" -o json \
-      | jq -r --arg c "${container}" '
+    res_json=$(k get -n "${NAMESPACE}" "${res}" -o json)
+    image=$(jq -r --arg c "${container}" '
           (if .kind == "CronJob" then .spec.jobTemplate.spec.template else .spec.template end)
-          | .spec.containers[] | select(.name == $c) | .image')
+          | .spec.containers[] | select(.name == $c) | .image' <<<"${res_json}")
     if [[ "${image}" == europe-docker.pkg.dev/* ]]; then
       warn "${workload}: on released image ${image} — published odg-core builds predate the OTEL SDK, so no spans will be emitted until you run 'kind-local-image <tag>' first"
     fi
 
-    # Build a kubectl-patch that upserts the three vars instead of append-
-    # only (`kubectl set env` does exactly the right thing: replace when the
-    # name exists, append otherwise). For deployments it patches the pod
-    # template directly; for cronjobs it updates the jobTemplate.
+    # Same env block as the odg-core charts (extensions helpers.tpl,
+    # delivery-service deployment.yaml). Released charts lack it, so mirror it
+    # here. Order matters: Kubernetes expands $(VAR) only from vars defined
+    # EARLIER in the list, so K8S_POD_* (downward API) must precede
+    # OTEL_RESOURCE_ATTRIBUTES. `kubectl set env` can't create fieldRef vars,
+    # hence a JSON patch that rewrites the container's env: drop our six names,
+    # re-append them in order. Idempotent; other env vars stay untouched.
+    env_patch=$(jq -c --arg c "${container}" --arg ep "${OTLP_ENDPOINT}" --arg svc "${workload}" '
+      (if .kind == "CronJob" then "/spec/jobTemplate/spec/template" else "/spec/template" end) as $tpl_path
+      | (if .kind == "CronJob" then .spec.jobTemplate.spec.template else .spec.template end) as $tpl
+      | ($tpl.spec.containers | map(.name) | index($c)) as $idx
+      | ["K8S_POD_NAME", "K8S_POD_UID", "K8S_POD_NAMESPACE",
+         "OTEL_EXPORTER_OTLP_ENDPOINT", "OTEL_SERVICE_NAME", "OTEL_RESOURCE_ATTRIBUTES"] as $ours
+      | def field($path): {valueFrom: {fieldRef: {fieldPath: $path}}};
+      [{
+        op: "add",
+        path: "\($tpl_path)/spec/containers/\($idx)/env",
+        value: (
+          ($tpl.spec.containers[$idx].env // [] | map(select(.name as $n | $ours | index($n) | not)))
+          + [
+            ({name: "K8S_POD_NAME"} + field("metadata.name")),
+            ({name: "K8S_POD_UID"} + field("metadata.uid")),
+            ({name: "K8S_POD_NAMESPACE"} + field("metadata.namespace")),
+            {name: "OTEL_EXPORTER_OTLP_ENDPOINT", value: $ep},
+            {name: "OTEL_SERVICE_NAME", value: $svc},
+            {name: "OTEL_RESOURCE_ATTRIBUTES",
+             value: "k8s.pod.name=$(K8S_POD_NAME),k8s.pod.uid=$(K8S_POD_UID),k8s.namespace.name=$(K8S_POD_NAMESPACE),k8s.container.name=\($c)"}
+          ]
+        )
+      }]' <<<"${res_json}")
+    k -n "${NAMESPACE}" patch "${res}" --type=json -p "${env_patch}" >/dev/null \
+      || die "patching env of ${workload} failed"
     if [[ "${res}" == deployment/* ]]; then
-      k set env -n "${NAMESPACE}" "${res}" --containers="${container}" \
-        OTEL_EXPORTER_OTLP_ENDPOINT="${OTLP_ENDPOINT}" \
-        OTEL_SERVICE_NAME="${workload}" \
-        OTEL_RESOURCE_ATTRIBUTES="k8s.pod.name=\$(K8S_POD_NAME),k8s.pod.uid=\$(K8S_POD_UID),k8s.namespace.name=\$(K8S_POD_NAMESPACE),k8s.container.name=${container}" \
-        >/dev/null
       k -n "${NAMESPACE}" rollout status "${res}" --timeout=120s \
         || info "    ${workload} still rolling out; traces start when Ready"
-    else
-      # CronJob: kubectl set env knows how to walk the jobTemplate
-      k set env -n "${NAMESPACE}" "${res}" --containers="${container}" \
-        OTEL_EXPORTER_OTLP_ENDPOINT="${OTLP_ENDPOINT}" \
-        OTEL_SERVICE_NAME="${workload}" \
-        OTEL_RESOURCE_ATTRIBUTES="k8s.pod.name=\$(K8S_POD_NAME),k8s.pod.uid=\$(K8S_POD_UID),k8s.namespace.name=\$(K8S_POD_NAMESPACE),k8s.container.name=${container}" \
-        >/dev/null
     fi
     ok "${workload} now pushes to ${OTLP_ENDPOINT}"
   done
@@ -232,29 +248,18 @@ fi
 # ─── 4. Port-forwards + data view ────────────────────────────────────────────
 # (no log-annotation step: the telemetry chart's annotationKey is "" = gate off,
 # all odg-namespace pods ship logs except the chart's built-in noisy excludes)
-info "5/6  port-forwards: :9090 prometheus, :8080 perses, :5601 dashboards, :4317 OTLP"
+info "5/6  port-forwards: :9090 prometheus, :8080 perses, :5601 dashboards, :4317 OTLP, :3000 dashboard, :5000 delivery-service"
+. "${SCRIPT_DIR}/port-forwards.sh"
 pf() { # pf <local:remote> <ns> <svc> <logfile>
-  pkill -f "kubectl.*port-forward.*${1}" 2>/dev/null || true; sleep 1
-  nohup bash -c '
-    fails=0
-    while [ "$fails" -lt 3 ]; do
-      kubectl --kubeconfig="'"${KUBECONFIG_FILE}"'" -n '"${2}"' port-forward svc/'"$3"' '"$1"' >>'"$4"' 2>&1
-      # cluster gone (kind-down / reboot / kubeconfig deleted)? 3 consecutive
-      # connection failures = exit instead of retrying forever. Transient drops
-      # (pod restart, laptop sleep) fail once, recover on the next attempt.
-      kubectl --kubeconfig="'"${KUBECONFIG_FILE}"'" get namespace '"${2}"' >/dev/null 2>&1 \
-        && fails=0 || fails=$((fails+1))
-      sleep 2
-    done
-    echo "$(date): cluster unreachable 3× — giving up" >>'"$4"'' _ "$1" "$2" "$3" "$4" >/dev/null 2>&1 &
-  disown
-  sleep 3
-  lsof -i tcp:"${1%%:*}" >/dev/null 2>&1 || die "port-forward ${1} for ${3} failed — see $4"
+  port_forward "${KUBECONFIG_FILE}" "$2" "$3" "$1" "$4" || die "port-forward ${1} for ${3} failed — see $4"
 }
 pf 9090:9090 "${NAMESPACE}" prometheus-operated /tmp/pf-prometheus.log
 pf 8080:8080 "${NAMESPACE}" perses /tmp/pf-perses.log
 pf 5601:5601 "${NAMESPACE}" opensearch-dashboards /tmp/pf-dashboards.log
 pf 4317:4317 "${NAMESPACE}" "${COLLECTOR_SVC}" /tmp/pf-otlp.log
+# step 4 restarted delivery-service/-dashboard pods -> the plain forwards from
+# kind-up are dead; replace them with self-healing ones
+odg_port_forwards "${KUBECONFIG_FILE}" "${NAMESPACE}"
 
 # Data views (index patterns) so Discover works out of the box for logs AND
 # traces. Spans ship to traces-otel-v1 (collector opensearch/traces exporter),

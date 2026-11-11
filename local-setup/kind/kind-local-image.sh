@@ -60,3 +60,6 @@ for i in "${!ODG_RESOURCE[@]}"; do
 done
 
 echo "✓ odg-core:${TAG} live on ${#ODG_RESOURCE[@]} workload(s)"
+
+. "${SCRIPT_DIR}/port-forwards.sh"
+odg_port_forwards "${KUBECONFIG_FILE}" "${NAMESPACE}"

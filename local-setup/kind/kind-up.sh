@@ -120,5 +120,5 @@ helm upgrade -i extensions oci://${EXTENSIONS_CHART} \
   "${HELM_OVERRIDE_ARGS[@]}" \
   --wait
 
-kc port-forward service/delivery-dashboard 3000:8080 > /dev/null &
-kc port-forward service/delivery-service 5000:8080 > /dev/null &
+. "${SCRIPT_DIR}/port-forwards.sh"
+odg_port_forwards "$dkubeconfig" "$NAMESPACE"

@@ -38,6 +38,9 @@ retrieve the greatest version. Upon execution, this command will create
 `<REPO_ROOT>/local-setup/kind/kubeconfig` which can be used to interact with
 the ODG cluster. Also, it will forward the delivery-service to
 `http://localhost:5000` and the delivery-dashboard to `http://localhost:3000`.
+These port-forwards restart themselves when the pods restart (for example after
+`make kind-local-image` or `make kind-observability-on`). They stop when the
+cluster is gone. Logs are in `/tmp/pf-delivery-*.log`.
 
 > [!NOTE]  
 > Currently, the listing of available versions via OCM CLI is not working for
