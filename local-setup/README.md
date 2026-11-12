@@ -126,8 +126,8 @@ Everything runs inside the KinD cluster — nothing is started on your Mac.
 ### Traces (OpenTelemetry)
 
 `make kind-observability-on` also enables OTel tracing on all ODG workloads:
-it patches the `OTEL_EXPORTER_OTLP_ENDPOINT`, `OTEL_SERVICE_NAME` and
-`OTEL_RESOURCE_ATTRIBUTES` environment variables onto every ODG Deployment
+it patches the `OTEL_EXPORTER_OTLP_ENDPOINT`, `OTEL_SERVICE_NAME`,
+`OTEL_SEMCONV_STABILITY_OPT_IN` and `OTEL_RESOURCE_ATTRIBUTES` environment variables onto every ODG Deployment
 and CronJob so spans are exported to the in-cluster collector. The patch is
 idempotent and does not change images or Helm releases — you can re-run
 `make kind-observability-on` at any time, also after `make kind-local-image`,

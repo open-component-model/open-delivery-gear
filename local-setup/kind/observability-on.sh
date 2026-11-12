@@ -210,14 +210,15 @@ else
     # here. Order matters: Kubernetes expands $(VAR) only from vars defined
     # EARLIER in the list, so K8S_POD_* (downward API) must precede
     # OTEL_RESOURCE_ATTRIBUTES. `kubectl set env` can't create fieldRef vars,
-    # hence a JSON patch that rewrites the container's env: drop our six names,
+    # hence a JSON patch that rewrites the container's env: drop our seven names,
     # re-append them in order. Idempotent; other env vars stay untouched.
     env_patch=$(jq -c --arg c "${container}" --arg ep "${OTLP_ENDPOINT}" --arg svc "${workload}" '
       (if .kind == "CronJob" then "/spec/jobTemplate/spec/template" else "/spec/template" end) as $tpl_path
       | (if .kind == "CronJob" then .spec.jobTemplate.spec.template else .spec.template end) as $tpl
       | ($tpl.spec.containers | map(.name) | index($c)) as $idx
       | ["K8S_POD_NAME", "K8S_POD_UID", "K8S_POD_NAMESPACE",
-         "OTEL_EXPORTER_OTLP_ENDPOINT", "OTEL_SERVICE_NAME", "OTEL_RESOURCE_ATTRIBUTES"] as $ours
+         "OTEL_EXPORTER_OTLP_ENDPOINT", "OTEL_SERVICE_NAME", "OTEL_SEMCONV_STABILITY_OPT_IN",
+         "OTEL_RESOURCE_ATTRIBUTES"] as $ours
       | def field($path): {valueFrom: {fieldRef: {fieldPath: $path}}};
       [{
         op: "add",
@@ -230,6 +231,10 @@ else
             ({name: "K8S_POD_NAMESPACE"} + field("metadata.namespace")),
             {name: "OTEL_EXPORTER_OTLP_ENDPOINT", value: $ep},
             {name: "OTEL_SERVICE_NAME", value: $svc},
+            # emit http.server.request.duration (seconds, with http.route) instead
+            # of the old-semconv http.server.duration (ms, no route) — the perses
+            # odg-http-server dashboard queries the new one
+            {name: "OTEL_SEMCONV_STABILITY_OPT_IN", value: "http"},
             {name: "OTEL_RESOURCE_ATTRIBUTES",
              value: "k8s.pod.name=$(K8S_POD_NAME),k8s.pod.uid=$(K8S_POD_UID),k8s.namespace.name=$(K8S_POD_NAMESPACE),k8s.container.name=\($c)"}
           ]
