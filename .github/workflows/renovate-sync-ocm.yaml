@@ -1,0 +1,105 @@
+name: Renovate Sync OCM
+# Replaces the former Renovate postUpgradeTask. Runs after Renovate pushed a
+# branch, so Renovate itself does not need to be allowed to execute commands
+# (RENOVATE_ALLOWED_POST_UPGRADE_COMMANDS).
+on:
+  push:
+    branches:
+      - renovate/**
+    paths:
+      - .ocm/**
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'renovate/* branch to sync'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: renovate-sync-ocm-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    # Only react to pushes by Renovate. If the sync push below re-triggers this
+    # job, the second run finds nothing to change and exits without pushing.
+    if: github.event_name == 'workflow_dispatch' || (github.repository_owner == 'open-component-model' && github.actor == 'odgbot[bot]')
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      # Checks out the branch and mints the federated write token in one step
+      # (checkout credentials are persisted, so `git push origin` works below).
+      # init-git-identity sets the git author to github-actions[bot]; its email
+      # is listed in renovate.json5 `gitIgnoredAuthors`.
+      - uses: gardener/cc-utils/.github/actions/trusted-checkout@v1
+        with:
+          token-server: ${{ vars.FEDERATED_GITHUB_ACCESS_TOKEN_SERVER }}
+          github-auth-token-permissions: |
+            contents: write
+            workflows: write
+          init-git-identity: true
+          ref: ${{ inputs.branch || github.ref_name }}
+          fetch-depth: 0
+
+      # Installs the latest stable OCM v2 CLI, verified against the release
+      # asset digest and build provenance attestation, and adds it to PATH.
+      - name: Install OCM CLI
+        id: ocm
+        uses: open-component-model/ocm-setup-action@585a852942b7fb3a1171c02eeb2d24e8deace9e6 # v2
+
+      - name: Determine base commit
+        id: base
+        shell: bash
+        run: |
+          # closest of main / release-* (fewest commits ahead) is the base of this branch
+          best=''
+          best_count=''
+          for candidate in $(git for-each-ref --format='%(refname:short)' 'refs/remotes/origin/main' 'refs/remotes/origin/release-*'); do
+            count="$(git rev-list --count "${candidate}..HEAD")"
+            if [ -z "$best_count" ] || [ "$count" -lt "$best_count" ]; then
+              best="$candidate"
+              best_count="$count"
+            fi
+          done
+          if [ -z "$best" ]; then
+            echo 'no base branch (main or release-*) found' >&2
+            exit 1
+          fi
+          echo "base=$(git merge-base "$best" HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Sync OCM references
+        id: sync
+        shell: bash
+        env:
+          BASE_REF: ${{ steps.base.outputs.base }}
+          OCM_BIN: ${{ steps.ocm.outputs.path }}
+        run: |
+          python3 .ci/renovate-sync-ocm
+          git add --all .ocm extension-definitions.yaml
+
+          if git diff --cached --quiet; then
+            echo 'nothing to sync'
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo '--- changed files ---'
+            git status --short
+            echo '--- diff stat ---'
+            git diff --cached --stat
+            echo '--- full diff ---'
+            git diff --cached
+            echo '-------------------'
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit and push
+        if: steps.sync.outputs.changed == 'true'
+        shell: bash
+        env:
+          BRANCH: ${{ inputs.branch || github.ref_name }}
+        run: |
+          git commit -m 'chore(renovate): sync OCM references and release notes'
+          git push origin "HEAD:refs/heads/${BRANCH}"
