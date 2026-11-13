@@ -9,7 +9,6 @@ extensions_cfg:
       - component_name: ocm.software/ocm
       - component_name: ocm.software/ocmcli
       - component_name: acme.org/sovereign/product
-      - component_name: opendesk.poc.sap.com/base
       - component_name: github.com/open-component-model/service-provider-ocm
       - component_name: github.com/openmcp-project/service-provider-kro
   bdba:
@@ -352,13 +351,6 @@ features_cfg:
       version: greatest
       icon: home
       releasePipelineUrl: https://github.com/openmcp-project/service-provider-kro/actions/workflows/release.yaml
-    - id: a50275cc-ea57-4e94-856b-5128d67ea598
-      name: opendesk.poc.sap.com/base
-      displayName: OpenDesk
-      type: OpenDesk
-      version: greatest
-      icon: home
-      releasePipelineUrl: https://github.com/platform-mesh/samples-opendesk-ocm-landscaper/actions/workflows/package_transfer.yaml
     - id: c6b1f9cf-63e0-4462-b55d-00b415a35be9
       name: acme.org/sovereign/product
       displayName: Product
@@ -409,9 +401,6 @@ ocm_repo_mappings:
   - repository: ghcr.io/openmcp-project/components
     prefixes:
       - github.com/openmcp-project/service-provider-kro
-  - repository: ghcr.io/platform-mesh/samples-opendesk-ocm-landscaper
-    prefixes:
-      - opendesk.poc.sap.com
 
 profiles:
   - name: OCM
@@ -437,17 +426,6 @@ profiles:
     special_component_ids:
       - 9dd1acb7-33cf-4707-914b-0a5096595fa4
       - 2986ba33-f937-4679-aa33-1d2ecaef7fe9
-
-  - name: OpenDesk
-    finding_types:
-      - finding/crypto
-      - finding/license
-      - finding/malware
-      - finding/osid
-      - finding/sast
-      - finding/vulnerability
-    special_component_ids:
-      - a50275cc-ea57-4e94-856b-5128d67ea598
 
   - name: Sovereign Demo
     finding_types:
