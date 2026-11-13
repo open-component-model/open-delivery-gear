@@ -1,0 +1,115 @@
+# In-cluster OpenSearch Data Prepper for the local observability stack.
+# Applied by ../observability-on.sh — no need to touch directly.
+#
+# Listens on :21890 (OTLP gRPC), receives trace fan-out from the otel
+# collector, writes shaped span docs to opensearch in `otel-v1-apm-span-*`
+# indices. Those are what OpenSearch Dashboards' Trace Analytics plugin reads.
+# Local-only — production uses BTP Cloud Logging's managed Data Prepper.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: data-prepper-pipeline
+  labels:
+    app: data-prepper
+data:
+  # Processors within one pipeline are chained; service_map emits only
+  # service-map docs (drops spans). Hence entry -> {raw, service-map} fan-out.
+  pipelines.yaml: |
+    entry-pipeline:
+      delay: "100"
+      source:
+        otel_trace_source:
+          ssl: false
+      buffer:
+        bounded_blocking:
+          buffer_size: 10240
+          batch_size: 160
+      sink:
+        - pipeline:
+            name: raw-pipeline
+        - pipeline:
+            name: service-map-pipeline
+    raw-pipeline:
+      source:
+        pipeline:
+          name: entry-pipeline
+      processor:
+        - otel_traces:
+            # Seconds (logged as ms). Default 180 s; 10 s for fast local feedback.
+            trace_flush_interval: 10
+      sink:
+        - opensearch:
+            hosts: ["http://opensearch.odg.svc.cluster.local:9200"]
+            insecure: true
+            index_type: trace-analytics-raw
+    service-map-pipeline:
+      delay: "100"
+      source:
+        pipeline:
+          name: entry-pipeline
+      processor:
+        - service_map:
+      sink:
+        - opensearch:
+            hosts: ["http://opensearch.odg.svc.cluster.local:9200"]
+            insecure: true
+            index_type: trace-analytics-service-map
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-prepper
+  labels:
+    app: data-prepper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: data-prepper
+  template:
+    metadata:
+      labels:
+        app: data-prepper
+    spec:
+      containers:
+        - name: data-prepper
+          image: opensearchproject/data-prepper:2.10.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: otlp-grpc
+              containerPort: 21890
+            - name: http
+              containerPort: 4900
+          volumeMounts:
+            - name: pipeline
+              mountPath: /usr/share/data-prepper/pipelines/pipelines.yaml
+              subPath: pipelines.yaml
+          resources:
+            requests: { memory: 512Mi, cpu: 100m }
+            limits:   { memory: 1Gi,   cpu: 500m }
+          readinessProbe:
+            tcpSocket:
+              port: otlp-grpc
+            initialDelaySeconds: 10
+            periodSeconds: 10
+      volumes:
+        - name: pipeline
+          configMap:
+            name: data-prepper-pipeline
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: data-prepper
+  labels:
+    app: data-prepper
+spec:
+  selector:
+    app: data-prepper
+  ports:
+    - name: otlp-grpc
+      port: 21890
+      targetPort: otlp-grpc
+    - name: http
+      port: 4900
+      targetPort: http

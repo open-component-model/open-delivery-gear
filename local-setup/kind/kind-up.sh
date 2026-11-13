@@ -40,18 +40,31 @@ check_required_flags() {
 parse_flags "$@"
 check_required_flags CLUSTER_NAME CHART
 
+# Pin kubeconfig to the repo-local file: callers routinely export merged
+# KUBECONFIG (kind + gardener clusters + ...); running this script's kubectl/
+# helm against the merged view stamps foreign contexts/current-context into the
+# wrong file. Every command below passes --kubeconfig explicitly via the kc/
+# helm wrappers. Only `kind create cluster` has no --kubeconfig equivalent —
+# it reads $KUBECONFIG only — so we export it for that ONE command and unset
+# again immediately after.
+dkubeconfig="${SCRIPT_DIR}/kubeconfig"
+kc()   { kubectl --kubeconfig="$dkubeconfig" "$@"; }
+helm() { command helm --kubeconfig="$dkubeconfig" "$@"; }
+
 echo ">>> 🔍 Checking for local override files in ${SCRIPT_DIR}"
 build_helm_override_args "${SCRIPT_DIR}"
 
-kind create cluster \
+# helm template below (inside <(...) ) never touches the cluster; kubeconfig
+# flag on it is harmless and keeps the "all helm calls pinned" invariant.
+KUBECONFIG="$dkubeconfig" kind create cluster \
   --name "$CLUSTER_NAME" \
   --config <(helm template "$CHART" --values "${SCRIPT_DIR}/values.yaml" "${HELM_OVERRIDE_ARGS[@]}")
 
 NAMESPACE="${NAMESPACE:-odg}"
 
-kubectl create ns $NAMESPACE
-kubectl config set-context --current --namespace=$NAMESPACE
-kubectl create -f "${CHART}/crd.yaml"
+kc create ns $NAMESPACE
+kc config set-context --current --namespace=$NAMESPACE
+kc create -f "${CHART}/crd.yaml"
 
 ODG_COMPONENT_REF="europe-docker.pkg.dev/gardener-project/releases//ocm.software/open-delivery-gear"
 ODG_VERSION="${ODG_VERSION:-$(ocm get cv ${ODG_COMPONENT_REF} --latest -o yaml | yq .[].component.version)}"
@@ -78,7 +91,7 @@ if [ -n "${EXTERNAL_DB_HOSTNAME}" ]; then
 else
   echo ">>> Installing delivery-database from ${DELIVERY_DATABASE_CHART}"
   # First, install custom pv and pvc to allow re-usage of host's filesystem mount
-  kubectl apply -f <(helm template delivery-db-pv "${CHART}/delivery-db-pv" --values "${SCRIPT_DIR}/cluster/values-delivery-db.yaml" "${HELM_OVERRIDE_ARGS[@]}") --namespace $NAMESPACE
+  kc apply -f <(helm template delivery-db-pv "${CHART}/delivery-db-pv" --values "${SCRIPT_DIR}/cluster/values-delivery-db.yaml" "${HELM_OVERRIDE_ARGS[@]}") --namespace $NAMESPACE
   helm upgrade -i delivery-db oci://${DELIVERY_DATABASE_CHART} \
     --namespace $NAMESPACE \
     --values ${CHART}/values-delivery-db.yaml \
@@ -107,5 +120,5 @@ helm upgrade -i extensions oci://${EXTENSIONS_CHART} \
   "${HELM_OVERRIDE_ARGS[@]}" \
   --wait
 
-kubectl port-forward service/delivery-dashboard 3000:8080 > /dev/null &
-kubectl port-forward service/delivery-service 5000:8080 > /dev/null &
+. "${SCRIPT_DIR}/port-forwards.sh"
+odg_port_forwards "$dkubeconfig" "$NAMESPACE"
