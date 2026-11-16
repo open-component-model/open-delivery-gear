@@ -224,13 +224,18 @@ else
         op: "add",
         path: "\($tpl_path)/spec/containers/\($idx)/env",
         value: (
-          ($tpl.spec.containers[$idx].env // [] | map(select(.name as $n | $ours | index($n) | not)))
+          ($tpl.spec.containers[$idx].env // []) as $env
+          # keep a chart-injected identity (odg-core charts inject per-process
+          # names, e.g. malware for the clamav deployment); release charts have
+          # none -> fall back to the workload name
+          | (($env | map(select(.name == "OTEL_SERVICE_NAME")) | first | .value) // $svc) as $svc_name
+          | ($env | map(select(.name as $n | $ours | index($n) | not)))
           + [
             ({name: "K8S_POD_NAME"} + field("metadata.name")),
             ({name: "K8S_POD_UID"} + field("metadata.uid")),
             ({name: "K8S_POD_NAMESPACE"} + field("metadata.namespace")),
             {name: "OTEL_EXPORTER_OTLP_ENDPOINT", value: $ep},
-            {name: "OTEL_SERVICE_NAME", value: $svc},
+            {name: "OTEL_SERVICE_NAME", value: $svc_name},
             # emit http.server.request.duration (seconds, with http.route) instead
             # of the old-semconv http.server.duration (ms, no route) — the perses
             # odg-http-server dashboard queries the new one
