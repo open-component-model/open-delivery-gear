@@ -39,6 +39,13 @@ check_required_flags CHART
 echo ">>> Checking for local override files in ${CHART}"
 build_helm_override_args "${SCRIPT_DIR}"
 
+# pin kubeconfig (see kind-up.sh): merged-KUBECONFIG callers would otherwise
+# corrupt the file's contexts/current-context. No `kind create cluster` here,
+# so a local var + wrappers suffice (no export needed).
+dkubeconfig="${SCRIPT_DIR}/kubeconfig"
+kc()   { kubectl --kubeconfig="$dkubeconfig" "$@"; }
+helm() { command helm --kubeconfig="$dkubeconfig" "$@"; }
+
 NAMESPACE="${NAMESPACE:-odg}"
 
 ODG_COMPONENT_REF="europe-docker.pkg.dev/gardener-project/releases//ocm.software/open-delivery-gear"
@@ -52,8 +59,8 @@ DELIVERY_DASHBOARD_CHART=$(echo "${COMPONENT_DESCRIPTORS}" | yq eval '.[].compon
 EXTENSIONS_CHART=$(echo "${COMPONENT_DESCRIPTORS}" | yq eval '.[].component.resources.[] | select(.name == "extensions" and .type | test("helmChart")) | .access.imageReference')
 DELIVERY_DATABASE_CHART=$(echo "${COMPONENT_DESCRIPTORS}" | yq eval '.[].component.resources.[] | select(.name == "postgresql" and .type | test("helmChart")) | .access.imageReference')
 
-kubectl config set-context --current --namespace=$NAMESPACE
-kubectl replace -f "${CHART}/crd.yaml"
+kc config set-context --current --namespace=$NAMESPACE
+kc replace -f "${CHART}/crd.yaml"
 
 echo ">>> Installing bootstrapping chart from ${BOOTSTRAPPING_CHART}"
 helm upgrade -i bootstrapping oci://${BOOTSTRAPPING_CHART} \
@@ -69,7 +76,7 @@ if [ -n "${EXTERNAL_DB_HOSTNAME}" ]; then
 else
   echo ">>> Installing delivery-database from ${DELIVERY_DATABASE_CHART}"
   # First, install custom pv and pvc to allow re-usage of host's filesystem mount
-  kubectl apply -f <(helm template delivery-db-pv "${CHART}/delivery-db-pv" --values "${SCRIPT_DIR}/cluster/values-delivery-db.yaml" "${HELM_OVERRIDE_ARGS[@]}") --namespace $NAMESPACE
+  kc apply -f <(helm template delivery-db-pv "${CHART}/delivery-db-pv" --values "${SCRIPT_DIR}/cluster/values-delivery-db.yaml" "${HELM_OVERRIDE_ARGS[@]}") --namespace $NAMESPACE
   helm upgrade -i delivery-db oci://${DELIVERY_DATABASE_CHART} \
       --namespace $NAMESPACE \
       --values ${CHART}/values-delivery-db.yaml \
@@ -83,9 +90,9 @@ helm upgrade -i delivery-service oci://${DELIVERY_SERVICE_CHART} \
     --values ${CHART}/values-delivery-service.yaml \
     "${HELM_OVERRIDE_ARGS[@]}" \
     --wait
-kubectl rollout restart deployment delivery-service # required to use updated configuration
+kc rollout restart deployment delivery-service # required to use updated configuration
 echo "Waiting for delivery-service to become ready, this can take up to 3 minutes..."
-kubectl rollout status deployment delivery-service \
+kc rollout status deployment delivery-service \
     --namespace $NAMESPACE \
     --timeout=180s
 
@@ -106,5 +113,5 @@ helm upgrade -i extensions oci://${EXTENSIONS_CHART} \
 # port-forward to the new delivery-service pods
 lsof -i tcp:3000 | grep kubectl | awk 'NR!=1 {print $2}' | xargs kill || true
 lsof -i tcp:5000 | grep kubectl | awk 'NR!=1 {print $2}' | xargs kill || true
-kubectl port-forward service/delivery-dashboard 3000:8080 > /dev/null &
-kubectl port-forward service/delivery-service 5000:8080 > /dev/null &
+kc port-forward service/delivery-dashboard 3000:8080 > /dev/null &
+kc port-forward service/delivery-service 5000:8080 > /dev/null &

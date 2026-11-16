@@ -20,11 +20,17 @@ kind-observability-on: $(HELM) $(KUBECTL) ## Observability: opensearch, dashboar
 	./local-setup/kind/observability-on.sh
 # No kind-observability-off: the stack is part of the kind cluster, and kind is
 # throwaway — `make kind-down` removes everything in one step.
+kind-otlp-env: ## Print the OTEL_EXPORTER_OTLP_ENDPOINT export for locally-run ODG apps (eval this)
+	@echo 'export OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317'
+
+kind-local-image: ## Switch all ODG workloads in kind to a locally built image: make kind-local-image TAG=0.1391.0
+	@if [ -z "$(TAG)" ]; then echo "usage: make kind-local-image TAG=<tag>"; exit 1; fi
+	./local-setup/kind/kind-local-image.sh $(TAG)
 
 # BTP backend support was removed with the chart rework — backend=btp still
 # exists in the chart values; re-add make targets when needed.
 
-.PHONY: kind-up kind-update kind-down kind-observability-on website-build website-setup website-dev website-serve website-clean help
+.PHONY: kind-up kind-update kind-down kind-observability-on kind-otlp-env kind-local-image website-build website-setup website-dev website-serve website-clean help
 
 # Default target
 .DEFAULT_GOAL := help

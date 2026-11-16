@@ -38,6 +38,9 @@ retrieve the greatest version. Upon execution, this command will create
 `<REPO_ROOT>/local-setup/kind/kubeconfig` which can be used to interact with
 the ODG cluster. Also, it will forward the delivery-service to
 `http://localhost:5000` and the delivery-dashboard to `http://localhost:3000`.
+These port-forwards restart themselves when the pods restart (for example after
+`make kind-local-image` or `make kind-observability-on`). They stop when the
+cluster is gone. Logs are in `/tmp/pf-delivery-*.log`.
 
 > [!NOTE]  
 > Currently, the listing of available versions via OCM CLI is not working for
@@ -84,9 +87,30 @@ ODG extensions can be dynamically added to your installation. Therefore, the
 configuration of the extensions must be done via `extensions_cfg` in the
 [values file](https://github.com/open-component-model/open-delivery-gear/blob/main/local-setup/kind/values.yaml).
 
+## Developing with a local odg-core build
+
+`make kind-up` always deploys the published charts with the published images
+— it does not pick up a local [odg-core](https://github.com/open-component-model/odg-core)
+build. To test local changes in odg-core, swap the image of every ODG
+workload after `kind-up`:
+
+```bash
+make kind-up
+# in odg-core: build the image, e.g. ODG_CORE_LIBS_VERSION=0.1391.0 make build-docker-local
+kind load docker-image odg-core:0.1391.0 --name odg-local
+make kind-local-image TAG=0.1391.0
+```
+
+`make kind-local-image TAG=<tag>` sets the image of every ODG Deployment and
+CronJob (delivery-service plus all extensions) to `odg-core:<tag>` and waits
+for the rollouts. It refuses to run if the image is not loaded into the KinD
+cluster yet — run `kind load docker-image odg-core:<tag>` first (the cluster
+name defaults to `odg-local`). The script only changes the image; it does not
+touch any other configuration.
+
 ## Observability
 
-To add metrics and dashboards on top of your local ODG, run:
+To add metrics, logs, traces and dashboards on top of your local ODG, run:
 
     make kind-observability-on
 
@@ -99,7 +123,45 @@ variable `ODG_OBSERVABILITY`:
 
 Everything runs inside the KinD cluster — nothing is started on your Mac.
 
-### What gets deployed from where
+### Traces (OpenTelemetry)
+
+`make kind-observability-on` also enables OTel tracing on all ODG workloads:
+it patches the `OTEL_EXPORTER_OTLP_ENDPOINT`, `OTEL_SERVICE_NAME`,
+`OTEL_SEMCONV_STABILITY_OPT_IN` and `OTEL_RESOURCE_ATTRIBUTES` environment variables onto every ODG Deployment
+and CronJob so spans are exported to the in-cluster collector. The patch is
+idempotent and does not change images or Helm releases — you can re-run
+`make kind-observability-on` at any time, also after `make kind-local-image`,
+without losing your local image (and vice versa).
+
+Spans land in two places in the in-cluster OpenSearch (open http://localhost:5601):
+
+- Discover → `traces-otel-v1`: raw spans, written by the collector.
+- Observability → Trace Analytics: traces, services and service map. The collector
+  also sends spans to a local Data Prepper, which writes `otel-v1-apm-span-*` and
+  `otel-v1-apm-service-map`. This is the same view as BTP Cloud Logging in
+  production, which runs its own Data Prepper. Traces show up about 10 s after
+  the request.
+
+> [!NOTE]
+> Tracing only produces spans if the workload's image contains the OTEL SDK.
+> If your ODG_CORE image build predates the SDK, no spans will be emitted —
+> the script warns when it patches a workload that runs a published registry
+> image without SDK support. Use `make kind-local-image` to run a current
+> build.
+
+Typical development flow therefore is:
+
+```bash
+make kind-up
+kind load docker-image odg-core:<tag> --name odg-local   # from your odg-core build
+make kind-local-image TAG=<tag>
+make kind-observability-on
+```
+
+For ODG processes running on your Mac (outside KinD), point them at the
+forwarded collector endpoint: `eval $(make kind-otlp-env)`.
+
+### What observability deploys from where
 
 | Component | Comes from |
 |---|---|
@@ -110,8 +172,9 @@ Everything runs inside the KinD cluster — nothing is started on your Mac.
 
 The OTel collector ships the logs of all pods in the `odg` namespace to the
 in-cluster OpenSearch (delivery-dashboard and delivery-db are excluded in the
-chart — too noisy). Prometheus scrapes the collector and kube-state-metrics.
-Perses serves the dashboards, backed by Prometheus.
+chart — too noisy) and accepts OTLP trace/metric pushes from the patched ODG
+workloads. Prometheus scrapes the collector and kube-state-metrics. Perses
+serves the dashboards, backed by Prometheus.
 
 ### Endpoints on localhost
 
@@ -121,7 +184,7 @@ After `make kind-observability-on` finishes, these port-forwards are running:
 |---|---|
 | http://localhost:8080 | Perses (Dashboards → odg) |
 | http://localhost:9090 | Prometheus UI |
-| http://localhost:5601 | OpenSearch Dashboards (Discover → `logs-otel-v1`) |
+| http://localhost:5601 | OpenSearch Dashboards (Discover → `logs-otel-v1`, `traces-otel-v1`; Observability → Trace Analytics) |
 | grpc://localhost:4317 | OTLP endpoint — push traces/metrics from apps on your Mac |
 
 The port-forwards restart themselves on drops (pod restart, laptop sleep).
