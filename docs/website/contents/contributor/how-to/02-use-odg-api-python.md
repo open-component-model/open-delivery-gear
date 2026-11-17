@@ -12,7 +12,7 @@ Resolve an OCM component using the ODG API and the ODG Python Package.
 
 - An ODG instance
 - `python3`, `pip3`
-- A GitHub token privileged to read-access the ODG instance
+- A (unprivileged) fine-grained GitHub token for a user authorised with read-access to the ODG instance
 
 ## Actions
 
