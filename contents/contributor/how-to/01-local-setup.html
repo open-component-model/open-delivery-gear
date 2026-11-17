@@ -3,7 +3,7 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html"><link rel="next" title="Use the ODG Python Package to resolve an OCM component" href="02-use-odg-api.html"><link rel="prev" title="Setting up a hybrid dev setup" href="00-hybrid-dev-setup.html">
+<link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html"><link rel="next" title="Use the ODG Python Package to resolve an OCM component" href="02-use-odg-api-python.html"><link rel="prev" title="Setting up a hybrid dev setup" href="00-hybrid-dev-setup.html">
         <link rel="prefetch" href="../../../_static/odg.svg" as="image">
 
     <link rel="shortcut icon" href="../../../_static/odg.svg"><!-- Generated with Sphinx 9.1.1 and Furo 2025.12.19 -->
@@ -232,7 +232,7 @@
 <li class="toctree-l2 current has-children"><a class="reference internal" href="index.html">How-to Guides</a><input aria-label="Toggle navigation of How-to Guides" checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="00-hybrid-dev-setup.html">Setting up a hybrid dev setup</a></li>
 <li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Deploying the Open Delivery Gear Locally</a></li>
-<li class="toctree-l3"><a class="reference internal" href="02-use-odg-api.html">Use the ODG Python Package to resolve an OCM component</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02-use-odg-api-python.html">Use the ODG Python Package to resolve an OCM component</a></li>
 <li class="toctree-l3"><a class="reference internal" href="03-vulnerabilities-for-component.html">Get all vulnerabilities for a Component</a></li>
 <li class="toctree-l3"><a class="reference internal" href="04-diki.html">Send Diki findings to ODG-API</a></li>
 <li class="toctree-l3"><a class="reference internal" href="05-sbom-download.html">Download SBOM Documents</a></li>
@@ -240,6 +240,7 @@
 <li class="toctree-l3"><a class="reference internal" href="07-change-vulnerability-sla.html">Change the SLAs for Vulnerability Findings</a></li>
 <li class="toctree-l3"><a class="reference internal" href="08-run-sql-statements.html">Run custom SQL commands in ODG</a></li>
 <li class="toctree-l3"><a class="reference internal" href="09-prepare-component-for-odg.html">Prepare Your Component for ODG</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10-use-odg-api-http.html">Use HTTP to resolve an OCM component</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../tutorial/index.html">Tutorials</a><input aria-label="Toggle navigation of Tutorials" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
@@ -361,7 +362,10 @@ set the environment variable <code class="docutils literal notranslate"><span cl
 retrieve the greatest version. Upon execution, this command will create
 <code class="docutils literal notranslate"><span class="pre">&lt;REPO_ROOT&gt;/local-setup/kind/kubeconfig</span></code> which can be used to interact with
 the ODG cluster. Also, it will forward the delivery-service to
-<code class="docutils literal notranslate"><span class="pre">http://localhost:5000</span></code> and the delivery-dashboard to <code class="docutils literal notranslate"><span class="pre">http://localhost:3000</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">http://localhost:5000</span></code> and the delivery-dashboard to <code class="docutils literal notranslate"><span class="pre">http://localhost:3000</span></code>.
+These port-forwards restart themselves when the pods restart (for example after
+<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">kind-local-image</span></code> or <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">kind-observability-on</span></code>). They stop when the
+cluster is gone. Logs are in <code class="docutils literal notranslate"><span class="pre">/tmp/pf-delivery-*.log</span></code>.</p>
 <blockquote>
 <div><p>[!NOTE]<br />
 Currently, the listing of available versions via OCM CLI is not working for
@@ -410,9 +414,28 @@ connection URL.</p>
 configuration of the extensions must be done via <code class="docutils literal notranslate"><span class="pre">extensions_cfg</span></code> in the
 <a class="reference external" href="https://github.com/open-component-model/open-delivery-gear/blob/main/local-setup/kind/values.yaml">values file</a>.</p>
 </section>
+<section id="developing-with-a-local-odg-core-build">
+<h2>Developing with a local odg-core build<a class="headerlink" href="#developing-with-a-local-odg-core-build" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">kind-up</span></code> always deploys the published charts with the published images
+— it does not pick up a local <a class="reference external" href="https://github.com/open-component-model/odg-core">odg-core</a>
+build. To test local changes in odg-core, swap the image of every ODG
+workload after <code class="docutils literal notranslate"><span class="pre">kind-up</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>kind-up
+<span class="c1"># in odg-core: build the image, e.g. ODG_CORE_LIBS_VERSION=0.1391.0 make build-docker-local</span>
+kind<span class="w"> </span>load<span class="w"> </span>docker-image<span class="w"> </span>odg-core:0.1391.0<span class="w"> </span>--name<span class="w"> </span>odg-local
+make<span class="w"> </span>kind-local-image<span class="w"> </span><span class="nv">TAG</span><span class="o">=</span><span class="m">0</span>.1391.0
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">kind-local-image</span> <span class="pre">TAG=&lt;tag&gt;</span></code> sets the image of every ODG Deployment and
+CronJob (delivery-service plus all extensions) to <code class="docutils literal notranslate"><span class="pre">odg-core:&lt;tag&gt;</span></code> and waits
+for the rollouts. It refuses to run if the image is not loaded into the KinD
+cluster yet — run <code class="docutils literal notranslate"><span class="pre">kind</span> <span class="pre">load</span> <span class="pre">docker-image</span> <span class="pre">odg-core:&lt;tag&gt;</span></code> first (the cluster
+name defaults to <code class="docutils literal notranslate"><span class="pre">odg-local</span></code>). The script only changes the image; it does not
+touch any other configuration.</p>
+</section>
 <section id="observability">
 <h2>Observability<a class="headerlink" href="#observability" title="Link to this heading">¶</a></h2>
-<p>To add metrics and dashboards on top of your local ODG, run:</p>
+<p>To add metrics, logs, traces and dashboards on top of your local ODG, run:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>make kind-observability-on
 </pre></div>
 </div>
@@ -424,8 +447,44 @@ variable <code class="docutils literal notranslate"><span class="pre">ODG_OBSERV
 </pre></div>
 </div>
 <p>Everything runs inside the KinD cluster — nothing is started on your Mac.</p>
-<section id="what-gets-deployed-from-where">
-<h3>What gets deployed from where<a class="headerlink" href="#what-gets-deployed-from-where" title="Link to this heading">¶</a></h3>
+<section id="traces-opentelemetry">
+<h3>Traces (OpenTelemetry)<a class="headerlink" href="#traces-opentelemetry" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">kind-observability-on</span></code> also enables OTel tracing on all ODG workloads:
+it patches the <code class="docutils literal notranslate"><span class="pre">OTEL_EXPORTER_OTLP_ENDPOINT</span></code>, <code class="docutils literal notranslate"><span class="pre">OTEL_SERVICE_NAME</span></code>,
+<code class="docutils literal notranslate"><span class="pre">OTEL_SEMCONV_STABILITY_OPT_IN</span></code> and <code class="docutils literal notranslate"><span class="pre">OTEL_RESOURCE_ATTRIBUTES</span></code> environment variables onto every ODG Deployment
+and CronJob so spans are exported to the in-cluster collector. The patch is
+idempotent and does not change images or Helm releases — you can re-run
+<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">kind-observability-on</span></code> at any time, also after <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">kind-local-image</span></code>,
+without losing your local image (and vice versa).</p>
+<p>Spans land in two places in the in-cluster OpenSearch (open http://localhost:5601):</p>
+<ul class="simple">
+<li><p>Discover → <code class="docutils literal notranslate"><span class="pre">traces-otel-v1</span></code>: raw spans, written by the collector.</p></li>
+<li><p>Observability → Trace Analytics: traces, services and service map. The collector
+also sends spans to a local Data Prepper, which writes <code class="docutils literal notranslate"><span class="pre">otel-v1-apm-span-*</span></code> and
+<code class="docutils literal notranslate"><span class="pre">otel-v1-apm-service-map</span></code>. This is the same view as BTP Cloud Logging in
+production, which runs its own Data Prepper. Traces show up about 10 s after
+the request.</p></li>
+</ul>
+<blockquote>
+<div><p>[!NOTE]
+Tracing only produces spans if the workload’s image contains the OTEL SDK.
+If your ODG_CORE image build predates the SDK, no spans will be emitted —
+the script warns when it patches a workload that runs a published registry
+image without SDK support. Use <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">kind-local-image</span></code> to run a current
+build.</p>
+</div></blockquote>
+<p>Typical development flow therefore is:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>kind-up
+kind<span class="w"> </span>load<span class="w"> </span>docker-image<span class="w"> </span>odg-core:&lt;tag&gt;<span class="w"> </span>--name<span class="w"> </span>odg-local<span class="w">   </span><span class="c1"># from your odg-core build</span>
+make<span class="w"> </span>kind-local-image<span class="w"> </span><span class="nv">TAG</span><span class="o">=</span>&lt;tag&gt;
+make<span class="w"> </span>kind-observability-on
+</pre></div>
+</div>
+<p>For ODG processes running on your Mac (outside KinD), point them at the
+forwarded collector endpoint: <code class="docutils literal notranslate"><span class="pre">eval</span> <span class="pre">$(make</span> <span class="pre">kind-otlp-env)</span></code>.</p>
+</section>
+<section id="what-observability-deploys-from-where">
+<h3>What observability deploys from where<a class="headerlink" href="#what-observability-deploys-from-where" title="Link to this heading">¶</a></h3>
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
 <thead>
@@ -451,8 +510,9 @@ variable <code class="docutils literal notranslate"><span class="pre">ODG_OBSERV
 </div>
 <p>The OTel collector ships the logs of all pods in the <code class="docutils literal notranslate"><span class="pre">odg</span></code> namespace to the
 in-cluster OpenSearch (delivery-dashboard and delivery-db are excluded in the
-chart — too noisy). Prometheus scrapes the collector and kube-state-metrics.
-Perses serves the dashboards, backed by Prometheus.</p>
+chart — too noisy) and accepts OTLP trace/metric pushes from the patched ODG
+workloads. Prometheus scrapes the collector and kube-state-metrics. Perses
+serves the dashboards, backed by Prometheus.</p>
 </section>
 <section id="endpoints-on-localhost">
 <h3>Endpoints on localhost<a class="headerlink" href="#endpoints-on-localhost" title="Link to this heading">¶</a></h3>
@@ -472,7 +532,7 @@ Perses serves the dashboards, backed by Prometheus.</p>
 <td><p>Prometheus UI</p></td>
 </tr>
 <tr class="row-even"><td><p>http://localhost:5601</p></td>
-<td><p>OpenSearch Dashboards (Discover → <code class="docutils literal notranslate"><span class="pre">logs-otel-v1</span></code>)</p></td>
+<td><p>OpenSearch Dashboards (Discover → <code class="docutils literal notranslate"><span class="pre">logs-otel-v1</span></code>, <code class="docutils literal notranslate"><span class="pre">traces-otel-v1</span></code>; Observability → Trace Analytics)</p></td>
 </tr>
 <tr class="row-odd"><td><p>grpc://localhost:4317</p></td>
 <td><p>OTLP endpoint — push traces/metrics from apps on your Mac</p></td>
@@ -501,7 +561,7 @@ on a PVC inside the cluster and is removed together with it.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="02-use-odg-api.html">
+          <a class="next-page" href="02-use-odg-api-python.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
@@ -593,8 +653,10 @@ on a PVC inside the cluster and is removed together with it.</p>
 <li><a class="reference internal" href="#termination">Termination</a></li>
 <li><a class="reference internal" href="#external-postgresql">External PostgreSQL</a></li>
 <li><a class="reference internal" href="#extensions">Extensions</a></li>
+<li><a class="reference internal" href="#developing-with-a-local-odg-core-build">Developing with a local odg-core build</a></li>
 <li><a class="reference internal" href="#observability">Observability</a><ul>
-<li><a class="reference internal" href="#what-gets-deployed-from-where">What gets deployed from where</a></li>
+<li><a class="reference internal" href="#traces-opentelemetry">Traces (OpenTelemetry)</a></li>
+<li><a class="reference internal" href="#what-observability-deploys-from-where">What observability deploys from where</a></li>
 <li><a class="reference internal" href="#endpoints-on-localhost">Endpoints on localhost</a></li>
 <li><a class="reference internal" href="#removal">Removal</a></li>
 </ul>
