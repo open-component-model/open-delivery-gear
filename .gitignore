@@ -1,5 +1,7 @@
 .vscode
 .venv
+# in case you create repo-local symlinks pointing at .claude/skills for PI (see local-setup/README.md)
+.agents
 website-out/
 kubeconfig
 *secrets*

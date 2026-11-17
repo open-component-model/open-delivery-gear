@@ -199,3 +199,27 @@ Logs: `/tmp/pf-*.log`.
 There is no separate off-switch. The stack lives entirely inside the KinD
 cluster, so `make kind-down` removes everything. OpenSearch data itself sits
 on a PVC inside the cluster and is removed together with it.
+
+## AI agent skill (odg-kind-cluster)
+
+This repository ships a skill for coding agents that implement the
+[Agent Skills specification](https://agentskills.io/specification). It lives
+at [`.claude/skills/odg-kind-cluster/`](../.claude/skills/odg-kind-cluster/SKILL.md)
+and guides the agent through creating, re-creating and verifying the local
+KinD cluster, testing local odg-core builds, and enabling the observability
+stack. Agents that read the `.claude/skills/` convention (e.g. Claude Code)
+discover it automatically.
+
+Other agents discover skills via the user skills directory (e.g.
+[pi](https://github.com/badlogic/pi-mono) reads `~/.agents/skills/`). To make
+the skill available to them — in this repository as well as in other
+repositories like odg-core or odg-observability — symlink it there, run from
+the repository root:
+
+```bash
+mkdir -p ~/.agents/skills
+ln -sfn "$PWD/.claude/skills/odg-kind-cluster" ~/.agents/skills/odg-kind-cluster
+```
+
+The symlink resolves to the checked-out file, so the skill always stays in
+sync with this repository.
