@@ -35,7 +35,7 @@ jobs:
       # (checkout credentials are persisted, so `git push origin` works below).
       # init-git-identity sets the git author to github-actions[bot]; its email
       # is listed in renovate.json5 `gitIgnoredAuthors`.
-      - uses: gardener/cc-utils/.github/actions/trusted-checkout@v1
+      - uses: gardener/cc-utils/.github/actions/trusted-checkout@1f5f408a236f484bb0f34ff0b4bf2b4e015c9561 # v1
         with:
           token-server: ${{ vars.FEDERATED_GITHUB_ACCESS_TOKEN_SERVER }}
           github-auth-token-permissions: |

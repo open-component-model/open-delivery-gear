@@ -12,12 +12,12 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-      - uses: gardener/cc-utils/.github/actions/kubernetes-auth@master
+      - uses: gardener/cc-utils/.github/actions/kubernetes-auth@daf2e089f2eef256d968f435b9ea61e5ece1b302 # master
         with:
           server: https://api.odg-pre-prod.garden-ci.shoot.live.k8s-hana.ondemand.com
           audience: open-delivery-gear
           kubeconfig-path: /tmp/kubeconfig.yaml
-      - uses: gardener/cc-utils/.github/actions/oci-auth@master
+      - uses: gardener/cc-utils/.github/actions/oci-auth@daf2e089f2eef256d968f435b9ea61e5ece1b302 # master
         with:
           oci-image-reference: europe-docker.pkg.dev/gardener-project
       - name: Update ODG Instance Configuration
@@ -26,7 +26,8 @@ jobs:
           set -euo pipefail
 
           pip3 install \
-            mako
+            --require-hashes \
+            --requirement ${{ github.workspace }}/.github/workflows/update-odg-instance-cfg.requirements.txt
 
           export component_name=ocm.software/open-delivery-gear/core
           export component_version=$(yq ".componentReferences[] | select(.componentName==strenv(component_name)) | .version" .ocm/base-component.yaml)
