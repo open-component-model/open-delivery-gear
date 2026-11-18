@@ -7,6 +7,6 @@ dependencies = [
     "sphinx==9.1.1",
     "myst-parser==5.2.0",
     "sphinx-autobuild==2025.8.25",
-    "sphinx-design==0.7.0",
+    "sphinx-design==0.8.0",
     "sphinxcontrib-mermaid==2.1.1",
 ]
