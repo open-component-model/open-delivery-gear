@@ -363,8 +363,8 @@
 </div>
 <hr class="docutils" />
 </section>
-<section id="odg-ocm-software-binary-scan-policy-v1">
-<span id="odgocmsoftwarebinary-scan-policy-v1"></span><h2><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/binary-scan-policy</span></code> v1<a class="headerlink" href="#odg-ocm-software-binary-scan-policy-v1" title="Link to this heading">¶</a></h2>
+<section id="odgocmsoftwarebinary-scan-policy-v1">
+<span id="odg-ocm-software-binary-scan-policy-v1"></span><h2><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/binary-scan-policy</span></code> v1<a class="headerlink" href="#odgocmsoftwarebinary-scan-policy-v1" title="Link to this heading">¶</a></h2>
 <p>Controls whether a binary vulnerability scan is skipped in ODG.</p>
 <p><strong>Effective at:</strong> resource only</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">resources</span><span class="p">:</span>
@@ -403,8 +403,8 @@
 </div>
 <hr class="docutils" />
 </section>
-<section id="odg-ocm-software-source-scan-policy-v1">
-<span id="odgocmsoftwaresource-scan-policy-v1"></span><h2><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/source-scan-policy</span></code> v1<a class="headerlink" href="#odg-ocm-software-source-scan-policy-v1" title="Link to this heading">¶</a></h2>
+<section id="odgocmsoftwaresource-scan-policy-v1">
+<span id="odg-ocm-software-source-scan-policy-v1"></span><h2><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/source-scan-policy</span></code> v1<a class="headerlink" href="#odgocmsoftwaresource-scan-policy-v1" title="Link to this heading">¶</a></h2>
 <p>Controls whether SAST (Static Application Security Testing) source analysis is run in ODG. Usually <code class="docutils literal notranslate"><span class="pre">skip</span></code> is set when the pipeline already ran a SAST scan.</p>
 <p><strong>Effective at:</strong> source only</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">sources</span><span class="p">:</span>
@@ -421,8 +421,8 @@
 <p>The fields are identical to those of <a class="reference internal" href="#odgocmsoftwarebinary-scan-policy-v1"><span class="std std-ref">odg.ocm.software/binary-scan-policy</span></a>.</p>
 <hr class="docutils" />
 </section>
-<section id="security-ocm-software-risk-profile-v1">
-<span id="securityocmsoftwarerisk-profile-v1"></span><h2><code class="docutils literal notranslate"><span class="pre">security.ocm.software/risk-profile</span></code> v1<a class="headerlink" href="#security-ocm-software-risk-profile-v1" title="Link to this heading">¶</a></h2>
+<section id="securityocmsoftwarerisk-profile-v1">
+<span id="security-ocm-software-risk-profile-v1"></span><h2><code class="docutils literal notranslate"><span class="pre">security.ocm.software/risk-profile</span></code> v1<a class="headerlink" href="#securityocmsoftwarerisk-profile-v1" title="Link to this heading">¶</a></h2>
 <p>Describes the deployment context of a component or artefact. ODG uses this information to suggest adjusted CVE severity scores that reflect the actual exposure of the component.</p>
 <p><strong>Effective at:</strong> resource (takes priority), component (fallback)</p>
 <p>All fields are optional. Fields that are omitted are treated as unknown and do not contribute to rescoring decisions.</p>
@@ -481,8 +481,8 @@
 </div>
 <hr class="docutils" />
 </section>
-<section id="odg-ocm-software-responsibles-v1">
-<span id="odgocmsoftwareresponsibles-v1"></span><h2><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/responsibles</span></code> v1<a class="headerlink" href="#odg-ocm-software-responsibles-v1" title="Link to this heading">¶</a></h2>
+<section id="odgocmsoftwareresponsibles-v1">
+<span id="odg-ocm-software-responsibles-v1"></span><h2><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/responsibles</span></code> v1<a class="headerlink" href="#odgocmsoftwareresponsibles-v1" title="Link to this heading">¶</a></h2>
 <p>Explicitly declares who is responsible for a component or artefact.</p>
 <p><strong>Effective at:</strong> resource/source (takes priority), component (fallback)</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">labels</span><span class="p">:</span>
@@ -649,10 +649,10 @@
             <ul>
 <li><a class="reference internal" href="#">OCM Label Index</a><ul>
 <li><a class="reference internal" href="#scope-matrix">Scope Matrix</a></li>
-<li><a class="reference internal" href="#odg-ocm-software-binary-scan-policy-v1"><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/binary-scan-policy</span></code> v1</a></li>
-<li><a class="reference internal" href="#odg-ocm-software-source-scan-policy-v1"><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/source-scan-policy</span></code> v1</a></li>
-<li><a class="reference internal" href="#security-ocm-software-risk-profile-v1"><code class="docutils literal notranslate"><span class="pre">security.ocm.software/risk-profile</span></code> v1</a></li>
-<li><a class="reference internal" href="#odg-ocm-software-responsibles-v1"><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/responsibles</span></code> v1</a></li>
+<li><a class="reference internal" href="#odgocmsoftwarebinary-scan-policy-v1"><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/binary-scan-policy</span></code> v1</a></li>
+<li><a class="reference internal" href="#odgocmsoftwaresource-scan-policy-v1"><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/source-scan-policy</span></code> v1</a></li>
+<li><a class="reference internal" href="#securityocmsoftwarerisk-profile-v1"><code class="docutils literal notranslate"><span class="pre">security.ocm.software/risk-profile</span></code> v1</a></li>
+<li><a class="reference internal" href="#odgocmsoftwareresponsibles-v1"><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/responsibles</span></code> v1</a></li>
 <li><a class="reference internal" href="#odg-ocm-software-purposes-v1"><code class="docutils literal notranslate"><span class="pre">odg.ocm.software/purposes</span></code> v1</a></li>
 </ul>
 </li>
