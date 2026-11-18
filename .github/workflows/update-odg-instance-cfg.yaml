@@ -3,6 +3,8 @@ name: Update Demo ODG Instance Configuration
 on:
   workflow_dispatch:
 
+permissions: {}
+
 jobs:
   update-odg-instance-cfg:
     runs-on: ubuntu-latest
