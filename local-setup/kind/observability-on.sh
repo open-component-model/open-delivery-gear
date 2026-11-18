@@ -291,6 +291,9 @@ for pattern in logs-otel-v1 traces-otel-v1; do
     sleep 2
   done
   # fetch the OS mapping -> build the index-pattern fields blob
+  # NOTE: This curl hits localhost (port-forwarded OpenSearch Dashboards), NOT
+  # the internet — it is NOT a "download-then-run" pattern despite what static
+  # analyzers may flag. The python3 call parses JSON; it does not execute code.
   fields_json=$(curl -s "localhost:5601/api/index_patterns/_fields_for_wildcard?pattern=${pattern}&meta_fields=_source&meta_fields=_id&meta_fields=_index&meta_fields=_score" \
     | python3 -c "import json,sys; d=json.load(sys.stdin); print(json.dumps(d.get('fields', [])))")
   # create the saved object with fields embedded (overwrite=true for re-runs)
