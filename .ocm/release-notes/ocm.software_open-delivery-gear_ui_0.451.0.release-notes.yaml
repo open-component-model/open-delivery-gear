@@ -1,0 +1,46 @@
+ocm:
+  component_name: ocm.software/open-delivery-gear/ui
+  component_version: 0.451.0
+release_notes:
+- audience: user
+  author:
+    hostname: github.com
+    type: githubUser
+    username: 8R0WNI3
+  category: feature
+  contents: The backlog item overview now features enriched backlog item statuses
+    (including error messages)
+  mimetype: text/markdown
+  reference: '[#569](https://github.com/open-component-model/odg-ui/pull/569)'
+  type: standard
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: alexbass01
+  category: improvement
+  contents: breaking Change login auth method to POST
+  mimetype: text/markdown
+  reference: '[#575](https://github.com/open-component-model/odg-ui/pull/575)'
+  type: standard
+- audience: operator
+  author:
+    hostname: github.com
+    type: githubUser
+    username: ChrisSchneider
+  category: fix
+  contents: Improved session state consistency when a token refresh and a logout occur
+    simultaneously
+  mimetype: text/markdown
+  reference: '[#577](https://github.com/open-component-model/odg-ui/pull/577)'
+  type: standard
+- audience: user
+  author:
+    hostname: github.com
+    type: githubUser
+    username: zkdev
+  category: breaking
+  contents: Deprecated "Download BoM" Button was removed. Use "Download SBoM" instead.
+  mimetype: text/markdown
+  reference: '[#571](https://github.com/open-component-model/odg-ui/pull/571)'
+  type: standard
