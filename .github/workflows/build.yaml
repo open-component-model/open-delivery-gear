@@ -20,7 +20,7 @@ permissions: {}
 
 jobs:
   prepare:
-    uses: gardener/cc-utils/.github/workflows/prepare.yaml@1f5f408a236f484bb0f34ff0b4bf2b4e015c9561 # v1
+    uses: gardener/cc-utils/.github/workflows/prepare.yaml@bce63f62928717a11f610ec8022af9feb497d5df # v1
     permissions:
       id-token: write
     with:
@@ -34,7 +34,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: gardener/cc-utils/.github/actions/trusted-checkout@1f5f408a236f484bb0f34ff0b4bf2b4e015c9561 # v1
+      - uses: gardener/cc-utils/.github/actions/trusted-checkout@bce63f62928717a11f610ec8022af9feb497d5df # v1
       - name: Export odg-extension-definitions
         run: |
           set -eu
@@ -43,7 +43,7 @@ jobs:
 
           mkdir blobs.d
           tar czf blobs.d/extension_definitions.tar.gz extension-definitions.yaml
-      - uses: gardener/cc-utils/.github/actions/export-ocm-fragments@1f5f408a236f484bb0f34ff0b4bf2b4e015c9561 # v1
+      - uses: gardener/cc-utils/.github/actions/export-ocm-fragments@bce63f62928717a11f610ec8022af9feb497d5df # v1
         with:
           blobs-directory: blobs.d
           ocm-resources: |
@@ -56,7 +56,7 @@ jobs:
 
   helmchart:
     name: Build Helmchart
-    uses: gardener/cc-utils/.github/workflows/helmchart-ocm.yaml@1f5f408a236f484bb0f34ff0b4bf2b4e015c9561 # v1
+    uses: gardener/cc-utils/.github/workflows/helmchart-ocm.yaml@bce63f62928717a11f610ec8022af9feb497d5df # v1
     needs:
       - prepare
     permissions:
@@ -77,14 +77,14 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: gardener/cc-utils/.github/actions/trusted-checkout@1f5f408a236f484bb0f34ff0b4bf2b4e015c9561 # v1
+      - uses: gardener/cc-utils/.github/actions/trusted-checkout@bce63f62928717a11f610ec8022af9feb497d5df # v1
       - name: Export Helmchart-Imagemap
         run: |
           set -eu
 
           mkdir blobs.d
           mv envoy-helmchart-imagemap.json blobs.d
-      - uses: gardener/cc-utils/.github/actions/export-ocm-fragments@1f5f408a236f484bb0f34ff0b4bf2b4e015c9561 # v1
+      - uses: gardener/cc-utils/.github/actions/export-ocm-fragments@bce63f62928717a11f610ec8022af9feb497d5df # v1
         with:
           blobs-directory: blobs.d
           ocm-resources: |
