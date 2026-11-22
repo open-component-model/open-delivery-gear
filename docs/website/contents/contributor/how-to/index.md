@@ -7,7 +7,7 @@ Step-by-step instructions for common development tasks and workflows.
 
 00-hybrid-dev-setup
 01-local-setup
-02-use-odg-api
+02-use-odg-api-python
 03-vulnerabilities-for-component
 04-diki
 05-sbom-download
@@ -15,4 +15,5 @@ Step-by-step instructions for common development tasks and workflows.
 07-change-vulnerability-sla
 08-run-sql-statements
 09-prepare-component-for-odg
+10-use-odg-api-http
 ```

@@ -6,6 +6,8 @@ on:
   workflow_call: {}
   workflow_dispatch: {}
 
+permissions: {}
+
 jobs:
   website:
     name: Build Website
@@ -19,7 +21,7 @@ jobs:
       uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
     - name: Build Website
       run: make website-build
-    - uses: gardener/cc-utils/.github/actions/upload-artifact@v1
+    - uses: gardener/cc-utils/.github/actions/upload-artifact@bce63f62928717a11f610ec8022af9feb497d5df # v1
       with:
         name: website
         path: website-out
