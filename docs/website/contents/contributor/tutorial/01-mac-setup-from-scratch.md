@@ -73,10 +73,12 @@ issues/PRs, checking security alerts).
    |---|---|
    | GitHub App name | Something unique, e.g. `yourname-odg-local` |
    | Homepage URL | `http://localhost:3000` |
-   | Redirect URI | `http://localhost:3000` |
-   | Allow wildcard matching (under Redirect URI) | ✅ Checked |
+   | Redirect URI | `http://localhost:3000/?client_id=<client_id>` |
+   | No wildcard matching (under Redirect URI) | ❌ Not checked |
    | Request user authorization (OAuth) during installation | ✅ Enabled |
    | Webhook | ❌ Disabled |
+
+   > **Note:** Do not forget the trailing slash in the Redirect URI (`localhost:3000/?client_id=...`), and edit the **Redirect URI** field - not the Homepage URL. Replace `<client_id>` with your actual app client ID.
 
 3. Under **Permissions & events**, set:
    - **Repository**: Contents, Issues, Pull requests → Read & Write
