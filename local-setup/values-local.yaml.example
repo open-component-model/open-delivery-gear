@@ -1,3 +1,14 @@
+# copy to local-setup/kind/values-local.yaml — kind-up/update/observability-on
+# merge it into every helm invocation via build_helm_override_args
 persistence:
   hostPath: "/Users/<your-username>/odg-postgres-data"
   containerPath: "/var/delivery-db"
+
+# tighten the delivery-db network policy: only same-namespace pods labelled
+# delivery-db-client=true (see the odg-core charts) may connect; without the
+# labelled workloads installed the delivery-service cannot reach the database.
+# Uncomment only together with odg-core charts shipping the client label:
+#primary:
+#  networkPolicy:
+#    allowExternal: false
+#    allowExternalEgress: false
