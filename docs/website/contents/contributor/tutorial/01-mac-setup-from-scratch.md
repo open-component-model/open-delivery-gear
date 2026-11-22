@@ -73,9 +73,12 @@ issues/PRs, checking security alerts).
    |---|---|
    | GitHub App name | Something unique, e.g. `yourname-odg-local` |
    | Homepage URL | `http://localhost:3000` |
-   | Callback URL | `http://localhost:3000` |
+   | Redirect URI | `http://localhost:3000/?client_id=<client_id>` |
+   | No wildcard matching (under Redirect URI) | ❌ Not checked |
    | Request user authorization (OAuth) during installation | ✅ Enabled |
    | Webhook | ❌ Disabled |
+
+   > **Note:** Do not forget the trailing slash in the Redirect URI (`localhost:3000/?client_id=...`), and edit the **Redirect URI** field - not the Homepage URL. Replace `<client_id>` with your actual app client ID.
 
 3. Under **Permissions & events**, set:
    - **Repository**: Contents, Issues, Pull requests → Read & Write
@@ -85,9 +88,10 @@ issues/PRs, checking security alerts).
    These extra permissions let plugins access GitHub (e.g. post findings). Org
    permissions enable OIDC team/org membership checks.
 
-4. **Install App** → install on your account or org, choosing which repos ODG
-   may access. You'll be redirected to a URL containing your
-   `installation_id`, e.g.
+4. **Install App** → install on your account or org. You must pick at least
+   one repository — pick any unimportant one, or create a new empty repo. It
+   is not really used with this local setup. You'll be redirected to a URL
+   containing your `installation_id`, e.g.
    `http://localhost:3000/?code=...&installation_id=151722591&setup_action=install`.
 
 ### Fill in `secrets-local.yaml`
@@ -95,7 +99,7 @@ issues/PRs, checking security alerts).
 Copy the example and edit it — the setup script picks it up automatically:
 
 ```bash
-cp local-setup/secrets-local.yaml.example local-setup/secrets-local.yaml
+cp local-setup/secrets-local.yaml.example local-setup/kind/secrets-local.yaml
 ```
 
 **`github-app`** section:
@@ -175,7 +179,7 @@ http://delivery-service.odg.svc.cluster.local:8080/auth?...&api_url=https://api.
 The volume mount where you want to keep your postgres data to a subfolder in your home directory:
 
 ```bash
-cp local-setup/values-local.yaml.example local-setup/values-local.yaml
+cp local-setup/values-local.yaml.example local-setup/kind/values-local.yaml
 ```
 
 ```yaml
