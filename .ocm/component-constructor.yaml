@@ -1,0 +1,70 @@
+name: ocm.software/open-delivery-gear
+version: "${VERSION}"
+provider:
+  name: ocm.software
+labels:
+  - name: odg.ocm.software/responsibles
+    value:
+      - github_hostname: github.com
+        teamname: open-component-model/maintainers
+        type: githubTeam
+componentReferences:
+  - componentName: ocm.software/open-delivery-gear/core
+    name: odg-core
+    version: 0.1391.1
+  - componentName: ocm.software/open-delivery-gear/observability
+    name: odg-observability
+    version: 0.44.0-rc.0
+  - componentName: ocm.software/open-delivery-gear/ui
+    name: odg-ui
+    version: 0.451.0-rc.0
+resources:
+  - name: network
+    type: helmChart
+    version: "${VERSION}"
+    extraIdentity:
+      type: helmChart
+    relation: local
+    access:
+      type: OCIImage/v1
+      imageReference: "${NETWORK_CHART_REF}"
+  - name: envoy-gateway
+    type: helmChart
+    version: v1.10.0
+    extraIdentity:
+      type: helmChart
+    relation: external
+    access:
+      type: OCIImage/v1
+      imageReference: docker.io/envoyproxy/gateway-helm:v1.10.0@sha256:dcb82a14c04b426615a71d97222c7edf9f5ff58b800d241e71ac5784ae6dc7b7
+  - name: envoy-gateway
+    type: ociImage
+    version: v1.10.0
+    relation: external
+    access:
+      type: OCIImage/v1
+      imageReference: docker.io/envoyproxy/gateway:v1.10.0@sha256:c2243d43518bed91d3ed8c2db849a4b7a14ac9b96eb019f2ab104bb1ca8572b1
+  - name: envoy-proxy
+    type: ociImage
+    version: v1.40.2
+    relation: external
+    access:
+      type: OCIImage/v1
+      imageReference: docker.io/envoyproxy/envoy:distroless-v1.40.2@sha256:09ca6f2140a61ad8df11779a4a30d52b48433d444466328494f9188c9c35eded
+  - name: odg-extension-definitions
+    type: odg-extension
+    version: "${VERSION}"
+    relation: local
+    input:
+      type: Dir/v1
+      path: ./extension-definitions
+      compress: true
+  - name: envoy-gateway
+    type: helmchart-imagemap
+    version: "${VERSION}"
+    extraIdentity:
+      type: helmchart-imagemap
+    relation: local
+    input:
+      type: File/v1
+      path: helmchart-imagemaps/envoy-gateway.json

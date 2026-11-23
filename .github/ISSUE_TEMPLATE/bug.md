@@ -14,8 +14,8 @@ Please provide a clear and concise description of the bug.
 **Version**
 <!---
 Please provide the version of Open Delivery Gear you are using.
-- The overall ODG version (see the `./VERSION` file) is usually enough, as it
-  gives us the full version vector.
+- The overall ODG version is usually enough, as it gives us the full
+  version vector.
 - If known, you can also provide the individual `odg-core` and `odg-ui`
   versions.
 -->
