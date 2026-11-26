@@ -9,19 +9,25 @@ spec:
     kind: ODG
     types:
       ExtensionName: "string | maxLength=22 enum=\"bdba,clamav,codeql,crypto,delivery-db-backup,ghas,issue-replicator,osid,sast,sla-violation-profiler,trivy\""
+      ObservabilityBackend: "string | maxLength=10 enum=\"btp,debug,opensearch\""
     spec:
       domain: string
       enabledExtensions: "[]ExtensionName | default=[]"
-      installNetworking: boolean | default=true
-      installObservability: boolean | default=true
       namespace: string | default=odg-system
+      networking:
+        enabled: boolean | default=false
+      observability:
+        enabled: boolean | default=false
+        backend: ObservabilityBackend | default=debug
+        btpEndpoint: string | default=""
+        opensearchEndpoint: string | default=""
   resources:
     # ── ocm.software/open-delivery-gear ────────────────────────────────────────
 
     # network chart
     - id: resourceNetworkChart
       includeWhen:
-        - ${schema.spec.installNetworking}
+        - ${schema.spec.networking.enabled}
       readyWhen:
         - ${resourceNetworkChart.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
       template:
@@ -41,7 +47,7 @@ spec:
             oci: resource.access.toOCI()
     - id: ociRepositoryNetwork
       includeWhen:
-        - ${schema.spec.installNetworking}
+        - ${schema.spec.networking.enabled}
       readyWhen:
         - ${ociRepositoryNetwork.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
       template:
@@ -64,7 +70,7 @@ spec:
                 subject: ^https://github\.com/open-component-model/open-delivery-gear/\.github/workflows/build\.yaml@refs/heads/release-\d+\.\d+$
     - id: helmReleaseNetwork
       includeWhen:
-        - ${schema.spec.installNetworking}
+        - ${schema.spec.networking.enabled}
       readyWhen:
         - ${helmReleaseNetwork.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
       template:
@@ -106,7 +112,7 @@ spec:
     # envoy-gateway images + chart
     - id: resourceEnvoyGatewayImage
       includeWhen:
-        - ${schema.spec.installNetworking}
+        - ${schema.spec.networking.enabled}
       readyWhen:
         - ${resourceEnvoyGatewayImage.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
       template:
@@ -125,7 +131,7 @@ spec:
             oci: resource.access.toOCI()
     - id: resourceEnvoyProxyImage
       includeWhen:
-        - ${schema.spec.installNetworking}
+        - ${schema.spec.networking.enabled}
       readyWhen:
         - ${resourceEnvoyProxyImage.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
       template:
@@ -144,7 +150,7 @@ spec:
             oci: resource.access.toOCI()
     - id: resourceEnvoyGatewayChart
       includeWhen:
-        - ${schema.spec.installNetworking}
+        - ${schema.spec.networking.enabled}
       readyWhen:
         - ${resourceEnvoyGatewayChart.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
       template:
@@ -164,7 +170,7 @@ spec:
             oci: resource.access.toOCI()
     - id: ociRepositoryEnvoyGateway
       includeWhen:
-        - ${schema.spec.installNetworking}
+        - ${schema.spec.networking.enabled}
       readyWhen:
         - ${ociRepositoryEnvoyGateway.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
       template:
@@ -182,7 +188,7 @@ spec:
             digest: ${resourceEnvoyGatewayChart.status.additional.oci.digest}
     - id: helmReleaseEnvoyGateway
       includeWhen:
-        - ${schema.spec.installNetworking}
+        - ${schema.spec.networking.enabled}
       readyWhen:
         - ${helmReleaseEnvoyGateway.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
       template:
@@ -682,7 +688,7 @@ spec:
     # prometheus-operator images + chart
     - id: resourcePrometheusOperatorImage
       includeWhen:
-        - ${schema.spec.installObservability}
+        - ${schema.spec.observability.enabled}
       readyWhen:
         - ${resourcePrometheusOperatorImage.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
       template:
@@ -701,7 +707,7 @@ spec:
             oci: resource.access.toOCI()
     - id: resourcePrometheusImage
       includeWhen:
-        - ${schema.spec.installObservability}
+        - ${schema.spec.observability.enabled}
       readyWhen:
         - ${resourcePrometheusImage.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
       template:
@@ -720,7 +726,7 @@ spec:
             oci: resource.access.toOCI()
     - id: resourcePrometheusConfigReloaderImage
       includeWhen:
-        - ${schema.spec.installObservability}
+        - ${schema.spec.observability.enabled}
       readyWhen:
         - ${resourcePrometheusConfigReloaderImage.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
       template:
@@ -739,7 +745,7 @@ spec:
             oci: resource.access.toOCI()
     - id: resourceAlertmanagerImage
       includeWhen:
-        - ${schema.spec.installObservability}
+        - ${schema.spec.observability.enabled}
       readyWhen:
         - ${resourceAlertmanagerImage.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
       template:
@@ -758,7 +764,7 @@ spec:
             oci: resource.access.toOCI()
     - id: resourceKubeStateMetricsImage
       includeWhen:
-        - ${schema.spec.installObservability}
+        - ${schema.spec.observability.enabled}
       readyWhen:
         - ${resourceKubeStateMetricsImage.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
       template:
@@ -777,7 +783,7 @@ spec:
             oci: resource.access.toOCI()
     - id: resourcePersesImage
       includeWhen:
-        - ${schema.spec.installObservability}
+        - ${schema.spec.observability.enabled}
       readyWhen:
         - ${resourcePersesImage.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
       template:
@@ -796,7 +802,7 @@ spec:
             oci: resource.access.toOCI()
     - id: resourceK8sSidecarImage
       includeWhen:
-        - ${schema.spec.installObservability}
+        - ${schema.spec.observability.enabled}
       readyWhen:
         - ${resourceK8sSidecarImage.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
       template:
@@ -815,7 +821,7 @@ spec:
             oci: resource.access.toOCI()
     - id: resourcePrometheusOperatorChart
       includeWhen:
-        - ${schema.spec.installObservability}
+        - ${schema.spec.observability.enabled}
       readyWhen:
         - ${resourcePrometheusOperatorChart.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
       template:
@@ -835,7 +841,7 @@ spec:
             oci: resource.access.toOCI()
     - id: ociRepositoryPrometheusOperator
       includeWhen:
-        - ${schema.spec.installObservability}
+        - ${schema.spec.observability.enabled}
       readyWhen:
         - ${ociRepositoryPrometheusOperator.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
       template:
@@ -858,7 +864,7 @@ spec:
                 subject: ^https://github\.com/open-component-model/odg-observability/\.github/workflows/build\.yaml@refs/heads/release-\d+\.\d+$
     - id: helmReleasePrometheusOperator
       includeWhen:
-        - ${schema.spec.installObservability}
+        - ${schema.spec.observability.enabled}
       readyWhen:
         - ${helmReleasePrometheusOperator.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
       template:
@@ -923,7 +929,7 @@ spec:
     # telemetry images + chart
     - id: resourceOtelCollectorImage
       includeWhen:
-        - ${schema.spec.installObservability}
+        - ${schema.spec.observability.enabled}
       readyWhen:
         - ${resourceOtelCollectorImage.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
       template:
@@ -942,7 +948,7 @@ spec:
             oci: resource.access.toOCI()
     - id: resourceMetricsOperatorImage
       includeWhen:
-        - ${schema.spec.installObservability}
+        - ${schema.spec.observability.enabled}
       readyWhen:
         - ${resourceMetricsOperatorImage.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
       template:
@@ -961,7 +967,7 @@ spec:
             oci: resource.access.toOCI()
     - id: resourceTelemetryChart
       includeWhen:
-        - ${schema.spec.installObservability}
+        - ${schema.spec.observability.enabled}
       readyWhen:
         - ${resourceTelemetryChart.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
       template:
@@ -981,7 +987,7 @@ spec:
             oci: resource.access.toOCI()
     - id: ociRepositoryTelemetry
       includeWhen:
-        - ${schema.spec.installObservability}
+        - ${schema.spec.observability.enabled}
       readyWhen:
         - ${ociRepositoryTelemetry.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
       template:
@@ -1004,7 +1010,7 @@ spec:
                 subject: ^https://github\.com/open-component-model/odg-observability/\.github/workflows/build\.yaml@refs/heads/release-\d+\.\d+$
     - id: helmReleaseTelemetry
       includeWhen:
-        - ${schema.spec.installObservability}
+        - ${schema.spec.observability.enabled}
       readyWhen:
         - ${helmReleaseTelemetry.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
       template:
@@ -1036,16 +1042,16 @@ spec:
             name: ${ociRepositoryTelemetry.metadata.name}
             namespace: ${schema.metadata.namespace}
           values:
-            backend: foo # XXX
+            backend: ${schema.spec.observability.backend}
             btp:
-              endpoint: foo # XXX
+              endpoint: ${schema.spec.observability.btpEndpoint}
             metrics-operator:
               image:
                 repository: ${resourceMetricsOperatorImage.status.additional.oci.registry}/${resourceMetricsOperatorImage.status.additional.oci.repository}
                 tag: ${resourceMetricsOperatorImage.status.additional.oci.tag}@${resourceMetricsOperatorImage.status.additional.oci.digest}
             observedNamespace: ${schema.spec.namespace}
             opensearch:
-              endpoint: foo # XXX
+              endpoint: ${schema.spec.observability.opensearchEndpoint}
             opentelemetry-collector:
               image:
                 repository: ${resourceOtelCollectorImage.status.additional.oci.registry}/${resourceOtelCollectorImage.status.additional.oci.repository}
