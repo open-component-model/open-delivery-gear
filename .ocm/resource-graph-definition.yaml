@@ -21,6 +21,7 @@ spec:
         backend: ObservabilityBackend | default=debug
         btpEndpoint: string | default=""
         opensearchEndpoint: string | default=""
+        gardener: boolean | default=false
   resources:
     # ── ocm.software/open-delivery-gear ────────────────────────────────────────
 
@@ -1045,6 +1046,8 @@ spec:
             backend: ${schema.spec.observability.backend}
             btp:
               endpoint: ${schema.spec.observability.btpEndpoint}
+            gardener:
+              enabled: ${schema.spec.observability.gardener}
             metrics-operator:
               image:
                 repository: ${resourceMetricsOperatorImage.status.additional.oci.registry}/${resourceMetricsOperatorImage.status.additional.oci.repository}
