@@ -1,0 +1,1056 @@
+apiVersion: kro.run/v1alpha1
+kind: ResourceGraphDefinition
+metadata:
+  name: odg
+spec:
+  schema:
+    apiVersion: v1alpha1
+    group: odg.ocm.software
+    kind: ODG
+    types:
+      ExtensionName: "string | maxLength=22 enum=\"bdba,clamav,codeql,crypto,delivery-db-backup,ghas,issue-replicator,osid,sast,sla-violation-profiler,trivy\""
+    spec:
+      domain: string
+      enabledExtensions: "[]ExtensionName | default=[]"
+      installNetworking: boolean | default=true
+      installObservability: boolean | default=true
+      namespace: string | default=odg-system
+  resources:
+    # ── ocm.software/open-delivery-gear ────────────────────────────────────────
+
+    # network chart
+    - id: resourceNetworkChart
+      includeWhen:
+        - ${schema.spec.installNetworking}
+      readyWhen:
+        - ${resourceNetworkChart.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: delivery.ocm.software/v1alpha1
+        kind: Resource
+        metadata:
+          name: network-chart
+        spec:
+          componentRef:
+            name: odg
+          resource:
+            byReference:
+              resource:
+                name: network
+                type: helmChart
+          additionalStatusFields:
+            oci: resource.access.toOCI()
+    - id: ociRepositoryNetwork
+      includeWhen:
+        - ${schema.spec.installNetworking}
+      readyWhen:
+        - ${ociRepositoryNetwork.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: source.toolkit.fluxcd.io/v1
+        kind: OCIRepository
+        metadata:
+          name: network
+        spec:
+          interval: 1m0s
+          layerSelector:
+            mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+            operation: copy
+          url: oci://${resourceNetworkChart.status.additional.oci.registry}/${resourceNetworkChart.status.additional.oci.repository}
+          ref:
+            digest: ${resourceNetworkChart.status.additional.oci.digest}
+          verify:
+            provider: cosign
+            matchOIDCIdentity:
+              - issuer: https://token.actions.githubusercontent.com
+                subject: ^https://github\.com/open-component-model/open-delivery-gear/\.github/workflows/build\.yaml@refs/heads/release-\d+\.\d+$
+    - id: helmReleaseNetwork
+      includeWhen:
+        - ${schema.spec.installNetworking}
+      readyWhen:
+        - ${helmReleaseNetwork.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: helm.toolkit.fluxcd.io/v2
+        kind: HelmRelease
+        metadata:
+          name: network
+        spec:
+          releaseName: network
+          interval: 1m
+          timeout: 5m
+          targetNamespace: ${schema.spec.namespace}
+          storageNamespace: ${schema.spec.namespace}
+          install:
+            crds: Create
+            createNamespace: true
+            timeout: 2m
+            remediation:
+              retries: 1
+          upgrade:
+            crds: CreateReplace
+            cleanupOnFail: true
+            force: true
+            remediation:
+              retries: 3
+              strategy: rollback
+          chartRef:
+            kind: OCIRepository
+            name: ${ociRepositoryNetwork.metadata.name}
+            namespace: ${schema.metadata.namespace}
+          values:
+            gateway:
+              annotations:
+                cert.gardener.cloud/dnsnames: '"*.${schema.spec.domain}"'
+                cert.gardener.cloud/purpose: managed
+                dns.gardener.cloud/class: garden
+                dns.gardener.cloud/dnsnames: '"*"'
+
+    # envoy-gateway images + chart
+    - id: resourceEnvoyGatewayImage
+      includeWhen:
+        - ${schema.spec.installNetworking}
+      readyWhen:
+        - ${resourceEnvoyGatewayImage.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: delivery.ocm.software/v1alpha1
+        kind: Resource
+        metadata:
+          name: envoy-gateway-image
+        spec:
+          componentRef:
+            name: odg
+          resource:
+            byReference:
+              resource:
+                name: envoy-gateway
+          additionalStatusFields:
+            oci: resource.access.toOCI()
+    - id: resourceEnvoyProxyImage
+      includeWhen:
+        - ${schema.spec.installNetworking}
+      readyWhen:
+        - ${resourceEnvoyProxyImage.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: delivery.ocm.software/v1alpha1
+        kind: Resource
+        metadata:
+          name: envoy-proxy-image
+        spec:
+          componentRef:
+            name: odg
+          resource:
+            byReference:
+              resource:
+                name: envoy-proxy
+          additionalStatusFields:
+            oci: resource.access.toOCI()
+    - id: resourceEnvoyGatewayChart
+      includeWhen:
+        - ${schema.spec.installNetworking}
+      readyWhen:
+        - ${resourceEnvoyGatewayChart.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: delivery.ocm.software/v1alpha1
+        kind: Resource
+        metadata:
+          name: envoy-gateway-chart
+        spec:
+          componentRef:
+            name: odg
+          resource:
+            byReference:
+              resource:
+                name: envoy-gateway
+                type: helmChart
+          additionalStatusFields:
+            oci: resource.access.toOCI()
+    - id: ociRepositoryEnvoyGateway
+      includeWhen:
+        - ${schema.spec.installNetworking}
+      readyWhen:
+        - ${ociRepositoryEnvoyGateway.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: source.toolkit.fluxcd.io/v1
+        kind: OCIRepository
+        metadata:
+          name: envoy-gateway
+        spec:
+          interval: 1m0s
+          layerSelector:
+            mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+            operation: copy
+          url: oci://${resourceEnvoyGatewayChart.status.additional.oci.registry}/${resourceEnvoyGatewayChart.status.additional.oci.repository}
+          ref:
+            digest: ${resourceEnvoyGatewayChart.status.additional.oci.digest}
+    - id: helmReleaseEnvoyGateway
+      includeWhen:
+        - ${schema.spec.installNetworking}
+      readyWhen:
+        - ${helmReleaseEnvoyGateway.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: helm.toolkit.fluxcd.io/v2
+        kind: HelmRelease
+        metadata:
+          name: envoy-gateway
+        spec:
+          releaseName: envoy-gateway
+          interval: 1m
+          timeout: 5m
+          targetNamespace: ${schema.spec.namespace}
+          storageNamespace: ${schema.spec.namespace}
+          install:
+            crds: Create
+            createNamespace: true
+            timeout: 2m
+            remediation:
+              retries: 1
+          upgrade:
+            crds: CreateReplace
+            cleanupOnFail: true
+            force: true
+            remediation:
+              retries: 3
+              strategy: rollback
+          chartRef:
+            kind: OCIRepository
+            name: ${ociRepositoryEnvoyGateway.metadata.name}
+            namespace: ${schema.metadata.namespace}
+          values:
+            certgen:
+              job:
+                ttlSecondsAfterFinished: 2147483647
+            config:
+              envoyGateway:
+                envoyProxy:
+                  provider:
+                    kubernetes:
+                      envoyDeployment:
+                        container:
+                          image: ${resourceEnvoyProxyImage.status.additional.oci.registry}/${resourceEnvoyProxyImage.status.additional.oci.repository}:${resourceEnvoyProxyImage.status.additional.oci.tag}@${resourceEnvoyProxyImage.status.additional.oci.digest}
+                    type: Kubernetes
+                gateway:
+                  controllerName: gateway.envoyproxy.io/gatewayclass-controller-${schema.spec.namespace}
+            fullnameOverride: envoy-gateway-${schema.spec.namespace}
+            global:
+              images:
+                envoyGateway:
+                  image: ${resourceEnvoyGatewayImage.status.additional.oci.registry}/${resourceEnvoyGatewayImage.status.additional.oci.repository}:${resourceEnvoyGatewayImage.status.additional.oci.tag}@${resourceEnvoyGatewayImage.status.additional.oci.digest}
+            images:
+              envoyGateway:
+                image: ${resourceEnvoyGatewayImage.status.additional.oci.registry}/${resourceEnvoyGatewayImage.status.additional.oci.repository}:${resourceEnvoyGatewayImage.status.additional.oci.tag}@${resourceEnvoyGatewayImage.status.additional.oci.digest}
+            topologyInjector:
+              enabled: false
+
+    # ── ocm.software/open-delivery-gear/core ───────────────────────────────────
+
+    - id: resourceCoreImage
+      readyWhen:
+        - ${resourceCoreImage.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: delivery.ocm.software/v1alpha1
+        kind: Resource
+        metadata:
+          name: core-image
+        spec:
+          componentRef:
+            name: odg-core
+          resource:
+            byReference:
+              resource:
+                name: core
+          additionalStatusFields:
+            oci: resource.access.toOCI()
+
+    # delivery-service chart (uses core image)
+    - id: resourceDeliveryServiceChart
+      readyWhen:
+        - ${resourceDeliveryServiceChart.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: delivery.ocm.software/v1alpha1
+        kind: Resource
+        metadata:
+          name: delivery-service-chart
+        spec:
+          componentRef:
+            name: odg-core
+          resource:
+            byReference:
+              resource:
+                name: delivery-service
+                type: helmChart
+          additionalStatusFields:
+            oci: resource.access.toOCI()
+    - id: ociRepositoryDeliveryService
+      readyWhen:
+        - ${ociRepositoryDeliveryService.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: source.toolkit.fluxcd.io/v1
+        kind: OCIRepository
+        metadata:
+          name: delivery-service
+        spec:
+          interval: 1m0s
+          layerSelector:
+            mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+            operation: copy
+          url: oci://${resourceDeliveryServiceChart.status.additional.oci.registry}/${resourceDeliveryServiceChart.status.additional.oci.repository}
+          ref:
+            digest: ${resourceDeliveryServiceChart.status.additional.oci.digest}
+          verify:
+            provider: cosign
+            matchOIDCIdentity:
+              - issuer: https://token.actions.githubusercontent.com
+                subject: ^https://github\.com/open-component-model/odg-core/\.github/workflows/build\.yaml@refs/heads/release-\d+\.\d+$
+    - id: helmReleaseDeliveryService
+      readyWhen:
+        - ${helmReleaseDeliveryService.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: helm.toolkit.fluxcd.io/v2
+        kind: HelmRelease
+        metadata:
+          name: delivery-service
+        spec:
+          releaseName: delivery-service
+          interval: 1m
+          timeout: 5m
+          targetNamespace: ${schema.spec.namespace}
+          storageNamespace: ${schema.spec.namespace}
+          install:
+            crds: Create
+            createNamespace: true
+            timeout: 2m
+            remediation:
+              retries: 1
+          upgrade:
+            crds: CreateReplace
+            cleanupOnFail: true
+            force: true
+            remediation:
+              retries: 3
+              strategy: rollback
+          chartRef:
+            kind: OCIRepository
+            name: ${ociRepositoryDeliveryService.metadata.name}
+            namespace: ${schema.metadata.namespace}
+          values:
+            autoscaler:
+              maxReplicas: 10
+              minReplicas: 2
+            host: delivery-service.${schema.spec.domain}
+            image:
+              repository: ${resourceCoreImage.status.additional.oci.registry}/${resourceCoreImage.status.additional.oci.repository}
+              tag: ${resourceCoreImage.status.additional.oci.tag}@${resourceCoreImage.status.additional.oci.digest}
+
+    # extensions chart (uses core image)
+    - id: resourceExtensionsChart
+      readyWhen:
+        - ${resourceExtensionsChart.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: delivery.ocm.software/v1alpha1
+        kind: Resource
+        metadata:
+          name: extensions-chart
+        spec:
+          componentRef:
+            name: odg-core
+          resource:
+            byReference:
+              resource:
+                name: extensions
+                type: helmChart
+          additionalStatusFields:
+            oci: resource.access.toOCI()
+    - id: ociRepositoryExtensions
+      readyWhen:
+        - ${ociRepositoryExtensions.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: source.toolkit.fluxcd.io/v1
+        kind: OCIRepository
+        metadata:
+          name: extensions
+        spec:
+          interval: 1m0s
+          layerSelector:
+            mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+            operation: copy
+          url: oci://${resourceExtensionsChart.status.additional.oci.registry}/${resourceExtensionsChart.status.additional.oci.repository}
+          ref:
+            digest: ${resourceExtensionsChart.status.additional.oci.digest}
+          verify:
+            provider: cosign
+            matchOIDCIdentity:
+              - issuer: https://token.actions.githubusercontent.com
+                subject: ^https://github\.com/open-component-model/odg-core/\.github/workflows/build\.yaml@refs/heads/release-\d+\.\d+$
+    - id: helmReleaseExtensions
+      readyWhen:
+        - ${helmReleaseExtensions.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: helm.toolkit.fluxcd.io/v2
+        kind: HelmRelease
+        metadata:
+          name: extensions
+        spec:
+          releaseName: extensions
+          interval: 1m
+          timeout: 5m
+          targetNamespace: ${schema.spec.namespace}
+          storageNamespace: ${schema.spec.namespace}
+          install:
+            crds: Create
+            createNamespace: true
+            timeout: 2m
+            remediation:
+              retries: 1
+          upgrade:
+            crds: CreateReplace
+            cleanupOnFail: true
+            force: true
+            remediation:
+              retries: 3
+              strategy: rollback
+          chartRef:
+            kind: OCIRepository
+            name: ${ociRepositoryExtensions.metadata.name}
+            namespace: ${schema.metadata.namespace}
+          values:
+            global:
+              image:
+                repository: ${resourceCoreImage.status.additional.oci.registry}/${resourceCoreImage.status.additional.oci.repository}
+                tag: ${resourceCoreImage.status.additional.oci.tag}@${resourceCoreImage.status.additional.oci.digest}
+            access-manager:
+              enabled: true
+            artefact-enumerator:
+              enabled: true
+            backlog-controller:
+              enabled: true
+            bdba:
+              enabled: ${schema.spec.enabledExtensions.exists(e, e == 'bdba')}
+            cache-manager:
+              enabled: true
+            clamav:
+              enabled: ${schema.spec.enabledExtensions.exists(e, e == 'clamav')}
+            codeql:
+              enabled: ${schema.spec.enabledExtensions.exists(e, e == 'codeql')}
+            crypto:
+              enabled: ${schema.spec.enabledExtensions.exists(e, e == 'crypto')}
+            delivery-db-backup:
+              enabled: ${schema.spec.enabledExtensions.exists(e, e == 'delivery-db-backup')}
+            ghas:
+              enabled: ${schema.spec.enabledExtensions.exists(e, e == 'ghas')}
+            issue-replicator:
+              enabled: ${schema.spec.enabledExtensions.exists(e, e == 'issue-replicator')}
+            osid:
+              enabled: ${schema.spec.enabledExtensions.exists(e, e == 'osid')}
+            responsibles:
+              enabled: true
+            sast:
+              enabled: ${schema.spec.enabledExtensions.exists(e, e == 'sast')}
+            sbom-generator:
+              enabled: true
+            sla-violation-profiler:
+              enabled: ${schema.spec.enabledExtensions.exists(e, e == 'sla-violation-profiler')}
+            trivy:
+              enabled: ${schema.spec.enabledExtensions.exists(e, e == 'trivy')}
+
+    # postgresql image + postgresql chart
+    - id: resourcePostgresqlImage
+      readyWhen:
+        - ${resourcePostgresqlImage.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: delivery.ocm.software/v1alpha1
+        kind: Resource
+        metadata:
+          name: postgresql-image
+        spec:
+          componentRef:
+            name: odg-core
+          resource:
+            byReference:
+              resource:
+                name: postgresql
+          additionalStatusFields:
+            oci: resource.access.toOCI()
+    - id: resourcePostgresqlChart
+      readyWhen:
+        - ${resourcePostgresqlChart.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: delivery.ocm.software/v1alpha1
+        kind: Resource
+        metadata:
+          name: postgresql-chart
+        spec:
+          componentRef:
+            name: odg-core
+          resource:
+            byReference:
+              resource:
+                name: postgresql
+                type: helmChart
+          additionalStatusFields:
+            oci: resource.access.toOCI()
+    - id: ociRepositoryPostgresql
+      readyWhen:
+        - ${ociRepositoryPostgresql.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: source.toolkit.fluxcd.io/v1
+        kind: OCIRepository
+        metadata:
+          name: postgresql
+        spec:
+          interval: 1m0s
+          layerSelector:
+            mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+            operation: copy
+          url: oci://${resourcePostgresqlChart.status.additional.oci.registry}/${resourcePostgresqlChart.status.additional.oci.repository}
+          ref:
+            digest: ${resourcePostgresqlChart.status.additional.oci.digest}
+    - id: helmReleasePostgresql
+      readyWhen:
+        - ${helmReleasePostgresql.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: helm.toolkit.fluxcd.io/v2
+        kind: HelmRelease
+        metadata:
+          name: postgresql
+        spec:
+          releaseName: postgresql
+          interval: 1m
+          timeout: 5m
+          targetNamespace: ${schema.spec.namespace}
+          storageNamespace: ${schema.spec.namespace}
+          install:
+            crds: Create
+            createNamespace: true
+            timeout: 2m
+            remediation:
+              retries: 1
+          upgrade:
+            crds: CreateReplace
+            cleanupOnFail: true
+            force: true
+            remediation:
+              retries: 3
+              strategy: rollback
+          chartRef:
+            kind: OCIRepository
+            name: ${ociRepositoryPostgresql.metadata.name}
+            namespace: ${schema.metadata.namespace}
+          values:
+            auth:
+              existingSecret: delivery-db-password
+            fullnameOverride: delivery-db
+            global:
+              security:
+                allowInsecureImages: true
+            image:
+              registry: ""
+              repository: ${resourcePostgresqlImage.status.additional.oci.registry}/${resourcePostgresqlImage.status.additional.oci.repository}
+              tag: ${resourcePostgresqlImage.status.additional.oci.tag}@${resourcePostgresqlImage.status.additional.oci.digest}
+            postgresqlDataDir: /data/pgdata
+            primary:
+              containerSecurityContext:
+                readOnlyRootFilesystem: false
+              extraEnvVars:
+                - name: POSTGRESQL_MAX_CONNECTIONS
+                  value: "200"
+              persistence:
+                mountPath: /data/
+              resources:
+                requests:
+                  cpu: 500m
+                  memory: 1Gi
+
+    # ── ocm.software/open-delivery-gear/ui ─────────────────────────────────────
+
+    # busybox image + delivery-dashboard image + dashboard chart
+    - id: resourceBusyboxImage
+      readyWhen:
+        - ${resourceBusyboxImage.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: delivery.ocm.software/v1alpha1
+        kind: Resource
+        metadata:
+          name: busybox-image
+        spec:
+          componentRef:
+            name: odg-ui
+          resource:
+            byReference:
+              resource:
+                name: busybox
+          additionalStatusFields:
+            oci: resource.access.toOCI()
+    - id: resourceDeliveryDashboardImage
+      readyWhen:
+        - ${resourceDeliveryDashboardImage.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: delivery.ocm.software/v1alpha1
+        kind: Resource
+        metadata:
+          name: delivery-dashboard-image
+        spec:
+          componentRef:
+            name: odg-ui
+          resource:
+            byReference:
+              resource:
+                name: delivery-dashboard
+          additionalStatusFields:
+            oci: resource.access.toOCI()
+    - id: resourceDeliveryDashboardChart
+      readyWhen:
+        - ${resourceDeliveryDashboardChart.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: delivery.ocm.software/v1alpha1
+        kind: Resource
+        metadata:
+          name: delivery-dashboard-chart
+        spec:
+          componentRef:
+            name: odg-ui
+          resource:
+            byReference:
+              resource:
+                name: delivery-dashboard
+                type: helmChart
+          additionalStatusFields:
+            oci: resource.access.toOCI()
+    - id: ociRepositoryDeliveryDashboard
+      readyWhen:
+        - ${ociRepositoryDeliveryDashboard.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: source.toolkit.fluxcd.io/v1
+        kind: OCIRepository
+        metadata:
+          name: delivery-dashboard
+        spec:
+          interval: 1m0s
+          layerSelector:
+            mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+            operation: copy
+          url: oci://${resourceDeliveryDashboardChart.status.additional.oci.registry}/${resourceDeliveryDashboardChart.status.additional.oci.repository}
+          ref:
+            digest: ${resourceDeliveryDashboardChart.status.additional.oci.digest}
+          verify:
+            provider: cosign
+            matchOIDCIdentity:
+              - issuer: https://token.actions.githubusercontent.com
+                subject: ^https://github\.com/open-component-model/odg-ui/\.github/workflows/build\.yaml@refs/heads/release-\d+\.\d+$
+    - id: helmReleaseDeliveryDashboard
+      readyWhen:
+        - ${helmReleaseDeliveryDashboard.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: helm.toolkit.fluxcd.io/v2
+        kind: HelmRelease
+        metadata:
+          name: delivery-dashboard
+        spec:
+          releaseName: delivery-dashboard
+          interval: 1m
+          timeout: 5m
+          targetNamespace: ${schema.spec.namespace}
+          storageNamespace: ${schema.spec.namespace}
+          install:
+            crds: Create
+            createNamespace: true
+            timeout: 2m
+            remediation:
+              retries: 1
+          upgrade:
+            crds: CreateReplace
+            cleanupOnFail: true
+            force: true
+            remediation:
+              retries: 3
+              strategy: rollback
+          chartRef:
+            kind: OCIRepository
+            name: ${ociRepositoryDeliveryDashboard.metadata.name}
+            namespace: ${schema.metadata.namespace}
+          values:
+            busybox:
+              image:
+                repository: ${resourceBusyboxImage.status.additional.oci.registry}/${resourceBusyboxImage.status.additional.oci.repository}
+                tag: ${resourceBusyboxImage.status.additional.oci.tag}@${resourceBusyboxImage.status.additional.oci.digest}
+            envVars:
+              REACT_APP_DELIVERY_SERVICE_API_URL: https://delivery-service.${schema.spec.domain}
+            host: delivery-dashboard.${schema.spec.domain}
+            image:
+              repository: ${resourceDeliveryDashboardImage.status.additional.oci.registry}/${resourceDeliveryDashboardImage.status.additional.oci.repository}
+              tag: ${resourceDeliveryDashboardImage.status.additional.oci.tag}@${resourceDeliveryDashboardImage.status.additional.oci.digest}
+
+    # ── ocm.software/open-delivery-gear/observability ──────────────────────────
+
+    # prometheus-operator images + chart
+    - id: resourcePrometheusOperatorImage
+      includeWhen:
+        - ${schema.spec.installObservability}
+      readyWhen:
+        - ${resourcePrometheusOperatorImage.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: delivery.ocm.software/v1alpha1
+        kind: Resource
+        metadata:
+          name: prometheus-operator-image
+        spec:
+          componentRef:
+            name: odg-observability
+          resource:
+            byReference:
+              resource:
+                name: prometheus-operator
+          additionalStatusFields:
+            oci: resource.access.toOCI()
+    - id: resourcePrometheusImage
+      includeWhen:
+        - ${schema.spec.installObservability}
+      readyWhen:
+        - ${resourcePrometheusImage.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: delivery.ocm.software/v1alpha1
+        kind: Resource
+        metadata:
+          name: prometheus-image
+        spec:
+          componentRef:
+            name: odg-observability
+          resource:
+            byReference:
+              resource:
+                name: prometheus
+          additionalStatusFields:
+            oci: resource.access.toOCI()
+    - id: resourcePrometheusConfigReloaderImage
+      includeWhen:
+        - ${schema.spec.installObservability}
+      readyWhen:
+        - ${resourcePrometheusConfigReloaderImage.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: delivery.ocm.software/v1alpha1
+        kind: Resource
+        metadata:
+          name: prometheus-config-reloader-image
+        spec:
+          componentRef:
+            name: odg-observability
+          resource:
+            byReference:
+              resource:
+                name: prometheus-config-reloader
+          additionalStatusFields:
+            oci: resource.access.toOCI()
+    - id: resourceAlertmanagerImage
+      includeWhen:
+        - ${schema.spec.installObservability}
+      readyWhen:
+        - ${resourceAlertmanagerImage.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: delivery.ocm.software/v1alpha1
+        kind: Resource
+        metadata:
+          name: alertmanager-image
+        spec:
+          componentRef:
+            name: odg-observability
+          resource:
+            byReference:
+              resource:
+                name: alertmanager
+          additionalStatusFields:
+            oci: resource.access.toOCI()
+    - id: resourceKubeStateMetricsImage
+      includeWhen:
+        - ${schema.spec.installObservability}
+      readyWhen:
+        - ${resourceKubeStateMetricsImage.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: delivery.ocm.software/v1alpha1
+        kind: Resource
+        metadata:
+          name: kube-state-metrics-image
+        spec:
+          componentRef:
+            name: odg-observability
+          resource:
+            byReference:
+              resource:
+                name: kube-state-metrics
+          additionalStatusFields:
+            oci: resource.access.toOCI()
+    - id: resourcePersesImage
+      includeWhen:
+        - ${schema.spec.installObservability}
+      readyWhen:
+        - ${resourcePersesImage.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: delivery.ocm.software/v1alpha1
+        kind: Resource
+        metadata:
+          name: perses-image
+        spec:
+          componentRef:
+            name: odg-observability
+          resource:
+            byReference:
+              resource:
+                name: perses
+          additionalStatusFields:
+            oci: resource.access.toOCI()
+    - id: resourceK8sSidecarImage
+      includeWhen:
+        - ${schema.spec.installObservability}
+      readyWhen:
+        - ${resourceK8sSidecarImage.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: delivery.ocm.software/v1alpha1
+        kind: Resource
+        metadata:
+          name: k8s-sidecar-image
+        spec:
+          componentRef:
+            name: odg-observability
+          resource:
+            byReference:
+              resource:
+                name: k8s-sidecar
+          additionalStatusFields:
+            oci: resource.access.toOCI()
+    - id: resourcePrometheusOperatorChart
+      includeWhen:
+        - ${schema.spec.installObservability}
+      readyWhen:
+        - ${resourcePrometheusOperatorChart.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: delivery.ocm.software/v1alpha1
+        kind: Resource
+        metadata:
+          name: prometheus-operator-chart
+        spec:
+          componentRef:
+            name: odg-observability
+          resource:
+            byReference:
+              resource:
+                name: prometheus-operator
+                type: helmChart
+          additionalStatusFields:
+            oci: resource.access.toOCI()
+    - id: ociRepositoryPrometheusOperator
+      includeWhen:
+        - ${schema.spec.installObservability}
+      readyWhen:
+        - ${ociRepositoryPrometheusOperator.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: source.toolkit.fluxcd.io/v1
+        kind: OCIRepository
+        metadata:
+          name: prometheus-operator
+        spec:
+          interval: 1m0s
+          layerSelector:
+            mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+            operation: copy
+          url: oci://${resourcePrometheusOperatorChart.status.additional.oci.registry}/${resourcePrometheusOperatorChart.status.additional.oci.repository}
+          ref:
+            digest: ${resourcePrometheusOperatorChart.status.additional.oci.digest}
+          verify:
+            provider: cosign
+            matchOIDCIdentity:
+              - issuer: https://token.actions.githubusercontent.com
+                subject: ^https://github\.com/open-component-model/odg-observability/\.github/workflows/build\.yaml@refs/heads/release-\d+\.\d+$
+    - id: helmReleasePrometheusOperator
+      includeWhen:
+        - ${schema.spec.installObservability}
+      readyWhen:
+        - ${helmReleasePrometheusOperator.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: helm.toolkit.fluxcd.io/v2
+        kind: HelmRelease
+        metadata:
+          name: prometheus-operator
+        spec:
+          releaseName: prometheus-operator
+          interval: 1m
+          timeout: 5m
+          targetNamespace: ${schema.spec.namespace}
+          storageNamespace: ${schema.spec.namespace}
+          install:
+            crds: Create
+            createNamespace: true
+            timeout: 2m
+            remediation:
+              retries: 1
+          upgrade:
+            crds: CreateReplace
+            cleanupOnFail: true
+            force: true
+            remediation:
+              retries: 3
+              strategy: rollback
+          chartRef:
+            kind: OCIRepository
+            name: ${ociRepositoryPrometheusOperator.metadata.name}
+            namespace: ${schema.metadata.namespace}
+          values:
+            alertmanager:
+              enabled: true
+              image:
+                repository: ${resourceAlertmanagerImage.status.additional.oci.registry}/${resourceAlertmanagerImage.status.additional.oci.repository}
+                tag: ${resourceAlertmanagerImage.status.additional.oci.tag}@${resourceAlertmanagerImage.status.additional.oci.digest}
+            image:
+              repository: ${resourcePrometheusOperatorImage.status.additional.oci.registry}/${resourcePrometheusOperatorImage.status.additional.oci.repository}
+              tag: ${resourcePrometheusOperatorImage.status.additional.oci.tag}@${resourcePrometheusOperatorImage.status.additional.oci.digest}
+            kube-state-metrics:
+              image:
+                repository: ${resourceKubeStateMetricsImage.status.additional.oci.registry}/${resourceKubeStateMetricsImage.status.additional.oci.repository}
+                tag: ${resourceKubeStateMetricsImage.status.additional.oci.tag}@${resourceKubeStateMetricsImage.status.additional.oci.digest}
+            perses-app:
+              enabled: true
+              image:
+                repository: ${resourcePersesImage.status.additional.oci.registry}/${resourcePersesImage.status.additional.oci.repository}
+                tag: ${resourcePersesImage.status.additional.oci.tag}@${resourcePersesImage.status.additional.oci.digest}
+              sidecar:
+                image:
+                  repository: ${resourceK8sSidecarImage.status.additional.oci.registry}/${resourceK8sSidecarImage.status.additional.oci.repository}
+                  tag: ${resourceK8sSidecarImage.status.additional.oci.tag}@${resourceK8sSidecarImage.status.additional.oci.digest}
+            prometheus:
+              image:
+                repository: ${resourcePrometheusImage.status.additional.oci.registry}/${resourcePrometheusImage.status.additional.oci.repository}
+                tag: ${resourcePrometheusImage.status.additional.oci.tag}@${resourcePrometheusImage.status.additional.oci.digest}
+            prometheus-config-reloader:
+              image:
+                repository: ${resourcePrometheusConfigReloaderImage.status.additional.oci.registry}/${resourcePrometheusConfigReloaderImage.status.additional.oci.repository}
+                tag: ${resourcePrometheusConfigReloaderImage.status.additional.oci.tag}@${resourcePrometheusConfigReloaderImage.status.additional.oci.digest}
+
+    # telemetry images + chart
+    - id: resourceOtelCollectorImage
+      includeWhen:
+        - ${schema.spec.installObservability}
+      readyWhen:
+        - ${resourceOtelCollectorImage.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: delivery.ocm.software/v1alpha1
+        kind: Resource
+        metadata:
+          name: otel-collector-image
+        spec:
+          componentRef:
+            name: odg-observability
+          resource:
+            byReference:
+              resource:
+                name: opentelemetry-collector-contrib
+          additionalStatusFields:
+            oci: resource.access.toOCI()
+    - id: resourceMetricsOperatorImage
+      includeWhen:
+        - ${schema.spec.installObservability}
+      readyWhen:
+        - ${resourceMetricsOperatorImage.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: delivery.ocm.software/v1alpha1
+        kind: Resource
+        metadata:
+          name: metrics-operator-image
+        spec:
+          componentRef:
+            name: odg-observability
+          resource:
+            byReference:
+              resource:
+                name: metrics-operator
+          additionalStatusFields:
+            oci: resource.access.toOCI()
+    - id: resourceTelemetryChart
+      includeWhen:
+        - ${schema.spec.installObservability}
+      readyWhen:
+        - ${resourceTelemetryChart.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: delivery.ocm.software/v1alpha1
+        kind: Resource
+        metadata:
+          name: telemetry-chart
+        spec:
+          componentRef:
+            name: odg-observability
+          resource:
+            byReference:
+              resource:
+                name: telemetry
+                type: helmChart
+          additionalStatusFields:
+            oci: resource.access.toOCI()
+    - id: ociRepositoryTelemetry
+      includeWhen:
+        - ${schema.spec.installObservability}
+      readyWhen:
+        - ${ociRepositoryTelemetry.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: source.toolkit.fluxcd.io/v1
+        kind: OCIRepository
+        metadata:
+          name: telemetry
+        spec:
+          interval: 1m0s
+          layerSelector:
+            mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+            operation: copy
+          url: oci://${resourceTelemetryChart.status.additional.oci.registry}/${resourceTelemetryChart.status.additional.oci.repository}
+          ref:
+            digest: ${resourceTelemetryChart.status.additional.oci.digest}
+          verify:
+            provider: cosign
+            matchOIDCIdentity:
+              - issuer: https://token.actions.githubusercontent.com
+                subject: ^https://github\.com/open-component-model/odg-observability/\.github/workflows/build\.yaml@refs/heads/release-\d+\.\d+$
+    - id: helmReleaseTelemetry
+      includeWhen:
+        - ${schema.spec.installObservability}
+      readyWhen:
+        - ${helmReleaseTelemetry.status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')}
+      template:
+        apiVersion: helm.toolkit.fluxcd.io/v2
+        kind: HelmRelease
+        metadata:
+          name: telemetry
+        spec:
+          releaseName: telemetry
+          interval: 1m
+          timeout: 5m
+          targetNamespace: ${schema.spec.namespace}
+          storageNamespace: ${schema.spec.namespace}
+          install:
+            crds: Create
+            createNamespace: true
+            timeout: 2m
+            remediation:
+              retries: 1
+          upgrade:
+            crds: CreateReplace
+            cleanupOnFail: true
+            force: true
+            remediation:
+              retries: 3
+              strategy: rollback
+          chartRef:
+            kind: OCIRepository
+            name: ${ociRepositoryTelemetry.metadata.name}
+            namespace: ${schema.metadata.namespace}
+          values:
+            backend: foo # XXX
+            btp:
+              endpoint: foo # XXX
+            metrics-operator:
+              image:
+                repository: ${resourceMetricsOperatorImage.status.additional.oci.registry}/${resourceMetricsOperatorImage.status.additional.oci.repository}
+                tag: ${resourceMetricsOperatorImage.status.additional.oci.tag}@${resourceMetricsOperatorImage.status.additional.oci.digest}
+            observedNamespace: ${schema.spec.namespace}
+            opensearch:
+              endpoint: foo # XXX
+            opentelemetry-collector:
+              image:
+                repository: ${resourceOtelCollectorImage.status.additional.oci.registry}/${resourceOtelCollectorImage.status.additional.oci.repository}
+                tag: ${resourceOtelCollectorImage.status.additional.oci.tag}@${resourceOtelCollectorImage.status.additional.oci.digest}
+            opentelemetry-collector-cluster:
+              image:
+                repository: ${resourceOtelCollectorImage.status.additional.oci.registry}/${resourceOtelCollectorImage.status.additional.oci.repository}
+                tag: ${resourceOtelCollectorImage.status.additional.oci.tag}@${resourceOtelCollectorImage.status.additional.oci.digest}
