@@ -68,3 +68,10 @@ resources:
     input:
       type: File/v1
       path: helmchart-imagemaps/envoy-gateway.json
+  - name: odg-rgd
+    type: blob
+    version: "${VERSION}"
+    relation: local
+    input:
+      type: File/v1
+      path: .ocm/resource-graph-definition.yaml
