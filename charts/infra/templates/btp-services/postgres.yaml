@@ -1,0 +1,116 @@
+{{- if .Values.postgres.enabled }}
+{{- $root := . }}
+{{- $pg := .Values.postgres }}
+{{- /* Restrict postgres to a subset of shoots by name (postgres.shoots); empty = all shoots. */ -}}
+{{- $allShoots := .Values.shoots }}
+{{- $shoots := $allShoots }}
+{{- if $pg.shoots }}
+{{- $wanted := $pg.shoots }}
+{{- $shoots = list }}
+{{- range $allShoots }}{{- if has .name $wanted }}{{- $shoots = append $shoots . }}{{- end }}{{- end }}
+{{- end }}
+{{- if not $shoots }}
+{{- fail "postgres.enabled is true but no matching shoots; entitlements are sized per shoot" }}
+{{- end }}
+{{- $count := len $shoots }}
+# PostgreSQL (SCI regions) requires TWO entitlements per the SAP sizing table: the compute
+# SKU (the chosen plan, standard/premium) and a separate storage SKU, both counted per
+# INSTANCE. Compute units scale with RAM: standard = memory/2 per instance (2GB->1, 4GB->2);
+# multi-AZ doubles the compute SKU and switches the storage SKU to storage_ha. The storage
+# SKU is counted in 5GB blocks: units = ceil(storageGB / 5) per instance (5GB->1, 20GB->4).
+# entitlementMultiplier (default 1) scales both SKUs per shoot for headroom.
+{{- $mult := $pg.entitlementMultiplier | default 1 }}
+{{- $computeMultiplier := ternary 2 1 $pg.multiAz }}
+{{- $computePerInstance := div $pg.memory 2 }}
+{{- $computeAmount := mul $count $computePerInstance $computeMultiplier $mult }}
+{{- $storagePlan := ternary "storage_ha" "storage" $pg.multiAz }}
+{{- $storageBlocksPerInstance := int (ceil (divf $pg.storageGB 5)) }}
+{{- $storageAmount := mul $count $storageBlocksPerInstance $mult }}
+apiVersion: account.btp.sap.crossplane.io/v1alpha1
+kind: Entitlement
+metadata:
+  name: {{ .Values.subaccount.name }}-postgresql-db-compute
+spec:
+  forProvider:
+    serviceName: postgresql-db
+    servicePlanName: {{ $pg.plan | quote }}
+    amount: {{ $computeAmount }}
+    subaccountRef:
+      name: {{ include "infra.subaccountRef" . }}
+  providerConfigRef:
+    name: {{ include "infra.providerConfigName" . }}
+---
+apiVersion: account.btp.sap.crossplane.io/v1alpha1
+kind: Entitlement
+metadata:
+  name: {{ .Values.subaccount.name }}-postgresql-db-storage
+spec:
+  forProvider:
+    serviceName: postgresql-db
+    servicePlanName: {{ $storagePlan | quote }}
+    amount: {{ $storageAmount }}
+    subaccountRef:
+      name: {{ include "infra.subaccountRef" . }}
+  providerConfigRef:
+    name: {{ include "infra.providerConfigName" . }}
+{{- if $pg.createInstances }}
+{{- range $shoots }}
+{{- $shoot := . }}
+---
+apiVersion: account.btp.sap.crossplane.io/v1alpha1
+kind: ServiceInstance
+metadata:
+  name: {{ $pg.bindingPrefix }}-{{ $shoot.name }}
+spec:
+  forProvider:
+    name: {{ $pg.bindingPrefix }}-{{ $shoot.name }}
+    offeringName: postgresql-db
+    planName: {{ $pg.plan | quote }}
+    subaccountRef:
+      name: {{ include "infra.subaccountRef" $root }}
+    serviceManagerRef:
+      name: {{ $root.Values.subaccount.name }}
+    parameters:
+      memory: {{ $pg.memory }}
+      storage: {{ $pg.storageGB }}
+      engine_version: {{ $pg.engineVersion | quote }}
+      multi_az: {{ $pg.multiAz }}
+      backup_retention_period: {{ $pg.backupRetentionDays }}
+      public_access: {{ $pg.publicAccess }}
+      {{- /* Source allowlist: per-shoot egressIP wins, else shoot.egressCIDRs (mask stripped), else global list. */}}
+      {{- $ips := list }}
+      {{- range ($shoot.egressCIDRs | default list) }}{{- $ips = append $ips (regexReplaceAll "/.*$" . "") }}{{- end }}
+      {{- $allow := $shoot.egressIP | default (join "," $ips) | default (join "," ($pg.allowAccess | default list)) }}
+      {{- if $allow }}
+      allow_access: {{ $allow | quote }}
+      {{- end }}
+      {{- with $pg.auditLogLevel }}
+      audit_log_level:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $pg.maintenanceWindow }}
+      maintenance_window:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+  providerConfigRef:
+    name: {{ include "infra.providerConfigName" $root }}
+---
+apiVersion: account.btp.sap.crossplane.io/v1alpha1
+kind: ServiceBinding
+metadata:
+  name: {{ $pg.bindingPrefix }}-{{ $shoot.name }}-binding
+spec:
+  forProvider:
+    name: {{ $pg.bindingPrefix }}-{{ $shoot.name }}-binding
+    serviceInstanceRef:
+      name: {{ $pg.bindingPrefix }}-{{ $shoot.name }}
+    subaccountRef:
+      name: {{ include "infra.subaccountRef" $root }}
+  providerConfigRef:
+    name: {{ include "infra.providerConfigName" $root }}
+  writeConnectionSecretToRef:
+    name: {{ $pg.bindingPrefix }}-{{ $shoot.name }}-credentials
+    namespace: {{ $root.Values.secrets.outputNamespace }}
+{{- end }}
+{{- end }}
+{{- end }}

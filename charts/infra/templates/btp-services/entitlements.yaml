@@ -1,0 +1,15 @@
+{{- if .Values.cloudLogging.enabled }}
+apiVersion: account.btp.sap.crossplane.io/v1alpha1
+kind: Entitlement
+metadata:
+  name: {{ .Values.subaccount.name }}-cloud-logging
+spec:
+  forProvider:
+    serviceName: cloud-logging
+    servicePlanName: standard
+    amount: 1
+    subaccountRef:
+      name: {{ include "infra.subaccountRef" . }}
+  providerConfigRef:
+    name: {{ include "infra.providerConfigName" . }}
+{{- end }}

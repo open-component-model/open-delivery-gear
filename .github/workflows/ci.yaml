@@ -79,6 +79,7 @@ jobs:
     needs:
       - preprocess
     uses: ./.github/workflows/build.yaml
+    secrets: inherit
     permissions:
       attestations: write
       contents: read
