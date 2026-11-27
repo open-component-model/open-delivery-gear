@@ -1,0 +1,26 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: provider-kubernetes-btp-reader
+rules:
+  - apiGroups:
+      - account.btp.sap.crossplane.io
+    resources:
+      - subaccounts
+    verbs:
+      - get
+      - list
+      - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: provider-kubernetes-btp-reader
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Values.crossplane.kubernetesProviderSA }}
+    namespace: {{ .Values.crossplane.namespace }}
+roleRef:
+  kind: ClusterRole
+  name: provider-kubernetes-btp-reader
+  apiGroup: rbac.authorization.k8s.io

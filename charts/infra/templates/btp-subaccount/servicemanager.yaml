@@ -1,0 +1,13 @@
+apiVersion: account.btp.sap.crossplane.io/v1beta1
+kind: ServiceManager
+metadata:
+  name: {{ .Values.subaccount.name }}
+spec:
+  writeConnectionSecretToRef:
+    name: {{ .Values.subaccount.name }}-service-manager
+    namespace: {{ .Values.secrets.outputNamespace }}
+  forProvider:
+    subaccountRef:
+      name: {{ include "infra.subaccountRef" . }}
+  providerConfigRef:
+    name: {{ include "infra.providerConfigName" . }}

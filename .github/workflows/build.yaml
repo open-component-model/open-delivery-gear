@@ -12,6 +12,13 @@ on:
         required: false
         type: boolean
         default: true
+    secrets:
+      COSIGN_KEY:
+        description: Private key PEM for key-based chart signing (charts with signing=keyful).
+        required: false
+      COSIGN_PASSWORD:
+        description: Password for COSIGN_KEY.
+        required: false
     outputs:
       network-chart-digest:
         description: Digest of the published network Helm chart
@@ -40,6 +47,10 @@ jobs:
         chart:
           - name: network
             dir: charts/network
+            signing: keyless
+          - name: infra
+            dir: charts/infra
+            signing: keyful
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -80,13 +91,30 @@ jobs:
           echo "CHART_DIGEST=${digest}" >> "$GITHUB_ENV"
           echo "OWNER=$OWNER" >> "$GITHUB_ENV"
       - name: Sign Helm chart (cosign keyless)
-        if: inputs.publish
+        if: inputs.publish && matrix.chart.signing == 'keyless'
         run: |
           cosign sign -y "$REGISTRY/$OWNER/odg/charts/${{ matrix.chart.name }}@${{ env.CHART_DIGEST }}"
       - name: Attest Helm chart
-        if: inputs.publish
+        if: inputs.publish && matrix.chart.signing == 'keyless'
         uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
         with:
           push-to-registry: true
           subject-digest: ${{ env.CHART_DIGEST }}
           subject-name: ${{ env.REGISTRY }}/${{ env.OWNER }}/odg/charts/${{ matrix.chart.name }}
+      - name: Sign Helm chart (cosign key-based)
+        if: inputs.publish && matrix.chart.signing == 'keyful'
+        env:
+          COSIGN_KEY: ${{ secrets.COSIGN_KEY }}
+          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+          # id-token:write is granted at job level for the keyless leg; clear the ambient
+          # OIDC token here so cosign cannot fall back to keyless/Fulcio on the keyful path.
+          ACTIONS_ID_TOKEN_REQUEST_URL: ""
+          ACTIONS_ID_TOKEN_REQUEST_TOKEN: ""
+          COSIGN_EXPERIMENTAL: "false"
+          COSIGN_YES: "true"
+        run: |
+          set -euo pipefail
+          # Key signature: no ambient OIDC/Fulcio cert and no transparency-log upload, so
+          # Flux verifies it with just the public key (no Sigstore/Rekor/TUF, no writable HOME).
+          cosign sign --yes --tlog-upload=false --key env://COSIGN_KEY \
+            "$REGISTRY/$OWNER/odg/charts/${{ matrix.chart.name }}@${{ env.CHART_DIGEST }}"

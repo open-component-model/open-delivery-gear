@@ -1,0 +1,41 @@
+{{- if .Values.shootOidc.enabled }}
+{{- $root := . }}
+# One AuthenticationConfiguration ConfigMap per shoot, in the garden namespace, referenced
+# by the shoot's kubeAPIServer.structuredAuthentication. It trusts the manual IAS OIDC
+# issuer and maps the IAS username/groups claims into Kubernetes identities. RBAC binding
+# the resulting group ("<groupsPrefix><IAS group>") to a role is applied manually per shoot.
+{{- range .Values.shoots }}
+{{- $shoot := . }}
+---
+apiVersion: kubernetes.crossplane.io/v1alpha2
+kind: Object
+metadata:
+  name: shoot-{{ $shoot.name }}-oidc
+spec:
+  providerConfigRef:
+    name: {{ $root.Values.gardener.providerConfigName }}
+  forProvider:
+    manifest:
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: shoot-{{ $shoot.name }}-oidc
+        namespace: {{ required "gardener.gardenNamespace is required" $root.Values.gardener.gardenNamespace }}
+      data:
+        config.yaml: |
+          apiVersion: apiserver.config.k8s.io/v1beta1
+          kind: AuthenticationConfiguration
+          jwt:
+            - issuer:
+                url: {{ include "infra.ias.oidcIssuerUrl" $root | quote }}
+                audiences:
+                  - {{ required "shootOidc.clientID is required" $root.Values.shootOidc.clientID | quote }}
+              claimMappings:
+                username:
+                  claim: {{ $root.Values.shootOidc.usernameClaim | quote }}
+                  prefix: {{ $root.Values.shootOidc.usernamePrefix | quote }}
+                groups:
+                  claim: {{ $root.Values.shootOidc.groupsClaim | quote }}
+                  prefix: {{ $root.Values.shootOidc.groupsPrefix | quote }}
+{{- end }}
+{{- end }}

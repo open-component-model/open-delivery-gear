@@ -1,0 +1,57 @@
+{{- if .Values.cloudLogging.enabled }}
+apiVersion: account.btp.sap.crossplane.io/v1alpha1
+kind: ServiceInstance
+metadata:
+  name: cloud-logging
+spec:
+  forProvider:
+    name: cloud-logging
+    offeringName: cloud-logging
+    planName: standard
+    shared: true
+    subaccountRef:
+      name: {{ include "infra.subaccountRef" . }}
+    serviceManagerRef:
+      name: {{ .Values.subaccount.name }}
+    parameters:
+      esApiEnabled: false
+      ingest_otlp:
+        enabled: true
+      maxDataInstances: {{ .Values.cloudLogging.maxDataInstances }}
+      maxIngestInstances: {{ .Values.cloudLogging.maxIngestInstances }}
+      retentionPeriod: {{ .Values.cloudLogging.retentionPeriod }}
+      {{- if .Values.cloudLogging.saml.enabled }}
+      # OpenSearch Dashboards SSO via IAS SAML 2.0 (OPTION 2, no request signing). The IAS
+      # tenant and SAML application are configured manually (see README). No secret is
+      # involved; all fields are supplied from non-secret values.
+      saml:
+        enabled: true
+        initiated: {{ .Values.cloudLogging.saml.initiated }}
+        roles_key: {{ .Values.cloudLogging.saml.roles_key | quote }}
+        admin_group: {{ .Values.cloudLogging.saml.admin_group | quote }}
+        idp:
+          metadata_url: {{ include "infra.ias.samlMetadataUrl" . | quote }}
+          entity_id: {{ include "infra.ias.samlEntityId" . | quote }}
+        sp:
+          entity_id: {{ required "cloudLogging.saml.spEntityId is required" .Values.cloudLogging.saml.spEntityId | quote }}
+      {{- end }}
+  providerConfigRef:
+    name: {{ include "infra.providerConfigName" . }}
+---
+apiVersion: account.btp.sap.crossplane.io/v1alpha1
+kind: ServiceBinding
+metadata:
+  name: cloud-logging-binding
+spec:
+  forProvider:
+    name: cloud-logging-binding
+    serviceInstanceRef:
+      name: cloud-logging
+    subaccountRef:
+      name: {{ include "infra.subaccountRef" . }}
+  providerConfigRef:
+    name: {{ include "infra.providerConfigName" . }}
+  writeConnectionSecretToRef:
+    name: cloud-logging-credentials
+    namespace: {{ .Values.secrets.outputNamespace }}
+{{- end }}

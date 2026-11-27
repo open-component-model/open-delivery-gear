@@ -1,0 +1,13 @@
+{{- if .Values.gardener.authEnabled }}
+apiVersion: gardener.orchestrate.cloud.sap/v1alpha1
+kind: ProviderConfig
+metadata:
+  name: gardener-auth
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      namespace: {{ .Values.secrets.namespace }}
+      name: {{ .Values.secrets.gardenerKubeconfig.name }}
+      key: {{ .Values.secrets.gardenerKubeconfig.key }}
+{{- end }}

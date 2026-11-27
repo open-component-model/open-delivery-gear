@@ -1,0 +1,6 @@
+apiVersion: v2
+name: infra
+description: ODG control plane infrastructure (BTP subaccount, BTP services, Gardener provider config, shoots) as a single Helm chart deployed by Flux. 
+type: application
+version: 0.1.0
+appVersion: "0.1.0"

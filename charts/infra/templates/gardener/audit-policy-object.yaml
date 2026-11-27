@@ -1,0 +1,92 @@
+apiVersion: kubernetes.crossplane.io/v1alpha2
+kind: Object
+metadata:
+  name: gardener-audit-policy
+spec:
+  providerConfigRef:
+    name: {{ .Values.gardener.providerConfigName }}
+  forProvider:
+    manifest:
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: audit-policy
+        namespace: {{ required "gardener.gardenNamespace is required" .Values.gardener.gardenNamespace }}
+      data:
+        policy: |
+          apiVersion: audit.k8s.io/v1
+          kind: Policy
+          omitStages:
+          - RequestReceived
+          rules:
+          # Don't log actions by Gardener system users
+          - level: None
+            users:
+              - "gardener"
+              - "kubelet"
+              - "etcd-client"
+              - "vpn-seed"
+              - "aws-lb-readvertiser"
+              - "cloud-config-downloader"
+              - "system:kube-apiserver:kubelet"
+              - "system:kube-controller-manager"
+              - "system:kube-aggregator"
+              - "system:kube-scheduler"
+              - "system:kube-addon-manager"
+              - "system:kube-proxy"
+              - "system:cluster-autoscaler"
+              - "system:machine-controller-manager"
+              - "system:cloud-controller-manager"
+              - "system:apiserver"
+              - "garden.sapcloud.io:system:cert-broker"
+              - "gardener.cloud:system:cert-management"
+              - "gardener.cloud:system:gardener-resource-manager"
+          # Don't log actions by Gardener system groups
+          - level: None
+            userGroups:
+              - "system:nodes"
+              - "system:bootstrappers"
+              - "system:serviceaccounts:kube-system"
+              - "garden.sapcloud.io:monitoring"
+          # Log secrets/configmaps at Metadata level only (don't log data)
+          - level: Metadata
+            resources:
+              - group: ""
+                resources: ["secrets", "configmaps", "serviceaccounts/token"]
+              - group: authentication.k8s.io
+                resources: ["tokenreviews"]
+          # Don't log events
+          - level: None
+            resources:
+              - group: ""
+                resources: ["events"]
+          # Don't log watch/get/list
+          - level: None
+            verbs: ["watch", "get", "list"]
+          # Don't log non-resource URLs
+          - level: None
+            nonResourceURLs:
+              - /*
+          # Log everything else at Metadata level
+          - level: Metadata
+            resources:
+              - group: ""
+              - group: "admissionregistration.k8s.io"
+              - group: "apiextensions.k8s.io"
+              - group: "apiregistration.k8s.io"
+              - group: "apps"
+              - group: "authentication.k8s.io"
+              - group: "authorization.k8s.io"
+              - group: "autoscaling"
+              - group: "batch"
+              - group: "certificates.k8s.io"
+              - group: "coordination.k8s.io"
+              - group: "extensions"
+              - group: "metrics.k8s.io"
+              - group: "networking.k8s.io"
+              - group: "policy"
+              - group: "rbac.authorization.k8s.io"
+              - group: "scheduling.k8s.io"
+              - group: "settings.k8s.io"
+              - group: "storage.k8s.io"
+              - group: "node.k8s.io"

@@ -1,0 +1,164 @@
+{{- range .Values.shoots }}
+{{- $shoot := . }}
+{{- $defaults := $.Values.shootDefaults }}
+---
+apiVersion: kubernetes.crossplane.io/v1alpha2
+kind: Object
+metadata:
+  name: shoot-{{ $shoot.name }}
+spec:
+  providerConfigRef:
+    name: {{ $.Values.gardener.providerConfigName }}
+  forProvider:
+    manifest:
+      apiVersion: core.gardener.cloud/v1beta1
+      kind: Shoot
+      metadata:
+        name: {{ $shoot.name }}
+        namespace: {{ required "gardener.gardenNamespace is required" $.Values.gardener.gardenNamespace }}
+        annotations:
+          confirmation.gardener.cloud/deletion: "true"
+          dashboard.gardener.cloud/no-hibernation-schedule: "true"
+      spec:
+        extensions:
+          - type: shoot-dns-service
+            providerConfig:
+              apiVersion: service.dns.extensions.gardener.cloud/v1alpha1
+              kind: DNSConfig
+              syncProvidersFromShootSpecDNS: true
+          - type: shoot-auditlog-service
+            providerConfig:
+              apiVersion: service.auditlog.extensions.gardener.cloud/v1alpha1
+              kind: AuditlogConfig
+              type: standard
+              tenantID: {{ required "subaccount.guid is required" $.Values.subaccount.guid | quote }}
+              serviceURL: {{ $.Values.auditlog.serviceUrl | quote }}
+              secretReferenceName: auditlog-credentials
+        resources:
+          - name: auditlog-credentials
+            resourceRef:
+              apiVersion: v1
+              kind: Secret
+              name: auditlog-credentials
+        kubernetes:
+          kubeAPIServer:
+            requests:
+              maxNonMutatingInflight: 400
+              maxMutatingInflight: 200
+            eventTTL: 1h0m0s
+            logging:
+              verbosity: 2
+            defaultNotReadyTolerationSeconds: 300
+            defaultUnreachableTolerationSeconds: 300
+            auditConfig:
+              auditPolicy:
+                configMapRef:
+                  name: audit-policy
+            {{- if $.Values.shootOidc.enabled }}
+            structuredAuthentication:
+              configMapName: shoot-{{ $shoot.name }}-oidc
+            {{- end }}
+          kubeControllerManager:
+            nodeCIDRMaskSize: 24
+            nodeMonitorGracePeriod: 40s
+          kubeScheduler:
+            profile: balanced
+          kubeProxy:
+            enabled: false
+          kubelet:
+            failSwapOn: true
+            kubeReserved:
+              cpu: 80m
+              memory: 1Gi
+              pid: 20k
+            imageGCHighThresholdPercent: 50
+            imageGCLowThresholdPercent: 40
+            serializeImagePulls: true
+            imageMinimumGCAge: 2m0s
+            imageMaximumGCAge: 0s
+          version: {{ ($shoot.kubernetes).version | default $defaults.kubernetes.version | quote }}
+          verticalPodAutoscaler:
+            enabled: true
+            evictAfterOOMThreshold: 10m0s
+            evictionRateBurst: 1
+            evictionRateLimit: -1
+            evictionTolerance: 0.5
+            recommendationMarginFraction: 0.15
+            updaterInterval: 1m0s
+            recommenderInterval: 1m0s
+        networking:
+          type: {{ $defaults.networking.type }}
+          providerConfig:
+            apiVersion: cilium.networking.extensions.gardener.cloud/v1alpha1
+            kind: NetworkConfig
+            overlay:
+              enabled: true
+            encryption:
+              enabled: true
+              mode: wireguard
+              nodeToNodeEnabled: true
+            egressGateway:
+              enabled: true
+          pods: {{ $defaults.networking.pods }}
+          nodes: {{ $defaults.networking.nodes }}
+          services: {{ $defaults.networking.services }}
+          ipFamilies:
+            - IPv4
+        maintenance:
+          autoUpdate:
+            kubernetesVersion: true
+            machineImageVersion: true
+          timeWindow:
+            begin: 040000+0100
+            end: 050000+0100
+        provider:
+          type: openstack
+          controlPlaneConfig:
+            apiVersion: openstack.provider.extensions.gardener.cloud/v1alpha1
+            kind: ControlPlaneConfig
+            loadBalancerProvider: f5
+          infrastructureConfig:
+            apiVersion: openstack.provider.extensions.gardener.cloud/v1alpha1
+            kind: InfrastructureConfig
+            networks:
+              workers: {{ $defaults.networking.nodes }}
+            floatingPoolName: {{ $defaults.floatingPoolName }}
+          workers:
+            - cri:
+                name: containerd
+              name: worker-0
+              machine:
+                type: {{ ($shoot.worker).machineType | default $defaults.worker.machineType }}
+                image:
+                  name: {{ $defaults.worker.image.name }}
+                  version: {{ $defaults.worker.image.version }}
+              maximum: {{ ($shoot.worker).max | default $defaults.worker.max }}
+              minimum: {{ ($shoot.worker).min | default $defaults.worker.min }}
+              maxSurge: 1
+              maxUnavailable: 0
+              zones:
+                {{- toYaml $defaults.zones | nindent 16 }}
+              systemComponents:
+                allow: true
+              updateStrategy: AutoRollingUpdate
+          workersSettings:
+            sshAccess:
+              enabled: true
+        purpose: {{ $shoot.purpose | default $defaults.purpose }}
+        hibernation:
+          enabled: false
+          schedules: []
+        region: {{ $defaults.region }}
+        systemComponents:
+          coreDNS:
+            autoscaling:
+              mode: horizontal
+          nodeLocalDNS:
+            enabled: true
+            forceTCPToUpstreamDNS: false
+        schedulerName: default-scheduler
+        cloudProfile:
+          kind: CloudProfile
+          name: {{ $defaults.cloudProfile }}
+        credentialsBindingName: {{ $defaults.credentialsBindingName }}
+{{- end }}

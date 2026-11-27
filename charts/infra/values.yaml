@@ -1,0 +1,263 @@
+# infra Helm chart — default values.
+#
+# This file is the canonical schema reference. Override per landscape with your own
+# values file (start from values.example.yaml), delivered to the HelmRelease via
+# valuesFrom.
+#
+# Conventions:
+#   - Keys left empty ("" / [] / {}) are REQUIRED from the override; the chart has no
+#     sensible default for them (they identify a specific subaccount / landscape).
+#   - Keys with a concrete value are structural defaults; override only if your landscape
+#     differs.
+
+# ---------------------------------------------------------------------------------------
+# BTP global account / CLI endpoint used by the Crossplane BTP ProviderConfig.
+# ---------------------------------------------------------------------------------------
+btp:
+  # BTP CLI server URL for your region. Example: "https://canary.cli.btp.int.sap".
+  cliServerUrl: ""        # REQUIRED (landscape)
+  # Global account GUID that owns the subaccount. Example: "8b7fcd40-...-f1a7c7ce9566".
+  globalAccountId: ""     # REQUIRED (landscape)
+
+# ---------------------------------------------------------------------------------------
+# The subaccount this chart manages. The subaccount is pre-existing and adopted
+# (deletionPolicy: Orphan), it is never created or deleted by the chart.
+# ---------------------------------------------------------------------------------------
+subaccount:
+  # Crossplane resource name (used for cross-references in the chart). Rarely changed.
+  name: "odg"
+  # Subaccount GUID. Set as the external-name (adoption) AND reused as the auditlog
+  # tenantID. Example: "00000000-0000-0000-0000-000000000000".
+  guid: ""                # REQUIRED (landscape)
+  # Cockpit display name and subdomain of the subaccount.
+  displayName: ""         # REQUIRED (landscape), e.g. "my-subaccount"
+  subdomain: ""           # REQUIRED (landscape), e.g. "my-subaccount"
+  # BTP region of the subaccount. Example: "eu10-canary".
+  region: ""              # REQUIRED (landscape)
+  # Subaccount administrators. NOTE: the provider can only set these at creation time;
+  # for an adopted subaccount this list is informational and changes must be made in the
+  # BTP cockpit.
+  admins: []              # REQUIRED (landscape), list of emails
+
+# ---------------------------------------------------------------------------------------
+# Gardener connectivity. The kubernetes Crossplane provider talks to the Gardener API to
+# manage Shoots; these values point it at the right project and credentials.
+# ---------------------------------------------------------------------------------------
+gardener:
+  # Gardener project namespace that holds the Shoots. Example: "garden-odgdev".
+  gardenNamespace: ""                    # REQUIRED (landscape)
+  # Name of the kubernetes.crossplane.io ProviderConfig the chart creates and the Shoot
+  # Objects reference. Structural; keep unless you run multiple Gardener targets.
+  providerConfigName: "gardener"
+  # Optional gardener-auth ProviderConfig (gardener.orchestrate.cloud.sap), for shoots
+  # that request auto-rotating admin kubeconfigs. Enable only when provider-gardener-auth
+  # is installed on the control plane.
+  authEnabled: false
+
+# ---------------------------------------------------------------------------------------
+# Manual, out-of-band secrets the Crossplane providers read. These MUST already exist in
+# `namespace` before the chart reconciles (see README Prerequisites). The chart only
+# references them by name/key, it never creates them.
+# ---------------------------------------------------------------------------------------
+secrets:
+  namespace: "manual-secrets"
+  # CIS credentials for the BTP provider.
+  cisCredentials:
+    name: "cis-provider-secret"
+    key: "data"
+  # Service account credentials for the BTP provider.
+  serviceAccount:
+    name: "sa-provider-secret"
+    key: "credentials"
+  # Service account kubeconfig for the Gardener API.
+  gardenerKubeconfig:
+    name: "gardener-kubeconfig"
+    key: "kubeconfig"
+  # Namespace where the chart writes connection secrets (service bindings, xsuaa creds).
+  outputNamespace: "default"
+
+# ---------------------------------------------------------------------------------------
+# Where the Crossplane kubernetes provider runs, for the BTP-reader RBAC the chart grants
+# it (so shoot Objects can read the Subaccount to inject the auditlog tenantID).
+# ---------------------------------------------------------------------------------------
+crossplane:
+  namespace: "crossplane-system"
+  kubernetesProviderSA: "provider-kubernetes"
+
+# ---------------------------------------------------------------------------------------
+# SAP Cloud Identity Services (IAS). Single source of truth for the manual IAS tenant.
+# The tenant, its applications, groups, and group memberships are all configured MANUALLY
+# (see README). Enter the tenant host once here; the IAS-backed features below
+# (cloudLogging.saml, shootOidc) derive their URLs from it.
+# ---------------------------------------------------------------------------------------
+ias:
+  # IAS tenant hostname, e.g. "example.accounts.ondemand.com". Required whenever an
+  # IAS-backed feature is enabled. Drives:
+  #   SAML metadata_url = https://<tenantHost>/saml2/metadata
+  #   SAML idp entity_id = https://<tenantHost>
+  #   OIDC issuer        = https://<tenantHost>/
+  tenantHost: ""
+
+# ---------------------------------------------------------------------------------------
+# SAP Cloud Logging: a shared ServiceInstance + ServiceBinding; the binding's connection
+# secret (cloud-logging-credentials) is used to ship logs from the shoots.
+# ---------------------------------------------------------------------------------------
+cloudLogging:
+  enabled: true
+  retentionPeriod: 30     # days logs are retained
+  maxDataInstances: 10    # OpenSearch data node cap
+  maxIngestInstances: 10  # ingestion node cap
+  # OpenSearch Dashboards SSO via IAS SAML 2.0 (OPTION 2, no request signing, no secret).
+  # The IdP URLs are derived from ias.tenantHost; you only provide the SAML app's entity id
+  # and the admin group. Disabled by default. See README.
+  saml:
+    enabled: false
+    initiated: true
+    roles_key: "groups"
+    # IAS group mapped to OpenSearch Dashboards all_access.
+    admin_group: "cls-admin"
+    # Entity ID of the SAML application created in IAS (REQUIRED when enabled).
+    spEntityId: "cls"
+    # Optional: override the IdP URLs instead of deriving them from ias.tenantHost.
+    idp:
+      metadataUrl: ""   # default: https://<ias.tenantHost>/saml2/metadata
+      entityId: ""      # default: https://<ias.tenantHost>
+
+# ---------------------------------------------------------------------------------------
+# SAP Audit Log: the service instance/binding, the Viewer subscription, the role
+# collection that grants Viewer access, and the per-user assignments.
+# ---------------------------------------------------------------------------------------
+auditlog:
+  enabled: true
+  # Name of the connection secret the auditlog ServiceBinding writes (in outputNamespace);
+  # the gardener auditlog-credentials Object sources user/password from it.
+  sourceSecretName: "auditlog-credentials"
+  # Audit Log Service API endpoint for your region. Example:
+  # "https://api.auditlog.cf.eu01-canary.hana.ondemand.com".
+  serviceUrl: ""          # REQUIRED (landscape)
+  # Name of the role collection the chart creates and assigns users to.
+  roleCollectionName: "Auditlog Viewer"
+  # Roles placed INTO that collection. The Audit Log Viewer UI needs BOTH the management
+  # and the viewer app role. roleTemplateAppId carries the per-subaccount !bN/!tN suffix,
+  # which is assigned by BTP and only readable from the authorization API:
+  #   GET /sap/rest/authorization/v2/apps  ->  .appid of auditlog-management / auditlog-viewer
+  # REQUIRED per landscape. Each entry: {name, roleTemplateName, roleTemplateAppId}, e.g.
+  #   - name: "Auditlog_Auditor"
+  #     roleTemplateName: "Auditlog_Auditor"
+  #     roleTemplateAppId: "auditlog-management!b7"
+  #   - name: "Auditlog_Auditor"
+  #     roleTemplateName: "Auditlog_Auditor"
+  #     roleTemplateAppId: "auditlog-viewer!t7"
+  roleCollectionRoles: []
+  # Users assigned to the collection; one RoleCollectionAssignment each.
+  # Each entry: {name: "<identifier>", email: "<user@sap.com>"}.
+  viewers: []
+
+# ---------------------------------------------------------------------------------------
+# Identity provider origin used for role collection assignments. "sap.default" is the SAP
+# ID Service; use a custom IAS origin if trust is configured.
+# ---------------------------------------------------------------------------------------
+idp:
+  origin: "sap.default"
+
+# ---------------------------------------------------------------------------------------
+# OIDC access to the shoots' kube-apiserver via the manual IAS tenant (Structured
+# Authentication, Kubernetes >= 1.30). When enabled, each shoot gets a
+# kubeAPIServer.structuredAuthentication ConfigMap (rendered into the garden namespace)
+# that trusts the IAS issuer and maps the IAS group into Kubernetes groups. Disabled by
+# default. The IAS tenant, OIDC application, and group are created MANUALLY (see README);
+# RBAC (binding the group to a role) is applied manually per shoot. No secret is involved:
+# the kube-apiserver only validates tokens.
+shootOidc:
+  enabled: false
+  # Client id of the IAS OIDC application; becomes the accepted token audience.
+  # REQUIRED when enabled.
+  clientID: ""
+  # Token claim used for the username, and the prefix applied to it (prefix guards against
+  # impersonation; keep it non-empty).
+  usernameClaim: "email"
+  usernamePrefix: "ias:"
+  # Token claim carrying group membership, and its prefix. The IAS group name shows up in
+  # Kubernetes as "<groupsPrefix><group>", e.g. "ias:Shoot-Admin". Bind that in RBAC.
+  groupsClaim: "groups"
+  groupsPrefix: "ias:"
+  # Optional: override the issuer instead of deriving it from ias.tenantHost.
+  # Default: https://<ias.tenantHost>/  (must match the token "iss" claim exactly).
+  issuerUrl: ""
+
+# ---------------------------------------------------------------------------------------
+# Shoots to create (one Gardener Shoot Object per entry). Landscape-specific.
+# Each entry needs only `name`; the rest falls back to shootDefaults. Optional overrides:
+#   - name: dev-1
+#     kubernetes: { version: "1.36.5" }   # override cluster version
+#     purpose: "evaluation"               # override shoot purpose
+#     worker:
+#       machineType: "g_c16_m64"          # override node machine type
+#       min: 1                            # override min node count
+#       max: 3                            # override max node count
+# ---------------------------------------------------------------------------------------
+shoots: []
+
+# ---------------------------------------------------------------------------------------
+# Defaults applied to every shoot unless overridden per entry above. Landscape-specific
+# (OpenStack region, cloud profile, machine type, networking). Required (non-empty) when
+# `shoots` is non-empty. See examples/values.example.yaml for a complete OpenStack set:
+#   kubernetes: { version }
+#   region, cloudProfile, credentialsBindingName, floatingPoolName, zones: []
+#   worker: { machineType, image: {name, version}, min, max }
+#   purpose
+#   networking: { type: cilium, pods, nodes, services }
+# ---------------------------------------------------------------------------------------
+shootDefaults: {}
+
+# ---------------------------------------------------------------------------------------
+# PostgreSQL (postgresql-db) database, one instance + binding per shoot. The subaccount-wide
+# compute Entitlement is requested once with amount scaled by the number of shoots (doubled
+# when multiAz). This landscape's offering exposes a single plan ("standard"); storage is an
+# instance parameter (storageGB), not a separate entitlement SKU. Each instance writes its
+# connection secret to "<bindingPrefix>-<shoot>-credentials" in secrets.outputNamespace.
+# The subaccount must have quota for the postgresql-db plan in the global account.
+# ---------------------------------------------------------------------------------------
+postgres:
+  # Master switch for the postgresql-db feature. When true, the subaccount compute + storage
+  # entitlements are rendered (sized to the shoot count). Instances are additionally gated by
+  # createInstances below.
+  enabled: false
+  # When true, a ServiceInstance + ServiceBinding is created per shoot. When false, only the
+  # entitlements are rendered (reserve quota without provisioning databases).
+  createInstances: false
+  # Restrict postgres to a subset of shoots by name (must match entries in top-level shoots).
+  # Empty list = every shoot. Example: ["dev-1"].
+  shoots: []
+  # Scales both entitlement SKUs (compute + storage) per shoot for headroom. Default 1.
+  entitlementMultiplier: 1
+  # Service plan: "standard" (1 vCPU:2GB) or "premium" (1 vCPU:4GB).
+  plan: "standard"
+  # Prefix for the per-shoot connection secret and instance/binding names.
+  bindingPrefix: "postgres"
+  # Provisioning parameters (see SAP help "Parameters"). SCI allows engineVersion 15 or 17.
+  # RAM in GB (standard plan allows 2 or 4). The compute entitlement is counted per 2GB, so
+  # each instance consumes memory/2 compute units (2GB->1, 4GB->2); multiAz doubles it.
+  memory: 2
+  # Disk size in GB (multiple of 5). The storage entitlement is counted in 5GB blocks, so each
+  # instance consumes ceil(storageGB / 5) storage units (5GB->1, 20GB->4).
+  storageGB: 5
+  engineVersion: "17"
+  multiAz: false     # true doubles the compute entitlement and provisions multi-AZ
+  backupRetentionDays: 3  # range 0-14
+  # Expose a public endpoint. Required true whenever allow_access is set.
+  publicAccess: true
+  # Source allowlist (BTP "allow_access"): comma-joined. Per shoot you SHOULD instead set the
+  # shoot's egress IP so each DB only admits its own shoot. Resolution order per instance:
+  #   shoots[].egressIP  ->  shoots[].egressCIDRs (joined)  ->  this global list (joined).
+  # Read a shoot's egress from its Shoot status.networking.egressCIDRs.
+  allowAccess: []
+  # PostgreSQL audit log level (list of categories, e.g. ROLE, DDL). Empty = provider default.
+  auditLogLevel:
+    - ROLE
+    - DDL
+  # Maintenance window (omit to use the service default).
+  maintenanceWindow:
+    day_of_week: Sunday
+    duration: 1
+    start_hour_utc: 4

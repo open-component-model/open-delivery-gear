@@ -1,0 +1,11 @@
+apiVersion: kubernetes.crossplane.io/v1alpha1
+kind: ProviderConfig
+metadata:
+  name: {{ .Values.gardener.providerConfigName }}
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      namespace: {{ .Values.secrets.namespace }}
+      name: {{ .Values.secrets.gardenerKubeconfig.name }}
+      key: {{ .Values.secrets.gardenerKubeconfig.key }}

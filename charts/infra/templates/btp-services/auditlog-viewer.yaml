@@ -1,0 +1,28 @@
+{{- if .Values.auditlog.enabled }}
+apiVersion: account.btp.sap.crossplane.io/v1alpha1
+kind: Entitlement
+metadata:
+  name: {{ .Values.subaccount.name }}-auditlog-viewer
+spec:
+  forProvider:
+    serviceName: auditlog-viewer
+    servicePlanName: free
+    enable: true
+    subaccountRef:
+      name: {{ include "infra.subaccountRef" . }}
+  providerConfigRef:
+    name: {{ include "infra.providerConfigName" . }}
+---
+apiVersion: account.btp.sap.crossplane.io/v1alpha1
+kind: Subscription
+metadata:
+  name: auditlog-viewer
+spec:
+  forProvider:
+    appName: auditlog-viewer
+    planName: free
+  cloudManagementRef:
+    name: {{ .Values.subaccount.name }}
+  providerConfigRef:
+    name: {{ include "infra.providerConfigName" . }}
+{{- end }}

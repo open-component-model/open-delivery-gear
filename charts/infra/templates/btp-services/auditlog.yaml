@@ -1,0 +1,48 @@
+{{- if .Values.auditlog.enabled }}
+apiVersion: account.btp.sap.crossplane.io/v1alpha1
+kind: Entitlement
+metadata:
+  name: {{ .Values.subaccount.name }}-auditlog
+spec:
+  forProvider:
+    serviceName: auditlog
+    servicePlanName: standard
+    amount: 1
+    subaccountRef:
+      name: {{ include "infra.subaccountRef" . }}
+  providerConfigRef:
+    name: {{ include "infra.providerConfigName" . }}
+---
+apiVersion: account.btp.sap.crossplane.io/v1alpha1
+kind: ServiceInstance
+metadata:
+  name: auditlog
+spec:
+  forProvider:
+    name: auditlog-instance
+    offeringName: auditlog
+    planName: standard
+    subaccountRef:
+      name: {{ include "infra.subaccountRef" . }}
+    serviceManagerRef:
+      name: {{ .Values.subaccount.name }}
+  providerConfigRef:
+    name: {{ include "infra.providerConfigName" . }}
+---
+apiVersion: account.btp.sap.crossplane.io/v1alpha1
+kind: ServiceBinding
+metadata:
+  name: auditlog-binding
+spec:
+  forProvider:
+    name: auditlog-binding
+    serviceInstanceRef:
+      name: auditlog
+    subaccountRef:
+      name: {{ include "infra.subaccountRef" . }}
+  providerConfigRef:
+    name: {{ include "infra.providerConfigName" . }}
+  writeConnectionSecretToRef:
+    name: {{ .Values.auditlog.sourceSecretName }}
+    namespace: {{ .Values.secrets.outputNamespace }}
+{{- end }}

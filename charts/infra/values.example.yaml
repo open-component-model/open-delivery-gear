@@ -1,0 +1,87 @@
+# Example landscape override for the infra chart.
+#
+# Copy this file, fill in your subaccount/landscape values, and supply it to the
+# HelmRelease (see README "Prerequisites").
+# It overrides the defaults in charts/infra/values.yaml. Keep your real copy
+# OUT of git.
+
+btp:
+  cliServerUrl: "https://canary.cli.btp.int.sap"   # BTP CLI server for your region
+  globalAccountId: "<global-account-guid>"
+
+subaccount:
+  name: "odg"
+  guid: "<subaccount-guid>"                         # also used as auditlog tenantID
+  displayName: "<subaccount-display-name>"
+  subdomain: "<subaccount-subdomain>"
+  region: "eu10-canary"
+  admins:
+    - first.last@example.com
+
+gardener:
+  gardenNamespace: "<garden-namespace>"             # e.g. garden-odgdev
+
+auditlog:
+  serviceUrl: "<service-url>"
+  # Users assigned to the "Auditlog Viewer" collection (one assignment each).
+  viewers:
+    - name: first-last
+      email: first.last@example.com
+
+# SAP Cloud Identity Services (IAS): one place for the manual tenant. The features below
+# derive their URLs from ias.tenantHost.
+ias:
+  tenantHost: "example.accounts.ondemand.com"
+
+# Cloud Logging OpenSearch Dashboards SSO via IAS SAML 2.0 (OPTION 2, no secret). IdP URLs
+# are derived from ias.tenantHost; provide only the SAML app's entity id and admin group.
+cloudLogging:
+  saml:
+    enabled: true
+    initiated: true
+    roles_key: "groups"
+    admin_group: "cls-admin"
+    spEntityId: "cls"
+
+# OIDC access to the shoot kube-apiserver via the manual IAS tenant. Issuer is derived from
+# ias.tenantHost; provide the OIDC app's client id. RBAC is applied manually per shoot.
+shootOidc:
+  enabled: true
+  clientID: "<shoot-oidc-client-id>"
+  usernameClaim: "email"
+  usernamePrefix: "ias:"
+  groupsClaim: "groups"
+  groupsPrefix: "ias:"
+
+shoots:
+  - name: dev-1
+
+# Shoot defaults for this landscape.
+shootDefaults:
+  kubernetes:
+    version: "1.36.5"
+  region: "eu-de-1"
+  cloudProfile: "<cloud-profile>"
+  credentialsBindingName: "<credentials-binding-name>"
+  zones:
+    - "<zone>"
+  worker:
+    machineType: "<machine-type>"
+    image:
+      name: "gardenlinux"
+      version: "2150.15.0"
+    min: 1
+    max: 2
+  purpose: "evaluation"
+
+# One PostgreSQL (postgresql-db, SCI) instance + binding per shoot. Connection details land
+# in "postgres-<shoot>-credentials" in secrets.outputNamespace. The subaccount needs
+# postgresql-db quota; the chart requests the entitlement, scaled by shoot count.
+postgres:
+  enabled: true
+  plan: "standard"
+  memory: 2
+  storageGB: 20
+  engineVersion: "17"
+  multiAz: false
+  backupRetentionDays: 3

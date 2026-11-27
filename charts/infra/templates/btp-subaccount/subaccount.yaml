@@ -1,0 +1,18 @@
+apiVersion: account.btp.sap.crossplane.io/v1alpha1
+kind: Subaccount
+metadata:
+  name: {{ .Values.subaccount.name }}
+  annotations:
+    crossplane.io/external-name: {{ required "subaccount.guid is required" .Values.subaccount.guid | quote }}
+spec:
+  deletionPolicy: Orphan
+  forProvider:
+    displayName: {{ required "subaccount.displayName is required" .Values.subaccount.displayName }}
+    subdomain: {{ required "subaccount.subdomain is required" .Values.subaccount.subdomain }}
+    region: {{ .Values.subaccount.region }}
+    subaccountAdmins:
+      {{- range .Values.subaccount.admins }}
+      - {{ . }}
+      {{- end }}
+  providerConfigRef:
+    name: {{ include "infra.providerConfigName" . }}

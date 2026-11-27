@@ -1,0 +1,59 @@
+{{- if .Values.auditlog.enabled }}
+apiVersion: security.btp.sap.crossplane.io/v1alpha1
+kind: SubaccountApiCredential
+metadata:
+  name: {{ .Values.subaccount.name }}-xsuaa-credentials
+spec:
+  forProvider:
+    subaccountRef:
+      name: {{ include "infra.subaccountRef" . }}
+  providerConfigRef:
+    name: {{ include "infra.providerConfigName" . }}
+  writeConnectionSecretToRef:
+    name: {{ .Values.subaccount.name }}-xsuaa-credentials
+    namespace: {{ .Values.secrets.outputNamespace }}
+---
+# Custom role collection holding the auditlog roles. roleTemplateAppId values are
+# per-subaccount constants (set in the landscape values); there is no predefined
+# collection containing the auditlog-viewer UI role, and no way to resolve the
+# !bN/!tN app id from a resource (it only lives in the BTP /apps API).
+apiVersion: security.btp.sap.crossplane.io/v1alpha1
+kind: RoleCollection
+metadata:
+  name: {{ .Values.subaccount.name }}-auditlog-viewer
+spec:
+  forProvider:
+    name: {{ .Values.auditlog.roleCollectionName | quote }}
+    description: "View SAP Audit Log Service logs"
+    roles:
+      {{- if .Values.auditlog.roleCollectionRoles }}
+      {{- range .Values.auditlog.roleCollectionRoles }}
+      - name: {{ .name | quote }}
+        roleTemplateAppId: {{ required "auditlog.roleCollectionRoles[].roleTemplateAppId is required" .roleTemplateAppId | quote }}
+        roleTemplateName: {{ .roleTemplateName | quote }}
+      {{- end }}
+      {{- else }}
+      []
+      {{- end }}
+  subaccountApiCredentialRef:
+    name: {{ .Values.subaccount.name }}-xsuaa-credentials
+  providerConfigRef:
+    name: {{ include "infra.providerConfigName" . }}
+# Per-user assignments to the custom "Auditlog Viewer" collection above.
+{{- range .Values.auditlog.viewers }}
+---
+apiVersion: security.btp.sap.crossplane.io/v1alpha1
+kind: RoleCollectionAssignment
+metadata:
+  name: auditlog-viewer-{{ .name }}
+spec:
+  forProvider:
+    roleCollectionName: {{ $.Values.auditlog.roleCollectionName | quote }}
+    userName: {{ .email }}
+    origin: {{ $.Values.idp.origin }}
+  subaccountApiCredentialRef:
+    name: {{ $.Values.subaccount.name }}-xsuaa-credentials
+  providerConfigRef:
+    name: {{ include "infra.providerConfigName" $ }}
+{{- end }}
+{{- end }}
