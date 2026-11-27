@@ -920,7 +920,7 @@ spec:
             prometheus:
               image:
                 repository: ${resourcePrometheusImage.status.additional.oci.registry}/${resourcePrometheusImage.status.additional.oci.repository}
-                tag: sha256:${resourcePrometheusImage.status.additional.oci.digest}
+                tag: ${resourcePrometheusImage.status.additional.oci.digest}
             prometheus-config-reloader:
               image:
                 repository: ${resourcePrometheusConfigReloaderImage.status.additional.oci.registry}/${resourcePrometheusConfigReloaderImage.status.additional.oci.repository}
