@@ -27,6 +27,7 @@ jobs:
     name: Build Helm chart
     runs-on: ubuntu-latest
     permissions:
+      artifact-metadata: write
       attestations: write
       contents: read
       id-token: write
