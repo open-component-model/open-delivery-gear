@@ -130,7 +130,7 @@ helm --kubeconfig="${KUBECONFIG_FILE}" template "${PROM_RELEASE}" "${PROM_CHART}
   --set image.repository="quay.io/prometheus-operator/prometheus-operator" \
   --set image.tag="v0.94.1" \
   --set prometheus.image.repository="docker.io/prom/prometheus" \
-  --set prometheus.image.tag="v3.15.0-distroless" \
+  --set prometheus.image.tag="sha256:b2a413d5a03ea6a76782a508d1c7947440bba3b973931a25676e278431891b01" \
   --set "prometheus-config-reloader.image.repository=quay.io/prometheus-operator/prometheus-config-reloader" \
   --set "prometheus-config-reloader.image.tag=v0.94.1" \
   "${HELM_OVERRIDE_ARGS[@]}" \
