@@ -920,7 +920,7 @@ spec:
             prometheus:
               image:
                 repository: ${resourcePrometheusImage.status.additional.oci.registry}/${resourcePrometheusImage.status.additional.oci.repository}
-                tag: ${resourcePrometheusImage.status.additional.oci.tag}@${resourcePrometheusImage.status.additional.oci.digest}
+                tag: ${resourcePrometheusImage.status.additional.oci.digest}
             prometheus-config-reloader:
               image:
                 repository: ${resourcePrometheusConfigReloaderImage.status.additional.oci.registry}/${resourcePrometheusConfigReloaderImage.status.additional.oci.repository}
@@ -1045,6 +1045,8 @@ spec:
             backend: ${schema.spec.observability.backend}
             btp:
               endpoint: ${schema.spec.observability.btpEndpoint}
+            gardener:
+              enabled: true
             metrics-operator:
               image:
                 repository: ${resourceMetricsOperatorImage.status.additional.oci.registry}/${resourceMetricsOperatorImage.status.additional.oci.repository}
